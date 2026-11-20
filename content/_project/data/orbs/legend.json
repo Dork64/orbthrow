@@ -1,0 +1,152 @@
+{
+  "_": "Легендарные сферы: [id, ветка, способность, 'code', 1, ru, en, ru_d, en_d, пробуждение ru, пробуждение en]. Дается на 10 уровне, на 20 — Пробуждение.",
+  "_universal": [
+    [
+      "l_double_ult",
+      "R",
+      "",
+      "code",
+      1,
+      "Двойной ультимейт",
+      "Double ultimate",
+      "У ультимейта 2 заряда: его можно применить дважды подряд, заряд восстанавливается за время перезарядки",
+      "Your ultimate has 2 charges; a charge restores over its cooldown",
+      "Пробуждение: перезарядка ультимейта −20%",
+      "Awakening: ultimate cooldown −20%"
+    ],
+    [
+      "l_master",
+      "H",
+      "",
+      "code",
+      1,
+      "Мастер способностей",
+      "Ability master",
+      "Первые три способности: перезарядка −25%, урон +20%",
+      "First three abilities: cooldown −25%, damage +20%",
+      "Пробуждение: −35% и +30%",
+      "Awakening: −35% and +30%"
+    ],
+    [
+      "l_second_wind",
+      "H",
+      "",
+      "code",
+      1,
+      "Второе дыхание",
+      "Second wind",
+      "При падении ниже 25% здоровья — лечение 40% и −50% получаемого урона на 4 с (раз в 60 с)",
+      "Below 25% health: heal 40% and take 50% less damage for 4 s (once per 60 s)",
+      "Пробуждение: раз в 40 с",
+      "Awakening: once per 40 s"
+    ]
+  ],
+  "npc_dota_hero_axe": [
+    [
+      "axe_l_arena",
+      "Q",
+      "axe_berserkers_call",
+      "code",
+      1,
+      "Арена гладиатора",
+      "Gladiator's Arena",
+      "Вызов создает вокруг Акса арену радиусом 550 на 2.5 с: враги не могут из нее выйти, внутри Акс получает +20 брони",
+      "Berserker's Call creates a 550 radius arena around Axe for 2.5 s: enemies cannot leave it, Axe gains +20 armor inside",
+      "Пробуждение: арена 4 с, внутри Акс наносит +20% урона",
+      "Awakening: the arena lasts 4 s, Axe deals +20% damage inside"
+    ],
+    [
+      "axe_l_hunt",
+      "W",
+      "axe_battle_hunger",
+      "code",
+      1,
+      "Кровавая охота",
+      "Blood Hunt",
+      "Голод ложится на всех врагов в 450 вокруг цели; каждый враг под Голодом дает Аксу +4 брони и +5% скорости бега",
+      "Battle Hunger also hits all enemies within 450 of the target; each hungering enemy grants Axe +4 armor and +5% movement speed",
+      "Пробуждение: урон Голода ×1.5, замедление +10%",
+      "Awakening: Hunger damage ×1.5, slow +10%"
+    ],
+    [
+      "axe_l_eternal",
+      "E",
+      "axe_counter_helix",
+      "code",
+      1,
+      "Вечный вихрь",
+      "Eternal Helix",
+      "Спираль срабатывает каждые 2 атаки по Аксу, но наносит 70% урона",
+      "Counter Helix triggers every 2 attacks on Axe but deals 70% damage",
+      "Пробуждение: Спираль наносит полный урон",
+      "Awakening: Counter Helix deals full damage"
+    ],
+    [
+      "axe_l_executioner",
+      "R",
+      "axe_culling_blade",
+      "code",
+      1,
+      "Палач",
+      "Executioner",
+      "После убийства Culling Blade 3 с его можно применить снова бесплатно, с дальностью +400",
+      "After a Culling Blade kill you can cast it again for free within 3 s, with +400 cast range",
+      "Пробуждение: порог казни +100, окно 5 с",
+      "Awakening: kill threshold +100, window 5 s"
+    ]
+  ],
+  "npc_dota_hero_juggernaut": [
+    [
+      "jugg_l_storm",
+      "Q",
+      "juggernaut_blade_fury",
+      "code",
+      1,
+      "Буря клинков",
+      "Blade Storm",
+      "Радиус Вихря +120, Вихрь втягивает врагов к Джаггернауту",
+      "Blade Fury radius +120, it pulls enemies towards Juggernaut",
+      "Пробуждение: длительность Вихря +2 с",
+      "Awakening: Blade Fury lasts 2 s longer"
+    ],
+    [
+      "jugg_l_sanctuary",
+      "W",
+      "juggernaut_healing_ward",
+      "code",
+      1,
+      "Святилище",
+      "Sanctuary",
+      "Тотем неуязвим 5 с после установки; в его радиусе Джаггернаут получает на 20% меньше урона",
+      "The Healing Ward is invulnerable for 5 s after placement; inside its radius Juggernaut takes 20% less damage",
+      "Пробуждение: −30% урона и +1% здоровья в секунду в радиусе",
+      "Awakening: −30% damage taken and +1% max health per second inside"
+    ],
+    [
+      "jugg_l_cuts",
+      "E",
+      "juggernaut_blade_dance",
+      "code",
+      1,
+      "Тысяча порезов",
+      "Thousand Cuts",
+      "Криты по героям вызывают кровотечение: 25% урона крита за 3 с, складывается",
+      "Critical strikes on heroes cause bleeding: 25% of the crit damage over 3 s, stacking",
+      "Пробуждение: 40% урона крита",
+      "Awakening: 40% of the crit damage"
+    ],
+    [
+      "jugg_l_endless",
+      "R",
+      "juggernaut_omni_slash",
+      "code",
+      1,
+      "Бесконечный омнислэш",
+      "Endless Omnislash",
+      "Каждое убийство героя во время Омнислэша продлевает его на 1 с и обновляет Вихрь",
+      "Each hero kill during Omnislash extends it by 1 s and refreshes Blade Fury",
+      "Пробуждение: +1.5 с за убийство, +15 урона ударов Омнислэша",
+      "Awakening: +1.5 s per kill, +15 damage on Omnislash strikes"
+    ]
+  ]
+}

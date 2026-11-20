@@ -1,0 +1,11 @@
+<root>
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/manifest.js" />
+	</scripts>
+	<Panel>
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/hud.xml" />
+		<CustomUIElement type="GameSetup" layoutfile="file://{resources}/layout/custom_game/setup.xml" />
+		<CustomUIElement type="GameInfo" layoutfile="file://{resources}/layout/custom_game/game_info.xml" />
+		<CustomUIElement type="EndScreen" layoutfile="file://{resources}/layout/custom_game/endscreen.xml" />
+	</Panel>
+</root>

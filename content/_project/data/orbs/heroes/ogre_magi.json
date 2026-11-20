@@ -1,0 +1,329 @@
+{
+ "hero": "npc_dota_hero_ogre_magi",
+ "orbs": [
+  {
+   "id": "ogre_p_bigblast",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "ogre_magi_fireblast",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "extra": {
+      "maxhp": 5,
+      "type": "magic"
+     }
+    }
+   ],
+   "ru": "Большой взрыв",
+   "en": "Big Blast",
+   "ru_d": "Fireblast дополнительно наносит 5% макс. здоровья цели",
+   "en_d": "Fireblast also deals 5% of the target's max health"
+  },
+  {
+   "id": "ogre_p_dizzy",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "ogre_magi_fireblast",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "disarm": 1,
+       "ms": -20
+      },
+      "dur": 1.5,
+      "delay": "stun_duration"
+     }
+    }
+   ],
+   "ru": "Звон в голове",
+   "en": "Seeing Stars",
+   "ru_d": "После оглушения Fireblast цель еще 1.5 с не может атаковать и замедлена на 20%",
+   "en_d": "After the Fireblast stun the target can't attack and is slowed by 20% for 1.5 more seconds"
+  },
+  {
+   "id": "ogre_p_napalm",
+   "r": "purple",
+   "branch": "W",
+   "ab": "ogre_magi_ignite",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "healred": 35
+      },
+      "dur": "duration"
+     }
+    }
+   ],
+   "ru": "Напалм",
+   "en": "Napalm",
+   "ru_d": "Ignite снижает получаемое лечение на 35%",
+   "en_d": "Ignite reduces healing received by 35%"
+  },
+  {
+   "id": "ogre_p_wildfire",
+   "r": "purple",
+   "branch": "W",
+   "ab": "ogre_magi_ignite",
+   "fx": [
+    {
+     "t": "blast",
+     "at": "target",
+     "delay": 0.4,
+     "radius": 250,
+     "dmg": 120,
+     "type": "magic",
+     "pfx": "particles/units/heroes/hero_dragon_knight/dragon_knight_breathe_fire.vpcf"
+    }
+   ],
+   "ru": "Лесной пожар",
+   "en": "Wildfire",
+   "ru_d": "Ignite взрывается на цели: 120 урона врагам вокруг в 250",
+   "en_d": "Ignite explodes on the target: 120 damage to enemies within 250"
+  },
+  {
+   "id": "ogre_p_thirst",
+   "r": "purple",
+   "branch": "E",
+   "ab": "ogre_magi_bloodlust",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 8,
+     "props": {
+      "ls": 15
+     }
+    }
+   ],
+   "ru": "Кровожадность",
+   "en": "Bloodthirst",
+   "ru_d": "Bloodlust дает Огру 15% вампиризма на 8 с",
+   "en_d": "Bloodlust grants Ogre 15% lifesteal for 8 s"
+  },
+  {
+   "id": "ogre_p_hide",
+   "r": "purple",
+   "branch": "E",
+   "ab": "ogre_magi_bloodlust",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 8,
+     "props": {
+      "armor": 6,
+      "mr": 10
+     }
+    }
+   ],
+   "ru": "Толстая шкура",
+   "en": "Thick Hide",
+   "ru_d": "Bloodlust дает Огру +6 брони и +10% сопротивления магии на 8 с",
+   "en_d": "Bloodlust grants Ogre +6 armor and +10% magic resistance for 8 s"
+  },
+  {
+   "id": "ogre_p_doublehit",
+   "r": "purple",
+   "branch": "R",
+   "ab": "ogre_magi_multicast",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "attack",
+     "chance": 15,
+     "heroOnly": 1,
+     "extra": {
+      "atk": 100,
+      "type": "phys"
+     }
+    }
+   ],
+   "ru": "Две головы — два удара",
+   "en": "Two Heads, Two Hits",
+   "ru_d": "15% шанс, что атака по герою ударит дважды",
+   "en_d": "15% chance that an attack on a hero hits twice"
+  },
+  {
+   "id": "ogre_p_jackpot",
+   "r": "purple",
+   "branch": "R",
+   "ab": "ogre_magi_multicast",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "any",
+     "heal": 25,
+     "manapct": 25
+    }
+   ],
+   "ru": "Джекпот",
+   "en": "Jackpot",
+   "ru_d": "Убийство героя восполняет 25% здоровья и маны",
+   "en_d": "A hero kill restores 25% health and mana"
+  },
+  {
+   "id": "ogre_m_autoblast",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "ogre_magi_fireblast",
+   "fx": [
+    {
+     "t": "auto",
+     "every": 9,
+     "range": 525,
+     "heroOnly": 1
+    }
+   ],
+   "ru": "Рефлекс",
+   "en": "Reflex",
+   "ru_d": "Раз в 9 с Fireblast сам бьет ближайшего героя в 525 (бесплатно)",
+   "en_d": "Every 9 s Fireblast hits the nearest hero within 525 by itself (free)",
+   "mech": 1
+  },
+  {
+   "id": "ogre_m_firerain",
+   "r": "purple",
+   "branch": "W",
+   "ab": "ogre_magi_ignite",
+   "fx": [
+    {
+     "t": "multi",
+     "chance": 30,
+     "times": 2,
+     "delay": 0.5
+    }
+   ],
+   "ru": "Огненный дождь",
+   "en": "Fire Rain",
+   "ru_d": "30% шанс бросить Ignite еще раз (до 2 раз подряд) — сверх мультикаста",
+   "en_d": "30% chance to throw Ignite again (up to 2 times in a row) — on top of Multicast",
+   "mech": 1
+  },
+  {
+   "id": "ogre_m_brother",
+   "r": "purple",
+   "branch": "E",
+   "ab": "ogre_magi_bloodlust",
+   "fx": [
+    {
+     "t": "summon",
+     "unit": "npc_dota_neutral_ogre_mauler",
+     "n": 1,
+     "dur": 20
+    }
+   ],
+   "ru": "Брат-громила",
+   "en": "Big Brother",
+   "ru_d": "Bloodlust зовет огра-громилу на 20 с",
+   "en_d": "Bloodlust summons an Ogre Bruiser for 20 s",
+   "mech": 1
+  },
+  {
+   "id": "ogre_m_burning",
+   "r": "purple",
+   "branch": "W",
+   "ab": "ogre_magi_ignite",
+   "fx": [
+    {
+     "t": "trail",
+     "win": 5,
+     "dps": "burn_damage*1.5",
+     "radius": 175,
+     "life": 3,
+     "type": "magic"
+    }
+   ],
+   "ru": "Горящий огр",
+   "en": "Burning Ogre",
+   "ru_d": "5 с после Ignite за Огром горит земля: 150% урона Ignite в секунду",
+   "en_d": "For 5 s after Ignite the ground burns behind Ogre: 150% of Ignite's damage per second",
+   "mech": 1
+  },
+  {
+   "id": "ogre_l_fireblast",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "ogre_magi_fireblast",
+   "mods": "stun_duration:+0.3",
+   "fx": [
+    {
+     "t": "charges",
+     "n": 1,
+     "aw": {
+      "n": 2
+     }
+    }
+   ],
+   "ru": "Двойная порция",
+   "en": "Double Helping",
+   "ru_d": "У Fireblast есть запасной заряд, оглушение +0.3 с",
+   "en_d": "Fireblast gets a spare charge, stun +0.3 s",
+   "ru_aw": "Пробуждение: 2 запасных заряда",
+   "en_aw": "Awakening: 2 spare charges"
+  },
+  {
+   "id": "ogre_l_ignite",
+   "r": "legend",
+   "branch": "W",
+   "ab": "ogre_magi_ignite",
+   "mods": "duration:+4;burn_damage:+20",
+   "awmods": "slow_movement_speed_pct:-15",
+   "ru": "Пекло",
+   "en": "Inferno",
+   "ru_d": "Ignite: длительность +4 с, урон +20 в секунду",
+   "en_d": "Ignite: duration +4 s, +20 damage per second",
+   "ru_aw": "Пробуждение: замедление +15%",
+   "en_aw": "Awakening: +15% slow"
+  },
+  {
+   "id": "ogre_l_bloodlust",
+   "r": "legend",
+   "branch": "E",
+   "ab": "ogre_magi_bloodlust",
+   "fx": [
+    {
+     "t": "passive",
+     "props": {
+      "as": "bonus_attack_speed*0.5",
+      "ms": "bonus_movement_speed*0.5"
+     },
+     "aw": {
+      "props": {
+       "as": "bonus_attack_speed*1",
+       "ms": "bonus_movement_speed*1"
+      }
+     }
+    }
+   ],
+   "ru": "Вечная жажда боя",
+   "en": "Eternal Bloodlust",
+   "ru_d": "Огр всегда получает 50% бонусов Bloodlust",
+   "en_d": "Ogre always has 50% of Bloodlust's bonuses",
+   "ru_aw": "Пробуждение: 100%",
+   "en_aw": "Awakening: 100%"
+  },
+  {
+   "id": "ogre_l_multicast",
+   "r": "legend",
+   "branch": "R",
+   "ab": "ogre_magi_multicast",
+   "mods": "multicast_2_times:+15;multicast_3_times:+15;multicast_4_times:+10",
+   "awmods": "multicast_4_times:+15",
+   "ru": "Безумная удача",
+   "en": "Insane Luck",
+   "ru_d": "Multicast: шанс двойного +15%, тройного +15%, четверного +10%",
+   "en_d": "Multicast: double +15%, triple +15%, quadruple +10% chance",
+   "ru_aw": "Пробуждение: четверной еще +15%",
+   "en_aw": "Awakening: quadruple +15% more"
+  }
+ ]
+}

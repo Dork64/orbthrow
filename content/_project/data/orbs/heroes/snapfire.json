@@ -1,0 +1,324 @@
+{
+ "hero": "npc_dota_hero_snapfire",
+ "orbs": [
+  {
+   "id": "snap_p_buckshot",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "snapfire_scatterblast",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "armor": -4
+      },
+      "dur": 4
+     }
+    }
+   ],
+   "ru": "Картечь",
+   "en": "Buckshot",
+   "ru_d": "Scatterblast снижает броню героев на 4 на 4 с",
+   "en_d": "Scatterblast reduces heroes' armor by 4 for 4 s"
+  },
+  {
+   "id": "snap_p_grit",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "snapfire_scatterblast",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 2,
+     "props": {
+      "ms": 25
+     }
+    }
+   ],
+   "ru": "Отдача в ноги",
+   "en": "Kick in the Boots",
+   "ru_d": "После Scatterblast +25% скорости бега на 2 с",
+   "en_d": "After Scatterblast: +25% movement speed for 2 s"
+  },
+  {
+   "id": "snap_p_fullbelly",
+   "r": "purple",
+   "branch": "W",
+   "ab": "snapfire_firesnap_cookie",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 4,
+     "props": {
+      "inc": -20
+     }
+    }
+   ],
+   "ru": "Сытое брюхо",
+   "en": "Full Belly",
+   "ru_d": "После Firesnap Cookie Снэпфайр получает на 20% меньше урона 4 с",
+   "en_d": "After Firesnap Cookie Snapfire takes 20% less damage for 4 s"
+  },
+  {
+   "id": "snap_p_shockwave",
+   "r": "purple",
+   "branch": "W",
+   "ab": "snapfire_firesnap_cookie",
+   "fx": [
+    {
+     "t": "blast",
+     "at": "target",
+     "delay": 0.6,
+     "radius": 325,
+     "dmg": 120,
+     "type": "magic",
+     "pfx": "particles/units/heroes/hero_earthshaker/earthshaker_echoslam_start.vpcf"
+    }
+   ],
+   "ru": "Ударная волна",
+   "en": "Shockwave",
+   "ru_d": "Приземление печенья — еще 120 урона врагам в 325",
+   "en_d": "The cookie landing deals 120 more damage to enemies within 325"
+  },
+  {
+   "id": "snap_p_hotlead",
+   "r": "purple",
+   "branch": "E",
+   "ab": "snapfire_lil_shredder",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "attack",
+     "win": "AbilityDuration",
+     "heroOnly": 1,
+     "extra": {
+      "flat": 30,
+      "type": "magic"
+     }
+    }
+   ],
+   "ru": "Горячий свинец",
+   "en": "Hot Lead",
+   "ru_d": "Во время Lil' Shredder атаки по героям наносят еще 30 магического урона",
+   "en_d": "During Lil' Shredder attacks on heroes deal 30 extra magic damage"
+  },
+  {
+   "id": "snap_p_shred",
+   "r": "purple",
+   "branch": "E",
+   "ab": "snapfire_lil_shredder",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "attack",
+     "win": "AbilityDuration",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "healred": 15
+      },
+      "dur": 4,
+      "max": 3
+     }
+    }
+   ],
+   "ru": "Шрапнель",
+   "en": "Shrapnel",
+   "ru_d": "Во время Lil' Shredder атаки снижают лечение героя на 15% (до 3 раз)",
+   "en_d": "During Lil' Shredder attacks reduce a hero's healing by 15% (up to 3 times)"
+  },
+  {
+   "id": "snap_p_napalm",
+   "r": "purple",
+   "branch": "R",
+   "ab": "snapfire_mortimer_kisses",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "mr": -10
+      },
+      "dur": 4,
+      "max": 3
+     }
+    }
+   ],
+   "ru": "Липкая магма",
+   "en": "Sticky Magma",
+   "ru_d": "Плевки Мортимера снижают сопротивление магии на 10% на 4 с (до 3 раз)",
+   "en_d": "Mortimer's globs reduce magic resistance by 10% for 4 s (up to 3 times)"
+  },
+  {
+   "id": "snap_p_shelter",
+   "r": "purple",
+   "branch": "R",
+   "ab": "snapfire_mortimer_kisses",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "AbilityDuration",
+     "props": {
+      "inc": -25
+     }
+    }
+   ],
+   "ru": "Укрытие",
+   "en": "Shelter",
+   "ru_d": "Во время Mortimer Kisses Снэпфайр получает на 25% меньше урона",
+   "en_d": "During Mortimer Kisses Snapfire takes 25% less damage"
+  },
+  {
+   "id": "snap_m_recoil",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "snapfire_scatterblast",
+   "fx": [
+    {
+     "t": "dash",
+     "dist": 350,
+     "to": "back"
+    }
+   ],
+   "ru": "Отдача",
+   "en": "Recoil",
+   "ru_d": "Scatterblast отбрасывает Снэпфайр назад на 350",
+   "en_d": "Scatterblast knocks Snapfire back 350",
+   "mech": 1
+  },
+  {
+   "id": "snap_m_twocookies",
+   "r": "purple",
+   "branch": "W",
+   "ab": "snapfire_firesnap_cookie",
+   "fx": [
+    {
+     "t": "multi",
+     "chance": 40,
+     "times": 1,
+     "delay": 0.7
+    }
+   ],
+   "ru": "Второе печенье",
+   "en": "Second Cookie",
+   "ru_d": "40% шанс, что сразу после приземления прилетит второе печенье (еще прыжок)",
+   "en_d": "40% chance that a second cookie follows right after landing (another hop)",
+   "mech": 1
+  },
+  {
+   "id": "snap_m_autoshred",
+   "r": "purple",
+   "branch": "E",
+   "ab": "snapfire_lil_shredder",
+   "fx": [
+    {
+     "t": "auto",
+     "every": 12,
+     "range": 700,
+     "heroOnly": 1
+    }
+   ],
+   "ru": "Сам стреляет",
+   "en": "Trigger Happy",
+   "ru_d": "Раз в 12 с Lil' Shredder включается сам, если рядом (700) есть герой",
+   "en_d": "Every 12 s Lil' Shredder turns on by itself if a hero is within 700",
+   "mech": 1
+  },
+  {
+   "id": "snap_m_spitstorm",
+   "r": "purple",
+   "branch": "R",
+   "ab": "snapfire_mortimer_kisses",
+   "fx": [
+    {
+     "t": "storm",
+     "win": "AbilityDuration",
+     "every": 0.75,
+     "radius": 1200,
+     "dmg": 90,
+     "type": "magic",
+     "debuff": {
+      "props": {
+       "ms": -20
+      },
+      "dur": 1
+     }
+    }
+   ],
+   "ru": "Шальные плевки",
+   "en": "Stray Globs",
+   "ru_d": "Во время Mortimer Kisses каждые 0.75 с еще один плевок в случайного врага в 1200 (90 урона)",
+   "en_d": "During Mortimer Kisses an extra glob hits a random enemy within 1200 every 0.75 s (90 damage)",
+   "mech": 1
+  },
+  {
+   "id": "snap_l_scatter",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "snapfire_scatterblast",
+   "mods": "blast_width_end:+150",
+   "fx": [
+    {
+     "t": "charges",
+     "n": 1,
+     "aw": {
+      "n": 2
+     }
+    }
+   ],
+   "ru": "Двустволка",
+   "en": "Double Barrel",
+   "ru_d": "У Scatterblast есть запасной заряд, ширина +150",
+   "en_d": "Scatterblast gets a spare charge, width +150",
+   "ru_aw": "Пробуждение: 2 запасных заряда",
+   "en_aw": "Awakening: 2 spare charges"
+  },
+  {
+   "id": "snap_l_cookie",
+   "r": "legend",
+   "branch": "W",
+   "ab": "snapfire_firesnap_cookie",
+   "mods": "jump_horizontal_distance:+250;impact_radius:+100",
+   "awmods": "impact_stun_duration:+0.6",
+   "ru": "Печенье-катапульта",
+   "en": "Catapult Cookie",
+   "ru_d": "Прыжок печенья +250, радиус удара +100",
+   "en_d": "Cookie hop +250, impact radius +100",
+   "ru_aw": "Пробуждение: оглушение +0.6 с",
+   "en_aw": "Awakening: stun +0.6 s"
+  },
+  {
+   "id": "snap_l_shredder",
+   "r": "legend",
+   "branch": "E",
+   "ab": "snapfire_lil_shredder",
+   "mods": "buffed_attacks:+4;damage:+25",
+   "awmods": "attack_speed_bonus:+100",
+   "ru": "Пулемет",
+   "en": "Machine Gun",
+   "ru_d": "Lil' Shredder: +4 выстрела, +25 урона",
+   "en_d": "Lil' Shredder: +4 shots, +25 damage",
+   "ru_aw": "Пробуждение: +100 скорости атаки",
+   "en_aw": "Awakening: +100 attack speed"
+  },
+  {
+   "id": "snap_l_mortimer",
+   "r": "legend",
+   "branch": "R",
+   "ab": "snapfire_mortimer_kisses",
+   "mods": "projectile_count:+5;burn_damage:+40",
+   "awmods": "damage_per_impact:%30",
+   "ru": "Поцелуи дракона",
+   "en": "Dragon Kisses",
+   "ru_d": "Mortimer Kisses: +5 плевков, горение +40 в секунду",
+   "en_d": "Mortimer Kisses: +5 globs, +40 burn per second",
+   "ru_aw": "Пробуждение: урон плевка +30%",
+   "en_aw": "Awakening: +30% glob damage"
+  }
+ ]
+}

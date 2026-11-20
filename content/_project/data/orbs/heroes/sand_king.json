@@ -1,0 +1,557 @@
+{
+ "hero": "npc_dota_hero_sand_king",
+ "orbs": [
+  {
+   "id": "sand_king_b_1",
+   "r": "blue",
+   "branch": "Q",
+   "ab": "sandking_burrowstrike",
+   "mods": "AbilityDamage:%20",
+   "max": 4,
+   "ru": "Тяжёлый прокол",
+   "en": "Heavy Burrow"
+  },
+  {
+   "id": "sand_king_b_2",
+   "r": "blue",
+   "branch": "Q",
+   "ab": "sandking_burrowstrike",
+   "mods": "burrow_width:18",
+   "max": 3,
+   "ru": "Широкий туннель",
+   "en": "Wide Tunnel"
+  },
+  {
+   "id": "sand_king_b_3",
+   "r": "blue",
+   "branch": "Q",
+   "ab": "sandking_burrowstrike",
+   "mods": "burrow_duration:0.15:s",
+   "max": 3,
+   "ru": "Зыбкая земля",
+   "en": "Unsteady Ground"
+  },
+  {
+   "id": "sand_king_b_4",
+   "r": "blue",
+   "branch": "W",
+   "ab": "sandking_sand_storm",
+   "mods": "sand_storm_damage:%15",
+   "max": 4,
+   "ru": "Острый песок",
+   "en": "Sharp Sand"
+  },
+  {
+   "id": "sand_king_b_5",
+   "r": "blue",
+   "branch": "W",
+   "ab": "sandking_sand_storm",
+   "mods": "sand_storm_radius:30",
+   "max": 3,
+   "ru": "Широкий бархан",
+   "en": "Wide Dune"
+  },
+  {
+   "id": "sand_king_b_6",
+   "r": "blue",
+   "branch": "W",
+   "ab": "sandking_sand_storm",
+   "mods": "AbilityDuration:1.5:s",
+   "max": 3,
+   "ru": "Долгая буря",
+   "en": "Long Sandstorm"
+  },
+  {
+   "id": "sand_king_b_7",
+   "r": "blue",
+   "branch": "E",
+   "ab": "sandking_scorpion_strike",
+   "mods": "attack_damage:15",
+   "max": 4,
+   "ru": "Крепкое жало",
+   "en": "Strong Stinger"
+  },
+  {
+   "id": "sand_king_b_8",
+   "r": "blue",
+   "branch": "E",
+   "ab": "sandking_scorpion_strike",
+   "mods": "radius:15",
+   "max": 3,
+   "ru": "Размах жала",
+   "en": "Stinger Reach"
+  },
+  {
+   "id": "sand_king_b_9",
+   "r": "blue",
+   "branch": "E",
+   "ab": "sandking_scorpion_strike",
+   "mods": "cd:10",
+   "max": 4,
+   "ru": "Быстрое жало",
+   "en": "Quick Stinger"
+  },
+  {
+   "id": "sand_king_b_10",
+   "r": "blue",
+   "branch": "R",
+   "ab": "sandking_epicenter",
+   "mods": "epicenter_damage:%12",
+   "max": 4,
+   "ru": "Сильный толчок",
+   "en": "Strong Tremor"
+  },
+  {
+   "id": "sand_king_b_11",
+   "r": "blue",
+   "branch": "R",
+   "ab": "sandking_epicenter",
+   "mods": "epicenter_slow_as:-4",
+   "max": 3,
+   "ru": "Тяжёлые руки",
+   "en": "Heavy Hands"
+  },
+  {
+   "id": "sand_king_b_12",
+   "r": "blue",
+   "branch": "R",
+   "ab": "sandking_epicenter",
+   "mods": "cd:10",
+   "max": 4,
+   "ru": "Сдвиг пластов",
+   "en": "Tectonic Cycle"
+  },
+  {
+   "id": "sand_p_carapace",
+   "branch": "Q",
+   "r": "purple",
+   "ab": "sandking_burrowstrike",
+   "max": 1,
+   "ru": "Песчаный панцирь",
+   "en": "Sand Carapace",
+   "ru_d": "После Burrowstrike +6 брони на 3 с",
+   "en_d": "After Burrowstrike: +6 armor for 3 s",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 3,
+     "props": {
+      "armor": 6
+     }
+    }
+   ]
+  },
+  {
+   "id": "sand_p_reclaim",
+   "branch": "Q",
+   "r": "purple",
+   "ab": "sandking_burrowstrike",
+   "max": 1,
+   "ru": "Возврат песка",
+   "en": "Reclaimed Sand",
+   "ru_d": "Урон Burrowstrike по герою снимает 1 с с перезарядки Scorpion Strike и возвращает ману в размере 20% урона. Раз в секунду по цели.",
+   "en_d": "Burrowstrike hero damage cuts 1 s off Scorpion Strike and restores mana equal to 20% of damage. Once per second per target.",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "icd": 1,
+     "mana": 20,
+     "cdr": {
+      "abs": [
+       "sandking_scorpion_strike"
+      ],
+      "sec": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "sand_p_drought",
+   "branch": "W",
+   "r": "purple",
+   "ab": "sandking_sand_storm",
+   "max": 1,
+   "ru": "Засуха",
+   "en": "Drought",
+   "ru_d": "8 с после Sand Storm лечение героев в 300 снижено на 20%",
+   "en_d": "For 8 s after Sand Storm, hero healing within 300 is reduced by 20%",
+   "fx": [
+    {
+     "t": "aura",
+     "win": 8,
+     "radius": 300,
+     "props": {
+      "healred": 20
+     },
+     "heroOnly": 1
+    }
+   ]
+  },
+  {
+   "id": "sand_p_shelter",
+   "branch": "W",
+   "r": "purple",
+   "ab": "sandking_sand_storm",
+   "max": 1,
+   "ru": "Укрытие в бархане",
+   "en": "Dune Shelter",
+   "ru_d": "Первые 5 с после Sand Storm +8 брони и +1% максимального здоровья в секунду.",
+   "en_d": "For the first 5 s after Sand Storm: 8 armor and regeneration of 1% max health per second.",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 5,
+     "props": {
+      "armor": 8,
+      "regenpct": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "sand_p_needle",
+   "branch": "E",
+   "r": "purple",
+   "ab": "sandking_scorpion_strike",
+   "max": 1,
+   "ru": "Осколок жала",
+   "en": "Stinger Shard",
+   "ru_d": "Scorpion Strike через 0.2 с вызывает дополнительный взрыв в выбранной точке: 45 магического урона в 230",
+   "en_d": "Scorpion Strike causes an additional blast at its target point after 0.2 s: 45 magic damage in 230",
+   "fx": [
+    {
+     "t": "blast",
+     "at": "point",
+     "delay": 0.2,
+     "radius": 230,
+     "dmg": 45,
+     "type": "magic"
+    }
+   ]
+  },
+  {
+   "id": "sand_p_stiffness",
+   "branch": "E",
+   "r": "purple",
+   "ab": "sandking_scorpion_strike",
+   "max": 1,
+   "ru": "Скованность",
+   "en": "Stiffness",
+   "ru_d": "Scorpion Strike через 0.2 с снижает скорость атаки врагов в 230 от выбранной точки на 30 на 3 с",
+   "en_d": "Scorpion Strike reduces enemy attack speed within 230 of its target point by 30 for 3 s after 0.2 s",
+   "fx": [
+    {
+     "t": "blast",
+     "at": "point",
+     "delay": 0.2,
+     "radius": 230,
+     "dmg": 0,
+     "type": "magic",
+     "debuff": {
+      "props": {
+       "as": -30
+      },
+      "dur": 3
+     }
+    }
+   ]
+  },
+  {
+   "id": "sand_p_stability",
+   "branch": "R",
+   "r": "purple",
+   "ab": "sandking_epicenter",
+   "max": 1,
+   "ru": "Устойчивость",
+   "en": "Stability",
+   "ru_d": "6 с после Epicenter +20% сопротивления эффектам, в пределах общего потолка сфер 50%",
+   "en_d": "For 6 s after Epicenter: +20% status resistance, within the shared 50% orb cap",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 6,
+     "props": {
+      "status": 20
+     }
+    }
+   ]
+  },
+  {
+   "id": "sand_p_harvest",
+   "branch": "R",
+   "r": "purple",
+   "ab": "sandking_epicenter",
+   "max": 1,
+   "ru": "Под песками",
+   "en": "Under the Sands",
+   "ru_d": "Epicenter метит до 3 героев на 4 с. Ваша атака по метке наносит 100 магического урона. Метка на цель — раз в 6 с.",
+   "en_d": "Epicenter marks up to 3 heroes for 4 s. Your attack consumes the mark for 100 magic damage. Marks have a 6 s cooldown per hero.",
+   "fx": [
+    {
+     "t": "mark",
+     "by": "ab",
+     "consume": [
+      "attack"
+     ],
+     "dur": 4,
+     "icd": 6,
+     "max": 3,
+     "dmg": 100
+    }
+   ]
+  },
+  {
+   "id": "sand_m_quicksand",
+   "branch": "W",
+   "r": "purple",
+   "ab": "sandking_sand_storm",
+   "max": 1,
+   "ru": "Зыбучий песок",
+   "en": "Quicksand",
+   "ru_d": "Sand Storm оставляет зону 300 на 5 с. Первый тик по герою наносит 110 магического урона, следующие по 25. Замедление 25%. Стеклянная пустыня заменяет эту зону.",
+   "en_d": "Sand Storm leaves a 300-radius zone for 5 s. The first tick per hero deals 110 magic damage, later ticks deal 25. Slows by 25%. Glass Desert replaces this zone.",
+   "fx": [
+    {
+     "t": "zone",
+     "at": "self",
+     "radius": 300,
+     "dur": 5,
+     "every": 1,
+     "dmg": 25,
+     "debuff": {
+      "props": {
+       "ms": -25
+      },
+      "dur": 1.2
+     },
+     "entryDmg": 85,
+     "group": "sandstorm"
+    }
+   ],
+   "mech": 1
+  },
+  {
+   "id": "sand_m_chitintrail",
+   "branch": "Q",
+   "r": "purple",
+   "ab": "sandking_burrowstrike",
+   "max": 1,
+   "ru": "Хитиновый след",
+   "en": "Chitin Trail",
+   "ru_d": "3 с после Burrowstrike остаётся след на 3 с: 30 магического урона в секунду и −2 брони",
+   "en_d": "For 3 s after Burrowstrike, leaves a 3 s trail: 30 magic damage per second and 2 armor reduction",
+   "fx": [
+    {
+     "t": "trail",
+     "win": 3,
+     "dps": 30,
+     "radius": 140,
+     "life": 3,
+     "type": "magic",
+     "debuff": {
+      "props": {
+       "armor": -2
+      },
+      "dur": 1
+     }
+    }
+   ],
+   "mech": 1
+  },
+  {
+   "id": "sand_m_fault",
+   "branch": "E",
+   "r": "purple",
+   "ab": "sandking_scorpion_strike",
+   "max": 1,
+   "ru": "Двойной разлом",
+   "en": "Double Fault",
+   "ru_d": "Burrowstrike и Scorpion Strike за 3 с: импульс 125 магического урона героям в 325. КД 8 с.",
+   "en_d": "Burrowstrike and Scorpion Strike within 3 s deal 125 magic damage in 325. 8 s cooldown.",
+   "fx": [
+    {
+     "t": "combo",
+     "abs": [
+      "sandking_burrowstrike",
+      "sandking_scorpion_strike"
+     ],
+     "need": 2,
+     "within": 3,
+     "icd": 8,
+     "radius": 325,
+     "dmg": 125,
+     "dur": 2,
+     "props": {}
+    }
+   ],
+   "mech": 1
+  },
+  {
+   "id": "sand_m_hourglass",
+   "branch": "R",
+   "r": "purple",
+   "ab": "sandking_epicenter",
+   "max": 1,
+   "ru": "Песочные часы",
+   "en": "Hourglass",
+   "ru_d": "Epicenter оставляет неподвижное кольцо 275–575 на 3 с. Первый тик по герою наносит 160 магического урона, следующие по 35. Замедление 25%.",
+   "en_d": "Epicenter leaves a fixed 275–575 ring for 3 s. The first tick per hero deals 160 magic damage, later ticks deal 35. Slows by 25%.",
+   "fx": [
+    {
+     "t": "zone",
+     "at": "self",
+     "radius": 575,
+     "dur": 3,
+     "every": 1,
+     "dmg": 35,
+     "debuff": {
+      "props": {
+       "ms": -25
+      },
+      "dur": 1.2
+     },
+     "inner": 275,
+     "entryDmg": 125
+    }
+   ],
+   "mech": 1
+  },
+  {
+   "id": "sand_l_fracture",
+   "branch": "Q",
+   "r": "legend",
+   "ab": "sandking_burrowstrike",
+   "max": 1,
+   "ru": "Тектонический разлом",
+   "en": "Tectonic Fault",
+   "ru_d": "Burrowstrike метит до 4 героев на 4 с. Scorpion Strike или ваша атака по метке взрывает её на 180 магического урона. Метка на цель — раз в 7 с.",
+   "en_d": "Burrowstrike marks up to 4 heroes for 4 s. Scorpion Strike damage or your attack detonates the mark for 180 magic damage. Marks have a 7 s cooldown per hero.",
+   "fx": [
+    {
+     "t": "mark",
+     "by": "ab",
+     "consume": [
+      "sandking_scorpion_strike",
+      "attack"
+     ],
+     "dur": 4,
+     "icd": 7,
+     "max": 4,
+     "dmg": 180,
+     "aw": {
+      "dmg": 260,
+      "dur": 5
+     }
+    }
+   ],
+   "ru_aw": "Пробуждение: 260 урона и 5 с на добивание.",
+   "en_aw": "Awakening: 260 damage and a 5 s mark."
+  },
+  {
+   "id": "sand_l_glass",
+   "branch": "W",
+   "r": "legend",
+   "ab": "sandking_sand_storm",
+   "max": 1,
+   "ru": "Стеклянная пустыня",
+   "en": "Glass Desert",
+   "ru_d": "Sand Storm оставляет кольцо 250–600 на 6 с. Первый тик по герою наносит 165 магического урона, следующие по 40. Замедление 30%. Центр безопасен от эффекта сферы.",
+   "en_d": "Sand Storm leaves a 250–600 ring for 6 s. The first tick per hero deals 165 magic damage, later ticks deal 40. Slows by 30%. The center is safe from the orb effect.",
+   "fx": [
+    {
+     "t": "zone",
+     "at": "self",
+     "radius": 600,
+     "dur": 6,
+     "every": 1,
+     "dmg": 40,
+     "debuff": {
+      "props": {
+       "ms": -30
+      },
+      "dur": 1.2
+     },
+     "inner": 250,
+     "entryDmg": 125,
+     "group": "sandstorm",
+     "aw": {
+      "dmg": 50,
+      "entryDmg": 175,
+      "radius": 650
+     }
+    }
+   ],
+   "ru_aw": "Пробуждение: первый тик 225, следующие по 50, внешний радиус 650.",
+   "en_aw": "Awakening: 225 first tick damage, 50 later damage, outer radius 650."
+  },
+  {
+   "id": "sand_l_twinfang",
+   "branch": "E",
+   "r": "legend",
+   "ab": "sandking_scorpion_strike",
+   "max": 1,
+   "ru": "Двойное жало",
+   "en": "Twin Stinger",
+   "ru_d": "Scorpion Strike получает второй заряд. Через 0,35 с после каждого применения в центре удара происходит взрыв на 85 магического урона в 175.",
+   "en_d": "Scorpion Strike gains a second charge. Each cast erupts at its center after 0.35 s for 85 magic damage within 175.",
+   "fx": [
+    {
+     "t": "charges",
+     "n": 1
+    },
+    {
+     "t": "blast",
+     "at": "point",
+     "delay": 0.35,
+     "radius": 175,
+     "dmg": 85,
+     "type": "magic",
+     "pfx": "particles/units/heroes/hero_earthshaker/earthshaker_echoslam_start.vpcf",
+     "aw": {
+      "dmg": 130,
+      "radius": 200
+     }
+    }
+   ],
+   "ru_aw": "Пробуждение: взрыв наносит 130 урона в 200.",
+   "en_aw": "Awakening: 130 eruption damage within 200."
+  },
+  {
+   "id": "sand_l_duneheart",
+   "branch": "R",
+   "r": "legend",
+   "ab": "sandking_epicenter",
+   "max": 1,
+   "ru": "Сердце бархана",
+   "en": "Dune Heart",
+   "ru_d": "Первые 6 с после Epicenter урон от героев в 15% макс. здоровья запускает ответ на 245 магического урона в 450. Восстанавливает 6% здоровья и снижает получаемый урон на 20% на 3 с. КД 15 с.",
+   "en_d": "For 6 s after Epicenter, taking hero damage equal to 15% max health triggers a 245 magic damage blast within 450, heals 6% max health and reduces damage taken by 20% for 3 s. 15 s cooldown.",
+   "fx": [
+    {
+     "t": "guard",
+     "win": 6,
+     "thr": 15,
+     "icd": 15,
+     "radius": 450,
+     "dmg": 245,
+     "dur": 3,
+     "props": {
+      "inc": -20
+     },
+     "heal": 6,
+     "aw": {
+      "dmg": 340,
+      "heal": 9,
+      "props": {
+       "inc": -25
+      }
+     }
+    }
+   ],
+   "ru_aw": "Пробуждение: 340 урона, лечение 9%, снижение урона 25%.",
+   "en_aw": "Awakening: 340 damage, 9% healing and 25% damage reduction."
+  }
+ ]
+}

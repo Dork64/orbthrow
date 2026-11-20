@@ -1,0 +1,55 @@
+{
+  "puck_waning_rift": {
+    "silence_duration": 5
+  },
+  "puck_phase_shift": {
+    "duration": 3.5
+  },
+  "puck_dream_coil": {
+    "coil_duration": 8
+  },
+  "slark_pounce": {
+    "leash_duration": 4.5,
+    "pounce_radius": 180
+  },
+  "slark_shadow_dance": {
+    "duration": 7
+  },
+  "slark_saltwater_shiv": {
+    "health_rest_steal": 35,
+    "regen_steal": 35,
+    "ms_steal": 30
+  },
+  "razor_static_link": {
+    "drain_rate": 45,
+    "drain_length": 14
+  },
+  "razor_eye_of_the_storm": {
+    "duration": 42
+  },
+  "necrolyte_heartstopper_aura": {
+    "aura_damage": 4
+  },
+  "necrolyte_reapers_scythe": {
+    "damage_per_health": 1.15
+  },
+  "sandking_burrowstrike": {
+    "burrow_duration": 2.8
+  },
+  "sandking_sand_storm": {
+    "sand_storm_damage": 240,
+    "sand_storm_radius": 1000
+  },
+  "sandking_epicenter": {
+    "epicenter_damage": 160
+  },
+  "puck_puckish": {
+    "mana_and_health_restore_pct": 6
+  },
+  "necrolyte_death_pulse": {
+    "heal": 260
+  },
+  "necrolyte_sadist": {
+    "regen": 6
+  }
+}

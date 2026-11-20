@@ -1,0 +1,360 @@
+{
+ "hero": "npc_dota_hero_pudge",
+ "orbs": [
+  {
+   "id": "pudge_p_snack",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "pudge_meat_hook",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "heal": 30
+    }
+   ],
+   "ru": "Закуска",
+   "en": "Snack",
+   "ru_d": "Meat Hook лечит Пуджа на 30% урона по героям",
+   "en_d": "Meat Hook heals Pudge for 30% of its damage to heroes"
+  },
+  {
+   "id": "pudge_p_rehook",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "pudge_meat_hook",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "cdr": {
+      "abs": [
+       "self"
+      ],
+      "sec": 4
+     }
+    }
+   ],
+   "ru": "Снова крюк",
+   "en": "Rehook",
+   "ru_d": "Попадание Meat Hook по герою сокращает его перезарядку на 4 с",
+   "en_d": "Hitting a hero with Meat Hook reduces its cooldown by 4 s"
+  },
+  {
+   "id": "pudge_p_stench",
+   "r": "purple",
+   "branch": "W",
+   "ab": "pudge_rot",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "as": -15
+      },
+      "dur": 0.5
+     }
+    }
+   ],
+   "ru": "Вонь",
+   "en": "Stench",
+   "ru_d": "Rot снижает скорость атаки героев на 15",
+   "en_d": "Rot reduces heroes' attack speed by 15"
+  },
+  {
+   "id": "pudge_p_feast",
+   "r": "purple",
+   "branch": "W",
+   "ab": "pudge_rot",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "heal": 30
+    }
+   ],
+   "ru": "Пир гнили",
+   "en": "Rot Feast",
+   "ru_d": "Rot лечит Пуджа на 30% урона по героям",
+   "en_d": "Rot heals Pudge for 30% of its damage to heroes"
+  },
+  {
+   "id": "pudge_p_lard",
+   "r": "purple",
+   "branch": "E",
+   "ab": "pudge_flesh_heap",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "armor": 6
+     }
+    }
+   ],
+   "ru": "Сало",
+   "en": "Lard",
+   "ru_d": "Flesh Heap дает +6 брони на время действия",
+   "en_d": "Flesh Heap grants +6 armor for its duration"
+  },
+  {
+   "id": "pudge_p_glutton",
+   "r": "purple",
+   "branch": "E",
+   "ab": "pudge_flesh_heap",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "any",
+     "stack": {
+      "props": {
+       "str": 2
+      },
+      "max": 12,
+      "perm": 1
+     }
+    }
+   ],
+   "ru": "Обжора",
+   "en": "Glutton",
+   "ru_d": "+2 силы за каждое убийство героя (до 12 раз, навсегда)",
+   "en_d": "+2 strength per hero kill (up to 12 times, permanent)"
+  },
+  {
+   "id": "pudge_p_chew",
+   "r": "purple",
+   "branch": "R",
+   "ab": "pudge_dismember",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "heal": 40
+    }
+   ],
+   "ru": "Жевание",
+   "en": "Chew",
+   "ru_d": "Dismember лечит Пуджа на 40% урона",
+   "en_d": "Dismember heals Pudge for 40% of its damage"
+  },
+  {
+   "id": "pudge_p_bulk",
+   "r": "purple",
+   "branch": "R",
+   "ab": "pudge_dismember",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "AbilityChannelTime",
+     "props": {
+      "inc": -25
+     }
+    }
+   ],
+   "ru": "Туша",
+   "en": "Bulk",
+   "ru_d": "Во время Dismember Пудж получает на 25% меньше урона",
+   "en_d": "During Dismember Pudge takes 25% less damage"
+  },
+  {
+   "id": "pudge_l_hook",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "pudge_meat_hook",
+   "mods": "damage:+120",
+   "awmods": "hook_speed:+600",
+   "fx": [
+    {
+     "t": "charges",
+     "n": 1
+    }
+   ],
+   "ru": "Мясник",
+   "en": "Butcher",
+   "ru_d": "У Meat Hook есть запасной заряд, урон +120",
+   "en_d": "Meat Hook gets a spare charge, damage +120",
+   "ru_aw": "Пробуждение: скорость крюка +600",
+   "en_aw": "Awakening: hook speed +600"
+  },
+  {
+   "id": "pudge_l_mire",
+   "r": "legend",
+   "branch": "W",
+   "ab": "pudge_rot",
+   "ru": "Топь мясника",
+   "en": "Butcher Mire",
+   "ru_d": "Rot раз в 2 с по каждому герою наносит ещё 2% его текущего здоровья магическим уроном и снижает его урон на 10% на 2 с",
+   "en_d": "Rot deals 2% of each hero's current health as extra magic damage and reduces their damage by 10% for 2 s, once per 2 s per target",
+   "ru_aw": "Пробуждение: 3% текущего здоровья, снижение урона 15%",
+   "en_aw": "Awakening: 3% current health, 15% damage reduction",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "icd": 2,
+     "extra": {
+      "curhp": 2,
+      "type": "magic"
+     },
+     "debuff": {
+      "props": {
+       "dmg": -10
+      },
+      "dur": 2
+     },
+     "aw": {
+      "extra": {
+       "curhp": 3,
+       "type": "magic"
+      },
+      "debuff": {
+       "props": {
+        "dmg": -15
+       },
+       "dur": 2
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "pudge_l_heap",
+   "r": "legend",
+   "branch": "E",
+   "ab": "pudge_flesh_heap",
+   "mods": "damage_block:+15",
+   "fx": [
+    {
+     "t": "passive",
+     "props": {
+      "hp": 300
+     },
+     "aw": {
+      "props": {
+       "hp": 600
+      }
+     }
+    }
+   ],
+   "ru": "Гора мяса",
+   "en": "Meat Mountain",
+   "ru_d": "Flesh Heap блокирует еще 15 урона; +300 здоровья",
+   "en_d": "Flesh Heap blocks 15 more damage; +300 health",
+   "ru_aw": "Пробуждение: +600 здоровья",
+   "en_aw": "Awakening: +600 health"
+  },
+  {
+   "id": "pudge_l_dismember",
+   "r": "legend",
+   "branch": "R",
+   "ab": "pudge_dismember",
+   "mods": "dismember_damage:+40;strength_damage:+0.3",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "ab",
+     "cdpct": 0,
+     "aw": {
+      "cdpct": 100
+     }
+    }
+   ],
+   "ru": "Разделка",
+   "en": "Carving",
+   "ru_d": "Урон Dismember +40, от силы +0.3 за единицу",
+   "en_d": "Dismember damage +40, +0.3 per strength",
+   "ru_aw": "Пробуждение: убийство Dismember обновляет его",
+   "en_aw": "Awakening: a Dismember kill refreshes it"
+  },
+  {
+   "id": "pudge_m_doublehook",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "pudge_meat_hook",
+   "fx": [
+    {
+     "t": "multi",
+     "chance": 35,
+     "times": 1,
+     "delay": 0.5
+    }
+   ],
+   "ru": "Двойной крюк",
+   "en": "Double Hook",
+   "ru_d": "35% шанс, что крюк полетит еще раз в ту же сторону",
+   "en_d": "35% chance that Meat Hook flies again in the same direction",
+   "mech": 1
+  },
+  {
+   "id": "pudge_m_rottrail",
+   "r": "purple",
+   "branch": "W",
+   "ab": "pudge_rot",
+   "fx": [
+    {
+     "t": "trail",
+     "dps": "rot_damage*0.5",
+     "radius": 170,
+     "life": 4,
+     "type": "magic",
+     "pfx": "particles/units/heroes/hero_viper/viper_nethertoxin.vpcf"
+    }
+   ],
+   "ru": "Гнилой след",
+   "en": "Rotten Trail",
+   "ru_d": "Где ходит Пудж, 4 с остается гниль: 50% урона Rot в секунду",
+   "en_d": "Where Pudge walks, rot stays for 4 s: 50% of Rot damage per second",
+   "mech": 1
+  },
+  {
+   "id": "pudge_m_magnet",
+   "r": "purple",
+   "branch": "E",
+   "ab": "pudge_flesh_heap",
+   "fx": [
+    {
+     "t": "pull",
+     "at": "self",
+     "radius": 550,
+     "dist": 350,
+     "pfx": "particles/units/heroes/hero_dark_seer/dark_seer_vacuum.vpcf"
+    }
+   ],
+   "ru": "Мясной магнит",
+   "en": "Meat Magnet",
+   "ru_d": "Flesh Heap стягивает к Пуджу врагов в 550",
+   "en_d": "Flesh Heap drags enemies within 550 to Pudge",
+   "mech": 1
+  },
+  {
+   "id": "pudge_m_bloat",
+   "r": "purple",
+   "branch": "E",
+   "ab": "pudge_flesh_heap",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 6,
+     "props": {
+      "scale": 135,
+      "nocol": 1,
+      "msc": 35,
+      "inc": -10
+     }
+    }
+   ],
+   "ru": "Туша",
+   "en": "Bloat",
+   "ru_d": "Flesh Heap раздувает Пуджа на 6 с: больше, сквозь всех, +35 скорости, −10% урона по нему",
+   "en_d": "Flesh Heap bloats Pudge for 6 s: bigger, passes through units, +35 speed, −10% damage taken",
+   "mech": 1
+  }
+ ]
+}

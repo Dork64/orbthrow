@@ -1,0 +1,326 @@
+{
+ "hero": "npc_dota_hero_windrunner",
+ "orbs": [
+  {
+   "id": "wr_p_knot",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "windrunner_shackleshot",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "mr": -20
+      },
+      "dur": 4
+     }
+    }
+   ],
+   "ru": "Тугой узел",
+   "en": "Tight Knot",
+   "ru_d": "После Shackleshot сопротивление магии цели −20% на 4 с",
+   "en_d": "After Shackleshot the target has −20% magic resistance for 4 s"
+  },
+  {
+   "id": "wr_p_arrowhead",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "windrunner_shackleshot",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "extra": {
+      "atk": 100,
+      "type": "phys"
+     }
+    }
+   ],
+   "ru": "Наконечник",
+   "en": "Arrowhead",
+   "ru_d": "Shackleshot наносит 100% урона атаки",
+   "en_d": "Shackleshot deals 100% of attack damage"
+  },
+  {
+   "id": "wr_p_piercing",
+   "r": "purple",
+   "branch": "W",
+   "ab": "windrunner_powershot",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "armor": -6
+      },
+      "dur": 5
+     }
+    }
+   ],
+   "ru": "Бронебойная",
+   "en": "Armor Piercer",
+   "ru_d": "Powershot снижает броню героев на 6 на 5 с",
+   "en_d": "Powershot reduces heroes' armor by 6 for 5 s"
+  },
+  {
+   "id": "wr_p_quickdraw",
+   "r": "purple",
+   "branch": "W",
+   "ab": "windrunner_powershot",
+   "fx": [
+    {
+     "t": "refund",
+     "chance": 30,
+     "cdpct": 100
+    }
+   ],
+   "ru": "Быстрая рука",
+   "en": "Quick Draw",
+   "ru_d": "30% шанс, что Powershot сразу перезарядится",
+   "en_d": "30% chance that Powershot is instantly refreshed"
+  },
+  {
+   "id": "wr_p_breeze",
+   "r": "purple",
+   "branch": "E",
+   "ab": "windrunner_windrun",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "AbilityDuration",
+     "props": {
+      "as": 60
+     }
+    }
+   ],
+   "ru": "Свежий бриз",
+   "en": "Fresh Breeze",
+   "ru_d": "Во время Windrun +60 скорости атаки",
+   "en_d": "During Windrun: +60 attack speed"
+  },
+  {
+   "id": "wr_p_headwind",
+   "r": "purple",
+   "branch": "E",
+   "ab": "windrunner_windrun",
+   "fx": [
+    {
+     "t": "aura",
+     "win": "AbilityDuration",
+     "radius": 350,
+     "props": {
+      "ms": -25
+     }
+    }
+   ],
+   "ru": "Встречный ветер",
+   "en": "Headwind",
+   "ru_d": "Во время Windrun враги в 350 замедлены на 25%",
+   "en_d": "During Windrun enemies within 350 are slowed by 25%"
+  },
+  {
+   "id": "wr_p_dance",
+   "r": "purple",
+   "branch": "R",
+   "ab": "windrunner_focusfire",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "AbilityDuration",
+     "props": {
+      "ms": 20,
+      "range": 100
+     }
+    }
+   ],
+   "ru": "Танец ветра",
+   "en": "Wind Dance",
+   "ru_d": "Во время Focus Fire +20% скорости бега и +100 дальности атаки",
+   "en_d": "During Focus Fire: +20% movement speed and +100 attack range"
+  },
+  {
+   "id": "wr_p_mark",
+   "r": "purple",
+   "branch": "R",
+   "ab": "windrunner_focusfire",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "attack",
+     "win": "AbilityDuration",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "armor": -1
+      },
+      "dur": 4,
+      "max": 8
+     }
+    }
+   ],
+   "ru": "Метка лучницы",
+   "en": "Ranger's Mark",
+   "ru_d": "Во время Focus Fire атаки снижают броню героя на 1 на 4 с (до 8 раз)",
+   "en_d": "During Focus Fire attacks reduce a hero's armor by 1 for 4 s (up to 8 times)"
+  },
+  {
+   "id": "wr_m_autoshackle",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "windrunner_shackleshot",
+   "fx": [
+    {
+     "t": "auto",
+     "every": 12,
+     "range": 700,
+     "heroOnly": 1
+    }
+   ],
+   "ru": "Охотничьи путы",
+   "en": "Hunting Shackles",
+   "ru_d": "Раз в 12 с Shackleshot сам летит в ближайшего героя в 700 (бесплатно)",
+   "en_d": "Every 12 s Shackleshot flies at the nearest hero within 700 by itself (free)",
+   "mech": 1
+  },
+  {
+   "id": "wr_m_swap",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "windrunner_shackleshot",
+   "fx": [
+    {
+     "t": "swap"
+    }
+   ],
+   "ru": "Подмена",
+   "en": "Switcheroo",
+   "ru_d": "После Shackleshot Лучница меняется местами с целью",
+   "en_d": "After Shackleshot Windranger swaps places with the target",
+   "mech": 1
+  },
+  {
+   "id": "wr_m_recoil",
+   "r": "purple",
+   "branch": "W",
+   "ab": "windrunner_powershot",
+   "fx": [
+    {
+     "t": "dash",
+     "dist": 400,
+     "to": "back"
+    }
+   ],
+   "ru": "Отдача",
+   "en": "Recoil",
+   "ru_d": "После Powershot Лучницу отбрасывает назад на 400",
+   "en_d": "After Powershot Windranger is pushed back 400",
+   "mech": 1
+  },
+  {
+   "id": "wr_m_squall",
+   "r": "purple",
+   "branch": "E",
+   "ab": "windrunner_windrun",
+   "fx": [
+    {
+     "t": "trail",
+     "win": "AbilityDuration",
+     "dps": 25,
+     "radius": 175,
+     "life": 3,
+     "type": "magic",
+     "debuff": {
+      "props": {
+       "ms": -30
+      },
+      "dur": 1
+     }
+    }
+   ],
+   "ru": "Шквальный след",
+   "en": "Squall Trail",
+   "ru_d": "Во время Windrun за Лучницей вихревой след: −30% скорости и 25 урона в секунду врагам",
+   "en_d": "During Windrun Windranger leaves a squall trail: −30% movement speed and 25 damage per second to enemies",
+   "mech": 1
+  },
+  {
+   "id": "wr_l_shackle",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "windrunner_shackleshot",
+   "mods": "shackle_count:+1;shackle_angle:+10",
+   "awmods": "stun_duration:+0.5",
+   "ru": "Двойные путы",
+   "en": "Double Shackles",
+   "ru_d": "Shackleshot связывает две цели, угол поиска +10",
+   "en_d": "Shackleshot binds two targets, search angle +10",
+   "ru_aw": "Пробуждение: оглушение +0.5 с",
+   "en_aw": "Awakening: stun +0.5 s"
+  },
+  {
+   "id": "wr_l_powershot",
+   "r": "legend",
+   "branch": "W",
+   "ab": "windrunner_powershot",
+   "mods": "arrow_width:+75",
+   "fx": [
+    {
+     "t": "charges",
+     "n": 1,
+     "aw": {
+      "n": 2
+     }
+    }
+   ],
+   "ru": "Залп",
+   "en": "Volley",
+   "ru_d": "У Powershot есть запасной заряд, ширина стрелы +75",
+   "en_d": "Powershot gets a spare charge, arrow width +75",
+   "ru_aw": "Пробуждение: 2 запасных заряда",
+   "en_aw": "Awakening: 2 spare charges"
+  },
+  {
+   "id": "wr_l_windrun",
+   "r": "legend",
+   "branch": "E",
+   "ab": "windrunner_windrun",
+   "awmods": "AbilityDuration:+2",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "AbilityDuration",
+     "props": {
+      "invis": 1,
+      "ms": 15
+     }
+    }
+   ],
+   "ru": "Ветер-призрак",
+   "en": "Ghost Wind",
+   "ru_d": "Windrun делает Лучницу невидимой (атака снимает) и дает +15% скорости",
+   "en_d": "Windrun makes Windranger invisible (attacking breaks it) and grants +15% movement speed",
+   "ru_aw": "Пробуждение: длительность +2 с",
+   "en_aw": "Awakening: duration +2 s"
+  },
+  {
+   "id": "wr_l_focus",
+   "r": "legend",
+   "branch": "R",
+   "ab": "windrunner_focusfire",
+   "mods": "focusfire_damage_reduction:+25",
+   "awmods": "bonus_range:+200",
+   "ru": "Меткий шквал",
+   "en": "True Squall",
+   "ru_d": "Focus Fire без штрафа к урону",
+   "en_d": "Focus Fire has no damage penalty",
+   "ru_aw": "Пробуждение: +200 дальности атаки во время Focus Fire",
+   "en_aw": "Awakening: +200 attack range during Focus Fire"
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+node_modules/
+build/
+.backups/
+.sim/
+_deploy/
+work/
+*.log
+tools_asset_info.bin
+tools_thumbnail_cache.sqlite3*
+.env
+.env.*
+!.env.example

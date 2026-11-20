@@ -1,0 +1,94 @@
+<root>
+	<styles>
+		<include src="s2r://panorama/styles/dotastyles.vcss_c" />
+		<include src="file://{resources}/styles/custom_game/hud.css" />
+	</styles>
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/version.js" />
+		<include src="file://{resources}/scripts/custom_game/util.js" />
+		<include src="file://{resources}/scripts/custom_game/hud.js" />
+		<include src="file://{resources}/scripts/custom_game/orbs.js" />
+		<include src="file://{resources}/scripts/custom_game/boss.js" />
+		<include src="file://{resources}/scripts/custom_game/help.js" />
+		<include src="file://{resources}/scripts/custom_game/slots.js" />
+		<include src="file://{resources}/scripts/custom_game/neutrals.js" />
+	</scripts>
+	<Panel class="OrbHud" hittest="false">
+		<Panel id="WorldMarks" hittest="false" />
+		<Label id="OrbWardTarget" class="Hidden" text="#orb_slot_pick_point" hittest="false" />
+		<Label id="OrbChargeDisplay" class="Hidden" hittest="false" />
+		<Panel id="ChestArrow" class="Hidden" hittest="false">
+			<Panel id="ChestArrowIcon" hittest="false" />
+			<Label id="ChestArrowText" text="" hittest="false" />
+		</Panel>
+		<Panel id="TopBar" hittest="false">
+			<Panel id="GoalBox" hittest="true">
+				<Label id="GoalCaption" text="#orb_goal" />
+				<Label id="GoalLabel" text="" />
+				<Panel id="GoalProgress" hittest="false"><Panel id="GoalProgressFill" hittest="false" /></Panel>
+				<Label id="TimerLabel" text="" />
+			</Panel>
+			<Panel id="PlayersRow" hittest="false" />
+		</Panel>
+		<!-- Событие арены: плашка под верхней панелью (game/arenaevents.ts) -->
+		<Panel id="EventBanner" class="Hidden" hittest="true">
+			<Label id="EventTitle" text="" hittest="false" />
+			<Label id="EventDesc" text="" hittest="false" />
+		</Panel>
+		<Panel id="Toasts" hittest="false" />
+		<Panel id="Errors" hittest="false" />
+		<!-- Справа над магазином: подмога, выбор сфер, шкалы (место считает orbs.ts). Не по центру,
+		     чтобы не закрывать бой; при открытом магазине скрыты -->
+		<Panel id="OrbBarsDock" class="Hidden" hittest="false">
+			<Panel id="HelpPanel" class="Hidden" hittest="true">
+				<Label id="HelpTitle" text="#orb_help_title" />
+				<Panel id="HelpButtons">
+					<Button class="HelpButton" onactivate="HelpPick('gold')"><Label id="HelpGoldLabel" text="" /></Button>
+					<Button class="HelpButton" onactivate="HelpPick('orb')"><Label text="#orb_help_orb" /></Button>
+					<Button class="HelpButton" onactivate="HelpPick('rage')"><Label text="#orb_help_rage" /></Button>
+				</Panel>
+				<Label id="HelpAuto" text="" />
+			</Panel>
+			<Panel id="OrbChoice" class="Hidden" hittest="true">
+				<Panel id="OrbChoiceHeader">
+					<Label id="OrbChoiceTitle" text="" />
+					<Button id="OrbCollapse" onactivate="OrbCollapse()">
+						<Label text="#orb_collapse" />
+					</Button>
+				</Panel>
+				<Panel id="OrbCards" />
+				<Panel id="OrbChoiceFooter">
+					<Button id="OrbReroll" onactivate="OrbReroll()">
+						<Label id="OrbRerollLabel" text="" />
+					</Button>
+					<Label id="OrbAutoLabel" text="" />
+				</Panel>
+			</Panel>
+			<Panel id="OrbBarsRow" hittest="false">
+				<Button id="OrbQueueButton" onactivate="OrbToggle()">
+					<Label id="OrbQueueLabel" text="" />
+					<Panel id="OrbQueueDots" hittest="false" />
+				</Button>
+				<Panel id="OrbBars" />
+			</Panel>
+		</Panel>
+		<!-- Выбор нейтрального предмета — как в Доте: у инвентаря, открывается кнопкой у слотов -->
+		<Panel id="NeutralChoice" class="Hidden" hittest="true">
+			<Panel id="NeutralHeader">
+				<Label id="NeutralTitle" text="" />
+				<Button id="NeutralCollapse" onactivate="NeutralCollapse()">
+					<Label text="✕" />
+				</Button>
+			</Panel>
+			<Label class="NeutralSection" text="#orb_neutral_trinkets" />
+			<Panel id="NeutralTrinkets" />
+			<Label class="NeutralSection" text="#orb_neutral_enh" />
+			<Panel id="NeutralEnh" />
+			<Label id="NeutralAuto" text="" />
+		</Panel>
+		<!-- Слоты расходников: место считает slots.ts по инвентарю Доты -->
+		<Panel id="SlotsTop" class="SlotGroup Hidden" hittest="false" />
+		<Panel id="SlotsRight" class="SlotGroup Hidden" hittest="false" />
+		<Label id="VersionLabel" text="" hittest="false" />
+	</Panel>
+</root>

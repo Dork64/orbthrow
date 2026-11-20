@@ -1,0 +1,351 @@
+{
+ "hero": "npc_dota_hero_mirana",
+ "orbs": [
+  {
+   "id": "mir_p_starlight",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "mirana_starfall",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "debuff": {
+      "props": {
+       "mr": -10
+      },
+      "dur": 4
+     }
+    }
+   ],
+   "ru": "Звездный свет",
+   "en": "Starlight",
+   "ru_d": "Starstorm снижает сопротивление магии врагов на 10% на 4 с",
+   "en_d": "Starstorm reduces enemies' magic resistance by 10% for 4 s"
+  },
+  {
+   "id": "mir_p_meteor",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "mirana_starfall",
+   "mods": "secondary_targets:+1",
+   "ru": "Метеоры",
+   "en": "Meteors",
+   "ru_d": "Вторая звезда Starstorm падает на 2 цели вместо 1",
+   "en_d": "Starstorm's second star hits 2 targets instead of 1"
+  },
+  {
+   "id": "mir_p_sacred",
+   "r": "purple",
+   "branch": "W",
+   "ab": "mirana_arrow",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "extra": {
+      "maxhp": 8,
+      "type": "magic"
+     }
+    }
+   ],
+   "ru": "Священный огонь",
+   "en": "Sacred Fire",
+   "ru_d": "Sacred Arrow наносит героям еще 8% их максимального здоровья",
+   "en_d": "Sacred Arrow deals an extra 8% of a hero's max health"
+  },
+  {
+   "id": "mir_p_quiver",
+   "r": "purple",
+   "branch": "W",
+   "ab": "mirana_arrow",
+   "fx": [
+    {
+     "t": "refund",
+     "chance": 25,
+     "cdpct": 50
+    }
+   ],
+   "ru": "Быстрый колчан",
+   "en": "Quick Quiver",
+   "ru_d": "25% шанс, что Sacred Arrow восстановится вдвое быстрее",
+   "en_d": "25% chance that Sacred Arrow recharges twice as fast"
+  },
+  {
+   "id": "mir_p_pounce",
+   "r": "purple",
+   "branch": "E",
+   "ab": "mirana_leap",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 5,
+     "props": {
+      "dmg": 10
+     }
+    }
+   ],
+   "ru": "Хищный прыжок",
+   "en": "Pounce",
+   "ru_d": "Leap дает +10% урона на 5 с",
+   "en_d": "Leap grants +10% damage for 5 s"
+  },
+  {
+   "id": "mir_p_blur",
+   "r": "purple",
+   "branch": "E",
+   "ab": "mirana_leap",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 3,
+     "props": {
+      "evasion": 30
+     }
+    }
+   ],
+   "ru": "Размытие",
+   "en": "Blur",
+   "ru_d": "Leap дает +30% уклонения на 3 с",
+   "en_d": "Leap grants +30% evasion for 3 s"
+  },
+  {
+   "id": "mir_p_shadow",
+   "r": "purple",
+   "branch": "R",
+   "ab": "mirana_invis",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "ms": 15,
+      "regenpct": 1
+     }
+    }
+   ],
+   "ru": "Лунная тень",
+   "en": "Moon Shade",
+   "ru_d": "Moonlight Shadow дает +15% скорости бега и 1% восстановления здоровья в секунду",
+   "en_d": "Moonlight Shadow grants +15% movement speed and 1% health regeneration per second"
+  },
+  {
+   "id": "mir_p_ambush",
+   "r": "purple",
+   "branch": "R",
+   "ab": "mirana_invis",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "win",
+     "win": "duration",
+     "cdpct": 40
+    }
+   ],
+   "ru": "Засада",
+   "en": "Ambush",
+   "ru_d": "Убийство героя во время Moonlight Shadow снимает 40% его перезарядки",
+   "en_d": "A hero kill during Moonlight Shadow removes 40% of its cooldown"
+  },
+  {
+   "id": "mir_l_starstorm",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "mirana_starfall",
+   "mods": "damage:+100",
+   "fx": [
+    {
+     "t": "echo",
+     "delays": [
+      0.8
+     ],
+     "pct": 50,
+     "aw": {
+      "pct": 80
+     }
+    }
+   ],
+   "ru": "Звездный дождь",
+   "en": "Star Rain",
+   "ru_d": "Урон Starstorm +100; через 0.8 с звезды бьют тех же врагов еще раз с 50% урона",
+   "en_d": "Starstorm damage +100; 0.8 s later the stars hit the same enemies again for 50% damage",
+   "ru_aw": "Пробуждение: повтор 80% урона",
+   "en_aw": "Awakening: repeat deals 80%"
+  },
+  {
+   "id": "mir_l_arrow",
+   "r": "legend",
+   "branch": "W",
+   "ab": "mirana_arrow",
+   "mods": "arrow_max_stun:+1;arrow_bonus_damage:+120",
+   "awmods": "arrow_speed:+400",
+   "ru": "Стрела богини",
+   "en": "Goddess Arrow",
+   "ru_d": "Максимальное оглушение Sacred Arrow +1 с, бонусный урон +120",
+   "en_d": "Sacred Arrow max stun +1 s, bonus damage +120",
+   "ru_aw": "Пробуждение: скорость стрелы +400",
+   "en_aw": "Awakening: arrow speed +400"
+  },
+  {
+   "id": "mir_l_starhunt",
+   "r": "legend",
+   "branch": "E",
+   "ab": "mirana_leap",
+   "ru": "Звёздная охотница",
+   "en": "Star Huntress",
+   "ru_d": "После Leap на 5 с: +100 дальности атаки; каждая 3-я атака по одному герою наносит ещё 80 магического урона (не чаще раза в секунду по цели)",
+   "en_d": "After Leap: +100 attack range for 5 s; every third attack on the same hero deals 80 extra magic damage (at most once per second per target)",
+   "ru_aw": "Пробуждение: дальность +150, дополнительный урон 120",
+   "en_aw": "Awakening: +150 range, 120 extra damage",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 5,
+     "props": {
+      "range": 100
+     },
+     "aw": {
+      "props": {
+       "range": 150
+      }
+     }
+    },
+    {
+     "t": "hit",
+     "by": "attack",
+     "win": 5,
+     "heroOnly": 1,
+     "every": 3,
+     "icd": 1,
+     "extra": {
+      "flat": 80,
+      "type": "magic"
+     },
+     "aw": {
+      "extra": {
+       "flat": 120,
+       "type": "magic"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "mir_l_moon",
+   "r": "legend",
+   "branch": "R",
+   "ab": "mirana_invis",
+   "mods": "duration:+6",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "as": 60,
+      "dmg": 10
+     },
+     "aw": {
+      "props": {
+       "dmg": 20
+      }
+     }
+    }
+   ],
+   "ru": "Полнолуние",
+   "en": "Full Moon",
+   "ru_d": "Moonlight Shadow длится на 6 с дольше и дает +60 скорости атаки и +10% урона",
+   "en_d": "Moonlight Shadow lasts 6 s longer and grants +60 attack speed and +10% damage",
+   "ru_aw": "Пробуждение: +20% урона",
+   "en_aw": "Awakening: +20% damage"
+  },
+  {
+   "id": "mirana_m_autostar",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "mirana_starfall",
+   "fx": [
+    {
+     "t": "auto",
+     "every": 6,
+     "range": 650
+    }
+   ],
+   "ru": "Звездный ливень",
+   "en": "Star Shower",
+   "ru_d": "Раз в 6 с Starstorm падает сам, если рядом (650) есть враг (бесплатно)",
+   "en_d": "Every 6 s Starstorm falls by itself when an enemy is within 650 (free)",
+   "mech": 1
+  },
+  {
+   "id": "mirana_m_volley",
+   "r": "purple",
+   "branch": "W",
+   "ab": "mirana_arrow",
+   "fx": [
+    {
+     "t": "multi",
+     "chance": 40,
+     "times": 2,
+     "delay": 0.35
+    }
+   ],
+   "ru": "Залп стрел",
+   "en": "Arrow Volley",
+   "ru_d": "40% шанс выпустить еще одну стрелу (и еще одну)",
+   "en_d": "40% chance to fire another arrow (and another)",
+   "mech": 1
+  },
+  {
+   "id": "mirana_m_starmine",
+   "r": "purple",
+   "branch": "E",
+   "ab": "mirana_leap",
+   "fx": [
+    {
+     "t": "trap",
+     "at": "self",
+     "radius": 240,
+     "arm": 0.5,
+     "life": 40,
+     "max": 3,
+     "dmg": 220,
+     "type": "magic",
+     "pfx": "particles/units/heroes/hero_lina/lina_spell_light_strike_array.vpcf",
+     "debuff": {
+      "props": {
+       "stun": 1
+      },
+      "dur": 0.8
+     }
+    }
+   ],
+   "ru": "Звездная мина",
+   "en": "Star Mine",
+   "ru_d": "Leap оставляет на месте прыжка мину (до 3): 220 урона и оглушение 0.8 с",
+   "en_d": "Leap leaves a mine where you jumped from (up to 3): 220 damage and a 0.8 s stun",
+   "mech": 1
+  },
+  {
+   "id": "mirana_m_moonstorm",
+   "r": "purple",
+   "branch": "R",
+   "ab": "mirana_invis",
+   "fx": [
+    {
+     "t": "storm",
+     "win": 8,
+     "every": 1,
+     "radius": 900,
+     "dmg": 130,
+     "type": "magic"
+    }
+   ],
+   "ru": "Ночь богини",
+   "en": "Goddess Night",
+   "ru_d": "После Moonlight Shadow 8 с каждую секунду молния бьет случайного врага в 900: 130 урона",
+   "en_d": "After Moonlight Shadow, for 8 s lightning strikes a random enemy within 900 every second: 130 damage",
+   "mech": 1
+  }
+ ]
+}

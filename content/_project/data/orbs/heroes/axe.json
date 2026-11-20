@@ -1,0 +1,85 @@
+{
+ "hero": "npc_dota_hero_axe",
+ "orbs": [
+  {
+   "id": "axe_m_vortex",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "axe_berserkers_call",
+   "fx": [
+    {
+     "t": "pull",
+     "at": "self",
+     "radius": 650,
+     "dist": 400,
+     "pfx": "particles/units/heroes/hero_dark_seer/dark_seer_vacuum.vpcf"
+    }
+   ],
+   "ru": "Водоворот ярости",
+   "en": "Fury Vortex",
+   "ru_d": "Вызов сначала стягивает к Аксу всех врагов в радиусе 650",
+   "en_d": "Berserker's Call first drags every enemy within 650 to Axe",
+   "mech": 1
+  },
+  {
+   "id": "axe_m_autohunger",
+   "r": "purple",
+   "branch": "W",
+   "ab": "axe_battle_hunger",
+   "fx": [
+    {
+     "t": "auto",
+     "every": 6,
+     "range": 700,
+     "heroOnly": 1
+    }
+   ],
+   "ru": "Неутолимый голод",
+   "en": "Endless Hunger",
+   "ru_d": "Раз в 6 с Голод сам накладывается на ближайшего вражеского героя в 700 (бесплатно)",
+   "en_d": "Every 6 s Battle Hunger casts itself on the nearest enemy hero within 700 (free)",
+   "mech": 1
+  },
+  {
+   "id": "axe_m_bloodtrail",
+   "r": "purple",
+   "branch": "E",
+   "ab": "axe_counter_helix",
+   "fx": [
+    {
+     "t": "trail",
+     "dps": "damage*0.4",
+     "radius": 160,
+     "life": 3,
+     "type": "pure",
+     "pfx": "particles/units/heroes/hero_batrider/batrider_firefly_path.vpcf"
+    }
+   ],
+   "ru": "Кровавый смерч",
+   "en": "Blood Whirl",
+   "ru_d": "Где пробежал Акс, 3 с горит земля: 40% урона Спирали в секунду чистым уроном",
+   "en_d": "Where Axe runs, the ground burns for 3 s: 40% of Helix damage per second as pure damage",
+   "mech": 1
+  },
+  {
+   "id": "axe_m_cullclones",
+   "r": "purple",
+   "branch": "R",
+   "ab": "axe_culling_blade",
+   "fx": [
+    {
+     "t": "illusion",
+     "n": 2,
+     "dur": 8,
+     "out": -40,
+     "inc": 150
+    }
+   ],
+   "ru": "Армия одного",
+   "en": "One-Man Horde",
+   "ru_d": "Culling Blade вызывает 2 иллюзии Акса на 8 с (60% урона)",
+   "en_d": "Culling Blade summons 2 Axe illusions for 8 s (60% damage)",
+   "mech": 1
+  }
+ ]
+}

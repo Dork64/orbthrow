@@ -1,0 +1,566 @@
+{
+ "hero": "npc_dota_hero_puck",
+ "orbs": [
+  {
+   "id": "puck_b_1",
+   "r": "blue",
+   "branch": "Q",
+   "ab": "puck_illusory_orb",
+   "mods": "damage:%20",
+   "max": 4,
+   "ru": "Яркость сферы",
+   "en": "Orb Brilliance"
+  },
+  {
+   "id": "puck_b_2",
+   "r": "blue",
+   "branch": "Q",
+   "ab": "puck_illusory_orb",
+   "mods": "radius:38",
+   "max": 3,
+   "ru": "Широкая орбита",
+   "en": "Wide Orbit"
+  },
+  {
+   "id": "puck_b_3",
+   "r": "blue",
+   "branch": "Q",
+   "ab": "puck_illusory_orb",
+   "mods": "cd:10",
+   "max": 4,
+   "ru": "Быстрая орбита",
+   "en": "Fast Orbit"
+  },
+  {
+   "id": "puck_b_4",
+   "r": "blue",
+   "branch": "W",
+   "ab": "puck_waning_rift",
+   "mods": "damage:%20",
+   "max": 4,
+   "ru": "Звонкий разлом",
+   "en": "Resonant Rift"
+  },
+  {
+   "id": "puck_b_5",
+   "r": "blue",
+   "branch": "W",
+   "ab": "puck_waning_rift",
+   "mods": "silence_duration:0.2:s",
+   "max": 3,
+   "ru": "Тишина разлома",
+   "en": "Rift Silence"
+  },
+  {
+   "id": "puck_b_6",
+   "r": "blue",
+   "branch": "W",
+   "ab": "puck_waning_rift",
+   "mods": "cd:10",
+   "max": 4,
+   "ru": "Частый разлом",
+   "en": "Frequent Rift"
+  },
+  {
+   "id": "puck_b_7",
+   "r": "blue",
+   "branch": "E",
+   "ab": "puck_phase_shift",
+   "mods": "duration:0.3:s",
+   "max": 3,
+   "ru": "Глубина фазы",
+   "en": "Deep Phase"
+  },
+  {
+   "id": "puck_b_8",
+   "r": "blue",
+   "branch": "E",
+   "ab": "puck_phase_shift",
+   "mods": "cd:10",
+   "max": 4,
+   "ru": "Смена фазы",
+   "en": "Phase Cycle"
+  },
+  {
+   "id": "puck_b_9",
+   "r": "blue",
+   "branch": "E",
+   "ab": "puck_puckish",
+   "mods": "mana_and_health_restore_pct:0.5:%",
+   "max": 3,
+   "ru": "Ловкий обман",
+   "en": "Clever Evasion"
+  },
+  {
+   "id": "puck_b_10",
+   "r": "blue",
+   "branch": "R",
+   "ab": "puck_dream_coil",
+   "mods": "coil_initial_damage:%20",
+   "max": 4,
+   "ru": "Первый виток",
+   "en": "First Coil"
+  },
+  {
+   "id": "puck_b_11",
+   "r": "blue",
+   "branch": "R",
+   "ab": "puck_dream_coil",
+   "mods": "coil_duration:0.4:s",
+   "max": 3,
+   "ru": "Длинный сон",
+   "en": "Long Dream"
+  },
+  {
+   "id": "puck_b_12",
+   "r": "blue",
+   "branch": "R",
+   "ab": "puck_dream_coil",
+   "mods": "cd:10",
+   "max": 4,
+   "ru": "Новый сон",
+   "en": "New Dream"
+  },
+  {
+   "id": "puck_p_refract",
+   "branch": "Q",
+   "r": "purple",
+   "ab": "puck_illusory_orb",
+   "max": 1,
+   "ru": "Преломление",
+   "en": "Refraction",
+   "ru_d": "Illusory Orb снижает сопротивление магии героя на 8% на 3 с",
+   "en_d": "Illusory Orb reduces hero magic resistance by 8% for 3 s",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "mr": -8
+      },
+      "dur": 3
+     },
+     "icd": 1
+    }
+   ]
+  },
+  {
+   "id": "puck_p_conserve",
+   "branch": "Q",
+   "r": "purple",
+   "ab": "puck_illusory_orb",
+   "max": 1,
+   "ru": "Световой отклик",
+   "en": "Light Echo",
+   "ru_d": "Урон Rift по герою снимает 1,5 с с оставшейся перезарядки Illusory Orb. Раз в 2 с на цель.",
+   "en_d": "Rift damage to a hero cuts 1.5 s off Illusory Orb’s remaining cooldown. Once per 2 s per target.",
+   "fx": [
+    {
+     "t": "hit",
+     "ab": "puck_waning_rift",
+     "by": "ab",
+     "heroOnly": 1,
+     "icd": 2,
+     "cdr": {
+      "abs": [
+       "puck_illusory_orb"
+      ],
+      "sec": 1.5
+     }
+    }
+   ]
+  },
+  {
+   "id": "puck_p_muffle",
+   "branch": "W",
+   "r": "purple",
+   "ab": "puck_waning_rift",
+   "max": 1,
+   "ru": "Глухой разлом",
+   "en": "Muffled Rift",
+   "ru_d": "Waning Rift снижает лечение героев на 25% на 3 с",
+   "en_d": "Waning Rift reduces hero healing by 25% for 3 s",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "healred": 25
+      },
+      "dur": 3
+     },
+     "icd": 1
+    }
+   ]
+  },
+  {
+   "id": "puck_p_gleam",
+   "branch": "W",
+   "r": "purple",
+   "ab": "puck_waning_rift",
+   "max": 1,
+   "ru": "Ускользающий свет",
+   "en": "Elusive Light",
+   "ru_d": "После Rift +15% скорости бега на 3 с",
+   "en_d": "After Rift: +15% movement speed for 3 s",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 3,
+     "props": {
+      "ms": 15
+     }
+    }
+   ]
+  },
+  {
+   "id": "puck_p_focus",
+   "branch": "E",
+   "r": "purple",
+   "ab": "puck_phase_shift",
+   "max": 1,
+   "ru": "Фазовый фокус",
+   "en": "Phase Focus",
+   "ru_d": "После применения Phase Shift +12% усиления способностей на 4 с",
+   "en_d": "After casting Phase Shift: +12% spell amplification for 4 s",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 4,
+     "props": {
+      "sa": 12
+     }
+    }
+   ]
+  },
+  {
+   "id": "puck_p_breath",
+   "branch": "E",
+   "r": "purple",
+   "ab": "puck_phase_shift",
+   "max": 1,
+   "ru": "Искажение",
+   "en": "Distortion",
+   "ru_d": "Phase Shift даёт 18% снижения получаемого урона на 3 с.",
+   "en_d": "Phase Shift grants 18% damage reduction for 3 s.",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 3,
+     "props": {
+      "inc": -18
+     }
+    }
+   ]
+  },
+  {
+   "id": "puck_p_loosen",
+   "branch": "R",
+   "r": "purple",
+   "ab": "puck_dream_coil",
+   "max": 1,
+   "ru": "Развязанный узел",
+   "en": "Loose Knot",
+   "ru_d": "Урон Coil по герою сокращает КД Orb и Rift на 1 с, раз в 2 с по цели",
+   "en_d": "Coil hero damage reduces Orb and Rift cooldowns by 1 s, once per 2 s per target",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "cdr": {
+      "abs": [
+       "puck_illusory_orb",
+       "puck_waning_rift"
+      ],
+      "sec": 1
+     },
+     "icd": 2
+    }
+   ]
+  },
+  {
+   "id": "puck_p_dreamfeast",
+   "branch": "R",
+   "r": "purple",
+   "ab": "puck_dream_coil",
+   "max": 1,
+   "ru": "Сладкий сон",
+   "en": "Sweet Dream",
+   "ru_d": "Убийство героя за 6 с после Coil восстанавливает 15% здоровья и маны",
+   "en_d": "A hero kill within 6 s of Coil restores 15% health and mana",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "win",
+     "win": 6,
+     "heal": 15,
+     "manapct": 15
+    }
+   ]
+  },
+  {
+   "id": "puck_m_crossing",
+   "branch": "W",
+   "r": "purple",
+   "ab": "puck_waning_rift",
+   "max": 1,
+   "ru": "Пересечение",
+   "en": "Intersection",
+   "ru_d": "Orb и Rift за 4 с вызывают импульс: 90 магического урона героям в 300; раз в 8 с",
+   "en_d": "Orb and Rift within 4 s trigger a 90 magic damage pulse to heroes within 300; once per 8 s",
+   "fx": [
+    {
+     "t": "combo",
+     "abs": [
+      "puck_illusory_orb",
+      "puck_waning_rift"
+     ],
+     "need": 2,
+     "within": 4,
+     "icd": 8,
+     "radius": 300,
+     "dmg": 90,
+     "dur": 2,
+     "props": {}
+    }
+   ],
+   "mech": 1
+  },
+  {
+   "id": "puck_m_decoy",
+   "branch": "W",
+   "r": "purple",
+   "ab": "puck_waning_rift",
+   "max": 1,
+   "ru": "Ложный скачок",
+   "en": "False Step",
+   "ru_d": "Waning Rift оставляет иллюзию и через 0,8 с бьёт в точке появления на 100 магического урона в радиусе 260.",
+   "en_d": "Waning Rift leaves an illusion and deals 100 magic damage within 260 of the arrival point after 0.8 s.",
+   "fx": [
+    {
+     "t": "illusion",
+     "n": 1,
+     "dur": 4,
+     "out": -80,
+     "inc": 200
+    },
+    {
+     "t": "blast",
+     "at": "point",
+     "delay": 0.8,
+     "radius": 260,
+     "dmg": 100,
+     "type": "magic",
+     "pfx": "particles/units/heroes/hero_queenofpain/queen_scream_of_pain_owner.vpcf"
+    }
+   ],
+   "mech": 1
+  },
+  {
+   "id": "puck_m_waypoint",
+   "branch": "Q",
+   "r": "purple",
+   "ab": "puck_ethereal_jaunt",
+   "max": 1,
+   "ru": "Точка перехода",
+   "en": "Waystation",
+   "ru_d": "Jaunt оставляет зону 260 на 3 с. Первый тик по герою наносит 100 магического урона, следующие по 25. Замедление 20%.",
+   "en_d": "Jaunt leaves a 260-radius zone for 3 s. The first tick per hero deals 100 magic damage, later ticks deal 25. Slows by 20%.",
+   "fx": [
+    {
+     "t": "zone",
+     "at": "self",
+     "radius": 260,
+     "dur": 3,
+     "every": 1,
+     "dmg": 25,
+     "debuff": {
+      "props": {
+       "ms": -20
+      },
+      "dur": 1.2
+     },
+     "entryDmg": 75
+    }
+   ],
+   "mech": 1
+  },
+  {
+   "id": "puck_m_dreamdust",
+   "branch": "R",
+   "r": "purple",
+   "ab": "puck_dream_coil",
+   "max": 1,
+   "ru": "Сонная пыль",
+   "en": "Dream Dust",
+   "ru_d": "Через 1.2 с после Coil импульс в выбранной точке: 100 магического урона и −10% сопротивления магии на 3 с",
+   "en_d": "1.2 s after Coil, a pulse at its target point deals 100 magic damage and reduces magic resistance by 10% for 3 s",
+   "fx": [
+    {
+     "t": "blast",
+     "at": "point",
+     "delay": 1.2,
+     "radius": 300,
+     "dmg": 100,
+     "type": "magic",
+     "debuff": {
+      "props": {
+       "mr": -10
+      },
+      "dur": 3
+     }
+    }
+   ],
+   "mech": 1
+  },
+  {
+   "id": "puck_l_binary",
+   "branch": "Q",
+   "r": "legend",
+   "ab": "puck_illusory_orb",
+   "max": 1,
+   "ru": "Две траектории",
+   "en": "Twin Trajectories",
+   "ru_d": "Illusory Orb получает второй заряд. Попадание метит до 4 героев на 5 с. Второй Orb спустя хотя бы 0,6 с взрывает метку на 150 магического урона. Метка на цель — раз в 8 с.",
+   "en_d": "Illusory Orb gains a second charge. Hits mark up to 4 heroes for 5 s. A second Orb after 0.6 s consumes the mark for 150 magic damage. Marks have an 8 s cooldown per hero.",
+   "fx": [
+    {
+     "t": "charges",
+     "n": 1
+    },
+    {
+     "t": "mark",
+     "by": "ab",
+     "consume": [
+      "puck_illusory_orb"
+     ],
+     "dur": 5,
+     "icd": 8,
+     "max": 4,
+     "dmg": 150,
+     "arm": 0.6,
+     "aw": {
+      "dmg": 225,
+      "dur": 6
+     },
+     "nextCast": true
+    }
+   ],
+   "ru_aw": "Пробуждение: взрыв наносит 225 урона, метка держится 6 с.",
+   "en_aw": "Awakening: 225 detonation damage, 6 s mark."
+  },
+  {
+   "id": "puck_l_brokenorbit",
+   "branch": "W",
+   "r": "legend",
+   "ab": "puck_waning_rift",
+   "max": 1,
+   "ru": "Ломаная орбита",
+   "en": "Broken Orbit",
+   "ru_d": "Orb, Rift и Jaunt за 5 с: 220 магического урона героям в 400 от Пака и +22% усиления заклинаний на 4 с. Раз в 12 с.",
+   "en_d": "Orb, Rift and Jaunt within 5 s deal 220 magic damage to heroes within 400 and grant 22% spell amplification for 4 s. Once per 12 s.",
+   "fx": [
+    {
+     "t": "combo",
+     "abs": [
+      "puck_illusory_orb",
+      "puck_waning_rift",
+      "puck_ethereal_jaunt"
+     ],
+     "need": 3,
+     "within": 5,
+     "icd": 12,
+     "radius": 400,
+     "dmg": 220,
+     "dur": 4,
+     "props": {
+      "sa": 22
+     },
+     "aw": {
+      "dmg": 310,
+      "props": {
+       "sa": 28
+      }
+     }
+    }
+   ],
+   "ru_aw": "Пробуждение: 310 урона и +28% усиления.",
+   "en_aw": "Awakening: 310 damage and 28% amplification."
+  },
+  {
+   "id": "puck_l_parallax",
+   "branch": "E",
+   "r": "legend",
+   "ab": "puck_phase_shift",
+   "max": 1,
+   "ru": "Параллакс",
+   "en": "Parallax",
+   "ru_d": "Phase Shift и Jaunt за 5 с: 150 магического урона героям в 325, +220 дальности заклинаний и 45% уклонения на 4 с. Раз в 10 с.",
+   "en_d": "Phase Shift and Jaunt within 5 s deal 150 magic damage to heroes within 325 and grant 220 cast range and 45% evasion for 4 s. Once per 10 s.",
+   "fx": [
+    {
+     "t": "combo",
+     "abs": [
+      "puck_phase_shift",
+      "puck_ethereal_jaunt"
+     ],
+     "need": 2,
+     "within": 5,
+     "icd": 10,
+     "radius": 325,
+     "dmg": 150,
+     "dur": 4,
+     "props": {
+      "castrange": 220,
+      "evasion": 45
+     },
+     "aw": {
+      "dmg": 220,
+      "props": {
+       "castrange": 300,
+       "evasion": 55
+      }
+     }
+    }
+   ],
+   "ru_aw": "Пробуждение: 220 урона, +300 дальности и 55% уклонения.",
+   "en_aw": "Awakening: 220 damage, 300 cast range and 55% evasion."
+  },
+  {
+   "id": "puck_l_dreamgarden",
+   "branch": "R",
+   "r": "legend",
+   "ab": "puck_dream_coil",
+   "max": 1,
+   "ru": "Ловец снов",
+   "en": "Dreamcatcher",
+   "ru_d": "Урон Dream Coil метит до 5 героев на 5 с. Waning Rift или Illusory Orb по отмеченной цели взрывает метку на 230 магического урона. Метка на цель — раз в 8 с.",
+   "en_d": "Dream Coil damage marks up to 5 heroes for 5 s. Waning Rift or Illusory Orb consumes the mark for 230 magic damage. Marks have an 8 s cooldown per hero.",
+   "fx": [
+    {
+     "t": "mark",
+     "by": "ab",
+     "consume": [
+      "puck_illusory_orb",
+      "puck_waning_rift"
+     ],
+     "dur": 5,
+     "icd": 8,
+     "max": 5,
+     "dmg": 230,
+     "aw": {
+      "dmg": 330,
+      "dur": 6
+     }
+    }
+   ],
+   "ru_aw": "Пробуждение: 330 урона взрыва, 6 с на добивание метки.",
+   "en_aw": "Awakening: 330 detonation damage, 6 s mark."
+  }
+ ]
+}

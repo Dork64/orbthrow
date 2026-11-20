@@ -1,0 +1,12 @@
+.GameInfoRoot { width: 600px; flow-children: down; padding: 16px 18px; }
+.InfoTitle { color: #f3d27c; font-size: 24px; font-weight: black; letter-spacing: 2px; }
+.InfoTagline { color: #a8b2bd; font-size: 14px; margin-bottom: 12px; }
+.InfoItem { width: 100%; flow-children: right; margin-bottom: 10px; }
+.InfoGem { width: 14px; height: 14px; margin: 4px 10px 0px 0px; border-radius: 7px; border: 1px solid #ffffff66; }
+.InfoGem.goal { background-color: gradient( radial, 35% 30%, 0% 0%, 70% 70%, from( #fff3cf ), to( #c28a22 ) ); }
+.InfoGem.grey { background-color: gradient( radial, 35% 30%, 0% 0%, 70% 70%, from( #ffffff ), to( #7d858e ) ); }
+.InfoGem.blue { background-color: gradient( radial, 35% 30%, 0% 0%, 70% 70%, from( #d8ecff ), to( #1d64cf ) ); }
+.InfoGem.purple { background-color: gradient( radial, 35% 30%, 0% 0%, 70% 70%, from( #f0dcff ), to( #7231cf ) ); }
+.InfoGem.legend { background-color: gradient( radial, 35% 30%, 0% 0%, 70% 70%, from( #fff3cf ), to( #e08a12 ) ); }
+.InfoGem.help { background-color: gradient( radial, 35% 30%, 0% 0%, 70% 70%, from( #e6ffd8 ), to( #3f8f2a ) ); }
+.InfoLine { width: fill-parent-flow( 1.0 ); color: #e6ebf0; font-size: 15px; }

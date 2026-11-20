@@ -1,0 +1,367 @@
+{
+ "hero": "npc_dota_hero_sven",
+ "orbs": [
+  {
+   "id": "sven_p_thunder",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "sven_storm_bolt",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "extra": {
+      "atk": 60,
+      "type": "phys"
+     }
+    }
+   ],
+   "ru": "Грохот",
+   "en": "Thunderclap",
+   "ru_d": "Storm Hammer наносит еще 60% урона атаки Свена (физический урон)",
+   "en_d": "Storm Hammer deals an extra 60% of Sven's attack damage as physical damage"
+  },
+  {
+   "id": "sven_p_ringing",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "sven_storm_bolt",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "disarm": 1
+      },
+      "dur": 2,
+      "delay": "bolt_stun_duration"
+     }
+    }
+   ],
+   "ru": "Звон в ушах",
+   "en": "Ringing Ears",
+   "ru_d": "После оглушения Молотом герои еще 2 с не могут атаковать",
+   "en_d": "After the Storm Hammer stun heroes are disarmed for 2 more seconds"
+  },
+  {
+   "id": "sven_p_crush",
+   "r": "purple",
+   "branch": "W",
+   "ab": "sven_great_cleave",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "attack",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "armor": -1.5
+      },
+      "dur": 4,
+      "max": 6
+     }
+    }
+   ],
+   "ru": "Сокрушение",
+   "en": "Crush",
+   "ru_d": "Атаки по героям снижают броню на 1.5 на 4 с (до 6 раз)",
+   "en_d": "Attacks on heroes reduce armor by 1.5 for 4 s (up to 6 times)"
+  },
+  {
+   "id": "sven_p_finish",
+   "r": "purple",
+   "branch": "W",
+   "ab": "sven_great_cleave",
+   "fx": [
+    {
+     "t": "vs",
+     "cond": "stunned",
+     "pct": 20
+    }
+   ],
+   "ru": "Добить лежачего",
+   "en": "Kick Them While Down",
+   "ru_d": "+20% урона по оглушенным врагам (сверх Vanquisher)",
+   "en_d": "+20% damage against stunned enemies (on top of Vanquisher)"
+  },
+  {
+   "id": "sven_p_secondbreath",
+   "r": "purple",
+   "branch": "E",
+   "ab": "sven_warcry",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "regenpct": 1.5
+     }
+    }
+   ],
+   "ru": "Дыхание воина",
+   "en": "Warrior Breath",
+   "ru_d": "Warcry восстанавливает 1.5% максимального здоровья в секунду на время действия",
+   "en_d": "Warcry restores 1.5% max health per second for its duration"
+  },
+  {
+   "id": "sven_p_fearless",
+   "r": "purple",
+   "branch": "E",
+   "ab": "sven_warcry",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "dispel": 1,
+     "props": {
+      "slowres": 40
+     }
+    }
+   ],
+   "ru": "Неустрашимый",
+   "en": "Fearless",
+   "ru_d": "Warcry снимает со Свена отрицательные эффекты и дает 40% сопротивления замедлению",
+   "en_d": "Warcry dispels Sven and grants 40% slow resistance"
+  },
+  {
+   "id": "sven_p_untamed",
+   "r": "purple",
+   "branch": "R",
+   "ab": "sven_gods_strength",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "AbilityDuration",
+     "props": {
+      "status": 40
+     }
+    }
+   ],
+   "ru": "Неукротимый",
+   "en": "Untamed",
+   "ru_d": "God's Strength дает 40% сопротивления эффектам",
+   "en_d": "God's Strength grants 40% status resistance"
+  },
+  {
+   "id": "sven_p_eternal",
+   "r": "purple",
+   "branch": "R",
+   "ab": "sven_gods_strength",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "win",
+     "win": "AbilityDuration",
+     "ext": {
+      "parts": [
+       "gods_strength"
+      ],
+      "sec": 4
+     }
+    }
+   ],
+   "ru": "Вечная сила",
+   "en": "Everlasting Strength",
+   "ru_d": "Убийство героя во время God's Strength продлевает его на 4 с",
+   "en_d": "A hero kill during God's Strength extends it by 4 s"
+  },
+  {
+   "id": "sven_l_hammer",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "sven_storm_bolt",
+   "mods": "bolt_aoe:+100",
+   "awmods": "bolt_stun_duration:+0.5",
+   "fx": [
+    {
+     "t": "charges",
+     "n": 1
+    }
+   ],
+   "ru": "Молот бога",
+   "en": "God's Hammer",
+   "ru_d": "У Storm Hammer есть запасной заряд (восстанавливается за время перезарядки), радиус +100",
+   "en_d": "Storm Hammer gets a spare charge (restores over its cooldown), radius +100",
+   "ru_aw": "Пробуждение: оглушение +0.5 с",
+   "en_aw": "Awakening: stun +0.5 s"
+  },
+  {
+   "id": "sven_l_cleave",
+   "r": "legend",
+   "branch": "W",
+   "ab": "sven_great_cleave",
+   "mods": "great_cleave_damage:=120",
+   "awmods": "great_cleave_damage:=150",
+   "ru": "Великий раскол",
+   "en": "Great Sunder",
+   "ru_d": "Раскол наносит 120% урона атаки",
+   "en_d": "Great Cleave deals 120% of the attack damage",
+   "ru_aw": "Пробуждение: 150% урона",
+   "en_aw": "Awakening: 150% damage"
+  },
+  {
+   "id": "sven_l_steeltempo",
+   "r": "legend",
+   "branch": "E",
+   "ab": "sven_warcry",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "range": 100
+     },
+     "aw": {
+      "props": {
+       "range": 150
+      }
+     }
+    },
+    {
+     "t": "hit",
+     "by": "attack",
+     "win": "duration",
+     "every": 3,
+     "heroOnly": 1,
+     "icd": 1,
+     "extra": {
+      "atk": 45,
+      "type": "phys"
+     },
+     "aw": {
+      "extra": {
+       "atk": 65,
+       "type": "phys"
+      }
+     }
+    }
+   ],
+   "ru": "Стальной ритм",
+   "en": "Steel Tempo",
+   "ru_d": "Во время Warcry: +100 дальности атаки; каждая 3-я атака по одному герою наносит ещё 45% урона атаки физическим уроном (не чаще раза в секунду по цели)",
+   "en_d": "During Warcry: +100 attack range; every third attack on the same hero deals 45% attack damage as extra physical damage (at most once per second per target)",
+   "ru_aw": "Пробуждение: дальность +150, дополнительный урон 65% атаки",
+   "en_aw": "Awakening: +150 range, 65% attack damage"
+  },
+  {
+   "id": "sven_l_avatar",
+   "r": "legend",
+   "branch": "R",
+   "ab": "sven_gods_strength",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "AbilityDuration",
+     "props": {
+      "inc": -20,
+      "cleave": 100
+     },
+     "aw": {
+      "props": {
+       "inc": -30
+      }
+     }
+    }
+   ],
+   "ru": "Аватар",
+   "en": "Avatar",
+   "ru_d": "Во время God's Strength Свен получает на 20% меньше урона и раскалывает еще 100% урона атаки",
+   "en_d": "During God's Strength Sven takes 20% less damage and cleaves an extra 100% of his attack damage",
+   "ru_aw": "Пробуждение: −30% получаемого урона",
+   "en_aw": "Awakening: −30% damage taken"
+  },
+  {
+   "id": "sven_m_thunderseal",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "sven_storm_bolt",
+   "fx": [
+    {
+     "t": "trap",
+     "at": "target",
+     "radius": 220,
+     "arm": 1,
+     "life": 15,
+     "max": 2,
+     "dmg": 140,
+     "type": "magic",
+     "debuff": {
+      "props": {
+       "root": 1
+      },
+      "dur": 0.8
+     }
+    }
+   ],
+   "ru": "Громовая печать",
+   "en": "Thunder Seal",
+   "ru_d": "Storm Bolt оставляет у цели ловушку на 15 с (до 2): 140 магического урона и обездвиживание 0.8 с",
+   "en_d": "Storm Bolt leaves a trap at the target for 15 s (max 2): 140 magic damage and 0.8 s root",
+   "mech": 1
+  },
+  {
+   "id": "sven_m_doublebolt",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "sven_storm_bolt",
+   "fx": [
+    {
+     "t": "multi",
+     "chance": 35,
+     "times": 1,
+     "delay": 0.4
+    }
+   ],
+   "ru": "Гром дважды",
+   "en": "Thunder Twice",
+   "ru_d": "35% шанс бросить второй Storm Bolt",
+   "en_d": "35% chance to throw a second Storm Bolt",
+   "mech": 1
+  },
+  {
+   "id": "sven_m_warcall",
+   "r": "purple",
+   "branch": "E",
+   "ab": "sven_warcry",
+   "fx": [
+    {
+     "t": "pull",
+     "at": "self",
+     "radius": 700,
+     "dist": 350,
+     "pfx": "particles/units/heroes/hero_dark_seer/dark_seer_vacuum.vpcf"
+    }
+   ],
+   "ru": "Зов на бой",
+   "en": "Call to Battle",
+   "ru_d": "Warcry стягивает к Свену врагов в 700",
+   "en_d": "Warcry drags enemies within 700 to Sven",
+   "mech": 1
+  },
+  {
+   "id": "sven_m_titan",
+   "r": "purple",
+   "branch": "R",
+   "ab": "sven_gods_strength",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 12,
+     "props": {
+      "scale": 145,
+      "nocol": 1,
+      "msc": 40,
+      "inc": -15
+     }
+    }
+   ],
+   "ru": "Исполин",
+   "en": "Titan",
+   "ru_d": "God's Strength делает Свена великаном на 12 с: больше, сквозь всех, +40 скорости, −15% урона по нему",
+   "en_d": "God's Strength turns Sven into a titan for 12 s: bigger, passes through units, +40 speed, −15% damage taken",
+   "mech": 1
+  }
+ ]
+}

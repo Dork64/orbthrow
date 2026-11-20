@@ -1,0 +1,310 @@
+{
+ "hero": "npc_dota_hero_ursa",
+ "orbs": [
+  {
+   "id": "ursa_p_quake",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "ursa_earthshock",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "debuff": {
+      "props": {
+       "armor": -5
+      },
+      "dur": 4
+     }
+    }
+   ],
+   "ru": "Раскол земли",
+   "en": "Ground Split",
+   "ru_d": "Earthshock снижает броню врагов на 5 на 4 с",
+   "en_d": "Earthshock reduces enemies' armor by 5 for 4 s"
+  },
+  {
+   "id": "ursa_p_hunger",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "ursa_earthshock",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "heal": 30
+    }
+   ],
+   "ru": "Голод медведя",
+   "en": "Bear Hunger",
+   "ru_d": "Earthshock лечит на 30% урона по героям",
+   "en_d": "Earthshock heals for 30% of its damage to heroes"
+  },
+  {
+   "id": "ursa_p_maul",
+   "r": "purple",
+   "branch": "W",
+   "ab": "ursa_overpower",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 6,
+     "props": {
+      "ls": 15
+     }
+    }
+   ],
+   "ru": "Растерзать",
+   "en": "Maul",
+   "ru_d": "Overpower дает 15% вампиризма атак по героям на 6 с",
+   "en_d": "Overpower grants 15% lifesteal on attacks against heroes for 6 s"
+  },
+  {
+   "id": "ursa_p_frenzy",
+   "r": "purple",
+   "branch": "W",
+   "ab": "ursa_overpower",
+   "mods": "max_attacks:+2",
+   "ru": "Бешенство",
+   "en": "Frenzy",
+   "ru_d": "Overpower дает на 2 быстрые атаки больше",
+   "en_d": "Overpower grants 2 more fast attacks"
+  },
+  {
+   "id": "ursa_p_stun",
+   "r": "purple",
+   "branch": "E",
+   "ab": "ursa_fury_swipes",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "attack",
+     "heroOnly": 1,
+     "every": 6,
+     "debuff": {
+      "props": {
+       "stun": 1
+      },
+      "dur": 0.5
+     }
+    }
+   ],
+   "ru": "Оглушающая лапа",
+   "en": "Stunning Paw",
+   "ru_d": "Каждая 6-я атака по одному герою оглушает его на 0.5 с",
+   "en_d": "Every 6th attack on the same hero stuns it for 0.5 s"
+  },
+  {
+   "id": "ursa_p_grudge",
+   "r": "purple",
+   "branch": "E",
+   "ab": "ursa_fury_swipes",
+   "mods": "bonus_reset_time:+8",
+   "ru": "Злопамятность",
+   "en": "Grudge",
+   "ru_d": "Стаки Fury Swipes держатся на 8 с дольше",
+   "en_d": "Fury Swipes stacks last 8 s longer"
+  },
+  {
+   "id": "ursa_p_charge",
+   "r": "purple",
+   "branch": "R",
+   "ab": "ursa_enrage",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "ms": 30
+     }
+    }
+   ],
+   "ru": "Медвежий бросок",
+   "en": "Bear Charge",
+   "ru_d": "Enrage дает +30% скорости бега",
+   "en_d": "Enrage grants +30% movement speed"
+  },
+  {
+   "id": "ursa_p_mend",
+   "r": "purple",
+   "branch": "R",
+   "ab": "ursa_enrage",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "regenpct": 4
+     }
+    }
+   ],
+   "ru": "Зализать раны",
+   "en": "Lick Wounds",
+   "ru_d": "Во время Enrage Урса восстанавливает 4% здоровья в секунду",
+   "en_d": "During Enrage Ursa restores 4% health per second"
+  },
+  {
+   "id": "ursa_l_shock",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "ursa_earthshock",
+   "mods": "AbilityCharges:+2",
+   "awmods": "AbilityDamage:+100",
+   "ru": "Сейсмический рев",
+   "en": "Seismic Roar",
+   "ru_d": "Earthshock получает 2 заряда",
+   "en_d": "Earthshock gets 2 charges",
+   "ru_aw": "Пробуждение: урон +100",
+   "en_aw": "Awakening: damage +100"
+  },
+  {
+   "id": "ursa_l_overpower",
+   "r": "legend",
+   "branch": "W",
+   "ab": "ursa_overpower",
+   "mods": "max_attacks:+3",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 6,
+     "props": {
+      "dmg": 15
+     },
+     "aw": {
+      "props": {
+       "dmg": 30
+      }
+     }
+    }
+   ],
+   "ru": "Шквал когтей",
+   "en": "Claw Flurry",
+   "ru_d": "Overpower дает на 3 быстрые атаки больше и +15% урона на 6 с",
+   "en_d": "Overpower grants 3 more fast attacks and +15% damage for 6 s",
+   "ru_aw": "Пробуждение: +30% урона",
+   "en_aw": "Awakening: +30% damage"
+  },
+  {
+   "id": "ursa_l_swipes",
+   "r": "legend",
+   "branch": "E",
+   "ab": "ursa_fury_swipes",
+   "mods": "damage_per_stack:+12",
+   "awmods": "damage_per_stack:+12",
+   "ru": "Тысяча царапин",
+   "en": "Thousand Scratches",
+   "ru_d": "Урон за стак Fury Swipes +12",
+   "en_d": "Fury Swipes damage per stack +12",
+   "ru_aw": "Пробуждение: еще +12 за стак",
+   "en_aw": "Awakening: another +12 per stack"
+  },
+  {
+   "id": "ursa_l_enrage",
+   "r": "legend",
+   "branch": "R",
+   "ab": "ursa_enrage",
+   "mods": "duration:+2",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "dmg": 25
+     },
+     "aw": {
+      "props": {
+       "dmg": 40
+      }
+     }
+    }
+   ],
+   "ru": "Ярость берсерка",
+   "en": "Berserker Rage",
+   "ru_d": "Enrage длится на 2 с дольше и дает +25% урона",
+   "en_d": "Enrage lasts 2 s longer and grants +25% damage",
+   "ru_aw": "Пробуждение: +40% урона",
+   "en_aw": "Awakening: +40% damage"
+  },
+  {
+   "id": "ursa_m_shockpull",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "ursa_earthshock",
+   "fx": [
+    {
+     "t": "pull",
+     "at": "self",
+     "radius": "shock_radius",
+     "dist": 250,
+     "pfx": "particles/units/heroes/hero_dark_seer/dark_seer_vacuum.vpcf"
+    }
+   ],
+   "ru": "Медвежьи объятия",
+   "en": "Bear Hug",
+   "ru_d": "Earthshock подтягивает врагов к Урсе",
+   "en_d": "Earthshock pulls enemies to Ursa",
+   "mech": 1
+  },
+  {
+   "id": "ursa_m_autopower",
+   "r": "purple",
+   "branch": "W",
+   "ab": "ursa_overpower",
+   "fx": [
+    {
+     "t": "auto",
+     "every": 10,
+     "range": 300,
+     "heroOnly": 1
+    }
+   ],
+   "ru": "Ярость без счета",
+   "en": "Endless Fury",
+   "ru_d": "Раз в 10 с Overpower включается сам, если рядом (300) вражеский герой",
+   "en_d": "Every 10 s Overpower activates by itself when an enemy hero is within 300",
+   "mech": 1
+  },
+  {
+   "id": "ursa_m_greatbear",
+   "r": "purple",
+   "branch": "R",
+   "ab": "ursa_enrage",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "scale": 145,
+      "nocol": 1,
+      "msc": 50
+     }
+    }
+   ],
+   "ru": "Великий медведь",
+   "en": "Great Bear",
+   "ru_d": "Enrage превращает Урсу в огромного медведя: больше, сквозь всех, +50 скорости",
+   "en_d": "Enrage turns Ursa into a giant bear: bigger, passes through units, +50 speed",
+   "mech": 1
+  },
+  {
+   "id": "ursa_m_doubleshock",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "ursa_earthshock",
+   "fx": [
+    {
+     "t": "multi",
+     "chance": 50,
+     "times": 1,
+     "delay": 0.35
+    }
+   ],
+   "ru": "Двойной удар",
+   "en": "Double Slam",
+   "ru_d": "50% шанс второго Earthshock",
+   "en_d": "50% chance of a second Earthshock",
+   "mech": 1
+  }
+ ]
+}

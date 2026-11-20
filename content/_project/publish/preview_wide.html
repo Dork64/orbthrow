@@ -1,0 +1,37 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  html,body{margin:0;padding:0;background:#05070a;}
+  .c{width:1024px;height:768px;position:relative;overflow:hidden;
+     background: radial-gradient(circle at 50% 42%, #22304a 0%, #0c111b 45%, #030406 80%);
+     font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;}
+  .glow{position:absolute;left:50%;top:38%;width:640px;height:640px;transform:translate(-50%,-50%);
+     background: radial-gradient(circle, rgba(232,194,106,.30) 0%, rgba(232,194,106,.08) 38%, rgba(0,0,0,0) 62%);}
+  .ring{position:absolute;left:50%;top:38%;width:380px;height:380px;transform:translate(-50%,-50%);
+     border-radius:50%;border:6px solid rgba(243,210,124,.85);
+     box-shadow:0 0 40px rgba(243,210,124,.55), inset 0 0 60px rgba(243,210,124,.25);}
+  .ring2{position:absolute;left:50%;top:38%;width:470px;height:470px;transform:translate(-50%,-50%);
+     border-radius:50%;border:2px dashed rgba(243,210,124,.25);}
+  .gem{position:absolute;border-radius:50%;transform:translate(-50%,-50%);
+     box-shadow:0 0 30px rgba(255,255,255,.35), 0 10px 30px rgba(0,0,0,.7);border:3px solid rgba(255,255,255,.6);}
+  .grey{background: radial-gradient(circle at 35% 30%, #fff 0%, #c8ced5 30%, #59616a 100%);}
+  .blue{background: radial-gradient(circle at 35% 30%, #eaf5ff 0%, #6fb7ff 30%, #123f8c 100%); box-shadow:0 0 50px rgba(77,163,255,.7),0 10px 30px rgba(0,0,0,.7);}
+  .purple{background: radial-gradient(circle at 35% 30%, #f6ebff 0%, #c08bff 30%, #4b1b96 100%); box-shadow:0 0 50px rgba(183,124,255,.75),0 10px 30px rgba(0,0,0,.7);}
+  .legend{background: radial-gradient(circle at 35% 30%, #fff8de 0%, #ffc964 30%, #a85c06 100%); box-shadow:0 0 70px rgba(255,177,61,.85),0 10px 30px rgba(0,0,0,.7);}
+  .core{position:absolute;left:50%;top:38%;width:140px;height:140px;transform:translate(-50%,-50%);}
+  .title{position:absolute;left:0;right:0;top:540px;text-align:center;color:#f3d27c;font-size:104px;font-weight:900;letter-spacing:14px;
+     text-shadow:0 0 30px rgba(232,194,106,.7), 0 6px 0 #6b4b12, 0 10px 30px #000;}
+  .sub{position:absolute;left:0;right:0;top:672px;text-align:center;color:#c9d3dd;font-size:28px;letter-spacing:6px;text-transform:uppercase;}
+  .dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#f3d27c;margin:0 18px 8px;vertical-align:middle;}
+</style></head>
+<body><div class="c">
+  <div class="glow"></div><div class="ring2"></div><div class="ring"></div>
+  <div class="gem legend core"></div>
+  <div class="gem grey"   style="left:512px;top:102px;width:70px;height:70px"></div>
+  <div class="gem blue"   style="left:705px;top:292px;width:82px;height:82px"></div>
+  <div class="gem purple" style="left:322px;top:330px;width:90px;height:90px"></div>
+  <div class="gem grey"   style="left:610px;top:450px;width:46px;height:46px;opacity:.85"></div>
+  <div class="gem blue"   style="left:385px;top:165px;width:44px;height:44px;opacity:.85"></div>
+  <div class="title">ORBTHROW</div>
+  <div class="sub">FFA<span class="dot"></span>Orbs<span class="dot"></span>Overboss</div>
+</div></body></html>

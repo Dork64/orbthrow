@@ -1,0 +1,555 @@
+{
+ "hero": "npc_dota_hero_razor",
+ "orbs": [
+  {
+   "id": "razor_b_1",
+   "r": "blue",
+   "branch": "Q",
+   "ab": "razor_plasma_field",
+   "mods": "damage_max:%20",
+   "max": 4,
+   "ru": "Край плазмы",
+   "en": "Plasma Edge"
+  },
+  {
+   "id": "razor_b_2",
+   "r": "blue",
+   "branch": "Q",
+   "ab": "razor_plasma_field",
+   "mods": "radius:35",
+   "max": 3,
+   "ru": "Дальний фронт",
+   "en": "Distant Front"
+  },
+  {
+   "id": "razor_b_3",
+   "r": "blue",
+   "branch": "Q",
+   "ab": "razor_plasma_field",
+   "mods": "slow_duration:0.2:s",
+   "max": 3,
+   "ru": "Ионный след",
+   "en": "Ion Wake"
+  },
+  {
+   "id": "razor_b_4",
+   "r": "blue",
+   "branch": "W",
+   "ab": "razor_static_link",
+   "mods": "drain_rate:2",
+   "max": 4,
+   "ru": "Плотная связь",
+   "en": "Dense Link"
+  },
+  {
+   "id": "razor_b_5",
+   "r": "blue",
+   "branch": "W",
+   "ab": "razor_static_link",
+   "mods": "drain_length:0.5:s",
+   "max": 3,
+   "ru": "Долгий контакт",
+   "en": "Long Contact"
+  },
+  {
+   "id": "razor_b_6",
+   "r": "blue",
+   "branch": "W",
+   "ab": "razor_static_link",
+   "mods": "cd:10",
+   "max": 4,
+   "ru": "Переподключение",
+   "en": "Reconnection"
+  },
+  {
+   "id": "razor_b_7",
+   "r": "blue",
+   "branch": "E",
+   "ab": "razor_storm_surge",
+   "mods": "strike_damage:%20",
+   "max": 4,
+   "ru": "Сильный разряд",
+   "en": "Strong Discharge"
+  },
+  {
+   "id": "razor_b_8",
+   "r": "blue",
+   "branch": "E",
+   "ab": "razor_storm_surge",
+   "mods": "strike_slow_duration:0.15:s",
+   "max": 3,
+   "ru": "Заземление",
+   "en": "Grounding"
+  },
+  {
+   "id": "razor_b_9",
+   "r": "blue",
+   "branch": "E",
+   "ab": "razor_storm_surge",
+   "mods": "strike_search_radius:45",
+   "max": 3,
+   "ru": "Дальняя искра",
+   "en": "Distant Spark"
+  },
+  {
+   "id": "razor_b_10",
+   "r": "blue",
+   "branch": "R",
+   "ab": "razor_eye_of_the_storm",
+   "mods": "damage:%15",
+   "max": 4,
+   "ru": "Грозовой удар",
+   "en": "Storm Strike"
+  },
+  {
+   "id": "razor_b_11",
+   "r": "blue",
+   "branch": "R",
+   "ab": "razor_eye_of_the_storm",
+   "mods": "duration:2:s",
+   "max": 3,
+   "ru": "Долгая гроза",
+   "en": "Long Storm"
+  },
+  {
+   "id": "razor_b_12",
+   "r": "blue",
+   "branch": "R",
+   "ab": "razor_eye_of_the_storm",
+   "mods": "cd:10",
+   "max": 4,
+   "ru": "Новый циклон",
+   "en": "New Cyclone"
+  },
+  {
+   "id": "razor_p_ionize",
+   "branch": "Q",
+   "r": "purple",
+   "ab": "razor_plasma_field",
+   "max": 1,
+   "ru": "Ионизация",
+   "en": "Ionization",
+   "ru_d": "Plasma Field снижает сопротивление магии героя на 8% на 3 с",
+   "en_d": "Plasma Field reduces hero magic resistance by 8% for 3 s",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "mr": -8
+      },
+      "dur": 3
+     },
+     "icd": 1
+    }
+   ]
+  },
+  {
+   "id": "razor_p_recycle",
+   "branch": "Q",
+   "r": "purple",
+   "ab": "razor_plasma_field",
+   "max": 1,
+   "ru": "Переработка заряда",
+   "en": "Charge Recycling",
+   "ru_d": "Plasma Field восстанавливает ману: 15% урона по героям, раз в секунду по цели",
+   "en_d": "Plasma Field restores mana equal to 15% of hero damage, once per second per target",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "mana": 15,
+     "icd": 1
+    }
+   ]
+  },
+  {
+   "id": "razor_p_insulate",
+   "branch": "W",
+   "r": "purple",
+   "ab": "razor_static_link",
+   "max": 1,
+   "ru": "Изоляция провода",
+   "en": "Wire Insulation",
+   "ru_d": "После Static Link +6 брони на 5 с",
+   "en_d": "After Static Link: +6 armor for 5 s",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 5,
+     "props": {
+      "armor": 6
+     }
+    }
+   ]
+  },
+  {
+   "id": "razor_p_shortcircuit",
+   "branch": "W",
+   "r": "purple",
+   "ab": "razor_static_link",
+   "max": 1,
+   "ru": "Замыкание",
+   "en": "Short Circuit",
+   "ru_d": "Убийство героя за 6 с после Static Link сокращает оставшийся КД Link на 25%",
+   "en_d": "A hero kill within 6 s of Static Link reduces its remaining cooldown by 25%",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "win",
+     "win": 6,
+     "cdpct": 25
+    }
+   ]
+  },
+  {
+   "id": "razor_p_coating",
+   "branch": "E",
+   "r": "purple",
+   "ab": "razor_storm_surge",
+   "max": 1,
+   "ru": "Диэлектрик",
+   "en": "Dielectric",
+   "ru_d": "Срабатывание Storm Surge по герою снижает его урон на 12% на 3 с. Раз в 3 с на цель.",
+   "en_d": "Storm Surge striking a hero reduces their damage by 12% for 3 s. Once per 3 s per target.",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "icd": 3,
+     "debuff": {
+      "props": {
+       "dmg": -12
+      },
+      "dur": 3
+     }
+    }
+   ]
+  },
+  {
+   "id": "razor_p_recover",
+   "branch": "E",
+   "r": "purple",
+   "ab": "razor_storm_surge",
+   "max": 1,
+   "ru": "Обратный ток",
+   "en": "Reverse Current",
+   "ru_d": "20% урона Storm Surge по героям лечит Рейзора, раз в секунду по цели",
+   "en_d": "20% of Storm Surge hero damage heals Razor, once per second per target",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "heal": 20,
+     "icd": 1
+    }
+   ]
+  },
+  {
+   "id": "razor_p_dryair",
+   "branch": "R",
+   "r": "purple",
+   "ab": "razor_eye_of_the_storm",
+   "max": 1,
+   "ru": "Сухой воздух",
+   "en": "Dry Air",
+   "ru_d": "Eye of the Storm снижает лечение героев на 20% на 2 с",
+   "en_d": "Eye of the Storm reduces hero healing by 20% for 2 s",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "healred": 20
+      },
+      "dur": 2
+     },
+     "icd": 1
+    }
+   ]
+  },
+  {
+   "id": "razor_p_stormfeast",
+   "branch": "R",
+   "r": "purple",
+   "ab": "razor_eye_of_the_storm",
+   "max": 1,
+   "ru": "В центре бури",
+   "en": "At the Storm Center",
+   "ru_d": "Первые 8 с после Eye of the Storm атаки по героям восстанавливают здоровье на 22% нанесённого ими урона.",
+   "en_d": "For the first 8 s after Eye of the Storm, hero attacks heal for 22% of damage dealt.",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 8,
+     "props": {
+      "ls": 22
+     }
+    }
+   ]
+  },
+  {
+   "id": "razor_m_front",
+   "branch": "Q",
+   "r": "purple",
+   "ab": "razor_plasma_field",
+   "max": 1,
+   "ru": "Грозовой фронт",
+   "en": "Storm Front",
+   "ru_d": "Plasma Field оставляет кольцо 300–550 на 4 с. Первый тик по герою наносит 110 магического урона, остальные по 25. Замедление 20%.",
+   "en_d": "Plasma Field leaves a 300–550 ring for 4 s. The first tick per hero deals 110 magic damage, later ticks deal 25. Slows by 20%.",
+   "fx": [
+    {
+     "t": "zone",
+     "at": "self",
+     "radius": 550,
+     "dur": 4,
+     "every": 1,
+     "dmg": 25,
+     "debuff": {
+      "props": {
+       "ms": -20
+      },
+      "dur": 1.2
+     },
+     "inner": 300,
+     "entryDmg": 85
+    }
+   ],
+   "mech": 1
+  },
+  {
+   "id": "razor_m_resonance",
+   "branch": "W",
+   "r": "purple",
+   "ab": "razor_static_link",
+   "max": 1,
+   "ru": "Резонансная дистанция",
+   "en": "Resonant Distance",
+   "ru_d": "Пока Static Link держится, на дистанции 250–550 цель получает 35 магического урона в секунду. После двух тиков подряд — один разряд на 75. Не дольше 5 с.",
+   "en_d": "While linked at 250–550 range, the target takes 35 magic damage per second. Two consecutive ticks cause one extra 75 damage. Lasts up to 5 s.",
+   "fx": [
+    {
+     "t": "tether",
+     "dur": 5,
+     "range": 650,
+     "minDist": 250,
+     "maxDist": 550,
+     "breakRange": 800,
+     "every": 1,
+     "dmg": 35,
+     "ownerMod": "modifier_razor_static_link",
+     "finishTicks": 2,
+     "finishDmg": 75
+    }
+   ],
+   "mech": 1
+  },
+  {
+   "id": "razor_m_closedloop",
+   "branch": "E",
+   "r": "purple",
+   "ab": "razor_storm_surge",
+   "max": 1,
+   "ru": "Замкнутый контур",
+   "en": "Closed Loop",
+   "ru_d": "Plasma Field и Static Link за 4 с дают −10% получаемого урона на 3 с; раз в 8 с",
+   "en_d": "Plasma Field and Static Link within 4 s grant 10% damage reduction for 3 s; once per 8 s",
+   "fx": [
+    {
+     "t": "combo",
+     "abs": [
+      "razor_plasma_field",
+      "razor_static_link"
+     ],
+     "need": 2,
+     "within": 4,
+     "icd": 8,
+     "radius": 0,
+     "dmg": 0,
+     "dur": 3,
+     "props": {
+      "inc": -10
+     }
+    }
+   ],
+   "mech": 1
+  },
+  {
+   "id": "razor_m_thunderwake",
+   "branch": "R",
+   "r": "purple",
+   "ab": "razor_eye_of_the_storm",
+   "max": 1,
+   "ru": "Грозовой след",
+   "en": "Thunder Wake",
+   "ru_d": "6 с после Eye of the Storm остаётся след на 2 с: 30 магического урона в секунду",
+   "en_d": "For 6 s after Eye of the Storm, leaves a 2 s trail dealing 30 magic damage per second",
+   "fx": [
+    {
+     "t": "trail",
+     "win": 6,
+     "dps": 30,
+     "radius": 160,
+     "life": 2,
+     "type": "magic"
+    }
+   ],
+   "mech": 1
+  },
+  {
+   "id": "razor_l_horizon",
+   "branch": "Q",
+   "r": "legend",
+   "ab": "razor_plasma_field",
+   "max": 1,
+   "ru": "Линия горизонта",
+   "en": "Horizon Line",
+   "ru_d": "Первое попадание Plasma Field метит до 5 героев на 4 с. Повторное попадание спустя 0,45 с взрывает метку на 220 магического урона. Метка на цель — раз в 7 с.",
+   "en_d": "The first Plasma Field hit marks up to 5 heroes for 4 s. Another hit after 0.45 s detonates it for 220 magic damage. Marks have a 7 s cooldown per hero.",
+   "fx": [
+    {
+     "t": "mark",
+     "by": "ab",
+     "consume": [
+      "razor_plasma_field"
+     ],
+     "dur": 4,
+     "icd": 7,
+     "max": 5,
+     "dmg": 220,
+     "arm": 0.45,
+     "aw": {
+      "dmg": 310,
+      "arm": 0.35
+     }
+    }
+   ],
+   "ru_aw": "Пробуждение: взрыв наносит 310, минимальный интервал — 0,35 с.",
+   "en_aw": "Awakening: 310 detonation damage, 0.35 s minimum interval."
+  },
+  {
+   "id": "razor_l_tension",
+   "branch": "W",
+   "r": "legend",
+   "ab": "razor_static_link",
+   "max": 1,
+   "ru": "Высокое напряжение",
+   "en": "High Tension",
+   "ru_d": "При Static Link на дистанции 200–575 цель получает 55 магического урона в секунду. 2 тика подряд дают один разряд на 180. Связь действует до 6 с, уход за 800 обрывает её.",
+   "en_d": "Static Link adds 55 magic damage per second at 200–575 range. Two consecutive ticks cause one extra 180 damage. Up to 6 s; moving beyond 800 breaks it.",
+   "fx": [
+    {
+     "t": "tether",
+     "dur": 6,
+     "range": 650,
+     "minDist": 200,
+     "maxDist": 575,
+     "breakRange": 800,
+     "every": 1,
+     "dmg": 55,
+     "ownerMod": "modifier_razor_static_link",
+     "finishTicks": 2,
+     "finishDmg": 180,
+     "aw": {
+      "dmg": 70,
+      "finishDmg": 250,
+      "maxDist": 650
+     }
+    }
+   ],
+   "ru_aw": "Пробуждение: 70 урона в секунду, разряд 250, рабочая дальность до 650.",
+   "en_aw": "Awakening: 70 damage per second, 250 discharge, active range up to 650."
+  },
+  {
+   "id": "razor_l_conductance",
+   "branch": "E",
+   "r": "legend",
+   "ab": "razor_storm_surge",
+   "max": 1,
+   "ru": "Проводимость",
+   "en": "Conductance",
+   "ru_d": "Storm Surge метит до 4 героев на 5 с. Ваша атака по метке наносит 170 магического урона. Каждый настоящий разряд Storm Surge сокращает КД Static Link на 1,25 с раз в 2 с по цели.",
+   "en_d": "Storm Surge marks up to 4 heroes for 5 s. Your attack consumes the mark for 170 magic damage. Each native Surge strike cuts Static Link cooldown by 1.25 s, once per 2 s per target.",
+   "fx": [
+    {
+     "t": "mark",
+     "by": "ab",
+     "consume": [
+      "attack"
+     ],
+     "dur": 5,
+     "icd": 8,
+     "max": 4,
+     "dmg": 170,
+     "aw": {
+      "dmg": 235
+     }
+    },
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "cdr": {
+      "abs": [
+       "razor_static_link"
+      ],
+      "sec": 1.25
+     },
+     "icd": 2,
+     "aw": {
+      "cdr": {
+       "abs": [
+        "razor_static_link"
+       ],
+       "sec": 1.75
+      }
+     }
+    }
+   ],
+   "ru_aw": "Пробуждение: 235 урона по метке и 1,75 с сокращения КД.",
+   "en_aw": "Awakening: 235 mark damage and 1.75 s cooldown reduction."
+  },
+  {
+   "id": "razor_l_capacitor",
+   "branch": "R",
+   "r": "legend",
+   "ab": "razor_eye_of_the_storm",
+   "max": 1,
+   "ru": "Накопленный разряд",
+   "en": "Stored Discharge",
+   "ru_d": "Первые 8 с после Eye of the Storm накопите от героев урон в 13% макс. здоровья. Тогда один раз ударьте на 250 магического урона по героям в 475 и получите +35% скорости на 3 с. КД 14 с.",
+   "en_d": "For 8 s after Eye of the Storm, taking hero damage equal to 13% max health triggers one 250 magic damage blast within 475 and grants 35% movement speed for 3 s. 14 s cooldown.",
+   "fx": [
+    {
+     "t": "guard",
+     "win": 8,
+     "thr": 13,
+     "icd": 14,
+     "radius": 475,
+     "dmg": 250,
+     "dur": 3,
+     "props": {
+      "ms": 35
+     },
+     "aw": {
+      "dmg": 350,
+      "props": {
+       "ms": 40
+      },
+      "heal": 6
+     }
+    }
+   ],
+   "ru_aw": "Пробуждение: 350 урона, +40% скорости, лечение 6% максимального здоровья.",
+   "en_aw": "Awakening: 350 damage, 40% movement speed, 6% max health healed."
+  }
+ ]
+}

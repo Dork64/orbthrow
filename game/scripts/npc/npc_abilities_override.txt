@@ -1,0 +1,45 @@
+// Правки стандартных способностей и предметов для режима (DESIGN 3.6 и 10.4).
+"DOTAAbilities"
+{
+	"Version"	"1"
+
+	// Rapier выключен: в гонке убийств его выпадение слишком случайно.
+	"item_rapier"
+	{
+		"ItemPurchasable"	"0"
+	}
+
+	// Aghanim's Shard продается с начала партии (в обычной Доте — с 15:00).
+	"item_aghanims_shard"
+	{
+		"ItemInitialStockTime"		"0.0"
+		"ItemInitialStockTimeTurbo"	"0.0"
+		"ItemStockInitial"			"1"
+		"ItemStockMax"				"1"
+		"ItemStockTime"				"1"
+	}
+
+	// Sniper: дальность Assassinate 2000, перезарядка 30/25/20 — иначе ворует добивания через всю карту.
+	"sniper_assassinate"
+	{
+		"AbilityCastRange"	"2000"
+		"AbilityCooldown"	"30 25 20"
+	}
+
+	// Mirana: стрела не дальше 2000.
+	"mirana_arrow"
+	{
+		"AbilityCastRange"	"2000"
+		"AbilityValues"
+		{
+			"arrow_range"	"2000"
+		}
+	}
+
+	// BKB: 95 -> 80 секунд; длительность и цена стандартные.
+	"item_black_king_bar"
+	{
+		"AbilityCooldown" "80"
+	}
+
+}

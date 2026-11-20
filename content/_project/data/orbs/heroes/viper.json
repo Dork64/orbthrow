@@ -1,0 +1,334 @@
+{
+ "hero": "npc_dota_hero_viper",
+ "orbs": [
+  {
+   "id": "viper_p_corrode",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "viper_poison_attack",
+   "mods": "magic_resistance:+4",
+   "ru": "Разъедание",
+   "en": "Corrode",
+   "ru_d": "Poison Attack снижает сопротивление магии еще на 4% за стак",
+   "en_d": "Poison Attack reduces magic resistance by 4% more per stack"
+  },
+  {
+   "id": "viper_p_venom",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "viper_poison_attack",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "heal": 30
+    }
+   ],
+   "ru": "Ядовитая кровь",
+   "en": "Venom Blood",
+   "ru_d": "Poison Attack лечит на 30% урона по героям",
+   "en_d": "Poison Attack heals for 30% of its damage to heroes"
+  },
+  {
+   "id": "viper_p_spread",
+   "r": "purple",
+   "branch": "W",
+   "ab": "viper_nethertoxin",
+   "mods": "radius:+150",
+   "ru": "Разлив",
+   "en": "Spill",
+   "ru_d": "Радиус Nethertoxin +150",
+   "en_d": "Nethertoxin radius +150"
+  },
+  {
+   "id": "viper_p_toxic",
+   "r": "purple",
+   "branch": "W",
+   "ab": "viper_nethertoxin",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "healred": 30
+      },
+      "dur": 1.5
+     }
+    }
+   ],
+   "ru": "Токсичность",
+   "en": "Toxicity",
+   "ru_d": "Nethertoxin снижает лечение героев на 30%",
+   "en_d": "Nethertoxin reduces heroes' healing by 30%"
+  },
+  {
+   "id": "viper_p_acid",
+   "r": "purple",
+   "branch": "E",
+   "ab": "viper_corrosive_skin",
+   "fx": [
+    {
+     "t": "taken",
+     "reflect": 10
+    }
+   ],
+   "ru": "Кислотная кожа",
+   "en": "Acid Skin",
+   "ru_d": "10% урона от героев возвращается атакующему (чистый урон)",
+   "en_d": "10% of the damage from heroes is returned to the attacker as pure damage"
+  },
+  {
+   "id": "viper_p_scales",
+   "r": "purple",
+   "branch": "E",
+   "ab": "viper_corrosive_skin",
+   "mods": "bonus_magic_resistance:+10",
+   "ru": "Чешуя",
+   "en": "Scales",
+   "ru_d": "Corrosive Skin дает еще +10% сопротивления магии",
+   "en_d": "Corrosive Skin grants another +10% magic resistance"
+  },
+  {
+   "id": "viper_p_fangs",
+   "r": "purple",
+   "branch": "R",
+   "ab": "viper_viper_strike",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "heal": 40
+    }
+   ],
+   "ru": "Клыки",
+   "en": "Fangs",
+   "ru_d": "Viper Strike лечит на 40% урона",
+   "en_d": "Viper Strike heals for 40% of its damage"
+  },
+  {
+   "id": "viper_p_strike",
+   "r": "purple",
+   "branch": "R",
+   "ab": "viper_viper_strike",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "ab",
+     "cdpct": 60
+    }
+   ],
+   "ru": "Добыча",
+   "en": "Prey",
+   "ru_d": "Убийство героя Viper Strike снимает 60% ее перезарядки",
+   "en_d": "A hero kill with Viper Strike removes 60% of its cooldown"
+  },
+  {
+   "id": "viper_l_venomcycle",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "viper_poison_attack",
+   "ru": "Цикл отравления",
+   "en": "Venom Cycle",
+   "ru_d": "Каждая 4-я атака по одному герою наносит ещё 4% его текущего здоровья магическим уроном и снижает лечение на 20% на 3 с (не чаще раза в секунду по цели)",
+   "en_d": "Every fourth attack on the same hero deals 4% of their current health as extra magic damage and reduces healing by 20% for 3 s (at most once per second per target)",
+   "ru_aw": "Пробуждение: 6% текущего здоровья, снижение лечения 30%",
+   "en_aw": "Awakening: 6% current health, 30% healing reduction",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "attack",
+     "every": 4,
+     "heroOnly": 1,
+     "icd": 1,
+     "extra": {
+      "curhp": 4,
+      "type": "magic"
+     },
+     "debuff": {
+      "props": {
+       "healred": 20
+      },
+      "dur": 3
+     },
+     "aw": {
+      "extra": {
+       "curhp": 6,
+       "type": "magic"
+      },
+      "debuff": {
+       "props": {
+        "healred": 30
+       },
+       "dur": 3
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "viper_l_toxin",
+   "r": "legend",
+   "branch": "W",
+   "ab": "viper_nethertoxin",
+   "mods": "max_damage:+60",
+   "awmods": "duration:+3",
+   "fx": [
+    {
+     "t": "charges",
+     "n": 1
+    }
+   ],
+   "ru": "Ядовитое болото",
+   "en": "Toxic Swamp",
+   "ru_d": "У Nethertoxin есть запасной заряд, наибольший урон +60",
+   "en_d": "Nethertoxin gets a spare charge, max damage +60",
+   "ru_aw": "Пробуждение: длится на 3 с дольше",
+   "en_aw": "Awakening: lasts 3 s longer"
+  },
+  {
+   "id": "viper_l_skin",
+   "r": "legend",
+   "branch": "E",
+   "ab": "viper_corrosive_skin",
+   "mods": "damage:+25;bonus_attack_speed:+30",
+   "fx": [
+    {
+     "t": "taken",
+     "reflect": 15,
+     "aw": {
+      "reflect": 25
+     }
+    }
+   ],
+   "ru": "Броня гадюки",
+   "en": "Viper Hide",
+   "ru_d": "Урон Corrosive Skin +25, скорость атаки Вайпера от нее +30; 15% урона от героев возвращается атакующему",
+   "en_d": "Corrosive Skin damage +25, Viper's attack speed from it +30; 15% of the damage from heroes is returned to the attacker",
+   "ru_aw": "Пробуждение: возврат 25%",
+   "en_aw": "Awakening: 25% returned"
+  },
+  {
+   "id": "viper_l_strike",
+   "r": "legend",
+   "branch": "R",
+   "ab": "viper_viper_strike",
+   "mods": "damage:+60;duration:+2",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "splash": {
+      "radius": 400,
+      "pct": 0
+     },
+     "aw": {
+      "splash": {
+       "pct": 50
+      }
+     }
+    }
+   ],
+   "ru": "Королевская кобра",
+   "en": "King Cobra",
+   "ru_d": "Урон Viper Strike +60, длительность +2 с",
+   "en_d": "Viper Strike damage +60, duration +2 s",
+   "ru_aw": "Пробуждение: урон Viper Strike задевает врагов в 400 вокруг цели (50%)",
+   "en_aw": "Awakening: Viper Strike damage also hits enemies within 400 of the target (50%)"
+  },
+  {
+   "id": "viper_m_venompath",
+   "r": "purple",
+   "branch": "W",
+   "ab": "viper_nethertoxin",
+   "fx": [
+    {
+     "t": "trail",
+     "dps": "max_damage*0.4",
+     "radius": 160,
+     "life": 4,
+     "type": "magic",
+     "pfx": "particles/units/heroes/hero_viper/viper_nethertoxin.vpcf"
+    }
+   ],
+   "ru": "Ядовитый след",
+   "en": "Venom Trail",
+   "ru_d": "Где летит Вайпер, 4 с яд: 40% наибольшего урона Nethertoxin в секунду",
+   "en_d": "Where Viper flies, poison stays for 4 s: 40% of max Nethertoxin damage per second",
+   "mech": 1
+  },
+  {
+   "id": "viper_m_doubletoxin",
+   "r": "purple",
+   "branch": "W",
+   "ab": "viper_nethertoxin",
+   "fx": [
+    {
+     "t": "multi",
+     "chance": 40,
+     "times": 1,
+     "delay": 0.4
+    }
+   ],
+   "ru": "Двойной токсин",
+   "en": "Double Toxin",
+   "ru_d": "40% шанс второго Nethertoxin",
+   "en_d": "40% chance of a second Nethertoxin",
+   "mech": 1
+  },
+  {
+   "id": "viper_m_autostrike",
+   "r": "purple",
+   "branch": "R",
+   "ab": "viper_viper_strike",
+   "fx": [
+    {
+     "t": "auto",
+     "every": 15,
+     "range": 700,
+     "heroOnly": 1
+    }
+   ],
+   "ru": "Змеиный укус",
+   "en": "Snake Bite",
+   "ru_d": "Раз в 15 с Viper Strike сам бьет ближайшего вражеского героя в 700 (бесплатно)",
+   "en_d": "Every 15 s Viper Strike hits the nearest enemy hero within 700 by itself (free)",
+   "mech": 1
+  },
+  {
+   "id": "viper_m_toxinmine",
+   "r": "purple",
+   "branch": "W",
+   "ab": "viper_nethertoxin",
+   "fx": [
+    {
+     "t": "trap",
+     "at": "point",
+     "radius": 240,
+     "arm": 1,
+     "life": 40,
+     "max": 3,
+     "dmg": "max_damage*1.5",
+     "type": "magic",
+     "pfx": "particles/units/heroes/hero_techies/techies_land_mine_explode.vpcf",
+     "debuff": {
+      "props": {
+       "mr": -20,
+       "silence": 1
+      },
+      "dur": 2.5
+     }
+    }
+   ],
+   "ru": "Ядовитая мина",
+   "en": "Toxic Mine",
+   "ru_d": "Nethertoxin оставляет мину (до 3): 150% урона и немота 2.5 с",
+   "en_d": "Nethertoxin leaves a mine (up to 3): 150% damage and a 2.5 s silence",
+   "mech": 1
+  }
+ ]
+}

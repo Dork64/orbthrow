@@ -1,0 +1,328 @@
+{
+ "hero": "npc_dota_hero_sniper",
+ "orbs": [
+  {
+   "id": "sniper_p_suppress",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "sniper_shrapnel",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "debuff": {
+      "props": {
+       "as": -30,
+       "reveal": 1
+      },
+      "dur": 1.5
+     }
+    }
+   ],
+   "ru": "Подавление",
+   "en": "Suppression",
+   "ru_d": "Враги в Шрапнели теряют 30 скорости атаки и не могут быть невидимыми",
+   "en_d": "Enemies in Shrapnel lose 30 attack speed and cannot turn invisible"
+  },
+  {
+   "id": "sniper_p_pierce",
+   "r": "purple",
+   "branch": "W",
+   "ab": "sniper_headshot",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "attack",
+     "pierce": {
+      "dist": 350,
+      "width": 150,
+      "pct": 40
+     }
+    }
+   ],
+   "ru": "Пробивной выстрел",
+   "en": "Piercing Shot",
+   "ru_d": "Атака задевает врагов на линии до 350 за целью: 40% урона атаки",
+   "en_d": "Attacks also hit enemies in a line up to 350 behind the target for 40% of the attack damage"
+  },
+  {
+   "id": "sniper_p_stunning",
+   "r": "purple",
+   "branch": "W",
+   "ab": "sniper_headshot",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "attack",
+     "heroOnly": 1,
+     "every": 4,
+     "debuff": {
+      "props": {
+       "stun": 1
+      },
+      "dur": 0.4
+     }
+    }
+   ],
+   "ru": "Оглушающий выстрел",
+   "en": "Stunning Shot",
+   "ru_d": "Каждая 4-я атака по одному герою оглушает его на 0.4 с",
+   "en_d": "Every 4th attack on the same hero stuns it for 0.4 s"
+  },
+  {
+   "id": "sniper_p_position",
+   "r": "purple",
+   "branch": "E",
+   "ab": "sniper_take_aim",
+   "fx": [
+    {
+     "t": "still",
+     "delay": 1.5,
+     "props": {
+      "dmg": 20
+     }
+    }
+   ],
+   "ru": "Позиция",
+   "en": "Entrenched",
+   "ru_d": "Простояв на месте 1.5 с, Снайпер наносит +20% урона, пока не сдвинется",
+   "en_d": "After standing still for 1.5 s Sniper deals +20% damage until he moves"
+  },
+  {
+   "id": "sniper_p_eagle",
+   "r": "purple",
+   "branch": "E",
+   "ab": "sniper_take_aim",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "as": 60
+     }
+    }
+   ],
+   "ru": "Глаз орла",
+   "en": "Eagle Eye",
+   "ru_d": "Активный Прицел дает +60 скорости атаки на время действия",
+   "en_d": "Active Take Aim grants +60 attack speed for its duration"
+  },
+  {
+   "id": "sniper_p_reload",
+   "r": "purple",
+   "branch": "R",
+   "ab": "sniper_assassinate",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "ab",
+     "cdpct": 50,
+     "manapct": 10
+    }
+   ],
+   "ru": "Перезарядка",
+   "en": "Reload",
+   "ru_d": "Убийство героя Assassinate снимает половину перезарядки и восстанавливает 10% маны",
+   "en_d": "A hero kill with Assassinate removes half of its cooldown and restores 10% mana"
+  },
+  {
+   "id": "sniper_p_ricochet",
+   "r": "purple",
+   "branch": "R",
+   "ab": "sniper_assassinate",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "chain": {
+      "jumps": 1,
+      "radius": 600,
+      "pct": 50
+     }
+    }
+   ],
+   "ru": "Рикошет",
+   "en": "Ricochet",
+   "ru_d": "Assassinate перескакивает на ближайшего героя в 600 от цели с 50% урона",
+   "en_d": "Assassinate bounces to the nearest hero within 600 of the target for 50% damage"
+  },
+  {
+   "id": "sniper_l_barrage",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "sniper_shrapnel",
+   "mods": "AbilityCharges:+2;shrapnel_damage:*1.4",
+   "awmods": "radius:+100",
+   "ru": "Огневой вал",
+   "en": "Barrage",
+   "ru_d": "+2 заряда Шрапнели, урон Шрапнели ×1.4",
+   "en_d": "+2 Shrapnel charges, Shrapnel damage ×1.4",
+   "ru_aw": "Пробуждение: радиус Шрапнели +100",
+   "en_aw": "Awakening: Shrapnel radius +100"
+  },
+  {
+   "id": "sniper_l_deadeye",
+   "r": "legend",
+   "branch": "W",
+   "ab": "sniper_headshot",
+   "mods": "proc_chance:=60",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "attack",
+     "heroOnly": 1,
+     "extra": {
+      "curhp": 4,
+      "type": "phys"
+     },
+     "aw": {
+      "extra": {
+       "curhp": 6
+      }
+     }
+    }
+   ],
+   "ru": "Смертельная точность",
+   "en": "Deadeye",
+   "ru_d": "Шанс выстрела в голову 60%; атаки по героям наносят еще 4% текущего здоровья цели",
+   "en_d": "Headshot chance 60%; attacks on heroes deal an extra 4% of the target's current health",
+   "ru_aw": "Пробуждение: 6% текущего здоровья",
+   "en_aw": "Awakening: 6% of current health"
+  },
+  {
+   "id": "sniper_l_nest",
+   "r": "legend",
+   "branch": "E",
+   "ab": "sniper_take_aim",
+   "mods": "does_root:=1",
+   "awmods": "duration:+3",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "range": 350,
+      "inc": -25,
+      "as": 60
+     }
+    }
+   ],
+   "ru": "Снайперское гнездо",
+   "en": "Sniper's Nest",
+   "ru_d": "Активный Прицел обездвиживает Снайпера, но дает +350 дальности, +60 скорости атаки и −25% получаемого урона",
+   "en_d": "Active Take Aim roots Sniper but grants +350 attack range, +60 attack speed and −25% damage taken",
+   "ru_aw": "Пробуждение: Прицел длится на 3 с дольше",
+   "en_aw": "Awakening: Take Aim lasts 3 s longer"
+  },
+  {
+   "id": "sniper_l_volley",
+   "r": "legend",
+   "branch": "R",
+   "ab": "sniper_assassinate",
+   "awmods": "damage:+150",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "splash": {
+      "radius": 350,
+      "pct": 100
+     }
+    }
+   ],
+   "ru": "Залп",
+   "en": "Volley",
+   "ru_d": "Assassinate бьет всех врагов в 350 вокруг цели полным уроном",
+   "en_d": "Assassinate hits all enemies within 350 of the target for full damage",
+   "ru_aw": "Пробуждение: урон Assassinate +150",
+   "en_aw": "Awakening: Assassinate damage +150"
+  },
+  {
+   "id": "sniper_m_shrapmulti",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "sniper_shrapnel",
+   "fx": [
+    {
+     "t": "multi",
+     "chance": 35,
+     "times": 1,
+     "delay": 0.4
+    }
+   ],
+   "ru": "Шквал шрапнели",
+   "en": "Shrapnel Squall",
+   "ru_d": "35% шанс, что Шрапнель тут же падает еще раз в ту же точку",
+   "en_d": "35% chance that Shrapnel instantly falls again on the same spot",
+   "mech": 1
+  },
+  {
+   "id": "sniper_m_aimdash",
+   "r": "purple",
+   "branch": "E",
+   "ab": "sniper_take_aim",
+   "fx": [
+    {
+     "t": "dash",
+     "dist": 500,
+     "to": "back"
+    }
+   ],
+   "ru": "Отскок снайпера",
+   "en": "Sniper's Hop",
+   "ru_d": "Take Aim отбрасывает Снайпера на 500 назад от курсора",
+   "en_d": "Take Aim hops Sniper 500 away from the cursor",
+   "mech": 1
+  },
+  {
+   "id": "sniper_m_tripwire",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "sniper_shrapnel",
+   "fx": [
+    {
+     "t": "trap",
+     "at": "point",
+     "radius": 180,
+     "arm": 1,
+     "life": 20,
+     "max": 2,
+     "dmg": 150,
+     "type": "magic",
+     "debuff": {
+      "props": {
+       "root": 1
+      },
+      "dur": 0.8
+     }
+    }
+   ],
+   "ru": "Сигнальная растяжка",
+   "en": "Tripwire",
+   "ru_d": "Shrapnel оставляет в выбранной точке ловушку на 20 с (до 2): 150 магического урона и обездвиживание 0.8 с",
+   "en_d": "Shrapnel leaves a trap at the target point for 20 s (max 2): 150 magic damage and 0.8 s root",
+   "mech": 1
+  },
+  {
+   "id": "sniper_m_doubleshot",
+   "r": "purple",
+   "branch": "R",
+   "ab": "sniper_assassinate",
+   "fx": [
+    {
+     "t": "multi",
+     "chance": 35,
+     "times": 1,
+     "delay": 0.5
+    }
+   ],
+   "ru": "Двойной выстрел",
+   "en": "Double Tap",
+   "ru_d": "35% шанс, что Assassinate выстрелит еще раз",
+   "en_d": "35% chance that Assassinate fires a second bullet",
+   "mech": 1
+  }
+ ]
+}

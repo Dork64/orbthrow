@@ -1,0 +1,33 @@
+<root>
+	<styles>
+		<include src="s2r://panorama/styles/dotastyles.vcss_c" />
+		<include src="file://{resources}/styles/custom_game/loading_screen.css" />
+	</styles>
+	<Panel class="LoadRoot" hittest="false">
+		<Panel id="LoadGlow" hittest="false" />
+		<Panel id="LoadCenter" hittest="false">
+			<Panel id="LoadGems">
+				<Panel class="LoadGem grey" /><Panel class="LoadGem blue" /><Panel class="LoadGem purple" /><Panel class="LoadGem legend" />
+			</Panel>
+			<Label id="LoadTitle" text="ORBTHROW" />
+			<Label id="LoadTagline" text="#orb_info_tagline" />
+			<Panel id="LoadCards">
+				<Panel class="LoadCard">
+					<Panel class="LoadGem purple" />
+					<Label class="LoadCardTitle" text="#orb_load_orbs" />
+					<Label class="LoadCardText" text="#orb_load_orbs_d" />
+				</Panel>
+				<Panel class="LoadCard">
+					<Panel class="LoadGem legend" />
+					<Label class="LoadCardTitle" text="#orb_load_center" />
+					<Label class="LoadCardText" text="#orb_load_center_d" />
+				</Panel>
+				<Panel class="LoadCard">
+					<Panel class="LoadGem blue" />
+					<Label class="LoadCardTitle" text="#orb_load_race" />
+					<Label class="LoadCardText" text="#orb_load_race_d" />
+				</Panel>
+			</Panel>
+		</Panel>
+	</Panel>
+</root>

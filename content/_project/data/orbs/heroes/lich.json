@@ -1,0 +1,306 @@
+{
+ "hero": "npc_dota_hero_lich",
+ "orbs": [
+  {
+   "id": "lich_p_cold",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "lich_frost_nova",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "debuff": {
+      "props": {
+       "mr": -12
+      },
+      "dur": 4
+     }
+    }
+   ],
+   "ru": "Пронизывающий холод",
+   "en": "Piercing Cold",
+   "ru_d": "Frost Blast снижает сопротивление магии врагов на 12% на 4 с",
+   "en_d": "Frost Blast reduces enemies' magic resistance by 12% for 4 s"
+  },
+  {
+   "id": "lich_p_blast",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "lich_frost_nova",
+   "fx": [
+    {
+     "t": "refund",
+     "chance": 35,
+     "cdpct": 100
+    }
+   ],
+   "ru": "Снова холод",
+   "en": "Cold Again",
+   "ru_d": "35% шанс, что Frost Blast не уйдет на перезарядку",
+   "en_d": "35% chance that Frost Blast does not go on cooldown"
+  },
+  {
+   "id": "lich_p_icy",
+   "r": "purple",
+   "branch": "W",
+   "ab": "lich_frost_shield",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "regen": 25
+     }
+    }
+   ],
+   "ru": "Ледяная кровь",
+   "en": "Icy Blood",
+   "ru_d": "Frost Shield дает Личу +25 восстановления здоровья на время действия",
+   "en_d": "Frost Shield grants Lich +25 health regeneration for its duration"
+  },
+  {
+   "id": "lich_p_thorns",
+   "r": "purple",
+   "branch": "W",
+   "ab": "lich_frost_shield",
+   "fx": [
+    {
+     "t": "taken",
+     "win": "duration",
+     "reflect": 20
+    }
+   ],
+   "ru": "Ледяные шипы",
+   "en": "Ice Thorns",
+   "ru_d": "Пока действует Frost Shield, 20% урона от героев возвращается атакующему",
+   "en_d": "While Frost Shield lasts, 20% of the damage from heroes is returned to the attacker"
+  },
+  {
+   "id": "lich_p_focus",
+   "r": "purple",
+   "branch": "E",
+   "ab": "lich_sinister_gaze",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 5,
+     "props": {
+      "sa": 20
+     }
+    }
+   ],
+   "ru": "Сила взгляда",
+   "en": "Focused Gaze",
+   "ru_d": "Sinister Gaze дает Личу +20% усиления способностей на 5 с",
+   "en_d": "Sinister Gaze grants Lich +20% spell amplification for 5 s"
+  },
+  {
+   "id": "lich_p_drain",
+   "r": "purple",
+   "branch": "E",
+   "ab": "lich_sinister_gaze",
+   "mods": "mana_drain:+15",
+   "ru": "Опустошение",
+   "en": "Drain",
+   "ru_d": "Sinister Gaze выкачивает на 15% больше маны",
+   "en_d": "Sinister Gaze drains 15% more mana"
+  },
+  {
+   "id": "lich_p_frostbound",
+   "r": "purple",
+   "branch": "R",
+   "ab": "lich_chain_frost",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "dmg": -15
+      },
+      "dur": 3
+     }
+    }
+   ],
+   "ru": "Обледенение",
+   "en": "Frostbound",
+   "ru_d": "Chain Frost снижает урон героев на 15% на 3 с",
+   "en_d": "Chain Frost reduces heroes' damage by 15% for 3 s"
+  },
+  {
+   "id": "lich_p_soul",
+   "r": "purple",
+   "branch": "R",
+   "ab": "lich_chain_frost",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "heal": 20
+    }
+   ],
+   "ru": "Пожиратель душ",
+   "en": "Soul Eater",
+   "ru_d": "Chain Frost лечит Лича на 20% урона по героям",
+   "en_d": "Chain Frost heals Lich for 20% of its damage to heroes"
+  },
+  {
+   "id": "lich_l_nova",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "lich_frost_nova",
+   "mods": "aoe_damage:+80;radius:+100",
+   "awmods": "aoe_damage:+80",
+   "ru": "Ледяная бездна",
+   "en": "Ice Abyss",
+   "ru_d": "Урон Frost Blast по области +80, радиус +100",
+   "en_d": "Frost Blast area damage +80, radius +100",
+   "ru_aw": "Пробуждение: урон по области еще +80",
+   "en_aw": "Awakening: area damage another +80"
+  },
+  {
+   "id": "lich_l_shield",
+   "r": "legend",
+   "branch": "W",
+   "ab": "lich_frost_shield",
+   "mods": "damage_reduction:+15;duration:+2",
+   "awmods": "radius:+300",
+   "ru": "Вечная мерзлота",
+   "en": "Permafrost",
+   "ru_d": "Frost Shield снижает урон еще на 15% и длится на 2 с дольше",
+   "en_d": "Frost Shield reduces 15% more damage and lasts 2 s longer",
+   "ru_aw": "Пробуждение: радиус ледяной ауры щита +300",
+   "en_aw": "Awakening: shield's frost aura radius +300"
+  },
+  {
+   "id": "lich_l_trance",
+   "r": "legend",
+   "branch": "E",
+   "ab": "lich_sinister_gaze",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 5,
+     "props": {
+      "sa": 25,
+      "mr": 20
+     },
+     "aw": {
+      "props": {
+       "sa": 40
+      }
+     }
+    }
+   ],
+   "ru": "Гипноз",
+   "en": "Trance",
+   "ru_d": "Sinister Gaze дает Личу +25% усиления способностей и +20% сопротивления магии на 5 с",
+   "en_d": "Sinister Gaze grants Lich +25% spell amplification and +20% magic resistance for 5 s",
+   "ru_aw": "Пробуждение: +40% усиления",
+   "en_aw": "Awakening: +40% amplification"
+  },
+  {
+   "id": "lich_l_chain",
+   "r": "legend",
+   "branch": "R",
+   "ab": "lich_chain_frost",
+   "mods": "jumps:+5;bonus_jump_damage:+10",
+   "awmods": "damage:+150",
+   "ru": "Вечная цепь",
+   "en": "Endless Chain",
+   "ru_d": "Chain Frost делает на 5 прыжков больше, урон за прыжок +10",
+   "en_d": "Chain Frost makes 5 more jumps, damage per jump +10",
+   "ru_aw": "Пробуждение: урон +150",
+   "en_aw": "Awakening: damage +150"
+  },
+  {
+   "id": "lich_m_autonova",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "lich_frost_nova",
+   "fx": [
+    {
+     "t": "auto",
+     "every": 6,
+     "range": 600
+    }
+   ],
+   "ru": "Ледяной залп",
+   "en": "Ice Volley",
+   "ru_d": "Раз в 6 с Frost Blast сам бьет ближайшего врага в 600 (бесплатно)",
+   "en_d": "Every 6 s Frost Blast hits the nearest enemy within 600 by itself (free)",
+   "mech": 1
+  },
+  {
+   "id": "lich_m_twinchain",
+   "r": "purple",
+   "branch": "R",
+   "ab": "lich_chain_frost",
+   "fx": [
+    {
+     "t": "multi",
+     "chance": 30,
+     "times": 1,
+     "delay": 0.5
+    }
+   ],
+   "ru": "Две цепи",
+   "en": "Twin Chains",
+   "ru_d": "30% шанс второй Chain Frost",
+   "en_d": "30% chance of a second Chain Frost",
+   "mech": 1
+  },
+  {
+   "id": "lich_m_icemines",
+   "r": "purple",
+   "branch": "W",
+   "ab": "lich_frost_shield",
+   "fx": [
+    {
+     "t": "trap",
+     "at": "self",
+     "radius": 240,
+     "arm": 0.5,
+     "life": 40,
+     "max": 3,
+     "dmg": "damage*5",
+     "type": "magic",
+     "pfx": "particles/units/heroes/hero_crystalmaiden/maiden_freezing_field_explosion.vpcf",
+     "debuff": {
+      "props": {
+       "root": 1
+      },
+      "dur": 1.5
+     }
+    }
+   ],
+   "ru": "Ледяные мины",
+   "en": "Ice Mines",
+   "ru_d": "Frost Shield оставляет ледяную мину под Личем (до 3): 5× урона щита и обездвиживание 1.5 с",
+   "en_d": "Frost Shield leaves an ice mine under Lich (up to 3): 5× shield damage and a 1.5 s root",
+   "mech": 1
+  },
+  {
+   "id": "lich_m_golems",
+   "r": "purple",
+   "branch": "R",
+   "ab": "lich_chain_frost",
+   "fx": [
+    {
+     "t": "summon",
+     "unit": "npc_dota_neutral_polar_furbolg_ursa_warrior",
+     "n": 2,
+     "dur": 20
+    }
+   ],
+   "ru": "Ледяные стражи",
+   "en": "Frost Wardens",
+   "ru_d": "Chain Frost призывает 2 полярных медведей на 20 с (растут со временем партии)",
+   "en_d": "Chain Frost summons 2 polar furbolgs for 20 s (they scale with match time)",
+   "mech": 1
+  }
+ ]
+}

@@ -1,0 +1,16 @@
+<root>
+	<styles>
+		<include src="s2r://panorama/styles/dotastyles.vcss_c" />
+		<include src="file://{resources}/styles/custom_game/game_info.css" />
+	</styles>
+	<Panel class="GameInfoRoot">
+		<Label class="InfoTitle" text="#orb_info_title" />
+		<Label class="InfoTagline" text="#orb_info_tagline" />
+		<Panel class="InfoItem"><Panel class="InfoGem goal" /><Label class="InfoLine" html="true" text="#orb_info_1" /></Panel>
+		<Panel class="InfoItem"><Panel class="InfoGem purple" /><Label class="InfoLine" html="true" text="#orb_info_2" /></Panel>
+		<Panel class="InfoItem"><Panel class="InfoGem legend" /><Label class="InfoLine" html="true" text="#orb_info_6" /></Panel>
+		<Panel class="InfoItem"><Panel class="InfoGem blue" /><Label class="InfoLine" html="true" text="#orb_info_3" /></Panel>
+		<Panel class="InfoItem"><Panel class="InfoGem grey" /><Label class="InfoLine" html="true" text="#orb_info_4" /></Panel>
+		<Panel class="InfoItem"><Panel class="InfoGem help" /><Label class="InfoLine" html="true" text="#orb_info_5" /></Panel>
+	</Panel>
+</root>

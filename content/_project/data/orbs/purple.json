@@ -1,0 +1,305 @@
+{
+  "_": "Фиолетовые сферы. Формат как у синих + [7] описание ru, [8] описание en. 'code' — эффект написан кодом (modifier_orb_controller). Раздел _universal доступен всем героям.",
+  "_universal": [
+    ["p_grave", "H", "", "code", 1, "Неупокоенный", "Undying", "Смертельный урон оставляет вас с 1 здоровьем: 1.5 с неуязвимости и +25% здоровья (раз в 90 с; каждая копия — на 20 с чаще)", "Lethal damage leaves you at 1 health: 1.5 s of invulnerability and +25% health (once per 90 s; each copy 20 s more often)"],
+    ["p_feast", "H", "", "code", 1, "Кровавый пир", "Blood Feast", "Убийство или помощь: +30% здоровья и маны и −50% оставшейся перезарядки обычных способностей (каждая копия +15%)", "Kill or assist: +30% health and mana and −50% remaining cooldown of basic abilities (each copy +15%)"],
+    ["p_meteor", "H", "", "code", 1, "Метеор", "Meteor", "Способность с перезарядкой от 3 с роняет метеор в точку или цель через 0.7 с: 60 + 6 × минута урона в 275 и оглушение 0.4 с (раз в 3 с; копии — больше урона)", "An ability with a 3 s+ cooldown drops a meteor on the point or target after 0.7 s: 60 + 6 × minute damage in 275 and a 0.4 s stun (once per 3 s; copies add damage)"],
+    ["p_martyr", "H", "", "code", 1, "Последний залп", "Last Salvo", "При смерти вы взрываетесь: 20% макс. здоровья магического урона врагам в 450 (убийство засчитывается вам; каждая копия +10%)", "On death you explode: 20% of max health as magic damage to enemies within 450 (kills count for you; each copy +10%)"],
+    ["p_vanish", "H", "", "code", 1, "Исчезновение", "Vanish", "После ультимейта вы невидимы 2.5 с (атака или способность снимают) и получаете +20% скорости бега (каждая копия +1 с)", "After your ultimate you turn invisible for 2.5 s (attacking or casting breaks it) and get +20% movement speed (each copy +1 s)"],
+    ["p_hunter", "H", "", "code", 1, "Охотник за сокровищами", "Treasure Hunter", "Сферы Повелителя, сферы у края и сундуки захватываются в 1.75 раза быстрее (копии — еще быстрее)", "Overboss orbs, edge orbs and chests are captured 1.75× faster (copies are faster still)"],
+    [
+      "p_bloodsucker",
+      "H",
+      "",
+      "code",
+      2,
+      "Кровопийца",
+      "Bloodsucker",
+      "12% любого урона по героям лечит вас",
+      "Heal for 12% of any damage dealt to heroes"
+    ],
+    [
+      "p_crit",
+      "H",
+      "",
+      "code",
+      2,
+      "Критический удар",
+      "Critical strike",
+      "20% шанс нанести атакой 200% урона; каждая следующая такая сфера — еще +50% к силе крита",
+      "20% chance to deal 200% attack damage; each extra copy adds +50% crit damage"
+    ],
+    [
+      "p_burn_aura",
+      "H",
+      "",
+      "code",
+      2,
+      "Сжигающая аура",
+      "Burning aura",
+      "Враги в 350 получают 40 + 3 × минута магического урона в секунду (за стак)",
+      "Enemies within 350 take 40 + 3 × minute magic damage per second (per stack)"
+    ],
+    [
+      "p_cleave",
+      "H",
+      "",
+      "code",
+      2,
+      "Раскол / Рикошет",
+      "Cleave / Ricochet",
+      "Ближний бой: раскол 40% урона атаки. Дальний: атака задевает еще одну цель в 450 с 50% урона (за стак)",
+      "Melee: cleave 40% of attack damage. Ranged: attacks hit one more target within 450 for 50% damage (per stack)"
+    ],
+    [
+      "p_unstoppable",
+      "H",
+      "",
+      "code",
+      1,
+      "Неудержимость",
+      "Unstoppable",
+      "+15% сопротивления эффектам и +15% сопротивления замедлению (повторные — с убыванием; эффекты от сфер всего не больше 50%)",
+      "+15% status resistance and +15% slow resistance (copies stack with diminishing returns; at most 50% status resistance from orbs)"
+    ],
+    [
+      "p_battle_shield",
+      "H",
+      "",
+      "code",
+      1,
+      "Щит битвы",
+      "Battle shield",
+      "Если 8 с не получали урона, следующий урон от героя дает щит 20% здоровья на 5 с (раз в 15 с); каждая копия — еще +20%, до 60%",
+      "If you took no damage for 8 s, the next hero damage grants a shield of 20% max health for 5 s (once per 15 s); each copy adds +20%, up to 60%"
+    ],
+    [
+      "p_executioner",
+      "H",
+      "",
+      "code",
+      1,
+      "Палач",
+      "Executioner",
+      "+20% урона по героям ниже 30% здоровья (за каждую копию)",
+      "+20% damage to heroes below 30% health (per copy)"
+    ],
+    [
+      "p_ferocity",
+      "H",
+      "",
+      "code",
+      1,
+      "Свирепость",
+      "Ferocity",
+      "Каждое убийство и помощь: +12 урона и +4% скорости бега до смерти (до 5 раз; каждая копия — еще 5)",
+      "Each kill or assist: +12 damage and +4% movement speed until death (up to 5 times; each copy adds 5 more)"
+    ]
+  ],
+  "npc_dota_hero_juggernaut": [
+    [
+      "jugg_p_critfury",
+      "Q",
+      "juggernaut_blade_fury",
+      "can_crit:1",
+      1,
+      "Режущий вихрь",
+      "Critical Fury",
+      "Вихрь клинков может наносить критический удар Blade Dance",
+      "Blade Fury can critically strike with Blade Dance"
+    ],
+    [
+      "jugg_p_hurricane",
+      "Q",
+      "juggernaut_blade_fury",
+      "bonus_movespeed:45;movement_slow:20",
+      1,
+      "Ураган",
+      "Hurricane",
+      "Во время Вихря +45 скорости бега, враги в радиусе замедлены на 20%",
+      "During Blade Fury +45 movement speed, enemies inside are slowed by 20%"
+    ],
+    [
+      "jugg_p_dispel",
+      "R",
+      "juggernaut_omni_slash",
+      "dispel:1",
+      1,
+      "Неуловимый",
+      "Elusive",
+      "Омнислэш снимает с Джаггернаута отрицательные эффекты, после него 1.5 с невосприимчивости к магии",
+      "Omnislash dispels Juggernaut and grants 1.5 s of spell immunity after it ends"
+    ],
+    [
+      "jugg_p_roaming_ward",
+      "W",
+      "juggernaut_healing_ward",
+      "code",
+      1,
+      "Бродячий тотем",
+      "Roaming Ward",
+      "Тотем следует за Джаггернаутом; в радиусе тотема Джаггернаут получает +5 брони",
+      "The Healing Ward follows Juggernaut; inside its radius Juggernaut gains +5 armor"
+    ],
+    [
+      "jugg_p_healing_fury",
+      "W",
+      "juggernaut_healing_ward",
+      "code",
+      1,
+      "Целебный вихрь",
+      "Healing Fury",
+      "Во время Вихря лечение тотема удваивается и действует в 1200 от тотема",
+      "During Blade Fury the ward heals twice as much and reaches 1200 range"
+    ],
+    [
+      "jugg_p_death_dance",
+      "E",
+      "juggernaut_blade_dance",
+      "code",
+      1,
+      "Танец смерти",
+      "Dance of Death",
+      "Каждый крит по герою сокращает перезарядку Вихря и Омнислэша на 1 с",
+      "Each critical strike on a hero reduces Blade Fury and Omnislash cooldowns by 1 s"
+    ],
+    [
+      "jugg_p_finisher",
+      "E",
+      "juggernaut_blade_dance",
+      "code",
+      1,
+      "Добивание",
+      "Finisher",
+      "+12% шанса крита по героям ниже 40% здоровья",
+      "+12% critical strike chance against heroes below 40% health"
+    ],
+    [
+      "jugg_p_bloody_omni",
+      "R",
+      "juggernaut_omni_slash",
+      "code",
+      1,
+      "Кровавый омнислэш",
+      "Bloody Omnislash",
+      "Удары Омнислэша по героям лечат Джаггернаута на 25% урона",
+      "Omnislash strikes on heroes heal Juggernaut for 25% of the damage"
+    ]
+  ],
+  "npc_dota_hero_lina": [
+    [
+      "lina_p_pierce",
+      "R",
+      "lina_laguna_blade",
+      "pierce_immunity:1",
+      1,
+      "Чистая ярость",
+      "Pure fury",
+      "Laguna Blade пробивает невосприимчивость к магии",
+      "Laguna Blade pierces spell immunity"
+    ]
+  ],
+  "npc_dota_hero_sniper": [
+    [
+      "sniper_p_charge",
+      "Q",
+      "sniper_shrapnel",
+      "AbilityCharges:1",
+      1,
+      "Четвертый заряд",
+      "Fourth charge",
+      "+1 заряд Шрапнели",
+      "+1 Shrapnel charge"
+    ]
+  ],
+  "npc_dota_hero_axe": [
+    [
+      "axe_p_spiked",
+      "Q",
+      "axe_berserkers_call",
+      "code",
+      1,
+      "Шипованная броня",
+      "Spiked Armor",
+      "Пока действует Вызов, Акс возвращает атакующему 25% урона от героев (чистый урон)",
+      "While Berserker's Call lasts, Axe returns 25% of hero damage to the attacker as pure damage"
+    ],
+    [
+      "axe_p_iron_will",
+      "Q",
+      "axe_berserkers_call",
+      "code",
+      1,
+      "Железная воля",
+      "Iron Will",
+      "Вызов дает Аксу 40% сопротивления эффектам на время действия",
+      "Berserker's Call grants Axe 40% status resistance for its duration"
+    ],
+    [
+      "axe_p_contagious",
+      "W",
+      "axe_battle_hunger",
+      "code",
+      1,
+      "Заразный голод",
+      "Contagious Hunger",
+      "Если враг под Голодом умер, Голод перескакивает на ближайшего врага-героя в 900 с полной длительностью",
+      "When an enemy under Battle Hunger dies, Hunger jumps to the nearest enemy hero within 900 with full duration"
+    ],
+    [
+      "axe_p_feast",
+      "W",
+      "axe_battle_hunger",
+      "code",
+      1,
+      "Пир",
+      "Feast",
+      "Акс лечится на 60% урона, нанесенного Голодом",
+      "Axe heals for 60% of the damage dealt by Battle Hunger"
+    ],
+    [
+      "axe_p_lacerate",
+      "E",
+      "axe_counter_helix",
+      "code",
+      1,
+      "Рваные раны",
+      "Lacerate",
+      "Каждая Спираль снижает броню задетых врагов на 1 на 6 с (до 8 раз)",
+      "Each Counter Helix reduces the armor of enemies hit by 1 for 6 s (up to 8 times)"
+    ],
+    [
+      "axe_p_spin",
+      "E",
+      "axe_counter_helix",
+      "code",
+      1,
+      "Раскрутка",
+      "Spin Up",
+      "Каждая Спираль дает Аксу +4% скорости бега и +15 скорости атаки на 4 с (до 5 раз)",
+      "Each Counter Helix grants Axe +4% movement speed and +15 attack speed for 4 s (up to 5 times)"
+    ],
+    [
+      "axe_p_execution",
+      "R",
+      "axe_culling_blade",
+      "code",
+      1,
+      "Казнь",
+      "Execution",
+      "Убийство Culling Blade полностью обновляет его перезарядку",
+      "A Culling Blade kill fully refreshes its cooldown"
+    ],
+    [
+      "axe_p_one_army",
+      "H",
+      "axe_one_man_army",
+      "code",
+      1,
+      "Один в поле воин",
+      "One Against All",
+      "Бонус One Man Army удваивается, если рядом 2 и больше врага-героя (в 700)",
+      "One Man Army bonus is doubled while 2 or more enemy heroes are within 700"
+    ]
+  ]
+}

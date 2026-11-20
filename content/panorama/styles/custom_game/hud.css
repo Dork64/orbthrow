@@ -1,0 +1,750 @@
+/* ORBTHROW — интерфейс партии.
+   Палитра: золото #e8c26a (главный акцент), текст #eef2f6 / #a8b2bd,
+   редкости сфер: серая #b5bdc6, синяя #4da3ff, фиолетовая #b77cff, легендарная #ffb13d. */
+
+.OrbHud {
+	width: 100%;
+	height: 100%;
+}
+
+.Hidden { visibility: collapse; }
+
+/* ---------- Верхняя панель ---------- */
+#TopBar {
+	horizontal-align: center;
+	y: 0px;
+	flow-children: right;
+}
+
+#GoalBox {
+	flow-children: down;
+	min-width: 120px;
+	margin-right: 10px;
+	padding: 3px 14px 6px 14px;
+	background-color: gradient( linear, 0% 0%, 0% 100%, from( #1d232ef4 ), to( #0b0e13f4 ) );
+	border: 1px solid #e8c26a55;
+	border-radius: 0px 0px 10px 10px;
+	box-shadow: 0px 4px 14px #000000aa;
+}
+
+#GoalCaption {
+	horizontal-align: center;
+	color: #a8b2bd;
+	font-size: 11px;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+}
+
+#GoalLabel {
+	horizontal-align: center;
+	color: #f3d27c;
+	font-size: 26px;
+	font-weight: black;
+	margin-top: -3px;
+	text-shadow: 0px 0px 8px #e8c26a66;
+}
+
+#GoalProgress {
+	width: 100%;
+	height: 4px;
+	margin: 1px 0px 3px 0px;
+	background-color: #ffffff14;
+	border-radius: 2px;
+}
+
+#GoalProgressFill {
+	height: 100%;
+	width: 0%;
+	border-radius: 2px;
+	background-color: gradient( linear, 0% 0%, 100% 0%, from( #b88a2f ), to( #ffe08a ) );
+	transition-property: width;
+	transition-duration: 0.4s;
+}
+
+#TimerLabel {
+	horizontal-align: center;
+	color: #d9e0e8;
+	font-size: 15px;
+	font-weight: bold;
+	letter-spacing: 1px;
+}
+
+#TimerLabel.Overtime {
+	color: #ff6a4d;
+	animation-name: OrbBlink;
+	animation-duration: 1s;
+	animation-iteration-count: infinite;
+}
+
+@keyframes 'OrbBlink' {
+	0% { opacity: 1; }
+	50% { opacity: 0.55; }
+	100% { opacity: 1; }
+}
+
+#PlayersRow {
+	flow-children: right;
+}
+
+.PlayerCard {
+	flow-children: down;
+	width: 66px;
+	margin-right: 5px;
+	background-color: gradient( linear, 0% 0%, 0% 100%, from( #161b23ee ), to( #0b0e13ee ) );
+	border-radius: 0px 0px 7px 7px;
+	border-bottom: 3px solid #888888;
+	box-shadow: 0px 3px 10px #00000099;
+	transition-property: position, opacity, box-shadow;
+	transition-duration: 0.3s;
+}
+
+.PlayerCard.Left { opacity: 0.35; }
+
+.PlayerCard DOTAHeroImage {
+	width: 66px;
+	height: 37px;
+}
+
+.PlayerCard .Kills {
+	vertical-align: center;
+	color: #ffffff;
+	font-size: 19px;
+	font-weight: black;
+	margin-top: -1px;
+	text-shadow: 0px 1px 3px #000000;
+}
+
+.PlayerCard .KillsRow {
+	horizontal-align: center;
+	flow-children: right;
+}
+
+.PlayerCard .Crown {
+	width: 17px;
+	height: 17px;
+	vertical-align: center;
+	margin: 1px 3px 0px -2px;
+	background-image: url("s2r://panorama/images/custom_game/crown001_psd.vtex");
+	background-size: 100%;
+	background-repeat: no-repeat;
+	visibility: collapse;
+}
+
+.PlayerCard.Leader .Crown { visibility: visible; }
+.PlayerCard.Leader { box-shadow: 0px 0px 12px 1px #e8c26acc; }
+.PlayerCard.Leader .Kills { color: #f3d27c; }
+.PlayerCard.Local { border-left: 1px solid #ffffffaa; border-right: 1px solid #ffffffaa; }
+
+/* ---------- Лента событий ---------- */
+/* Лента событий — на месте стандартной ленты Доты: слева, над миникартой (при перевернутом
+   интерфейсе — справа). Стандартная лента скрыта (hud.ts). */
+#Toasts {
+	horizontal-align: left;
+	vertical-align: top;
+	margin: 395px 0px 0px 8px;
+	flow-children: down;
+	width: 400px;
+}
+
+#Toasts.Flipped { horizontal-align: right; margin: 395px 8px 0px 0px; }
+#Toasts.Flipped .Toast { horizontal-align: right; }
+
+.Toast {
+	horizontal-align: left;
+	max-width: 400px;
+	margin-bottom: 5px;
+	padding: 7px 12px 7px 12px;
+	color: #eef2f6;
+	font-size: 15px;
+	background-color: gradient( linear, 0% 0%, 100% 0%, from( #10141bd8 ), to( #10141bf2 ) );
+	border-left: 3px solid #e8c26a;
+	border-radius: 0px 6px 6px 0px;
+	box-shadow: 0px 2px 8px #00000088;
+	opacity: 1;
+	transition-property: opacity, transform;
+	transition-duration: 0.5s;
+	transform: translateX( 0px );
+}
+
+.Toast.kill { border-left-color: #e2533d; background-color: gradient( linear, 0% 0%, 100% 0%, from( #3a1612d8 ), to( #10141bf2 ) ); }
+.Toast.goal { border-left-color: #f3d27c; font-size: 17px; font-weight: bold; color: #ffe8a8; background-color: gradient( linear, 0% 0%, 100% 0%, from( #3d2e0ed8 ), to( #10141bf2 ) ); }
+.Toast.event { border-left-color: #b77cff; background-color: gradient( linear, 0% 0%, 100% 0%, from( #2a1840d8 ), to( #10141bf2 ) ); }
+.Toast.info { border-left-color: #6fb2e8; }
+.Toast.tip { border-left-color: #8fdc6c; color: #e3f7d6; font-size: 15px; background-color: gradient( linear, 0% 0%, 100% 0%, from( #1b3014d8 ), to( #10141bf2 ) ); }
+.Toast.Fade { opacity: 0; transform: translateX( -30px ); }
+#Toasts.Flipped .Toast.Fade { transform: translateX( 30px ); }
+
+#Errors {
+	horizontal-align: left;
+	vertical-align: top;
+	margin: 120px 0px 0px 12px;
+	flow-children: down;
+	width: 520px;
+}
+
+.ErrorLine {
+	background-color: #5a1010ee;
+	color: #ffd0d0;
+	font-size: 14px;
+	padding: 4px 8px;
+	margin-bottom: 3px;
+	border-radius: 4px;
+}
+
+#VersionLabel {
+	horizontal-align: left;
+	vertical-align: bottom;
+	margin: 0px 0px 2px 4px;
+	color: #ffffff3a;
+	font-size: 11px;
+}
+
+/* ---------- Сферы: шкалы и очередь ---------- */
+/* Окна выбора стоят справа над шкалами (#OrbBarsDock), а не по центру экрана */
+
+#OrbBarsDock {
+	horizontal-align: right;
+	vertical-align: bottom;
+	flow-children: down;
+	margin: 0px 10px 200px 0px;
+	opacity: 1;
+	transition-property: opacity;
+	transition-duration: 0.15s;
+}
+
+#OrbBarsDock.Flipped { horizontal-align: left; margin: 0px 0px 200px 10px; }
+#OrbBarsDock.ShopOpen { opacity: 0; }
+
+#OrbBarsRow {
+	horizontal-align: right;
+	flow-children: down;
+	padding: 6px 7px 6px 7px;
+	background-color: gradient( linear, 0% 0%, 0% 100%, from( #161b23e6 ), to( #0b0e13e6 ) );
+	border: 1px solid #ffffff14;
+	border-radius: 10px;
+	box-shadow: 0px 3px 12px #00000099;
+}
+
+#OrbBars {
+	flow-children: down;
+}
+
+.OrbBar {
+	width: 214px;
+	height: 20px;
+	margin-top: 4px;
+	background-color: #00000099;
+	border: 1px solid #ffffff1c;
+	border-radius: 11px;
+}
+
+.OrbBar .Fill {
+	height: 100%;
+	width: 0%;
+	border-radius: 10px;
+	transition-property: width;
+	transition-duration: 0.35s;
+}
+
+.OrbBar.grey .Fill { background-color: gradient( linear, 0% 0%, 0% 100%, from( #d3d9df ), to( #6c747d ) ); }
+.OrbBar.blue .Fill { background-color: gradient( linear, 0% 0%, 0% 100%, from( #7cc0ff ), to( #1f5fbf ) ); }
+.OrbBar.purple .Fill { background-color: gradient( linear, 0% 0%, 0% 100%, from( #d2a6ff ), to( #6f33c4 ) ); }
+.OrbBar.neutral .Fill { background-color: gradient( linear, 0% 0%, 0% 100%, from( #b7f08f ), to( #3f8a24 ) ); }
+.OrbBar.neutral.Waiting .Fill { background-color: gradient( linear, 0% 0%, 0% 100%, from( #7d8a74 ), to( #3a4234 ) ); }
+.OrbBar.neutral.Ready { border: 1px solid #a7ec86; box-shadow: 0px 0px 8px #a7ec8688; }
+.OrbBar.neutral:hover { border: 1px solid #ffffff55; }
+
+/* Самоцвет в начале шкалы */
+.OrbGem {
+	width: 14px;
+	height: 14px;
+	margin: 2px 0px 0px 3px;
+	border-radius: 8px;
+	border: 1px solid #ffffff66;
+	box-shadow: 0px 0px 4px #00000099;
+}
+
+.OrbGem.grey { background-color: gradient( radial, 35% 30%, 0% 0%, 70% 70%, from( #ffffff ), to( #7d858e ) ); }
+.OrbGem.blue { background-color: gradient( radial, 35% 30%, 0% 0%, 70% 70%, from( #d8ecff ), to( #1d64cf ) ); }
+.OrbGem.purple { background-color: gradient( radial, 35% 30%, 0% 0%, 70% 70%, from( #f0dcff ), to( #7231cf ) ); }
+.OrbGem.legend { background-color: gradient( radial, 35% 30%, 0% 0%, 70% 70%, from( #fff3cf ), to( #e08a12 ) ); }
+.OrbGem.neutral { background-color: gradient( radial, 35% 30%, 0% 0%, 70% 70%, from( #ecffdc ), to( #3f8a24 ) ); }
+
+.OrbBar .Text {
+	horizontal-align: center;
+	vertical-align: center;
+	color: #ffffff;
+	font-size: 12px;
+	font-weight: bold;
+	text-shadow: 0px 1px 3px #000000;
+}
+
+#OrbQueueButton {
+	flow-children: right;
+	width: 214px;
+	height: 26px;
+	padding: 0px 10px;
+	border-radius: 13px;
+	background-color: #262c36;
+	border: 1px solid #ffffff22;
+	vertical-align: center;
+}
+
+#OrbQueueButton:hover { background-color: #343c48; }
+
+#OrbQueueButton.HasOrbs {
+	background-color: gradient( linear, 0% 0%, 0% 100%, from( #8a6420 ), to( #4e360c ) );
+	border: 1px solid #f3d27c;
+	animation-name: OrbPulse;
+	animation-duration: 1.2s;
+	animation-iteration-count: infinite;
+}
+
+@keyframes 'OrbPulse' {
+	0% { box-shadow: 0px 0px 2px 0px #f3d27c00; }
+	50% { box-shadow: 0px 0px 12px 3px #f3d27ccc; }
+	100% { box-shadow: 0px 0px 2px 0px #f3d27c00; }
+}
+
+#OrbQueueLabel {
+	color: #ffffff;
+	font-size: 14px;
+	font-weight: bold;
+	vertical-align: center;
+	text-shadow: 0px 1px 2px #000000;
+}
+
+#OrbQueueDots { flow-children: right; vertical-align: center; }
+
+.OrbDot {
+	min-width: 18px;
+	height: 18px;
+	margin-left: 4px;
+	border-radius: 9px;
+	color: #ffffff;
+	font-size: 12px;
+	font-weight: bold;
+	text-align: center;
+	padding-top: 1px;
+	text-shadow: 0px 1px 2px #000000;
+	border: 1px solid #ffffff55;
+}
+
+.OrbDot.grey { background-color: #8a929b; }
+.OrbDot.blue { background-color: #2f7fe0; }
+.OrbDot.purple { background-color: #8b4ce0; }
+.OrbDot.legend { background-color: #e09a2f; }
+
+/* ---------- Выбор сферы ---------- */
+#OrbChoice {
+	horizontal-align: right;
+	width: 340px;
+	flow-children: down;
+	margin-bottom: 6px;
+	padding: 10px 10px 8px 10px;
+	background-color: gradient( linear, 0% 0%, 0% 100%, from( #181e28f6 ), to( #0b0e13f6 ) );
+	border: 1px solid #ffffff22;
+	border-radius: 10px;
+	box-shadow: 0px 6px 22px #000000cc;
+}
+
+#OrbChoice.grey { border: 1px solid #b5bdc666; }
+#OrbChoice.blue { border: 1px solid #4da3ff88; }
+#OrbChoice.purple { border: 1px solid #b77cff99; }
+#OrbChoice.legend { border: 1px solid #ffb13daa; box-shadow: 0px 0px 26px #ffb13d55; }
+
+#OrbChoiceHeader { width: 100%; flow-children: right; margin-bottom: 8px; padding: 0px 4px; }
+
+#OrbChoiceTitle {
+	color: #f3d27c;
+	font-size: 15px;
+	font-weight: bold;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	vertical-align: center;
+	width: fill-parent-flow( 1.0 );
+}
+
+#OrbChoice.grey #OrbChoiceTitle { color: #d3d9df; }
+#OrbChoice.blue #OrbChoiceTitle { color: #8cc6ff; }
+#OrbChoice.purple #OrbChoiceTitle { color: #cfa6ff; }
+#OrbChoice.legend #OrbChoiceTitle { color: #ffc964; }
+
+#OrbCollapse, #OrbReroll {
+	padding: 4px 12px;
+	background-color: #ffffff0c;
+	border-radius: 6px;
+	border: 1px solid #ffffff26;
+}
+
+#OrbCollapse:hover, #OrbReroll:hover { background-color: #ffffff1c; border: 1px solid #ffffff44; }
+#OrbReroll:disabled { opacity: 0.35; }
+
+#OrbCollapse Label, #OrbReroll Label { color: #e6ebf0; font-size: 13px; }
+
+#OrbCards { flow-children: down; width: 100%; }
+
+.OrbCard {
+	width: 100%;
+	margin: 0px 0px 5px 0px;
+	padding: 7px 9px 7px 9px;
+	flow-children: down;
+	border-radius: 8px;
+	background-color: gradient( linear, 0% 0%, 0% 100%, from( #262d38 ), to( #151a21 ) );
+	border: 1px solid #ffffff1f;
+	border-top: 3px solid #b5bdc6;
+	transition-property: transform, box-shadow, border;
+	transition-duration: 0.12s;
+}
+
+.OrbCard:hover { transform: translateX( -4px ); box-shadow: 0px 6px 16px #000000cc; border: 1px solid #ffffff55; }
+.OrbCard.blue { border-top: 3px solid #4da3ff; }
+.OrbCard.purple { border-top: 3px solid #b77cff; }
+.OrbCard.legend { border-top: 3px solid #ffb13d; background-color: gradient( linear, 0% 0%, 0% 100%, from( #33291a ), to( #17130d ) ); }
+.OrbCard.blue:hover { box-shadow: 0px 6px 18px #4da3ff55; }
+.OrbCard.purple:hover { box-shadow: 0px 6px 18px #b77cff66; }
+.OrbCard.legend:hover { box-shadow: 0px 6px 22px #ffb13d77; }
+
+.OrbCard .Head { width: 100%; flow-children: right; margin-bottom: 6px; }
+
+.OrbCard .Icon {
+	width: 36px;
+	height: 36px;
+	margin-right: 9px;
+	border-radius: 6px;
+	border: 1px solid #ffffff40;
+	box-shadow: 0px 2px 6px #000000aa;
+}
+
+.OrbCard.blue .Icon { border: 1px solid #4da3ffaa; }
+.OrbCard.purple .Icon { border: 1px solid #b77cffaa; }
+.OrbCard.legend .Icon { border: 1px solid #ffb13dcc; }
+
+.OrbCard .Titles { flow-children: down; width: fill-parent-flow( 1.0 ); vertical-align: center; }
+
+.OrbCard .Recommended {
+	horizontal-align: right;
+	color: #9be37a;
+	font-size: 10px;
+	font-weight: bold;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	margin-bottom: -2px;
+}
+
+.OrbCard .MechTag {
+	horizontal-align: right;
+	color: #ffb13d;
+	font-size: 10px;
+	font-weight: bold;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	margin-bottom: -2px;
+}
+.OrbCard.Mech { border-top: 3px solid #ffb13d; background-color: gradient( linear, 0% 0%, 0% 100%, from( #2f2338 ), to( #17121d ) ); }
+.OrbCard .Name { color: #ffffff; font-size: 15px; font-weight: bold; text-shadow: 0px 1px 2px #000000; }
+.OrbCard .Meta { color: #98a3ae; font-size: 12px; margin-top: 1px; }
+.OrbCard .Desc { color: #dfe5eb; font-size: 13px; }
+.OrbCard .Awake { color: #ffc964; font-size: 13px; margin-top: 5px; }
+
+.OrbCard .Values {
+	horizontal-align: left;
+	margin-top: 4px;
+	padding: 2px 8px;
+	border-radius: 4px;
+	background-color: #9be37a1f;
+	color: #a7ec86;
+	font-size: 15px;
+	font-weight: bold;
+}
+
+#OrbChoiceFooter { width: 100%; flow-children: right; margin-top: 9px; padding: 0px 4px; }
+
+#OrbAutoLabel {
+	color: #98a3ae;
+	font-size: 13px;
+	horizontal-align: right;
+	vertical-align: center;
+	margin-left: 12px;
+}
+
+/* ---------- Захват сфер Повелителя ---------- */
+#WorldMarks { width: 100%; height: 100%; }
+
+.BossMark {
+	width: 104px;
+	flow-children: down;
+}
+
+.BossMark.Offscreen { visibility: collapse; }
+
+.BossMark .Bar {
+	width: 104px;
+	height: 10px;
+	background-color: #000000c4;
+	border: 1px solid #4da3ff;
+	border-radius: 5px;
+	box-shadow: 0px 0px 6px #4da3ff88;
+}
+
+.BossMark.purple .Bar { border: 1px solid #b77cff; box-shadow: 0px 0px 6px #b77cff99; }
+
+.BossMark .Fill {
+	height: 100%;
+	width: 0%;
+	border-radius: 5px;
+	background-color: #888888;
+}
+
+.BossMark .Label {
+	horizontal-align: center;
+	color: #ff6a4d;
+	font-size: 14px;
+	font-weight: bold;
+	text-shadow: 0px 1px 3px #000000;
+}
+
+/* ---------- Месть, охота, очередь сфер в верхней панели ---------- */
+.PlayerCard .HuntLabel {
+	visibility: collapse;
+	horizontal-align: center;
+	color: #ff4d3a;
+	font-size: 10px;
+	font-weight: bold;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	text-shadow: 0px 1px 2px #000000;
+}
+.PlayerCard.Hunted .HuntLabel { visibility: visible; }
+.PlayerCard.Hunted { box-shadow: 0px 0px 12px 2px #ff4d3a; }
+
+.PlayerCard .Revenge {
+	horizontal-align: center;
+	font-size: 12px;
+	font-weight: bold;
+	text-shadow: 0px 1px 2px #000000;
+}
+.PlayerCard .Revenge.Mine { color: #9be37a; }
+.PlayerCard .Revenge.Theirs { color: #ff8a6a; }
+
+.PlayerCard .QueueDots { horizontal-align: center; flow-children: right; margin-bottom: 3px; }
+.QDot { width: 6px; height: 6px; border-radius: 3px; margin: 0px 1px; }
+.QDot.grey { background-color: #b5bdc6; }
+.QDot.blue { background-color: #4da3ff; }
+.QDot.purple { background-color: #b77cff; }
+.QDot.legend { background-color: #ffb13d; }
+
+/* ---------- Подмога ---------- */
+#HelpPanel {
+	horizontal-align: right;
+	width: 340px;
+	flow-children: down;
+	margin-bottom: 8px;
+	padding: 10px;
+	background-color: gradient( linear, 0% 0%, 0% 100%, from( #17241af6 ), to( #0b0e13f6 ) );
+	border: 1px solid #9be37a88;
+	border-radius: 10px;
+	box-shadow: 0px 6px 22px #000000cc;
+}
+#HelpTitle { color: #a7ec86; font-size: 15px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+#HelpButtons { flow-children: down; width: 100%; }
+.HelpButton {
+	width: 100%;
+	min-height: 40px;
+	margin: 0px 0px 4px 0px;
+	padding: 8px 10px;
+	background-color: gradient( linear, 0% 0%, 0% 100%, from( #263022 ), to( #151a14 ) );
+	border: 1px solid #ffffff26;
+	border-radius: 8px;
+	transition-property: transform, border;
+	transition-duration: 0.12s;
+}
+.HelpButton:hover { transform: translateY( -3px ); border: 1px solid #9be37a99; }
+.HelpButton Label { color: #eef2f6; font-size: 14px; }
+#HelpAuto { color: #98a3ae; font-size: 13px; margin-top: 7px; }
+
+/* ---------- Слоты расходников (дым, пыль, варды) ---------- */
+#SlotsTop { flow-children: right; }
+#SlotsRight { flow-children: down; }
+.SlotGroup.Hidden { visibility: collapse; }
+
+.Slot {
+	width: 46px;
+	height: 34px;
+	margin: 0px 3px 3px 0px;
+	border-radius: 4px;
+	border: 1px solid #ffffff33;
+	background-color: #0b0e13ee;
+	box-shadow: 0px 2px 6px #000000aa;
+	transition-property: border, brightness, saturation;
+	transition-duration: 0.12s;
+}
+.Slot:hover { border: 1px solid #f3d27c; brightness: 1.25; }
+.Slot.Empty { saturation: 0; brightness: 0.55; }
+.Slot.Hidden { visibility: collapse; }
+.Slot .SlotImg { width: 100%; height: 100%; }
+
+.SlotKey {
+	horizontal-align: left;
+	vertical-align: top;
+	margin: 0px 0px 0px 2px;
+	color: #ffffffcc;
+	font-size: 11px;
+	font-weight: bold;
+	text-shadow: 0px 0px 3px #000000;
+}
+
+.SlotCount {
+	horizontal-align: right;
+	vertical-align: bottom;
+	margin: 0px 2px 0px 0px;
+	color: #ffffff;
+	font-size: 14px;
+	font-weight: black;
+	text-shadow: 0px 0px 3px #000000;
+}
+
+.Slot.Eat { border: 1px solid #9be37a; box-shadow: 0px 0px 8px #9be37a88; animation-name: OrbPulse; animation-duration: 1.4s; animation-iteration-count: infinite; }
+.SlotEatPlus {
+	horizontal-align: center;
+	vertical-align: center;
+	color: #a7ec86;
+	font-size: 24px;
+	font-weight: black;
+	text-shadow: 0px 0px 4px #000000;
+}
+
+/* ---------- Выбор нейтрального предмета ---------- */
+#NeutralChoice {
+	flow-children: down;
+	padding: 6px 8px 6px 8px;
+	background-color: gradient( linear, 0% 0%, 0% 100%, from( #18241af6 ), to( #0b0e13f6 ) );
+	border: 1px solid #a7ec8699;
+	border-radius: 8px;
+	box-shadow: 0px 4px 14px #000000cc;
+}
+#NeutralChoice.Hidden { visibility: collapse; }
+#NeutralHeader { width: 100%; flow-children: right; margin-bottom: 4px; }
+#NeutralTitle { color: #b7f08f; font-size: 12px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; vertical-align: center; width: fill-parent-flow( 1.0 ); }
+#NeutralCollapse { padding: 1px 7px; background-color: #ffffff0c; border-radius: 6px; border: 1px solid #ffffff26; }
+#NeutralCollapse:hover { background-color: #ffffff1c; }
+#NeutralCollapse Label { color: #e6ebf0; font-size: 13px; }
+.NeutralSection { color: #8f9aa6; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; margin: 4px 0px 3px 1px; }
+#NeutralTrinkets, #NeutralEnh { flow-children: right; }
+.NeutralCard {
+	width: 52px;
+	height: 40px;
+	margin-right: 4px;
+	border-radius: 5px;
+	border: 1px solid #ffffff2a;
+	transition-property: transform, border, opacity;
+	transition-duration: 0.12s;
+}
+.NeutralCard:hover { border: 1px solid #a7ec86; brightness: 1.3; }
+.NeutralCard.Chosen { border: 2px solid #a7ec86; box-shadow: 0px 0px 8px #a7ec86aa; }
+.NeutralCard.Dim { opacity: 0.5; }
+.NeutralImg { width: 100%; height: 100%; border-radius: 4px; }
+.NeutralLvl { horizontal-align: right; vertical-align: bottom; margin: 0px 2px 0px 0px; color: #ffffff; font-size: 11px; font-weight: bold; text-shadow: 0px 0px 3px #000000; }
+#NeutralAuto { color: #98a3ae; font-size: 11px; margin-top: 3px; horizontal-align: right; }
+/* Кнопка «нейтралка готова» у слотов, как светящаяся ячейка в Доте */
+.Slot.Neutral { border: 1px solid #a7ec86; box-shadow: 0px 0px 10px #a7ec86aa; animation-name: OrbPulse; animation-duration: 1.2s; animation-iteration-count: infinite; }
+.SlotNeutralMark { horizontal-align: center; vertical-align: center; color: #b7f08f; font-size: 18px; font-weight: black; text-shadow: 0px 0px 4px #000000; }
+
+/* ---------- Сундук курьера: метки и стрелка ---------- */
+.ChestMark { width: 120px; flow-children: down; }
+.ChestMark.Offscreen { visibility: collapse; }
+.ChestLabel {
+	horizontal-align: center;
+	padding: 1px 8px;
+	border-radius: 8px;
+	background-color: #2a1f08e6;
+	border: 1px solid #f3d27c;
+	color: #ffe8a8;
+	font-size: 13px;
+	font-weight: bold;
+	letter-spacing: 1px;
+	text-shadow: 0px 1px 3px #000000;
+	box-shadow: 0px 0px 8px #f3d27c88;
+}
+.ChestMark .Bar {
+	horizontal-align: center;
+	width: 104px;
+	height: 9px;
+	margin-top: 3px;
+	background-color: #000000c4;
+	border: 1px solid #f3d27c;
+	border-radius: 5px;
+}
+.ChestMark .Fill { height: 100%; width: 0%; border-radius: 5px; background-color: #888888; }
+.ChestMark.Spot .Bar, .ChestMark.Courier .Bar { visibility: collapse; }
+.ChestMark.Courier .ChestLabel { font-size: 11px; opacity: 0.85; }
+
+#ChestArrow { width: 64px; height: 64px; }
+#ChestArrow.Hidden { visibility: collapse; }
+#ChestArrowIcon {
+	width: 30px;
+	height: 30px;
+	horizontal-align: center;
+	vertical-align: center;
+	background-color: #f3d27c;
+	border-radius: 15px 15px 15px 0px;
+	box-shadow: 0px 0px 10px #f3d27ccc;
+}
+#ChestArrowText {
+	horizontal-align: center;
+	vertical-align: bottom;
+	margin-bottom: -12px;
+	color: #ffe8a8;
+	font-size: 11px;
+	font-weight: bold;
+	text-shadow: 0px 1px 3px #000000;
+}
+
+/* ---------- Событие арены ---------- */
+#EventBanner {
+	horizontal-align: center;
+	y: 92px;
+	flow-children: down;
+	max-width: 460px;
+	padding: 4px 16px 6px 16px;
+	background-color: gradient( linear, 0% 0%, 0% 100%, from( #2a1414ee ), to( #120a0aee ) );
+	border: 1px solid #e8c26a66;
+	border-radius: 8px;
+	box-shadow: 0px 4px 14px #000000aa;
+	opacity: 1;
+	transition-property: opacity, transform;
+	transition-duration: 0.3s;
+}
+#EventBanner.Soon { opacity: 0.85; border: 1px dashed #e8c26a88; }
+#EventBanner.bloodmoon { background-color: gradient( linear, 0% 0%, 0% 100%, from( #4a0d12ee ), to( #1c0507ee ) ); border-color: #ff4d5a99; }
+#EventBanner.goldrain { background-color: gradient( linear, 0% 0%, 0% 100%, from( #4a3a0dee ), to( #1c1505ee ) ); border-color: #ffd34d99; }
+#EventBanner.storm { background-color: gradient( linear, 0% 0%, 0% 100%, from( #102a4aee ), to( #050e1cee ) ); border-color: #6ab8ff99; }
+#EventBanner.haste { background-color: gradient( linear, 0% 0%, 0% 100%, from( #3a124aee ), to( #14051cee ) ); border-color: #d36aff99; }
+#EventTitle {
+	horizontal-align: center;
+	color: #ffe8b0;
+	font-size: 17px;
+	font-weight: black;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	text-shadow: 0px 0px 6px #00000099;
+}
+#EventDesc {
+	horizontal-align: center;
+	text-align: center;
+	color: #d9e0e8;
+	font-size: 13px;
+}
+
+#OrbWardTarget, #OrbChargeDisplay {
+    horizontal-align: center;
+    vertical-align: bottom;
+    color: #ffffff;
+    font-size: 17px;
+    background-color: #131a22ee;
+    border: 1px solid #859bb7;
+    padding: 4px 11px;
+    text-shadow: 1px 1px 2px #000000;
+}
+#OrbChargeDisplay { margin-bottom: 168px; }
+#OrbWardTarget { margin-bottom: 202px; }

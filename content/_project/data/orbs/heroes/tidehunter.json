@@ -1,0 +1,278 @@
+{
+ "hero": "npc_dota_hero_tidehunter",
+ "orbs": [
+  {
+   "id": "tide_p_corrode",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "tidehunter_gush",
+   "mods": "negative_armor:+3",
+   "ru": "Коррозия",
+   "en": "Corrosion",
+   "ru_d": "Gush снижает броню еще на 3",
+   "en_d": "Gush reduces armor by 3 more"
+  },
+  {
+   "id": "tide_p_tide",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "tidehunter_gush",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "heal": 30
+    }
+   ],
+   "ru": "Прилив сил",
+   "en": "Tide of Strength",
+   "ru_d": "Gush лечит на 30% урона по героям",
+   "en_d": "Gush heals for 30% of its damage to heroes"
+  },
+  {
+   "id": "tide_p_spikes",
+   "r": "purple",
+   "branch": "W",
+   "ab": "tidehunter_kraken_shell",
+   "fx": [
+    {
+     "t": "taken",
+     "reflect": 12
+    }
+   ],
+   "ru": "Шипы ракушки",
+   "en": "Shell Spikes",
+   "ru_d": "12% урона от героев возвращается атакующему (чистый урон)",
+   "en_d": "12% of the damage from heroes is returned to the attacker as pure damage"
+  },
+  {
+   "id": "tide_p_brine",
+   "r": "purple",
+   "branch": "W",
+   "ab": "tidehunter_kraken_shell",
+   "fx": [
+    {
+     "t": "passive",
+     "props": {
+      "regen": 10
+     }
+    }
+   ],
+   "ru": "Соленая кровь",
+   "en": "Brine",
+   "ru_d": "+10 восстановления здоровья, пока изучен Kraken Shell",
+   "en_d": "+10 health regeneration while Kraken Shell is learned"
+  },
+  {
+   "id": "tide_p_heavy",
+   "r": "purple",
+   "branch": "E",
+   "ab": "tidehunter_anchor_smash",
+   "mods": "attack_damage:+50",
+   "ru": "Тяжелый якорь",
+   "en": "Heavy Anchor",
+   "ru_d": "Урон Anchor Smash +50",
+   "en_d": "Anchor Smash damage +50"
+  },
+  {
+   "id": "tide_p_weaken",
+   "r": "purple",
+   "branch": "E",
+   "ab": "tidehunter_anchor_smash",
+   "mods": "damage_reduction:-10",
+   "ru": "Подавление",
+   "en": "Suppress",
+   "ru_d": "Anchor Smash снижает урон врагов еще на 10%",
+   "en_d": "Anchor Smash reduces enemies' damage by 10% more"
+  },
+  {
+   "id": "tide_p_bulwark",
+   "r": "purple",
+   "branch": "R",
+   "ab": "tidehunter_ravage",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 5,
+     "props": {
+      "armor": 15
+     }
+    }
+   ],
+   "ru": "Волнорез",
+   "en": "Breakwater",
+   "ru_d": "Ravage дает Тайду +15 брони на 5 с",
+   "en_d": "Ravage grants Tidehunter +15 armor for 5 s"
+  },
+  {
+   "id": "tide_p_maelstrom",
+   "r": "purple",
+   "branch": "R",
+   "ab": "tidehunter_ravage",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "cdr": {
+      "abs": [
+       "self"
+      ],
+      "sec": 8
+     }
+    }
+   ],
+   "ru": "Водоворот",
+   "en": "Maelstrom",
+   "ru_d": "Каждый герой, задетый Ravage, сокращает его перезарядку на 8 с",
+   "en_d": "Each hero hit by Ravage reduces its cooldown by 8 s"
+  },
+  {
+   "id": "tide_l_gush",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "tidehunter_gush",
+   "mods": "gush_damage:+100",
+   "awmods": "movement_speed:-20",
+   "fx": [
+    {
+     "t": "charges",
+     "n": 1
+    }
+   ],
+   "ru": "Цунами",
+   "en": "Tsunami",
+   "ru_d": "У Gush есть запасной заряд, урон +100",
+   "en_d": "Gush gets a spare charge, damage +100",
+   "ru_aw": "Пробуждение: замедление +20%",
+   "en_aw": "Awakening: slow +20%"
+  },
+  {
+   "id": "tide_l_shell",
+   "r": "legend",
+   "branch": "W",
+   "ab": "tidehunter_kraken_shell",
+   "mods": "damage_reduction:+30",
+   "fx": [
+    {
+     "t": "taken",
+     "reflect": 15,
+     "aw": {
+      "reflect": 25
+     }
+    }
+   ],
+   "ru": "Панцирь кракена",
+   "en": "Kraken Carapace",
+   "ru_d": "Kraken Shell блокирует на 30 урона больше; 15% урона от героев возвращается атакующему",
+   "en_d": "Kraken Shell blocks 30 more damage; 15% of the damage from heroes is returned to the attacker",
+   "ru_aw": "Пробуждение: возврат 25%",
+   "en_aw": "Awakening: 25% returned"
+  },
+  {
+   "id": "tide_l_anchor",
+   "r": "legend",
+   "branch": "E",
+   "ab": "tidehunter_anchor_smash",
+   "mods": "additional_range:+150;attack_damage:+75",
+   "awmods": "reduction_duration:+3",
+   "ru": "Якорь бездны",
+   "en": "Abyssal Anchor",
+   "ru_d": "Радиус Anchor Smash +150, урон +75",
+   "en_d": "Anchor Smash radius +150, damage +75",
+   "ru_aw": "Пробуждение: снижение урона длится на 3 с дольше",
+   "en_aw": "Awakening: the damage reduction lasts 3 s longer"
+  },
+  {
+   "id": "tide_l_ravage",
+   "r": "legend",
+   "branch": "R",
+   "ab": "tidehunter_ravage",
+   "mods": "duration:+0.8;radius:+250",
+   "awmods": "AbilityDamage:+150",
+   "ru": "Гнев океана",
+   "en": "Ocean's Wrath",
+   "ru_d": "Оглушение Ravage +0.8 с, радиус +250",
+   "en_d": "Ravage stun +0.8 s, radius +250",
+   "ru_aw": "Пробуждение: урон +150",
+   "en_aw": "Awakening: damage +150"
+  },
+  {
+   "id": "tide_m_autoanchor",
+   "r": "purple",
+   "branch": "E",
+   "ab": "tidehunter_anchor_smash",
+   "fx": [
+    {
+     "t": "auto",
+     "every": 4,
+     "range": 320
+    }
+   ],
+   "ru": "Якорь сам",
+   "en": "Self-Smash",
+   "ru_d": "Раз в 4 с Anchor Smash бьет сам, если рядом (320) есть враг",
+   "en_d": "Every 4 s Anchor Smash hits by itself if an enemy is within 320",
+   "mech": 1
+  },
+  {
+   "id": "tide_m_doublegush",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "tidehunter_gush",
+   "fx": [
+    {
+     "t": "multi",
+     "chance": 40,
+     "times": 1,
+     "delay": 0.4
+    }
+   ],
+   "ru": "Двойная волна",
+   "en": "Double Gush",
+   "ru_d": "40% шанс второго Gush",
+   "en_d": "40% chance of a second Gush",
+   "mech": 1
+  },
+  {
+   "id": "tide_m_whirlpool",
+   "r": "purple",
+   "branch": "R",
+   "ab": "tidehunter_ravage",
+   "fx": [
+    {
+     "t": "pull",
+     "at": "self",
+     "radius": "radius",
+     "dist": 500,
+     "delay": 1.5,
+     "pfx": "particles/units/heroes/hero_dark_seer/dark_seer_vacuum.vpcf"
+    }
+   ],
+   "ru": "Водоворот",
+   "en": "Whirlpool",
+   "ru_d": "Через 1.5 с после Ravage всех врагов в радиусе стягивает к Тайду",
+   "en_d": "1.5 s after Ravage all enemies in its radius are dragged to Tidehunter",
+   "mech": 1
+  },
+  {
+   "id": "tide_m_tide",
+   "r": "purple",
+   "branch": "W",
+   "ab": "tidehunter_kraken_shell",
+   "fx": [
+    {
+     "t": "rewind",
+     "delay": 4,
+     "heal": 70
+    }
+   ],
+   "ru": "Прилив",
+   "en": "High Tide",
+   "ru_d": "Через 4 с после Kraken Shell Тайд возвращается на место и восстанавливает 70% потерянного здоровья",
+   "en_d": "4 s after Kraken Shell, Tide returns to that spot and restores 70% of the health he lost",
+   "mech": 1
+  }
+ ]
+}

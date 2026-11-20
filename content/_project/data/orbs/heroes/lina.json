@@ -1,0 +1,338 @@
+{
+ "hero": "npc_dota_hero_lina",
+ "orbs": [
+  {
+   "id": "lina_p_double",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "lina_dragon_slave",
+   "fx": [
+    {
+     "t": "echo",
+     "delays": [
+      0.4
+     ],
+     "pct": 50
+    }
+   ],
+   "ru": "Двойной дракон",
+   "en": "Twin Dragons",
+   "ru_d": "Через 0.4 с Dragon Slave повторно наносит 50% урона тем же врагам",
+   "en_d": "0.4 s later Dragon Slave deals 50% of its damage again to the same enemies"
+  },
+  {
+   "id": "lina_p_scorch",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "lina_dragon_slave",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "debuff": {
+      "props": {
+       "mr": -15
+      },
+      "dur": 4
+     }
+    }
+   ],
+   "ru": "Обжигающая волна",
+   "en": "Scorching Wave",
+   "ru_d": "Dragon Slave снижает сопротивление магии врагов на 15% на 4 с",
+   "en_d": "Dragon Slave reduces enemies' magic resistance by 15% for 4 s"
+  },
+  {
+   "id": "lina_p_second",
+   "r": "purple",
+   "branch": "W",
+   "ab": "lina_light_strike_array",
+   "fx": [
+    {
+     "t": "blast",
+     "at": "point",
+     "delay": 2.0,
+     "radius": "light_strike_array_aoe",
+     "dmg": "light_strike_array_damage*0.5",
+     "type": "magic",
+     "pfx": "particles/units/heroes/hero_lina/lina_spell_light_strike_array.vpcf"
+    }
+   ],
+   "ru": "Второй удар",
+   "en": "Aftershock",
+   "ru_d": "Через 1.5 с после взрыва LSA взрывается еще раз на том же месте: 50% урона, без оглушения",
+   "en_d": "1.5 s after it lands, Light Strike Array erupts again in the same place for 50% damage, without a stun"
+  },
+  {
+   "id": "lina_p_cage",
+   "r": "purple",
+   "branch": "W",
+   "ab": "lina_light_strike_array",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "stun": 1
+      },
+      "dur": 0.4,
+      "delay": "light_strike_array_stun_duration"
+     }
+    }
+   ],
+   "ru": "Клетка",
+   "en": "Cage",
+   "ru_d": "Оглушение LSA по героям длится на 0.4 с дольше",
+   "en_d": "Light Strike Array stuns heroes 0.4 s longer"
+  },
+  {
+   "id": "lina_p_overheat",
+   "r": "purple",
+   "branch": "E",
+   "ab": "lina_fiery_soul",
+   "fx": [
+    {
+     "t": "stacks",
+     "mod": "fiery_soul",
+     "min": "fiery_soul_max_stacks",
+     "props": {
+      "sa": 15
+     }
+    }
+   ],
+   "ru": "Перегрев",
+   "en": "Overheat",
+   "ru_d": "При полном запасе Fiery Soul +15% усиления способностей",
+   "en_d": "+15% spell amplification while Fiery Soul is at full stacks"
+  },
+  {
+   "id": "lina_p_heat",
+   "r": "purple",
+   "branch": "E",
+   "ab": "lina_fiery_soul",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "attack",
+     "heroOnly": 1,
+     "addstack": {
+      "mod": "fiery_soul",
+      "max": "fiery_soul_max_stacks",
+      "dur": "fiery_soul_stack_duration"
+     }
+    }
+   ],
+   "ru": "Жар боя",
+   "en": "Heat of Battle",
+   "ru_d": "Атаки по героям добавляют заряд Fiery Soul, если он уже действует",
+   "en_d": "Attacks on heroes add a Fiery Soul stack while it is active"
+  },
+  {
+   "id": "lina_p_incinerate",
+   "r": "purple",
+   "branch": "R",
+   "ab": "lina_laguna_blade",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "ab",
+     "refresh": [
+      "lina_dragon_slave",
+      "lina_light_strike_array"
+     ]
+    }
+   ],
+   "ru": "Испепеление",
+   "en": "Incinerate",
+   "ru_d": "Убийство героя Laguna Blade обновляет Dragon Slave и Light Strike Array",
+   "en_d": "A hero kill with Laguna Blade refreshes Dragon Slave and Light Strike Array"
+  },
+  {
+   "id": "lina_l_storm",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "lina_dragon_slave",
+   "fx": [
+    {
+     "t": "echo",
+     "delays": [
+      0.35,
+      0.7
+     ],
+     "pct": 50,
+     "aw": {
+      "pct": 75
+     }
+    }
+   ],
+   "ru": "Драконья буря",
+   "en": "Dragon Storm",
+   "ru_d": "Dragon Slave дважды повторяет удар по тем же врагам (через 0.35 и 0.7 с) с 50% урона",
+   "en_d": "Dragon Slave strikes the same enemies twice more (after 0.35 and 0.7 s) for 50% damage",
+   "ru_aw": "Пробуждение: повторы наносят 75% урона",
+   "en_aw": "Awakening: repeats deal 75% damage"
+  },
+  {
+   "id": "lina_l_rain",
+   "r": "legend",
+   "branch": "W",
+   "ab": "lina_light_strike_array",
+   "mods": "light_strike_array_aoe:+75",
+   "fx": [
+    {
+     "t": "charges",
+     "n": 1,
+     "aw": {
+      "n": 2
+     }
+    }
+   ],
+   "ru": "Огненный дождь",
+   "en": "Fire Rain",
+   "ru_d": "У Light Strike Array есть запасной заряд (восстанавливается за время перезарядки), радиус +75",
+   "en_d": "Light Strike Array gets a spare charge (restores over its cooldown), radius +75",
+   "ru_aw": "Пробуждение: 2 запасных заряда",
+   "en_aw": "Awakening: 2 spare charges"
+  },
+  {
+   "id": "lina_l_soul",
+   "r": "legend",
+   "branch": "E",
+   "ab": "lina_fiery_soul",
+   "mods": "fiery_soul_max_stacks:+3",
+   "fx": [
+    {
+     "t": "stacks",
+     "mod": "fiery_soul",
+     "min": 1,
+     "perstack": 1,
+     "props": {
+      "sa": 2
+     },
+     "aw": {
+      "props": {
+       "sa": 3
+      }
+     }
+    }
+   ],
+   "ru": "Пламя души",
+   "en": "Soul Flame",
+   "ru_d": "Запас Fiery Soul +3; каждый заряд дает +2% усиления способностей",
+   "en_d": "Fiery Soul max stacks +3; each stack grants +2% spell amplification",
+   "ru_aw": "Пробуждение: +3% за заряд",
+   "en_aw": "Awakening: +3% per stack"
+  },
+  {
+   "id": "lina_l_chain",
+   "r": "legend",
+   "branch": "R",
+   "ab": "lina_laguna_blade",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "chain": {
+      "jumps": 2,
+      "radius": 500,
+      "pct": 50
+     },
+     "aw": {
+      "chain": {
+       "pct": 75
+      }
+     }
+    }
+   ],
+   "ru": "Цепная лагуна",
+   "en": "Chain Laguna",
+   "ru_d": "Laguna Blade перескакивает еще на 2 героев в 500 с 50% урона",
+   "en_d": "Laguna Blade jumps to 2 more heroes within 500 for 50% damage",
+   "ru_aw": "Пробуждение: 75% урона",
+   "en_aw": "Awakening: 75% damage"
+  },
+  {
+   "id": "lina_m_dragonflock",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "lina_dragon_slave",
+   "fx": [
+    {
+     "t": "multi",
+     "chance": 40,
+     "times": 2,
+     "delay": 0.3
+    }
+   ],
+   "ru": "Драконья стая",
+   "en": "Dragon Flock",
+   "ru_d": "40% шанс, что Dragon Slave вылетит еще раз (и еще раз)",
+   "en_d": "40% chance that Dragon Slave fires again (and again)",
+   "mech": 1
+  },
+  {
+   "id": "lina_m_autolsa",
+   "r": "purple",
+   "branch": "W",
+   "ab": "lina_light_strike_array",
+   "fx": [
+    {
+     "t": "auto",
+     "every": 8,
+     "range": 800,
+     "heroOnly": 1
+    }
+   ],
+   "ru": "Огненный дождь",
+   "en": "Fire Rain",
+   "ru_d": "Раз в 8 с Light Strike Array сам бьет по ближайшему вражескому герою в 800 (бесплатно)",
+   "en_d": "Every 8 s Light Strike Array strikes the nearest enemy hero within 800 by itself (free)",
+   "mech": 1
+  },
+  {
+   "id": "lina_m_firesteps",
+   "r": "purple",
+   "branch": "E",
+   "ab": "lina_laguna_blade",
+   "fx": [
+    {
+     "t": "trail",
+     "dps": "damage*0.07",
+     "radius": 150,
+     "life": 3,
+     "type": "magic",
+     "pfx": "particles/units/heroes/hero_batrider/batrider_firefly_path.vpcf"
+    }
+   ],
+   "ru": "Огненные шаги",
+   "en": "Fire Steps",
+   "ru_d": "Где бежит Лина, 3 с горит земля: 7% урона Laguna Blade в секунду",
+   "en_d": "Where Lina runs the ground burns for 3 s: 7% of Laguna Blade damage per second",
+   "mech": 1
+  },
+  {
+   "id": "lina_m_skyfire",
+   "r": "purple",
+   "branch": "R",
+   "ab": "lina_laguna_blade",
+   "fx": [
+    {
+     "t": "storm",
+     "win": 6,
+     "every": 1,
+     "radius": 900,
+     "dmg": "damage*0.12",
+     "type": "magic"
+    }
+   ],
+   "ru": "Небесный огонь",
+   "en": "Skyfire",
+   "ru_d": "После Laguna Blade 6 с каждую секунду молния бьет случайного врага в 900: 12% урона Laguna",
+   "en_d": "After Laguna Blade, for 6 s lightning strikes a random enemy within 900 every second: 12% of Laguna damage",
+   "mech": 1
+  }
+ ]
+}

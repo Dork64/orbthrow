@@ -1,0 +1,328 @@
+{
+ "hero": "npc_dota_hero_queenofpain",
+ "orbs": [
+  {
+   "id": "qop_p_venom",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "queenofpain_shadow_strike",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "mr": -8
+      },
+      "dur": 6
+     }
+    }
+   ],
+   "ru": "Яд Королевы",
+   "en": "Queen's Venom",
+   "ru_d": "Shadow Strike снижает сопротивление магии героя на 8% на 6 с",
+   "en_d": "Shadow Strike reduces a hero's magic resistance by 8% for 6 s"
+  },
+  {
+   "id": "qop_p_sip",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "queenofpain_shadow_strike",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "heal": 30
+    }
+   ],
+   "ru": "Глоток крови",
+   "en": "Blood Sip",
+   "ru_d": "Shadow Strike лечит на 30% урона по героям",
+   "en_d": "Shadow Strike heals for 30% of its damage to heroes"
+  },
+  {
+   "id": "qop_p_masquerade",
+   "r": "purple",
+   "branch": "W",
+   "ab": "queenofpain_blink",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 3,
+     "props": {
+      "armor": 6,
+      "evasion": 25
+     }
+    }
+   ],
+   "ru": "Маскарад",
+   "en": "Masquerade",
+   "ru_d": "После Blink: +6 брони и 25% уклонения на 3 с",
+   "en_d": "After Blink: +6 armor and 25% evasion for 3 s"
+  },
+  {
+   "id": "qop_p_rush",
+   "r": "purple",
+   "branch": "W",
+   "ab": "queenofpain_blink",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 3,
+     "props": {
+      "ms": 25
+     }
+    }
+   ],
+   "ru": "Порыв",
+   "en": "Rush",
+   "ru_d": "После Blink +25% скорости бега на 3 с",
+   "en_d": "After Blink +25% movement speed for 3 s"
+  },
+  {
+   "id": "qop_p_echo",
+   "r": "purple",
+   "branch": "E",
+   "ab": "queenofpain_scream_of_pain",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "heal": 25
+    }
+   ],
+   "ru": "Эхо крика",
+   "en": "Scream Echo",
+   "ru_d": "Scream of Pain лечит на 25% урона по героям",
+   "en_d": "Scream of Pain heals for 25% of its damage to heroes"
+  },
+  {
+   "id": "qop_p_haste",
+   "r": "purple",
+   "branch": "E",
+   "ab": "queenofpain_scream_of_pain",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "cdr": {
+      "abs": [
+       "queenofpain_blink"
+      ],
+      "sec": 1
+     }
+    }
+   ],
+   "ru": "Ускорение",
+   "en": "Haste",
+   "ru_d": "Каждый герой, задетый Scream of Pain, сокращает перезарядку Blink на 1 с",
+   "en_d": "Each hero hit by Scream of Pain reduces Blink's cooldown by 1 s"
+  },
+  {
+   "id": "qop_p_deafen",
+   "r": "purple",
+   "branch": "R",
+   "ab": "queenofpain_sonic_wave",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "ms": -30
+      },
+      "dur": 3
+     }
+    }
+   ],
+   "ru": "Оглушительный звук",
+   "en": "Deafening",
+   "ru_d": "Sonic Wave замедляет героев на 30% на 3 с",
+   "en_d": "Sonic Wave slows heroes by 30% for 3 s"
+  },
+  {
+   "id": "qop_p_encore",
+   "r": "purple",
+   "branch": "R",
+   "ab": "queenofpain_sonic_wave",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "ab",
+     "cdpct": 50
+    }
+   ],
+   "ru": "На бис",
+   "en": "Encore",
+   "ru_d": "Убийство героя Sonic Wave снимает половину ее перезарядки",
+   "en_d": "A hero kill with Sonic Wave removes half of its cooldown"
+  },
+  {
+   "id": "qop_l_strike",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "queenofpain_shadow_strike",
+   "mods": "strike_damage:+80;duration_damage:+30",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "splash": {
+      "radius": 300,
+      "pct": 0
+     },
+     "aw": {
+      "splash": {
+       "pct": 60
+      }
+     }
+    }
+   ],
+   "ru": "Теневой удар",
+   "en": "Shadow Blow",
+   "ru_d": "Урон Shadow Strike +80, урон яда +30",
+   "en_d": "Shadow Strike damage +80, poison damage +30",
+   "ru_aw": "Пробуждение: урон Shadow Strike задевает врагов в 300 вокруг цели (60%)",
+   "en_aw": "Awakening: Shadow Strike damage also hits enemies within 300 of the target (60%)"
+  },
+  {
+   "id": "qop_l_blink",
+   "r": "legend",
+   "branch": "W",
+   "ab": "queenofpain_blink",
+   "fx": [
+    {
+     "t": "charges",
+     "n": 1,
+     "aw": {
+      "n": 2
+     }
+    }
+   ],
+   "ru": "Неуловимая",
+   "en": "Elusive",
+   "ru_d": "У Blink есть запасной заряд",
+   "en_d": "Blink gets a spare charge",
+   "ru_aw": "Пробуждение: 2 запасных заряда",
+   "en_aw": "Awakening: 2 spare charges"
+  },
+  {
+   "id": "qop_l_scream",
+   "r": "legend",
+   "branch": "E",
+   "ab": "queenofpain_scream_of_pain",
+   "mods": "damage:+100;area_of_effect:+150",
+   "awmods": "damage:+100",
+   "ru": "Крик банши",
+   "en": "Banshee Scream",
+   "ru_d": "Урон Scream of Pain +100, радиус +150",
+   "en_d": "Scream of Pain damage +100, radius +150",
+   "ru_aw": "Пробуждение: урон еще +100",
+   "en_aw": "Awakening: another +100 damage"
+  },
+  {
+   "id": "qop_l_wave",
+   "r": "legend",
+   "branch": "R",
+   "ab": "queenofpain_sonic_wave",
+   "mods": "damage:+150;final_aoe:+150",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "ab",
+     "cdpct": 0,
+     "aw": {
+      "cdpct": 100
+     }
+    }
+   ],
+   "ru": "Звуковой удар",
+   "en": "Sonic Boom",
+   "ru_d": "Урон Sonic Wave +150, ширина в конце +150",
+   "en_d": "Sonic Wave damage +150, end width +150",
+   "ru_aw": "Пробуждение: убийство Sonic Wave обновляет ее",
+   "en_aw": "Awakening: a Sonic Wave kill refreshes it"
+  },
+  {
+   "id": "qop_m_endless",
+   "r": "purple",
+   "branch": "E",
+   "ab": "queenofpain_scream_of_pain",
+   "fx": [
+    {
+     "t": "auto",
+     "every": 6,
+     "range": 420
+    }
+   ],
+   "ru": "Вечный крик",
+   "en": "Endless Scream",
+   "ru_d": "Раз в 6 с Scream of Pain звучит сам, если рядом (420) есть враг (бесплатно)",
+   "en_d": "Every 6 s Scream of Pain goes off by itself if an enemy is within 420 (free)",
+   "mech": 1
+  },
+  {
+   "id": "qop_m_blinkloop",
+   "r": "purple",
+   "branch": "W",
+   "ab": "queenofpain_blink",
+   "fx": [
+    {
+     "t": "rewind",
+     "delay": 3,
+     "heal": 50
+    }
+   ],
+   "ru": "Петля прыжка",
+   "en": "Blink Loop",
+   "ru_d": "Через 3 с после Blink Королева возвращается туда, откуда прыгнула, и восстанавливает 50% потерянного здоровья",
+   "en_d": "3 s after Blink, Queen returns to where she blinked from and restores 50% of the health she lost",
+   "mech": 1
+  },
+  {
+   "id": "qop_m_doublestrike",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "queenofpain_shadow_strike",
+   "fx": [
+    {
+     "t": "multi",
+     "chance": 50,
+     "times": 1,
+     "delay": 0.3
+    }
+   ],
+   "ru": "Двойной кинжал",
+   "en": "Double Dagger",
+   "ru_d": "50% шанс второго Shadow Strike",
+   "en_d": "50% chance of a second Shadow Strike",
+   "mech": 1
+  },
+  {
+   "id": "qop_m_mirror",
+   "r": "purple",
+   "branch": "E",
+   "ab": "queenofpain_scream_of_pain",
+   "fx": [
+    {
+     "t": "illusion",
+     "n": 1,
+     "dur": 6,
+     "out": -40,
+     "inc": 200
+    }
+   ],
+   "ru": "Отражение",
+   "en": "Reflection",
+   "ru_d": "Scream of Pain вызывает иллюзию Королевы на 6 с (60% урона)",
+   "en_d": "Scream of Pain summons a Queen illusion for 6 s (60% damage)",
+   "mech": 1
+  }
+ ]
+}

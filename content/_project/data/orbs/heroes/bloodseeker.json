@@ -1,0 +1,343 @@
+{
+ "hero": "npc_dota_hero_bloodseeker",
+ "orbs": [
+  {
+   "id": "bs_p_frenzy",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "bloodseeker_bloodrage",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "ms": 15,
+      "ls": 12
+     }
+    }
+   ],
+   "ru": "Неистовство",
+   "en": "Frenzy",
+   "ru_d": "Bloodrage дает Сикеру +15% скорости бега и 12% вампиризма",
+   "en_d": "Bloodrage grants Bloodseeker +15% movement speed and 12% lifesteal"
+  },
+  {
+   "id": "bs_p_redrhythm",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "bloodseeker_bloodrage",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "attack",
+     "win": "duration",
+     "heroOnly": 1,
+     "every": 4,
+     "icd": 1,
+     "extra": {
+      "atk": 30,
+      "type": "phys"
+     }
+    }
+   ],
+   "ru": "Кровавый ритм",
+   "en": "Blood Rhythm",
+   "ru_d": "Во время Bloodrage каждая 4-я атака по одному герою наносит ещё 30% урона атаки физическим уроном; не чаще раза в секунду по цели",
+   "en_d": "During Bloodrage every fourth attack on the same hero deals 30% attack damage as extra physical damage; at most once per second per target"
+  },
+  {
+   "id": "bs_p_curse",
+   "r": "purple",
+   "branch": "W",
+   "ab": "bloodseeker_blood_bath",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "healred": 40
+      },
+      "dur": 6
+     }
+    }
+   ],
+   "ru": "Кровавое проклятие",
+   "en": "Blood Curse",
+   "ru_d": "Blood Rite снижает получаемое врагами лечение на 40% на 6 с",
+   "en_d": "Blood Rite reduces enemies' healing received by 40% for 6 s"
+  },
+  {
+   "id": "bs_p_sacrifice",
+   "r": "purple",
+   "branch": "W",
+   "ab": "bloodseeker_blood_bath",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "ab",
+     "heal": 30,
+     "cdpct": 100
+    }
+   ],
+   "ru": "Жертвоприношение",
+   "en": "Sacrifice",
+   "ru_d": "Убийство Blood Rite восполняет 30% здоровья и сразу перезаряжает его",
+   "en_d": "A kill with Blood Rite restores 30% health and instantly refreshes it"
+  },
+  {
+   "id": "bs_p_scent",
+   "r": "purple",
+   "branch": "E",
+   "ab": "bloodseeker_thirst",
+   "fx": [
+    {
+     "t": "vs",
+     "lowhp": 40,
+     "pct": 15
+    }
+   ],
+   "ru": "Запах крови",
+   "en": "Scent of Blood",
+   "ru_d": "+15% урона по героям ниже 40% здоровья",
+   "en_d": "+15% damage against heroes below 40% health"
+  },
+  {
+   "id": "bs_p_hamstring",
+   "r": "purple",
+   "branch": "E",
+   "ab": "bloodseeker_thirst",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "attack",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "ms": -8
+      },
+      "dur": 3,
+      "max": 4
+     }
+    }
+   ],
+   "ru": "Подрезать сухожилия",
+   "en": "Hamstring",
+   "ru_d": "Атаки по героям замедляют на 8% на 3 с (до 4 раз)",
+   "en_d": "Attacks on heroes slow by 8% for 3 s (up to 4 times)"
+  },
+  {
+   "id": "bs_p_hemorrhage",
+   "r": "purple",
+   "branch": "R",
+   "ab": "bloodseeker_rupture",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "healred": 50
+      },
+      "dur": "duration"
+     }
+    }
+   ],
+   "ru": "Кровотечение",
+   "en": "Hemorrhage",
+   "ru_d": "Цель Rupture получает на 50% меньше лечения",
+   "en_d": "The Rupture target receives 50% less healing"
+  },
+  {
+   "id": "bs_p_trophy",
+   "r": "purple",
+   "branch": "R",
+   "ab": "bloodseeker_rupture",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "win",
+     "win": "duration",
+     "cdpct": 35,
+     "heal": 20
+    }
+   ],
+   "ru": "Трофей",
+   "en": "Trophy",
+   "ru_d": "Убийство героя, пока действует Rupture: +20% здоровья и −35% оставшейся перезарядки Rupture",
+   "en_d": "A hero kill while Rupture is active: +20% health and −35% of Rupture's remaining cooldown"
+  },
+  {
+   "id": "bs_m_trail",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "bloodseeker_bloodrage",
+   "fx": [
+    {
+     "t": "trail",
+     "win": "duration",
+     "dps": 50,
+     "radius": 160,
+     "life": 3,
+     "type": "magic",
+     "debuff": {
+      "props": {
+       "healred": 20
+      },
+      "dur": 1
+     }
+    }
+   ],
+   "ru": "Кровавый след",
+   "en": "Blood Trail",
+   "ru_d": "Пока действует Bloodrage, за Сикером кровавый след: 50 урона в секунду и −20% лечения врагам",
+   "en_d": "While Bloodrage lasts Bloodseeker leaves a blood trail: 50 damage per second and −20% healing to enemies",
+   "mech": 1
+  },
+  {
+   "id": "bs_m_doublerite",
+   "r": "purple",
+   "branch": "W",
+   "ab": "bloodseeker_blood_bath",
+   "fx": [
+    {
+     "t": "multi",
+     "chance": 40,
+     "times": 1,
+     "delay": 0.6
+    }
+   ],
+   "ru": "Двойной ритуал",
+   "en": "Double Rite",
+   "ru_d": "40% шанс, что Blood Rite повторится в той же точке",
+   "en_d": "40% chance that Blood Rite repeats at the same spot",
+   "mech": 1
+  },
+  {
+   "id": "bs_m_gather",
+   "r": "purple",
+   "branch": "W",
+   "ab": "bloodseeker_blood_bath",
+   "fx": [
+    {
+     "t": "pull",
+     "at": "point",
+     "radius": "radius",
+     "dist": 300,
+     "delay": 0.5,
+     "pfx": "particles/units/heroes/hero_dark_seer/dark_seer_vacuum.vpcf"
+    }
+   ],
+   "ru": "Зов крови",
+   "en": "Call of Blood",
+   "ru_d": "Blood Rite стягивает врагов к центру перед взрывом",
+   "en_d": "Blood Rite drags enemies to its center before it erupts",
+   "mech": 1
+  },
+  {
+   "id": "bs_m_pounce",
+   "r": "purple",
+   "branch": "R",
+   "ab": "bloodseeker_rupture",
+   "fx": [
+    {
+     "t": "dash",
+     "dist": 900,
+     "to": "target"
+    }
+   ],
+   "ru": "Бросок охотника",
+   "en": "Hunter's Pounce",
+   "ru_d": "После Rupture Сикер прыгает к цели (до 900)",
+   "en_d": "After Rupture Bloodseeker leaps to the target (up to 900)",
+   "mech": 1
+  },
+  {
+   "id": "bs_l_rage",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "bloodseeker_bloodrage",
+   "mods": "attack_speed:+60",
+   "awmods": "spell_amp:+20",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "ls": 15
+     }
+    }
+   ],
+   "ru": "Безумие",
+   "en": "Madness",
+   "ru_d": "Bloodrage: +60 скорости атаки и 15% вампиризма",
+   "en_d": "Bloodrage: +60 attack speed and 15% lifesteal",
+   "ru_aw": "Пробуждение: усиление способностей +20%",
+   "en_aw": "Awakening: +20% spell amplification"
+  },
+  {
+   "id": "bs_l_rite",
+   "r": "legend",
+   "branch": "W",
+   "ab": "bloodseeker_blood_bath",
+   "mods": "radius:+100",
+   "fx": [
+    {
+     "t": "charges",
+     "n": 1,
+     "aw": {
+      "n": 2
+     }
+    }
+   ],
+   "ru": "Кровавая жатва",
+   "en": "Blood Harvest",
+   "ru_d": "У Blood Rite есть запасной заряд, радиус +100",
+   "en_d": "Blood Rite gets a spare charge, radius +100",
+   "ru_aw": "Пробуждение: 2 запасных заряда",
+   "en_aw": "Awakening: 2 spare charges"
+  },
+  {
+   "id": "bs_l_thirst",
+   "r": "legend",
+   "branch": "E",
+   "ab": "bloodseeker_thirst",
+   "mods": "visibility_threshold_pct:+25;max_bonus_pct:+25;invis_threshold_pct:+25",
+   "fx": [
+    {
+     "t": "passive",
+     "props": {
+      "dmgc": 25
+     },
+     "aw": {
+      "props": {
+       "dmgc": 45
+      }
+     }
+    }
+   ],
+   "ru": "Вечная жажда",
+   "en": "Endless Thirst",
+   "ru_d": "Thirst видит героев ниже 50% здоровья и ускоряет сильнее; +25 урона атаки",
+   "en_d": "Thirst reveals heroes below 50% health and speeds up more; +25 attack damage",
+   "ru_aw": "Пробуждение: +45 урона",
+   "en_aw": "Awakening: +45 damage"
+  },
+  {
+   "id": "bs_l_rupture",
+   "r": "legend",
+   "branch": "R",
+   "ab": "bloodseeker_rupture",
+   "mods": "duration:+4;movement_damage_pct:+20",
+   "awmods": "movement_damage_pct:+15",
+   "ru": "Разрыв артерий",
+   "en": "Severed Arteries",
+   "ru_d": "Rupture: длительность +4 с, урон от бега +20%",
+   "en_d": "Rupture: duration +4 s, movement damage +20%",
+   "ru_aw": "Пробуждение: урон от движения дополнительно +15%",
+   "en_aw": "Awakening: movement damage +15% more"
+  }
+ ]
+}

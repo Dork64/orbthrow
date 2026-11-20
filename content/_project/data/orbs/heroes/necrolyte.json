@@ -1,0 +1,550 @@
+{
+ "hero": "npc_dota_hero_necrolyte",
+ "orbs": [
+  {
+   "id": "necrolyte_b_1",
+   "r": "blue",
+   "branch": "Q",
+   "ab": "necrolyte_death_pulse",
+   "mods": "AbilityDamage:%20",
+   "max": 4,
+   "ru": "Моровое дыхание",
+   "en": "Plague Breath"
+  },
+  {
+   "id": "necrolyte_b_2",
+   "r": "blue",
+   "branch": "Q",
+   "ab": "necrolyte_death_pulse",
+   "mods": "heal:18",
+   "max": 4,
+   "ru": "Живая пульсация",
+   "en": "Living Pulse"
+  },
+  {
+   "id": "necrolyte_b_3",
+   "r": "blue",
+   "branch": "Q",
+   "ab": "necrolyte_death_pulse",
+   "mods": "cd:10",
+   "max": 4,
+   "ru": "Частый пульс",
+   "en": "Frequent Pulse"
+  },
+  {
+   "id": "necrolyte_b_4",
+   "r": "blue",
+   "branch": "W",
+   "ab": "necrolyte_ghost_shroud",
+   "mods": "duration:0.3:s",
+   "max": 3,
+   "ru": "Длинная вуаль",
+   "en": "Long Shroud"
+  },
+  {
+   "id": "necrolyte_b_5",
+   "r": "blue",
+   "branch": "W",
+   "ab": "necrolyte_ghost_shroud",
+   "mods": "movement_speed:3:%",
+   "max": 3,
+   "ru": "Холодный воздух",
+   "en": "Cold Air"
+  },
+  {
+   "id": "necrolyte_b_6",
+   "r": "blue",
+   "branch": "W",
+   "ab": "necrolyte_ghost_shroud",
+   "mods": "cd:10",
+   "max": 4,
+   "ru": "Новая вуаль",
+   "en": "New Shroud"
+  },
+  {
+   "id": "necrolyte_b_7",
+   "r": "blue",
+   "branch": "E",
+   "ab": "necrolyte_heartstopper_aura",
+   "mods": "aura_radius:30",
+   "max": 3,
+   "ru": "Широкий мор",
+   "en": "Wide Plague"
+  },
+  {
+   "id": "necrolyte_b_8",
+   "r": "blue",
+   "branch": "E",
+   "ab": "necrolyte_heartstopper_aura",
+   "mods": "aura_damage:0.15:%",
+   "max": 4,
+   "ru": "Тихая убыль",
+   "en": "Quiet Decline"
+  },
+  {
+   "id": "necrolyte_b_9",
+   "r": "blue",
+   "branch": "E",
+   "ab": "necrolyte_sadist",
+   "mods": "regen:0.4",
+   "max": 3,
+   "ru": "Запас жнеца",
+   "en": "Sadist Reserves"
+  },
+  {
+   "id": "necrolyte_b_10",
+   "r": "blue",
+   "branch": "R",
+   "ab": "necrolyte_reapers_scythe",
+   "mods": "damage_per_health:0.025",
+   "max": 3,
+   "ru": "Острая грань",
+   "en": "Sharp Edge"
+  },
+  {
+   "id": "necrolyte_b_11",
+   "r": "blue",
+   "branch": "R",
+   "ab": "necrolyte_reapers_scythe",
+   "mods": "AbilityCastRange:40",
+   "max": 3,
+   "ru": "Длинная коса",
+   "en": "Long Scythe"
+  },
+  {
+   "id": "necrolyte_b_12",
+   "r": "blue",
+   "branch": "R",
+   "ab": "necrolyte_reapers_scythe",
+   "mods": "AbilityManaCost:-24",
+   "max": 3,
+   "ru": "Холодный расчёт",
+   "en": "Cold Calculation"
+  },
+  {
+   "id": "necro_p_brittle",
+   "branch": "Q",
+   "r": "purple",
+   "ab": "necrolyte_death_pulse",
+   "max": 1,
+   "ru": "Хрупкие кости",
+   "en": "Brittle Bones",
+   "ru_d": "Death Pulse снижает сопротивление магии героев на 10% на 3 с.",
+   "en_d": "Death Pulse reduces hero magic resistance by 10% for 3 s.",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "icd": 1,
+     "debuff": {
+      "props": {
+       "mr": -10
+      },
+      "dur": 3
+     }
+    }
+   ]
+  },
+  {
+   "id": "necro_p_transfusion",
+   "branch": "Q",
+   "r": "purple",
+   "ab": "necrolyte_death_pulse",
+   "max": 1,
+   "ru": "Переливание",
+   "en": "Transfusion",
+   "ru_d": "Death Pulse возвращает ману в размере 25% нанесённого героям урона. Раз в секунду по цели.",
+   "en_d": "Death Pulse returns mana equal to 25% damage dealt to heroes. Once per second per target.",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "icd": 1,
+     "mana": 25
+    }
+   ]
+  },
+  {
+   "id": "necro_p_chill",
+   "branch": "W",
+   "r": "purple",
+   "ab": "necrolyte_ghost_shroud",
+   "max": 1,
+   "ru": "Холод могилы",
+   "en": "Grave Chill",
+   "ru_d": "После Ghost Shroud +12% усиления способностей на 3 с",
+   "en_d": "After Ghost Shroud: +12% spell amplification for 3 s",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 3,
+     "props": {
+      "sa": 12
+     }
+    }
+   ]
+  },
+  {
+   "id": "necro_p_veil",
+   "branch": "W",
+   "r": "purple",
+   "ab": "necrolyte_ghost_shroud",
+   "max": 1,
+   "ru": "Плотная вуаль",
+   "en": "Dense Veil",
+   "ru_d": "Во время Ghost Shroud +10% сопротивления магии",
+   "en_d": "During Ghost Shroud: +10% magic resistance",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "mr": 10
+     }
+    }
+   ]
+  },
+  {
+   "id": "necro_p_ossuary",
+   "branch": "E",
+   "r": "purple",
+   "ab": "necrolyte_heartstopper_aura",
+   "max": 1,
+   "ru": "Костница",
+   "en": "Ossuary",
+   "ru_d": "Пока изучена Heartstopper Aura, +4 брони",
+   "en_d": "While Heartstopper Aura is learned: +4 armor",
+   "fx": [
+    {
+     "t": "passive",
+     "props": {
+      "armor": 4
+     }
+    }
+   ]
+  },
+  {
+   "id": "necro_p_frailty",
+   "branch": "E",
+   "r": "purple",
+   "ab": "necrolyte_heartstopper_aura",
+   "max": 1,
+   "ru": "Немощь",
+   "en": "Frailty",
+   "ru_d": "Герои в 350 наносят на 8% меньше урона",
+   "en_d": "Heroes within 350 deal 8% less damage",
+   "fx": [
+    {
+     "t": "aura",
+     "radius": 350,
+     "props": {
+      "dmg": -8
+     },
+     "heroOnly": 1
+    }
+   ]
+  },
+  {
+   "id": "necro_p_lastbreath",
+   "branch": "R",
+   "r": "purple",
+   "ab": "necrolyte_reapers_scythe",
+   "max": 1,
+   "ru": "Последний вдох",
+   "en": "Last Breath",
+   "ru_d": "После Reaper’s Scythe следующая атака или Death Pulse по её цели за 4 с наносит 80 магического урона. Метка на цель — раз в 6 с.",
+   "en_d": "After Reaper’s Scythe, your next attack or Death Pulse on that target within 4 s deals 80 magic damage. Marks have a 6 s cooldown per target.",
+   "fx": [
+    {
+     "t": "mark",
+     "by": "cast",
+     "consume": [
+      "attack",
+      "necrolyte_death_pulse"
+     ],
+     "dur": 4,
+     "icd": 6,
+     "max": 1,
+     "dmg": 80
+    }
+   ]
+  },
+  {
+   "id": "necro_p_remains",
+   "branch": "R",
+   "r": "purple",
+   "ab": "necrolyte_reapers_scythe",
+   "max": 1,
+   "ru": "Нетленные останки",
+   "en": "Undying Remains",
+   "ru_d": "После применения Reaper’s Scythe Некрофос на 4 с получает +20% сопротивления эффектам. Общий предел сфер — 50%.",
+   "en_d": "Casting Reaper’s Scythe grants 20% status resistance for 4 s, within the shared 50% orb cap.",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 4,
+     "props": {
+      "status": 20
+     }
+    }
+   ]
+  },
+  {
+   "id": "necro_m_procession",
+   "branch": "Q",
+   "r": "purple",
+   "ab": "necrolyte_death_pulse",
+   "max": 1,
+   "ru": "Траурный путь",
+   "en": "Funeral Procession",
+   "ru_d": "3 с после Pulse остаётся след на 2 с: 25 магического урона в секунду и −5% сопротивления магии",
+   "en_d": "For 3 s after Pulse, leaves a 2 s trail: 25 magic damage per second and 5% magic resistance reduction",
+   "fx": [
+    {
+     "t": "trail",
+     "win": 3,
+     "dps": 25,
+     "radius": 140,
+     "life": 2,
+     "type": "magic",
+     "debuff": {
+      "props": {
+       "mr": -5
+      },
+      "dur": 1
+     }
+    }
+   ],
+   "mech": 1
+  },
+  {
+   "id": "necro_m_mortuary",
+   "branch": "W",
+   "r": "purple",
+   "ab": "necrolyte_ghost_shroud",
+   "max": 1,
+   "ru": "Круг забвения",
+   "en": "Circle of Oblivion",
+   "ru_d": "Ghost Shroud оставляет кольцо 200–450 на 4 с. Первый тик по герою наносит 105 магического урона, следующие по 25. Замедление 20%.",
+   "en_d": "Ghost Shroud leaves a 200–450 ring for 4 s. The first tick per hero deals 105 magic damage, later ticks deal 25. Slows by 20%.",
+   "fx": [
+    {
+     "t": "zone",
+     "at": "self",
+     "radius": 450,
+     "dur": 4,
+     "every": 1,
+     "dmg": 25,
+     "debuff": {
+      "props": {
+       "ms": -20
+      },
+      "dur": 1.2
+     },
+     "inner": 200,
+     "entryDmg": 80
+    }
+   ],
+   "mech": 1
+  },
+  {
+   "id": "necro_m_pallor",
+   "branch": "E",
+   "r": "purple",
+   "ab": "necrolyte_heartstopper_aura",
+   "max": 1,
+   "ru": "Смена дыхания",
+   "en": "Changing Breath",
+   "ru_d": "Death Pulse и Ghost Shroud за 4 с: импульс 110 магического урона в 325 и +15% усиления заклинаний на 3 с. КД 10 с.",
+   "en_d": "Death Pulse and Ghost Shroud within 4 s deal 110 magic damage in 325 and grant 15% spell amplification for 3 s. 10 s cooldown.",
+   "fx": [
+    {
+     "t": "combo",
+     "abs": [
+      "necrolyte_death_pulse",
+      "necrolyte_ghost_shroud"
+     ],
+     "need": 2,
+     "within": 4,
+     "icd": 10,
+     "radius": 325,
+     "dmg": 110,
+     "dur": 3,
+     "props": {
+      "sa": 15
+     }
+    }
+   ],
+   "mech": 1
+  },
+  {
+   "id": "necro_m_epitaph",
+   "branch": "R",
+   "r": "purple",
+   "ab": "necrolyte_reapers_scythe",
+   "max": 1,
+   "ru": "Эпитафия",
+   "en": "Epitaph",
+   "ru_d": "Scythe оставляет у цели одну ловушку на 8 с: готова через 2 с, 160 магического урона и замедление героя на 30% на 3 с",
+   "en_d": "Scythe leaves one trap at the target for 8 s: arms after 2 s, 160 magic damage and 30% slow to a hero for 3 s",
+   "fx": [
+    {
+     "t": "trap",
+     "at": "target",
+     "radius": 220,
+     "arm": 2,
+     "life": 8,
+     "max": 1,
+     "dmg": 160,
+     "type": "magic",
+     "debuff": {
+      "props": {
+       "ms": -30
+      },
+      "dur": 3
+     }
+    }
+   ],
+   "mech": 1
+  },
+  {
+   "id": "necro_l_garden",
+   "branch": "Q",
+   "r": "legend",
+   "ab": "necrolyte_death_pulse",
+   "max": 1,
+   "ru": "Сад увядания",
+   "en": "Withering Garden",
+   "ru_d": "Death Pulse отмечает до 4 героев на 8 с. Повторный Pulse спустя хотя бы 0,65 с наносит отмеченному герою 155 магического урона сверх обычного и лечит Некрофоса на 3% макс. здоровья. Метка на цель — раз в 9 с.",
+   "en_d": "Death Pulse marks up to 4 heroes for 8 s. A later Pulse after at least 0.65 s deals 155 extra magic damage and heals Necrophos for 3% max health. Marks have a 9 s cooldown per hero.",
+   "fx": [
+    {
+     "t": "mark",
+     "by": "ab",
+     "consume": [
+      "necrolyte_death_pulse"
+     ],
+     "dur": 8,
+     "icd": 9,
+     "max": 4,
+     "dmg": 155,
+     "arm": 0.65,
+     "heal": 3,
+     "aw": {
+      "dmg": 230,
+      "heal": 4
+     }
+    }
+   ],
+   "ru_aw": "Пробуждение: 230 урона и лечение 4% за метку.",
+   "en_aw": "Awakening: 230 damage and 4% healing per mark."
+  },
+  {
+   "id": "necro_l_breathcycle",
+   "branch": "W",
+   "r": "legend",
+   "ab": "necrolyte_ghost_shroud",
+   "max": 1,
+   "ru": "Между жизнью и смертью",
+   "en": "Between Life and Death",
+   "ru_d": "В течение 5 с после Ghost Shroud урон от героев в 12% макс. здоровья запускает ответ: 200 магического урона в 430, лечение 8% макс. здоровья и −15% получаемого урона на 3 с. КД 13 с.",
+   "en_d": "For 5 s after Ghost Shroud, taking hero damage equal to 12% max health retaliates for 200 magic damage within 430, heals 8% max health and grants 15% damage reduction for 3 s. 13 s cooldown.",
+   "fx": [
+    {
+     "t": "guard",
+     "win": 5,
+     "thr": 12,
+     "icd": 13,
+     "radius": 430,
+     "dmg": 200,
+     "dur": 3,
+     "props": {
+      "inc": -15
+     },
+     "heal": 8,
+     "aw": {
+      "dmg": 285,
+      "heal": 10,
+      "props": {
+       "inc": -20
+      }
+     }
+    }
+   ],
+   "ru_aw": "Пробуждение: 285 урона, лечение 10%, снижение урона 20%.",
+   "en_aw": "Awakening: 285 damage, 10% healing and 20% damage reduction."
+  },
+  {
+   "id": "necro_l_lastcircle",
+   "branch": "E",
+   "r": "legend",
+   "ab": "necrolyte_heartstopper_aura",
+   "max": 1,
+   "ru": "Круг немощи",
+   "en": "Circle of Frailty",
+   "ru_d": "Death Pulse оставляет зону 425 на 4 с. Первый тик по герою наносит 145 магического урона, остальные по 30. В зоне лечение слабее на 32%.",
+   "en_d": "Death Pulse leaves a 425-radius zone for 4 s. The first tick per hero deals 145 magic damage, later ticks deal 30. Healing is reduced by 32% inside.",
+   "fx": [
+    {
+     "t": "zone",
+     "ab": "necrolyte_death_pulse",
+     "at": "self",
+     "radius": 425,
+     "dur": 4,
+     "dmg": 30,
+     "entryDmg": 115,
+     "every": 1,
+     "debuff": {
+      "props": {
+       "healred": 32
+      },
+      "dur": 1.2
+     },
+     "aw": {
+      "entryDmg": 165,
+      "debuff": {
+       "props": {
+        "healred": 40
+       }
+      }
+     }
+    }
+   ],
+   "ru_aw": "Пробуждение: первый тик наносит 195, лечение слабее на 40%.",
+   "en_aw": "Awakening: 195 first tick damage, 40% healing reduction."
+  },
+  {
+   "id": "necro_l_testament",
+   "branch": "R",
+   "r": "legend",
+   "ab": "necrolyte_reapers_scythe",
+   "max": 1,
+   "ru": "Завещание",
+   "en": "Testament",
+   "ru_d": "Коса метит цель на 5 с. Следующий Death Pulse по ней наносит ещё 240 магического урона и лечит Некрофоса на 8% максимального здоровья. Метка не взрывается от самой Косы.",
+   "en_d": "Scythe marks its target for 5 s. The next Death Pulse deals 240 extra magic damage to it and heals Necrophos for 8% max health. Scythe itself cannot detonate the mark.",
+   "fx": [
+    {
+     "t": "mark",
+     "by": "cast",
+     "consume": [
+      "necrolyte_death_pulse"
+     ],
+     "dur": 5,
+     "icd": 10,
+     "max": 1,
+     "dmg": 240,
+     "heal": 8,
+     "aw": {
+      "dmg": 350,
+      "heal": 11
+     }
+    }
+   ],
+   "ru_aw": "Пробуждение: 350 урона и лечение 11%.",
+   "en_aw": "Awakening: 350 damage and 11% healing."
+  }
+ ]
+}

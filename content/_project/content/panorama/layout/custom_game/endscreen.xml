@@ -1,0 +1,29 @@
+<root>
+	<styles>
+		<include src="s2r://panorama/styles/dotastyles.vcss_c" />
+		<include src="file://{resources}/styles/custom_game/endscreen.css" />
+	</styles>
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/util.js" />
+		<include src="file://{resources}/scripts/custom_game/endscreen.js" />
+	</scripts>
+	<Panel class="EndRoot" hittest="true">
+		<Panel id="EndBox">
+			<Panel id="EndCrown" />
+			<Label id="EndTitle" text="" />
+			<Label id="EndReason" text="" />
+			<Panel id="EndHeader" class="EndRow Header">
+				<Label class="Place" text="#" />
+				<Label class="Hero" text="#orb_end_player" />
+				<Label class="Score" text="#orb_end_kda" />
+				<Label class="Nw" text="#orb_end_nw" />
+				<Label class="Titles" text="#orb_end_titles" />
+				<Label class="Build" text="#orb_end_build" />
+			</Panel>
+			<Panel id="EndRows" />
+			<Button id="EndClose" onactivate="Game.FinishGame()">
+				<Label text="#orb_end_close" />
+			</Button>
+		</Panel>
+	</Panel>
+</root>

@@ -1,0 +1,299 @@
+{
+ "hero": "npc_dota_hero_phantom_assassin",
+ "orbs": [
+  {
+   "id": "pa_p_bloodknife",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "phantom_assassin_stifling_dagger",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "heal": 40
+    }
+   ],
+   "ru": "Кровавый кинжал",
+   "en": "Blood Dagger",
+   "ru_d": "Stifling Dagger лечит на 40% урона по героям",
+   "en_d": "Stifling Dagger heals for 40% of its damage to heroes"
+  },
+  {
+   "id": "pa_p_rend",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "phantom_assassin_stifling_dagger",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "debuff": {
+      "props": {
+       "armor": -4
+      },
+      "dur": 3
+     }
+    }
+   ],
+   "ru": "Рассечение",
+   "en": "Rend",
+   "ru_d": "Stifling Dagger снижает броню цели на 4 на 3 с",
+   "en_d": "Stifling Dagger reduces the target's armor by 4 for 3 s"
+  },
+  {
+   "id": "pa_p_leech",
+   "r": "purple",
+   "branch": "W",
+   "ab": "phantom_assassin_phantom_strike",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "ls": 20
+     }
+    }
+   ],
+   "ru": "Пиявка",
+   "en": "Leech",
+   "ru_d": "После Phantom Strike 20% вампиризма атак по героям на 3 с",
+   "en_d": "After Phantom Strike 20% lifesteal on attacks against heroes for 3 s"
+  },
+  {
+   "id": "pa_p_surprise",
+   "r": "purple",
+   "branch": "W",
+   "ab": "phantom_assassin_phantom_strike",
+   "fx": [
+    {
+     "t": "crit",
+     "chance": 20,
+     "mult": 200,
+     "win": "duration"
+    }
+   ],
+   "ru": "Внезапность",
+   "en": "Surprise",
+   "ru_d": "3 с после Phantom Strike 20% шанс критического удара 200%",
+   "en_d": "For 3 s after Phantom Strike 20% chance to crit for 200%"
+  },
+  {
+   "id": "pa_p_ghoststep",
+   "r": "purple",
+   "branch": "E",
+   "ab": "phantom_assassin_immaterial",
+   "fx": [
+    {
+     "t": "passive",
+     "props": {
+      "ms": 8
+     }
+    }
+   ],
+   "ru": "Призрачный шаг",
+   "en": "Ghost Step",
+   "ru_d": "+8% скорости бега, пока изучен Immaterial",
+   "en_d": "+8% movement speed while Immaterial is learned"
+  },
+  {
+   "id": "pa_p_fade",
+   "r": "purple",
+   "branch": "E",
+   "ab": "phantom_assassin_immaterial",
+   "fx": [
+    {
+     "t": "lowhp",
+     "thr": 30,
+     "props": {
+      "evasion": 25
+     }
+    }
+   ],
+   "ru": "Растворение",
+   "en": "Fade",
+   "ru_d": "Ниже 30% здоровья +25% уклонения",
+   "en_d": "Below 30% health +25% evasion"
+  },
+  {
+   "id": "pa_p_harvest",
+   "r": "purple",
+   "branch": "R",
+   "ab": "phantom_assassin_coup_de_grace",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "any",
+     "heal": 25
+    }
+   ],
+   "ru": "Кровавая жатва",
+   "en": "Blood Harvest",
+   "ru_d": "Убийство героя лечит на 25% здоровья",
+   "en_d": "A hero kill heals 25% of max health"
+  },
+  {
+   "id": "pa_p_execute",
+   "r": "purple",
+   "branch": "R",
+   "ab": "phantom_assassin_coup_de_grace",
+   "fx": [
+    {
+     "t": "vs",
+     "lowhp": 30,
+     "attackOnly": 1,
+     "pct": 20
+    }
+   ],
+   "ru": "Казнь",
+   "en": "Execute",
+   "ru_d": "+20% урона атакой по героям ниже 30% здоровья",
+   "en_d": "+20% attack damage against heroes below 30% health"
+  },
+  {
+   "id": "pa_l_daggers",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "phantom_assassin_stifling_dagger",
+   "mods": "base_damage:+60",
+   "fx": [
+    {
+     "t": "charges",
+     "n": 1,
+     "aw": {
+      "n": 2
+     }
+    }
+   ],
+   "ru": "Веер кинжалов",
+   "en": "Dagger Fan",
+   "ru_d": "У Stifling Dagger есть запасной заряд, урон +60",
+   "en_d": "Stifling Dagger gets a spare charge, damage +60",
+   "ru_aw": "Пробуждение: 2 запасных заряда",
+   "en_aw": "Awakening: 2 spare charges"
+  },
+  {
+   "id": "pa_l_shadow",
+   "r": "legend",
+   "branch": "W",
+   "ab": "phantom_assassin_phantom_strike",
+   "mods": "AbilityCharges:+1;bonus_attack_speed:+60",
+   "awmods": "duration:+2",
+   "ru": "Танец теней",
+   "en": "Shadow Dance",
+   "ru_d": "Phantom Strike: +1 заряд, +60 скорости атаки",
+   "en_d": "Phantom Strike: +1 charge, +60 attack speed",
+   "ru_aw": "Пробуждение: бонус длится на 2 с дольше",
+   "en_aw": "Awakening: the bonus lasts 2 s longer"
+  },
+  {
+   "id": "pa_l_ghost",
+   "r": "legend",
+   "branch": "E",
+   "ab": "phantom_assassin_immaterial",
+   "mods": "evasion:+10",
+   "awmods": "evasion:+10",
+   "fx": [
+    {
+     "t": "passive",
+     "props": {
+      "ms": 10
+     }
+    }
+   ],
+   "ru": "Призрак",
+   "en": "Phantom",
+   "ru_d": "Уклонение Immaterial +10%, +10% скорости бега",
+   "en_d": "Immaterial evasion +10%, +10% movement speed",
+   "ru_aw": "Пробуждение: еще +10% уклонения",
+   "en_aw": "Awakening: another +10% evasion"
+  },
+  {
+   "id": "pa_l_coup",
+   "r": "legend",
+   "branch": "R",
+   "ab": "phantom_assassin_coup_de_grace",
+   "mods": "crit_chance:+8;crit_bonus:+75",
+   "awmods": "crit_bonus:+75",
+   "ru": "Последний удар",
+   "en": "Final Blow",
+   "ru_d": "Шанс Coup de Grace +8%, сила крита +75%",
+   "en_d": "Coup de Grace chance +8%, crit damage +75%",
+   "ru_aw": "Пробуждение: сила крита еще +75%",
+   "en_aw": "Awakening: crit damage another +75%"
+  },
+  {
+   "id": "pa_m_daggerfan",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "phantom_assassin_stifling_dagger",
+   "fx": [
+    {
+     "t": "multi",
+     "chance": 50,
+     "times": 2,
+     "delay": 0.25
+    }
+   ],
+   "ru": "Град кинжалов",
+   "en": "Dagger Hail",
+   "ru_d": "50% шанс бросить еще один кинжал (и еще один)",
+   "en_d": "50% chance to throw another dagger (and another)",
+   "mech": 1
+  },
+  {
+   "id": "pa_m_double",
+   "r": "purple",
+   "branch": "W",
+   "ab": "phantom_assassin_phantom_strike",
+   "fx": [
+    {
+     "t": "illusion",
+     "n": 1,
+     "dur": 6,
+     "out": -40,
+     "inc": 200
+    }
+   ],
+   "ru": "Фантомный двойник",
+   "en": "Phantom Double",
+   "ru_d": "Phantom Strike оставляет иллюзию на 6 с (60% урона)",
+   "en_d": "Phantom Strike leaves an illusion for 6 s (60% damage)",
+   "mech": 1
+  },
+  {
+   "id": "pa_m_blurloop",
+   "r": "purple",
+   "branch": "E",
+   "ab": "phantom_assassin_blur",
+   "fx": [
+    {
+     "t": "rewind",
+     "delay": 4,
+     "heal": 60
+    }
+   ],
+   "ru": "Петля тени",
+   "en": "Shadow Loop",
+   "ru_d": "Через 4 с после Blur ПА возвращается на место применения и восстанавливает 60% потерянного здоровья",
+   "en_d": "4 s after Blur, PA returns to where she cast it and restores 60% of the health she lost",
+   "mech": 1
+  },
+  {
+   "id": "pa_m_switch",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "phantom_assassin_stifling_dagger",
+   "fx": [
+    {
+     "t": "swap"
+    }
+   ],
+   "ru": "Подмена",
+   "en": "Switch",
+   "ru_d": "Stifling Dagger меняет ПА и цель местами",
+   "en_d": "Stifling Dagger swaps PA and the target",
+   "mech": 1
+  }
+ ]
+}

@@ -1,0 +1,23 @@
+.LoadRoot { width: 100%; height: 100%; background-color: gradient( radial, 50% 42%, 0% 0%, 80% 80%, from( #1d2433 ), to( #030406 ) ); }
+#LoadGlow {
+	width: 900px; height: 900px; horizontal-align: center; vertical-align: center; y: -60px;
+	background-color: gradient( radial, 50% 50%, 0% 0%, 50% 50%, from( #e8c26a26 ), to( #e8c26a00 ) );
+}
+#LoadCenter { horizontal-align: center; vertical-align: center; flow-children: down; y: -40px; }
+#LoadGems { horizontal-align: center; flow-children: right; margin-bottom: 8px; }
+.LoadGem { width: 22px; height: 22px; margin: 0px 6px; border-radius: 11px; border: 1px solid #ffffff77; box-shadow: 0px 0px 10px #00000099; }
+.LoadGem.grey { background-color: gradient( radial, 35% 30%, 0% 0%, 70% 70%, from( #ffffff ), to( #7d858e ) ); }
+.LoadGem.blue { background-color: gradient( radial, 35% 30%, 0% 0%, 70% 70%, from( #d8ecff ), to( #1d64cf ) ); }
+.LoadGem.purple { background-color: gradient( radial, 35% 30%, 0% 0%, 70% 70%, from( #f0dcff ), to( #7231cf ) ); }
+.LoadGem.legend { background-color: gradient( radial, 35% 30%, 0% 0%, 70% 70%, from( #fff3cf ), to( #e08a12 ) ); }
+#LoadTitle { horizontal-align: center; color: #f3d27c; font-size: 96px; font-weight: black; letter-spacing: 12px; text-shadow: 0px 0px 30px #e8c26a88; }
+#LoadTagline { horizontal-align: center; color: #c5ced8; font-size: 22px; margin-top: -6px; margin-bottom: 40px; }
+#LoadCards { horizontal-align: center; flow-children: right; }
+.LoadCard {
+	width: 300px; margin: 0px 12px; padding: 18px 20px; flow-children: down;
+	background-color: gradient( linear, 0% 0%, 0% 100%, from( #1b212bcc ), to( #0b0e13cc ) );
+	border: 1px solid #ffffff1f; border-radius: 12px;
+}
+.LoadCard .LoadGem { horizontal-align: left; margin: 0px 0px 10px 0px; }
+.LoadCardTitle { color: #ffffff; font-size: 20px; font-weight: bold; margin-bottom: 6px; }
+.LoadCardText { color: #b9c3cd; font-size: 15px; }

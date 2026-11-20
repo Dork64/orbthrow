@@ -1,0 +1,199 @@
+{
+  "AbilityDamage": [
+    "Урон",
+    "Damage"
+  ],
+  "damage": [
+    "Урон",
+    "Damage"
+  ],
+  "heal": [
+    "Лечение",
+    "Healing"
+  ],
+  "duration": [
+    "Длительность",
+    "Duration",
+    "s"
+  ],
+  "movement_speed": [
+    "Изменение скорости бега",
+    "Movement speed change",
+    "%"
+  ],
+  "aura_radius": [
+    "Радиус ауры",
+    "Aura radius"
+  ],
+  "aura_damage": [
+    "Урон ауры от макс. здоровья в секунду",
+    "Aura damage from max health per second",
+    "%"
+  ],
+  "regen": [
+    "Регенерация за заряд",
+    "Regeneration per stack"
+  ],
+  "damage_per_health": [
+    "Коэффициент урона за недостающее здоровье",
+    "Missing health damage multiplier"
+  ],
+  "AbilityCastRange": [
+    "Дальность применения",
+    "Cast range"
+  ],
+  "AbilityManaCost": [
+    "Расход маны",
+    "Mana cost"
+  ],
+  "radius": [
+    "Радиус",
+    "Radius"
+  ],
+  "silence_duration": [
+    "Длительность немоты",
+    "Silence duration",
+    "s"
+  ],
+  "mana_and_health_restore_pct": [
+    "Восстановление здоровья и маны",
+    "Health and mana restored",
+    "%"
+  ],
+  "coil_initial_damage": [
+    "Начальный урон Coil",
+    "Initial Coil damage"
+  ],
+  "coil_duration": [
+    "Длительность Coil",
+    "Coil duration",
+    "s"
+  ],
+  "damage_max": [
+    "Максимальный урон",
+    "Maximum damage"
+  ],
+  "slow_duration": [
+    "Длительность замедления",
+    "Slow duration",
+    "s"
+  ],
+  "drain_rate": [
+    "Кража урона в секунду",
+    "Damage stolen per second"
+  ],
+  "drain_length": [
+    "Длительность связи",
+    "Link duration",
+    "s"
+  ],
+  "strike_damage": [
+    "Урон разряда",
+    "Discharge damage"
+  ],
+  "strike_slow_duration": [
+    "Длительность замедления разрядом",
+    "Discharge slow duration",
+    "s"
+  ],
+  "strike_search_radius": [
+    "Радиус поиска цели",
+    "Target search radius"
+  ],
+  "burrow_width": [
+    "Ширина прокола",
+    "Burrowstrike width"
+  ],
+  "burrow_duration": [
+    "Длительность оглушения",
+    "Stun duration",
+    "s"
+  ],
+  "sand_storm_damage": [
+    "Урон песчаной бури в секунду",
+    "Sand Storm damage per second"
+  ],
+  "sand_storm_radius": [
+    "Радиус песчаной бури",
+    "Sand Storm radius"
+  ],
+  "AbilityDuration": [
+    "Длительность",
+    "Duration",
+    "s"
+  ],
+  "attack_damage": [
+    "Бонус урона атаки",
+    "Attack damage bonus"
+  ],
+  "epicenter_damage": [
+    "Урон за толчок",
+    "Damage per pulse"
+  ],
+  "epicenter_slow_as": [
+    "Изменение скорости атаки врага",
+    "Enemy attack speed change"
+  ],
+  "total_damage": [
+    "Суммарный урон",
+    "Total damage"
+  ],
+  "leash_duration": [
+    "Длительность привязки",
+    "Leash duration",
+    "s"
+  ],
+  "pounce_radius": [
+    "Радиус попадания прыжком",
+    "Pounce collision radius"
+  ],
+  "leash_radius": [
+    "Радиус привязки",
+    "Leash radius"
+  ],
+  "health_rest_steal": [
+    "Кража восстановления здоровья",
+    "Health restoration stolen",
+    "%"
+  ],
+  "regen_steal": [
+    "Кража регенерации",
+    "Regeneration stolen",
+    "%"
+  ],
+  "ms_steal": [
+    "Кража скорости бега",
+    "Movement speed stolen",
+    "%"
+  ],
+  "speed_bonus": [
+    "Скорость бега",
+    "Movement speed",
+    "%"
+  ],
+  "speed_duration": [
+    "Длительность ускорения",
+    "Speed bonus duration",
+    "s"
+  ],
+  "dragon_slave_width_initial": [
+    "Ширина у начала волны",
+    "Starting width"
+  ],
+  "dragon_slave_width_end": [
+    "Ширина у конца волны",
+    "Ending width"
+  ],
+  "explosion_max_dist": [
+    "Максимальная дальность взрывов",
+    "Maximum explosion distance"
+  ],
+  "health_regen": [
+    "Восстановление здоровья в секунду",
+    "Health regeneration per second"
+  ],
+  "armor": [
+    "Броня",
+    "Armor"
+  ]
+}

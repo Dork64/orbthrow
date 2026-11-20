@@ -1,0 +1,338 @@
+{
+ "hero": "npc_dota_hero_faceless_void",
+ "orbs": [
+  {
+   "id": "void_p_afterimage",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "faceless_void_time_walk",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 3,
+     "props": {
+      "as": 60
+     }
+    }
+   ],
+   "ru": "Остаточный образ",
+   "en": "Afterimage",
+   "ru_d": "После Time Walk +60 скорости атаки на 3 с",
+   "en_d": "After Time Walk: +60 attack speed for 3 s"
+  },
+  {
+   "id": "void_p_shatter",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "faceless_void_time_walk",
+   "fx": [
+    {
+     "t": "blast",
+     "at": "point",
+     "delay": 0.3,
+     "radius": 275,
+     "dmg": 150,
+     "type": "magic",
+     "debuff": {
+      "props": {
+       "ms": -30
+      },
+      "dur": 2
+     },
+     "pfx": "particles/units/heroes/hero_ursa/ursa_earthshock.vpcf"
+    }
+   ],
+   "ru": "Удар временем",
+   "en": "Time Shatter",
+   "ru_d": "В конце Time Walk волна: 150 урона и −30% скорости врагам рядом на 2 с",
+   "en_d": "Time Walk ends with a shockwave: 150 damage and −30% movement speed to nearby enemies for 2 s"
+  },
+  {
+   "id": "void_p_stagnation",
+   "r": "purple",
+   "branch": "W",
+   "ab": "faceless_void_time_dilation",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "healred": 40
+      },
+      "dur": 3
+     }
+    }
+   ],
+   "ru": "Застой",
+   "en": "Stagnation",
+   "ru_d": "Враги под Time Dilation получают на 40% меньше лечения",
+   "en_d": "Enemies under Time Dilation receive 40% less healing"
+  },
+  {
+   "id": "void_p_timeguard",
+   "r": "purple",
+   "branch": "W",
+   "ab": "faceless_void_time_dilation",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 5,
+     "props": {
+      "castrange": 175,
+      "mr": 12
+     }
+    }
+   ],
+   "ru": "Хрономант",
+   "en": "Chronomancer",
+   "ru_d": "После Time Dilation на 5 с: +175 дальности способностей и +12% сопротивления магии",
+   "en_d": "After Time Dilation: +175 cast range and +12% magic resistance for 5 s"
+  },
+  {
+   "id": "void_p_frozen",
+   "r": "purple",
+   "branch": "E",
+   "ab": "faceless_void_time_lock",
+   "fx": [
+    {
+     "t": "vs",
+     "cond": "stunned",
+     "pct": 20
+    }
+   ],
+   "ru": "Бить замершего",
+   "en": "Strike the Frozen",
+   "ru_d": "+20% урона по оглушенным врагам",
+   "en_d": "+20% damage against stunned enemies"
+  },
+  {
+   "id": "void_p_fifth",
+   "r": "purple",
+   "branch": "E",
+   "ab": "faceless_void_time_lock",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "attack",
+     "every": 5,
+     "heroOnly": 1,
+     "extra": {
+      "atk": 60,
+      "type": "phys"
+     }
+    }
+   ],
+   "ru": "Пятая секунда",
+   "en": "Fifth Second",
+   "ru_d": "Каждая 5-я атака по одному герою наносит еще 60% урона атаки",
+   "en_d": "Every 5th attack on the same hero deals an extra 60% of attack damage"
+  },
+  {
+   "id": "void_p_feast",
+   "r": "purple",
+   "branch": "R",
+   "ab": "faceless_void_chronosphere",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "ls": 30
+     }
+    }
+   ],
+   "ru": "Пир во времени",
+   "en": "Feast in Time",
+   "ru_d": "Во время Chronosphere Войд получает 30% вампиризма",
+   "en_d": "During Chronosphere Void gets 30% lifesteal"
+  },
+  {
+   "id": "void_p_chronokill",
+   "r": "purple",
+   "branch": "R",
+   "ab": "faceless_void_chronosphere",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "win",
+     "win": "duration",
+     "cdpct": 30
+    }
+   ],
+   "ru": "Петля",
+   "en": "The Loop",
+   "ru_d": "Каждое убийство героя в Chronosphere сокращает ее перезарядку на 30%",
+   "en_d": "Every hero kill inside Chronosphere cuts its cooldown by 30%"
+  },
+  {
+   "id": "void_m_twin",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "faceless_void_time_walk",
+   "fx": [
+    {
+     "t": "illusion",
+     "n": 1,
+     "dur": 6,
+     "out": -40,
+     "inc": 200
+    }
+   ],
+   "ru": "Двойник из прошлого",
+   "en": "Twin from the Past",
+   "ru_d": "Time Walk оставляет иллюзию Войда на 6 с (60% урона)",
+   "en_d": "Time Walk leaves an illusion of Void for 6 s (60% damage)",
+   "mech": 1
+  },
+  {
+   "id": "void_m_vortex",
+   "r": "purple",
+   "branch": "W",
+   "ab": "faceless_void_time_dilation",
+   "fx": [
+    {
+     "t": "pull",
+     "at": "self",
+     "radius": "radius",
+     "dist": 250,
+     "pfx": "particles/units/heroes/hero_dark_seer/dark_seer_vacuum.vpcf"
+    }
+   ],
+   "ru": "Временная воронка",
+   "en": "Time Vortex",
+   "ru_d": "Time Dilation притягивает врагов к Войду на 250",
+   "en_d": "Time Dilation drags enemies 250 towards Void",
+   "mech": 1
+  },
+  {
+   "id": "void_m_timetrap",
+   "r": "purple",
+   "branch": "W",
+   "ab": "faceless_void_time_dilation",
+   "fx": [
+    {
+     "t": "trap",
+     "at": "self",
+     "radius": 250,
+     "arm": 1,
+     "life": 30,
+     "max": 2,
+     "dmg": 80,
+     "type": "magic",
+     "debuff": {
+      "props": {
+       "stun": 1
+      },
+      "dur": 1.2
+     }
+    }
+   ],
+   "ru": "Капкан времени",
+   "en": "Time Trap",
+   "ru_d": "Time Dilation оставляет под Войдом капкан (до 2): первый подошедший герой замирает на 1.2 с",
+   "en_d": "Time Dilation leaves a trap under Void (up to 2): the first hero to step on it freezes for 1.2 s",
+   "mech": 1
+  },
+  {
+   "id": "void_m_rifts",
+   "r": "purple",
+   "branch": "R",
+   "ab": "faceless_void_chronosphere",
+   "fx": [
+    {
+     "t": "storm",
+     "win": "duration",
+     "every": 0.5,
+     "radius": "radius",
+     "dmg": 60,
+     "type": "magic"
+    }
+   ],
+   "ru": "Разрывы времени",
+   "en": "Time Rifts",
+   "ru_d": "Во время Chronosphere каждые 0.5 с разрыв времени бьет случайного врага в сфере (60 урона)",
+   "en_d": "During Chronosphere a time rift hits a random enemy inside every 0.5 s (60 damage)",
+   "mech": 1
+  },
+  {
+   "id": "void_l_walk",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "faceless_void_time_walk",
+   "mods": "range:+200",
+   "fx": [
+    {
+     "t": "charges",
+     "n": 1,
+     "aw": {
+      "n": 2
+     }
+    }
+   ],
+   "ru": "Шаги во времени",
+   "en": "Steps in Time",
+   "ru_d": "У Time Walk есть запасной заряд, дальность +200",
+   "en_d": "Time Walk gets a spare charge, range +200",
+   "ru_aw": "Пробуждение: 2 запасных заряда",
+   "en_aw": "Awakening: 2 spare charges"
+  },
+  {
+   "id": "void_l_dilation",
+   "r": "legend",
+   "branch": "W",
+   "ab": "faceless_void_time_dilation",
+   "mods": "radius:+200;duration:+3",
+   "awmods": "damage_per_stack:+6",
+   "ru": "Остановка мира",
+   "en": "World Stop",
+   "ru_d": "Time Dilation: радиус +200, длительность +3 с",
+   "en_d": "Time Dilation: radius +200, duration +3 s",
+   "ru_aw": "Пробуждение: урон за заряд +6",
+   "en_aw": "Awakening: damage per charge +6"
+  },
+  {
+   "id": "void_l_lock",
+   "r": "legend",
+   "branch": "E",
+   "ab": "faceless_void_time_lock",
+   "mods": "chance_pct:+10;bonus_damage:+20",
+   "awmods": "duration:+0.3",
+   "ru": "Застывшее мгновение",
+   "en": "Frozen Moment",
+   "ru_d": "Time Lock: шанс +10%, урон +20",
+   "en_d": "Time Lock: +10% chance, +20 damage",
+   "ru_aw": "Пробуждение: оглушение +0.3 с",
+   "en_aw": "Awakening: stun +0.3 s"
+  },
+  {
+   "id": "void_l_chrono",
+   "r": "legend",
+   "branch": "R",
+   "ab": "faceless_void_chronosphere",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "as": 120,
+      "dmg": 20
+     },
+     "aw": {
+      "props": {
+       "as": 160,
+       "dmg": 35
+      }
+     }
+    }
+   ],
+   "ru": "Хозяин времени",
+   "en": "Master of Time",
+   "ru_d": "Во время Chronosphere +120 скорости атаки и +20% урона",
+   "en_d": "During Chronosphere: +120 attack speed and +20% damage",
+   "ru_aw": "Пробуждение: +160 скорости атаки и +35% урона",
+   "en_aw": "Awakening: +160 attack speed and +35% damage"
+  }
+ ]
+}

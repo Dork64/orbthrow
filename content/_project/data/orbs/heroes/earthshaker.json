@@ -1,0 +1,340 @@
+{
+ "hero": "npc_dota_hero_earthshaker",
+ "orbs": [
+  {
+   "id": "es_p_rift",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "earthshaker_fissure",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "debuff": {
+      "props": {
+       "ms": -30
+      },
+      "dur": 3,
+      "delay": "stun_duration"
+     }
+    }
+   ],
+   "ru": "Трещина",
+   "en": "Rift",
+   "ru_d": "После оглушения Fissure враги еще 3 с замедлены на 30%",
+   "en_d": "After the Fissure stun enemies are slowed by 30% for 3 more seconds"
+  },
+  {
+   "id": "es_p_tremor",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "earthshaker_fissure",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "cdr": {
+      "abs": [
+       "earthshaker_echo_slam"
+      ],
+      "sec": 5
+     }
+    }
+   ],
+   "ru": "Предвестник",
+   "en": "Harbinger",
+   "ru_d": "Каждый герой, задетый Fissure, сокращает перезарядку Echo Slam на 5 с",
+   "en_d": "Each hero hit by Fissure reduces Echo Slam's cooldown by 5 s"
+  },
+  {
+   "id": "es_p_lifetotem",
+   "r": "purple",
+   "branch": "W",
+   "ab": "earthshaker_enchant_totem",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 5,
+     "props": {
+      "ls": 30
+     }
+    }
+   ],
+   "ru": "Тотем жизни",
+   "en": "Totem of Life",
+   "ru_d": "5 с после Enchant Totem атаки по героям лечат на 30% урона",
+   "en_d": "For 5 s after Enchant Totem attacks on heroes heal for 30% of the damage"
+  },
+  {
+   "id": "es_p_stoneskin",
+   "r": "purple",
+   "branch": "W",
+   "ab": "earthshaker_enchant_totem",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 5,
+     "props": {
+      "armor": 8
+     }
+    }
+   ],
+   "ru": "Каменная кожа",
+   "en": "Stoneskin",
+   "ru_d": "Enchant Totem дает +8 брони на 5 с",
+   "en_d": "Enchant Totem grants +8 armor for 5 s"
+  },
+  {
+   "id": "es_p_concussion",
+   "r": "purple",
+   "branch": "E",
+   "ab": "earthshaker_aftershock",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "mr": -8
+      },
+      "dur": 4,
+      "max": 3
+     }
+    }
+   ],
+   "ru": "Сотрясение",
+   "en": "Concussion",
+   "ru_d": "Aftershock снижает сопротивление магии героев на 8% на 4 с (до 3 раз)",
+   "en_d": "Aftershock reduces heroes' magic resistance by 8% for 4 s (up to 3 times)"
+  },
+  {
+   "id": "es_p_earthpower",
+   "r": "purple",
+   "branch": "E",
+   "ab": "earthshaker_aftershock",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "heal": 25
+    }
+   ],
+   "ru": "Сила земли",
+   "en": "Earth Power",
+   "ru_d": "Aftershock лечит Шейкера на 25% урона по героям",
+   "en_d": "Aftershock heals Earthshaker for 25% of its damage to heroes"
+  },
+  {
+   "id": "es_p_echolife",
+   "r": "purple",
+   "branch": "R",
+   "ab": "earthshaker_echo_slam",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "heal": 10
+    }
+   ],
+   "ru": "Отголосок жизни",
+   "en": "Echo of Life",
+   "ru_d": "Echo Slam лечит на 10% урона по героям",
+   "en_d": "Echo Slam heals for 10% of its damage to heroes"
+  },
+  {
+   "id": "es_p_victory",
+   "r": "purple",
+   "branch": "R",
+   "ab": "earthshaker_echo_slam",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "ab",
+     "cdpct": 50
+    }
+   ],
+   "ru": "Эхо победы",
+   "en": "Echo of Victory",
+   "ru_d": "Убийство героя Echo Slam снимает половину его перезарядки",
+   "en_d": "A hero kill with Echo Slam removes half of its cooldown"
+  },
+  {
+   "id": "es_l_rift",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "earthshaker_fissure",
+   "mods": "fissure_damage:+100",
+   "awmods": "stun_duration:+0.4",
+   "fx": [
+    {
+     "t": "charges",
+     "n": 1
+    }
+   ],
+   "ru": "Разлом",
+   "en": "Great Rift",
+   "ru_d": "У Fissure есть запасной заряд, урон +100",
+   "en_d": "Fissure gets a spare charge, damage +100",
+   "ru_aw": "Пробуждение: оглушение +0.4 с",
+   "en_aw": "Awakening: stun +0.4 s"
+  },
+  {
+   "id": "es_l_faultline",
+   "r": "legend",
+   "branch": "W",
+   "ab": "earthshaker_enchant_totem",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "attack",
+     "win": 4,
+     "heroOnly": 1,
+     "icd": 4,
+     "extra": {
+      "maxhp": 5,
+      "type": "magic"
+     },
+     "debuff": {
+      "props": {
+       "root": 1
+      },
+      "dur": 0.6
+     },
+     "aw": {
+      "extra": {
+       "maxhp": 7,
+       "type": "magic"
+      }
+     }
+    }
+   ],
+   "ru": "Линия разлома",
+   "en": "Fault Line",
+   "ru_d": "В течение 4 с после Enchant Totem атака по герою наносит ещё 5% его максимального здоровья магическим уроном и обездвиживает на 0.6 с; раз в 4 с по каждой цели",
+   "en_d": "For 4 s after Enchant Totem, attacking a hero deals 5% of their max health as magic damage and roots for 0.6 s; once per 4 s per target",
+   "ru_aw": "Пробуждение: дополнительный урон 7% здоровья",
+   "en_aw": "Awakening: extra damage is 7% max health"
+  },
+  {
+   "id": "es_l_aftershock",
+   "r": "legend",
+   "branch": "E",
+   "ab": "earthshaker_aftershock",
+   "mods": "aftershock_range:+150;aftershock_damage:+60",
+   "awmods": "AbilityDuration:+0.4",
+   "ru": "Толчки",
+   "en": "Tremors",
+   "ru_d": "Радиус Aftershock +150, урон +60",
+   "en_d": "Aftershock radius +150, damage +60",
+   "ru_aw": "Пробуждение: оглушение +0.4 с",
+   "en_aw": "Awakening: stun +0.4 s"
+  },
+  {
+   "id": "es_l_apocalypse",
+   "r": "legend",
+   "branch": "R",
+   "ab": "earthshaker_echo_slam",
+   "mods": "echo_slam_echo_damage:+40",
+   "fx": [
+    {
+     "t": "echo",
+     "delays": [
+      1.0
+     ],
+     "pct": 40,
+     "aw": {
+      "pct": 70
+     }
+    }
+   ],
+   "ru": "Апокалипсис",
+   "en": "Apocalypse",
+   "ru_d": "Урон эха Echo Slam +40; через 1 с Echo Slam повторяет 40% урона по тем же целям",
+   "en_d": "Echo Slam echo damage +40; 1 s later Echo Slam repeats 40% of its damage to the same targets",
+   "ru_aw": "Пробуждение: повтор 70% урона",
+   "en_aw": "Awakening: repeat deals 70%"
+  },
+  {
+   "id": "es_m_stoneecho",
+   "r": "purple",
+   "branch": "W",
+   "ab": "earthshaker_enchant_totem",
+   "fx": [
+    {
+     "t": "illusion",
+     "n": 1,
+     "dur": 6,
+     "out": -65,
+     "inc": 200
+    }
+   ],
+   "ru": "Каменное эхо",
+   "en": "Stone Echo",
+   "ru_d": "Enchant Totem создаёт иллюзию на 6 с: 35% урона, получает втрое больше урона",
+   "en_d": "Enchant Totem creates an illusion for 6 s: 35% damage dealt, triple damage taken",
+   "mech": 1
+  },
+  {
+   "id": "es_m_doublefissure",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "earthshaker_fissure",
+   "fx": [
+    {
+     "t": "multi",
+     "chance": 35,
+     "times": 1,
+     "delay": 0.4
+    }
+   ],
+   "ru": "Двойной разлом",
+   "en": "Double Fissure",
+   "ru_d": "35% шанс второго Fissure в ту же сторону",
+   "en_d": "35% chance of a second Fissure in the same direction",
+   "mech": 1
+  },
+  {
+   "id": "es_m_epicenter",
+   "r": "purple",
+   "branch": "R",
+   "ab": "earthshaker_echo_slam",
+   "fx": [
+    {
+     "t": "pull",
+     "at": "self",
+     "radius": 750,
+     "dist": 450,
+     "pfx": "particles/units/heroes/hero_dark_seer/dark_seer_vacuum.vpcf"
+    }
+   ],
+   "ru": "Эпицентр",
+   "en": "Epicenter",
+   "ru_d": "Echo Slam стягивает врагов в 750 к Шейкеру",
+   "en_d": "Echo Slam drags enemies within 750 to Earthshaker",
+   "mech": 1
+  },
+  {
+   "id": "es_m_autototem",
+   "r": "purple",
+   "branch": "W",
+   "ab": "earthshaker_enchant_totem",
+   "fx": [
+    {
+     "t": "auto",
+     "every": 6,
+     "range": 250,
+     "heroOnly": 1
+    }
+   ],
+   "ru": "Тотем сам",
+   "en": "Auto Totem",
+   "ru_d": "Раз в 6 с Enchant Totem срабатывает сам, если рядом (250) вражеский герой",
+   "en_d": "Every 6 s Enchant Totem triggers by itself when an enemy hero is within 250",
+   "mech": 1
+  }
+ ]
+}

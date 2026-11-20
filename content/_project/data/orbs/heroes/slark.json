@@ -1,0 +1,564 @@
+{
+ "hero": "npc_dota_hero_slark",
+ "orbs": [
+  {
+   "id": "slark_b_1",
+   "r": "blue",
+   "branch": "Q",
+   "ab": "slark_dark_pact",
+   "mods": "total_damage:%20",
+   "max": 4,
+   "ru": "Тёмная волна",
+   "en": "Dark Wave"
+  },
+  {
+   "id": "slark_b_2",
+   "r": "blue",
+   "branch": "Q",
+   "ab": "slark_dark_pact",
+   "mods": "radius:30",
+   "max": 3,
+   "ru": "Широкий прилив",
+   "en": "Wide Tide"
+  },
+  {
+   "id": "slark_b_3",
+   "r": "blue",
+   "branch": "Q",
+   "ab": "slark_dark_pact",
+   "mods": "cd:10",
+   "max": 4,
+   "ru": "Быстрый пакт",
+   "en": "Quick Pact"
+  },
+  {
+   "id": "slark_b_4",
+   "r": "blue",
+   "branch": "W",
+   "ab": "slark_pounce",
+   "mods": "leash_duration:0.2:s",
+   "max": 3,
+   "ru": "Цепкая хватка",
+   "en": "Firm Leash"
+  },
+  {
+   "id": "slark_b_5",
+   "r": "blue",
+   "branch": "W",
+   "ab": "slark_pounce",
+   "mods": "pounce_radius:16",
+   "max": 3,
+   "ru": "Точный прыжок",
+   "en": "Precise Pounce"
+  },
+  {
+   "id": "slark_b_6",
+   "r": "blue",
+   "branch": "W",
+   "ab": "slark_pounce",
+   "mods": "leash_radius:-20",
+   "max": 3,
+   "ru": "Тесный круг",
+   "en": "Tight Circle"
+  },
+  {
+   "id": "slark_b_7",
+   "r": "blue",
+   "branch": "E",
+   "ab": "slark_saltwater_shiv",
+   "mods": "health_rest_steal:2",
+   "max": 3,
+   "ru": "Солёная рана",
+   "en": "Salt Wound"
+  },
+  {
+   "id": "slark_b_8",
+   "r": "blue",
+   "branch": "E",
+   "ab": "slark_saltwater_shiv",
+   "mods": "regen_steal:2",
+   "max": 3,
+   "ru": "Иссякание",
+   "en": "Depletion"
+  },
+  {
+   "id": "slark_b_9",
+   "r": "blue",
+   "branch": "E",
+   "ab": "slark_saltwater_shiv",
+   "mods": "ms_steal:2:%",
+   "max": 3,
+   "ru": "Украденный шаг",
+   "en": "Stolen Step"
+  },
+  {
+   "id": "slark_b_10",
+   "r": "blue",
+   "branch": "R",
+   "ab": "slark_shadow_dance",
+   "mods": "duration:0.3:s",
+   "max": 3,
+   "ru": "Долгие сумерки",
+   "en": "Long Twilight"
+  },
+  {
+   "id": "slark_b_11",
+   "r": "blue",
+   "branch": "R",
+   "ab": "slark_shadow_dance",
+   "mods": "cd:10",
+   "max": 4,
+   "ru": "Зов глубины",
+   "en": "Call of the Deep"
+  },
+  {
+   "id": "slark_b_12",
+   "r": "blue",
+   "branch": "R",
+   "ab": "slark_shadow_dance",
+   "mods": "AbilityManaCost:-12",
+   "max": 3,
+   "ru": "Тихая глубина",
+   "en": "Quiet Depths"
+  },
+  {
+   "id": "slark_p_brine",
+   "branch": "Q",
+   "r": "purple",
+   "ab": "slark_dark_pact",
+   "max": 1,
+   "ru": "Солёный прилив",
+   "en": "Brine Tide",
+   "ru_d": "15% урона Dark Pact по героям лечит Сларка",
+   "en_d": "15% of Dark Pact hero damage heals Slark",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "heal": 15
+    }
+   ]
+  },
+  {
+   "id": "slark_p_silt",
+   "branch": "Q",
+   "r": "purple",
+   "ab": "slark_dark_pact",
+   "max": 1,
+   "ru": "Ил в глазах",
+   "en": "Silt in the Eyes",
+   "ru_d": "Dark Pact снижает скорость атаки героев на 25 на 3 с, раз в секунду по цели",
+   "en_d": "Dark Pact reduces hero attack speed by 25 for 3 s, once per second per target",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "as": -25
+      },
+      "dur": 3
+     },
+     "icd": 1
+    }
+   ]
+  },
+  {
+   "id": "slark_p_scales",
+   "branch": "W",
+   "r": "purple",
+   "ab": "slark_pounce",
+   "max": 1,
+   "ru": "Скользкая чешуя",
+   "en": "Slick Scales",
+   "ru_d": "После Pounce +8 брони и +20% сопротивления замедлению на 3 с.",
+   "en_d": "After Pounce: 8 armor and 20% slow resistance for 3 s.",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 3,
+     "props": {
+      "armor": 8,
+      "slowres": 20
+     }
+    }
+   ]
+  },
+  {
+   "id": "slark_p_bite",
+   "branch": "W",
+   "r": "purple",
+   "ab": "slark_pounce",
+   "max": 1,
+   "ru": "Голодный заход",
+   "en": "Hungry Approach",
+   "ru_d": "После Pounce 15% вампиризма атак по героям на 4 с",
+   "en_d": "After Pounce: 15% attack lifesteal against heroes for 4 s",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 4,
+     "props": {
+      "ls": 15
+     }
+    }
+   ]
+  },
+  {
+   "id": "slark_p_cut",
+   "branch": "E",
+   "r": "purple",
+   "ab": "slark_saltwater_shiv",
+   "max": 1,
+   "ru": "Рваный надрез",
+   "en": "Ragged Cut",
+   "ru_d": "При применении Saltwater Shiv через 0.15 с цель окружает всплеск радиусом 160: 55 магического урона",
+   "en_d": "Casting Saltwater Shiv creates a splash around its target after 0.15 s: 160 radius, 55 magic damage",
+   "fx": [
+    {
+     "t": "blast",
+     "at": "target",
+     "delay": 0.15,
+     "radius": 160,
+     "dmg": 55,
+     "type": "magic"
+    }
+   ]
+  },
+  {
+   "id": "slark_p_openseam",
+   "branch": "E",
+   "r": "purple",
+   "ab": "slark_saltwater_shiv",
+   "max": 1,
+   "ru": "Открытый шов",
+   "en": "Open Seam",
+   "ru_d": "При применении Saltwater Shiv броня врагов в 140 вокруг цели снижается на 3 на 4 с",
+   "en_d": "Casting Saltwater Shiv reduces enemy armor within 140 of its target by 3 for 4 s",
+   "fx": [
+    {
+     "t": "blast",
+     "at": "target",
+     "delay": 0.15,
+     "radius": 140,
+     "dmg": 0,
+     "type": "magic",
+     "debuff": {
+      "props": {
+       "armor": -3
+      },
+      "dur": 4
+     }
+    }
+   ]
+  },
+  {
+   "id": "slark_p_reach",
+   "branch": "R",
+   "r": "purple",
+   "ab": "slark_shadow_dance",
+   "max": 1,
+   "ru": "Руки из глубины",
+   "en": "Hands from Below",
+   "ru_d": "Во время Shadow Dance +75 дальности атаки и +150 дальности способностей",
+   "en_d": "During Shadow Dance: +75 attack range and +150 cast range",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "range": 75,
+      "castrange": 150
+     }
+    }
+   ]
+  },
+  {
+   "id": "slark_p_escape",
+   "branch": "R",
+   "r": "purple",
+   "ab": "slark_shadow_dance",
+   "max": 1,
+   "ru": "Живым в глубину",
+   "en": "Dive Alive",
+   "ru_d": "Во время Shadow Dance каждая 3-я атака по одному герою лечит на 70% нанесённого этой атакой урона. Раз в 1,5 с по цели.",
+   "en_d": "During Shadow Dance, every third attack against a hero heals for 70% of that attack’s damage. Once per 1.5 s per target.",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "attack",
+     "heroOnly": 1,
+     "win": "duration",
+     "every": 3,
+     "icd": 1.5,
+     "heal": 70
+    }
+   ]
+  },
+  {
+   "id": "slark_m_salttrail",
+   "branch": "Q",
+   "r": "purple",
+   "ab": "slark_dark_pact",
+   "max": 1,
+   "ru": "След отлива",
+   "en": "Ebb Trail",
+   "ru_d": "3 с после Dark Pact остаётся след на 2 с: 30 магического урона в секунду и −15% скорости",
+   "en_d": "For 3 s after Dark Pact, leaves a 2 s trail: 30 magic damage per second and 15% slow",
+   "fx": [
+    {
+     "t": "trail",
+     "win": 3,
+     "dps": 30,
+     "radius": 150,
+     "life": 2,
+     "type": "magic",
+     "debuff": {
+      "props": {
+       "ms": -15
+      },
+      "dur": 1
+     }
+    }
+   ],
+   "mech": 1
+  },
+  {
+   "id": "slark_m_loneprey",
+   "branch": "W",
+   "r": "purple",
+   "ab": "slark_pounce",
+   "max": 1,
+   "ru": "Одинокая добыча",
+   "en": "Lone Prey",
+   "ru_d": "Пойманный Pounce герой без других врагов в 600 получает 50 магического урона в секунду, пока привязан и в пределах 450 от Сларка. Полторы секунды подряд добавляют один удар на 70.",
+   "en_d": "A Pounce target isolated from other enemies within 600 takes 50 magic damage per second while leashed and within 450 of Slark. After 1.5 s uninterrupted, it takes one extra 70 damage.",
+   "fx": [
+    {
+     "t": "tether",
+     "delay": 0.15,
+     "dur": 4,
+     "range": 300,
+     "minDist": 0,
+     "maxDist": 450,
+     "breakRange": 600,
+     "every": 0.5,
+     "dmg": 25,
+     "isolated": 600,
+     "targetMod": "modifier_slark_pounce_leash",
+     "finishTicks": 3,
+     "finishDmg": 70
+    }
+   ],
+   "mech": 1
+  },
+  {
+   "id": "slark_m_sidestep",
+   "branch": "E",
+   "r": "purple",
+   "ab": "slark_saltwater_shiv",
+   "max": 1,
+   "ru": "Скользящий надрез",
+   "en": "Sliding Cut",
+   "ru_d": "Dark Pact и Saltwater Shiv за 3 с дают +20% скорости бега и проход сквозь юнитов на 3 с; раз в 8 с",
+   "en_d": "Dark Pact and Saltwater Shiv within 3 s grant +20% movement speed and no unit collision for 3 s; once per 8 s",
+   "fx": [
+    {
+     "t": "combo",
+     "abs": [
+      "slark_dark_pact",
+      "slark_saltwater_shiv"
+     ],
+     "need": 2,
+     "within": 3,
+     "icd": 8,
+     "radius": 0,
+     "dmg": 0,
+     "dur": 3,
+     "props": {
+      "ms": 20,
+      "nocol": 1
+     }
+    }
+   ],
+   "mech": 1
+  },
+  {
+   "id": "slark_m_lowtide",
+   "branch": "R",
+   "r": "purple",
+   "ab": "slark_shadow_dance",
+   "max": 1,
+   "ru": "Низкая вода",
+   "en": "Low Tide",
+   "ru_d": "Shadow Dance оставляет зону 300 на 4 с. Первый тик по герою наносит 100 магического урона, следующие по 30. Замедление 25%.",
+   "en_d": "Shadow Dance leaves a 300-radius zone for 4 s. The first tick per hero deals 100 magic damage, later ticks deal 30. Slows by 25%.",
+   "fx": [
+    {
+     "t": "zone",
+     "at": "self",
+     "radius": 300,
+     "dur": 4,
+     "every": 1,
+     "dmg": 30,
+     "debuff": {
+      "props": {
+       "ms": -25
+      },
+      "dur": 1.2
+     },
+     "entryDmg": 70
+    }
+   ],
+   "mech": 1
+  },
+  {
+   "id": "slark_l_recovery",
+   "branch": "Q",
+   "r": "legend",
+   "ab": "slark_dark_pact",
+   "max": 1,
+   "ru": "Пакт хищника",
+   "en": "Predator’s Pact",
+   "ru_d": "Dark Pact метит до 3 героев на 4 с. Атака по метке наносит 140 магического урона и лечит Сларка на 6% максимального здоровья. Метка на цель — раз в 6 с.",
+   "en_d": "Dark Pact marks up to 3 heroes for 4 s. Attacking the mark deals 140 magic damage and heals Slark for 6% of his max health. Marks have a 6 s cooldown per hero.",
+   "fx": [
+    {
+     "t": "mark",
+     "by": "ab",
+     "consume": [
+      "attack"
+     ],
+     "dur": 4,
+     "icd": 6,
+     "max": 3,
+     "dmg": 140,
+     "heal": 6,
+     "aw": {
+      "dmg": 205,
+      "heal": 8
+     }
+    }
+   ],
+   "ru_aw": "Пробуждение: 205 урона, лечение 8%.",
+   "en_aw": "Awakening: 205 damage, 8% healing."
+  },
+  {
+   "id": "slark_l_silentduel",
+   "branch": "W",
+   "r": "legend",
+   "ab": "slark_pounce",
+   "max": 1,
+   "ru": "Без свидетелей",
+   "en": "No Witnesses",
+   "ru_d": "Pounce наносит привязанному герою в пределах 450 дополнительно 65 магического урона в секунду и лечит на 45% этого урона. 1,5 с непрерывного контакта добавляют один удар на 140.",
+   "en_d": "Pounce deals 65 extra magic damage per second to a leashed hero within 450 and heals for 45% of that damage. 1.5 s of uninterrupted contact adds one hit for 140.",
+   "fx": [
+    {
+     "t": "tether",
+     "delay": 0.15,
+     "dur": 4,
+     "range": 300,
+     "minDist": 0,
+     "maxDist": 450,
+     "breakRange": 600,
+     "every": 0.5,
+     "dmg": 32.5,
+     "targetMod": "modifier_slark_pounce_leash",
+     "heal": 45,
+     "finishTicks": 3,
+     "finishDmg": 140,
+     "aw": {
+      "dmg": 42.5,
+      "heal": 55,
+      "finishDmg": 195
+     }
+    }
+   ],
+   "ru_aw": "Пробуждение: 85 урона в секунду, лечение 55%, удар на 195.",
+   "en_aw": "Awakening: 85 damage per second, 55% healing and a 195 hit."
+  },
+  {
+   "id": "slark_l_rhythm",
+   "branch": "E",
+   "r": "legend",
+   "ab": "slark_saltwater_shiv",
+   "max": 1,
+   "ru": "Ритм хищника",
+   "en": "Predator Rhythm",
+   "ru_d": "Saltwater Shiv метит цель на 5 с. Dark Pact или атака взрывает метку на 160 магического урона и лечит на 8% макс. здоровья. Метка на цель — раз в 7 с.",
+   "en_d": "Saltwater Shiv marks its target for 5 s. Dark Pact or an attack consumes it for 160 magic damage and heals 8% max health. Marks have a 7 s cooldown per target.",
+   "fx": [
+    {
+     "t": "mark",
+     "by": "cast",
+     "consume": [
+      "slark_dark_pact",
+      "attack"
+     ],
+     "dur": 5,
+     "icd": 7,
+     "max": 1,
+     "dmg": 160,
+     "arm": 0.15,
+     "heal": 8,
+     "aw": {
+      "dmg": 225,
+      "heal": 10
+     },
+     "nativeMark": "modifier_slark_saltwater_shiv_impact_slow"
+    }
+   ],
+   "ru_aw": "Пробуждение: 225 урона и 10% лечения.",
+   "en_aw": "Awakening: 225 damage and 10% healing."
+  },
+  {
+   "id": "slark_l_blackfin",
+   "branch": "R",
+   "r": "legend",
+   "ab": "slark_shadow_dance",
+   "max": 1,
+   "ru": "Чёрный плавник",
+   "en": "Blackfin",
+   "ru_d": "Во время Shadow Dance +55 скорости атаки и +125 дальности. Атаки по героям ниже 40% здоровья наносят ещё 60% урона атаки, раз в 1,4 с по цели.",
+   "en_d": "During Shadow Dance: 55 attack speed and 125 attack range. Attacks against heroes below 40% health deal 60% extra attack damage, once per 1.4 s per target.",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "as": 55,
+      "range": 125
+     },
+     "aw": {
+      "props": {
+       "as": 75,
+       "range": 175
+      }
+     }
+    },
+    {
+     "t": "hit",
+     "by": "attack",
+     "heroOnly": 1,
+     "extra": {
+      "atk": 60,
+      "type": "phys"
+     },
+     "lowhp": 40,
+     "win": "duration",
+     "icd": 1.4,
+     "aw": {
+      "extra": {
+       "atk": 85
+      }
+     }
+    }
+   ],
+   "ru_aw": "Пробуждение: скорость атаки +75, дальность +175, дополнительный урон 85%.",
+   "en_aw": "Awakening: 75 attack speed, 175 range, 85% extra damage."
+  }
+ ]
+}

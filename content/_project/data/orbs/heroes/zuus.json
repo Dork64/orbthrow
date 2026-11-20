@@ -1,0 +1,341 @@
+{
+ "hero": "npc_dota_hero_zuus",
+ "orbs": [
+  {
+   "id": "zeus_p_overload",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "zuus_arc_lightning",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "mr": -4
+      },
+      "dur": 5,
+      "max": 5
+     }
+    }
+   ],
+   "ru": "Перегрузка",
+   "en": "Overload",
+   "ru_d": "Каждое попадание Arc Lightning снижает сопротивление магии героя на 4% на 5 с (до 5 раз)",
+   "en_d": "Every Arc Lightning hit reduces a hero's magic resistance by 4% for 5 s (up to 5 times)"
+  },
+  {
+   "id": "zeus_p_capacitor",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "zuus_arc_lightning",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "mana": 20
+    }
+   ],
+   "ru": "Конденсатор",
+   "en": "Capacitor",
+   "ru_d": "Arc Lightning по героям возвращает ману: 20% нанесенного урона",
+   "en_d": "Arc Lightning hits on heroes restore mana equal to 20% of the damage dealt"
+  },
+  {
+   "id": "zeus_p_judgement",
+   "r": "purple",
+   "branch": "W",
+   "ab": "zuus_lightning_bolt",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "extra": {
+      "curhp": 7,
+      "type": "magic"
+     }
+    }
+   ],
+   "ru": "Небесный суд",
+   "en": "Divine Judgement",
+   "ru_d": "Lightning Bolt дополнительно наносит 7% текущего здоровья цели",
+   "en_d": "Lightning Bolt also deals 7% of the target's current health"
+  },
+  {
+   "id": "zeus_p_blind",
+   "r": "purple",
+   "branch": "W",
+   "ab": "zuus_lightning_bolt",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "disarm": 1
+      },
+      "dur": 1.5
+     }
+    }
+   ],
+   "ru": "Ослепительная вспышка",
+   "en": "Blinding Flash",
+   "ru_d": "После Lightning Bolt герой 1.5 с не может атаковать",
+   "en_d": "After Lightning Bolt the hero can't attack for 1.5 s"
+  },
+  {
+   "id": "zeus_p_skyborn",
+   "r": "purple",
+   "branch": "E",
+   "ab": "zuus_heavenly_jump",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 3,
+     "props": {
+      "ms": 25,
+      "evasion": 30
+     }
+    }
+   ],
+   "ru": "Небожитель",
+   "en": "Skyborn",
+   "ru_d": "После Heavenly Jump +25% скорости бега и 30% уклонения на 3 с",
+   "en_d": "After Heavenly Jump: +25% movement speed and 30% evasion for 3 s"
+  },
+  {
+   "id": "zeus_p_static",
+   "r": "purple",
+   "branch": "H",
+   "ab": "zuus_static_field",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "attack",
+     "heroOnly": 1,
+     "extra": {
+      "curhp": 3,
+      "type": "magic"
+     }
+    }
+   ],
+   "ru": "Статика в руках",
+   "en": "Static Hands",
+   "ru_d": "Атаки по героям наносят еще 3% текущего здоровья цели",
+   "en_d": "Attacks on heroes deal an extra 3% of the target's current health"
+  },
+  {
+   "id": "zeus_p_wrathkill",
+   "r": "purple",
+   "branch": "R",
+   "ab": "zuus_thundergods_wrath",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "ab",
+     "cdpct": 40
+    }
+   ],
+   "ru": "Ненасытный гнев",
+   "en": "Insatiable Wrath",
+   "ru_d": "Каждое убийство Thundergod's Wrath сокращает его оставшуюся перезарядку на 40%",
+   "en_d": "Every kill with Thundergod's Wrath cuts its remaining cooldown by 40%"
+  },
+  {
+   "id": "zeus_p_divine",
+   "r": "purple",
+   "branch": "R",
+   "ab": "zuus_thundergods_wrath",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 8,
+     "props": {
+      "sa": 20,
+      "ms": 15
+     }
+    }
+   ],
+   "ru": "Божественная ярость",
+   "en": "Divine Fury",
+   "ru_d": "После Thundergod's Wrath +20% усиления способностей и +15% скорости на 8 с",
+   "en_d": "After Thundergod's Wrath: +20% spell amplification and +15% movement speed for 8 s"
+  },
+  {
+   "id": "zeus_m_autoarc",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "zuus_arc_lightning",
+   "fx": [
+    {
+     "t": "auto",
+     "every": 3,
+     "range": 700,
+     "heroOnly": 1
+    }
+   ],
+   "ru": "Живая молния",
+   "en": "Living Lightning",
+   "ru_d": "Раз в 3 с Arc Lightning сам бьет ближайшего героя в 700 (бесплатно)",
+   "en_d": "Every 3 s Arc Lightning strikes the nearest hero within 700 by itself (free)",
+   "mech": 1
+  },
+  {
+   "id": "zeus_m_storm",
+   "r": "purple",
+   "branch": "W",
+   "ab": "zuus_lightning_bolt",
+   "fx": [
+    {
+     "t": "storm",
+     "win": 6,
+     "every": 1,
+     "radius": 700,
+     "dmg": "damage*0.35",
+     "type": "magic"
+    }
+   ],
+   "ru": "Грозовой фронт",
+   "en": "Storm Front",
+   "ru_d": "После Lightning Bolt 6 с вокруг Зевса бьют молнии: раз в секунду 35% урона Bolt по случайному врагу в 700",
+   "en_d": "For 6 s after Lightning Bolt, lightning strikes a random enemy within 700 every second for 35% of Bolt's damage",
+   "mech": 1
+  },
+  {
+   "id": "zeus_m_sparks",
+   "r": "purple",
+   "branch": "E",
+   "ab": "zuus_heavenly_jump",
+   "fx": [
+    {
+     "t": "trail",
+     "win": 4,
+     "dps": 70,
+     "radius": 160,
+     "life": 3,
+     "type": "magic",
+     "debuff": {
+      "props": {
+       "ms": -20
+      },
+      "dur": 1
+     }
+    }
+   ],
+   "ru": "Искрящий след",
+   "en": "Spark Trail",
+   "ru_d": "4 с после Heavenly Jump за Зевсом искрящийся след: 70 урона в секунду и −20% скорости врагам",
+   "en_d": "For 4 s after Heavenly Jump Zeus leaves a sparking trail: 70 damage per second and −20% movement speed to enemies",
+   "mech": 1
+  },
+  {
+   "id": "zeus_m_twicewrath",
+   "r": "purple",
+   "branch": "R",
+   "ab": "zuus_thundergods_wrath",
+   "fx": [
+    {
+     "t": "multi",
+     "chance": 25,
+     "times": 1,
+     "delay": 1.5
+    }
+   ],
+   "ru": "Гнев дважды",
+   "en": "Wrath Twice",
+   "ru_d": "25% шанс, что Thundergod's Wrath ударит еще раз через 1.5 с",
+   "en_d": "25% chance that Thundergod's Wrath strikes again 1.5 s later",
+   "mech": 1
+  },
+  {
+   "id": "zeus_l_chain",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "zuus_arc_lightning",
+   "mods": "jump_count:+6;radius:+150",
+   "awmods": "has_unlimited_jumps:=1",
+   "ru": "Бесконечная дуга",
+   "en": "Endless Arc",
+   "ru_d": "Arc Lightning прыгает еще 6 раз, радиус прыжка +150",
+   "en_d": "Arc Lightning jumps 6 more times, jump radius +150",
+   "ru_aw": "Пробуждение: прыжки без ограничения",
+   "en_aw": "Awakening: unlimited jumps"
+  },
+  {
+   "id": "zeus_l_bolt",
+   "r": "legend",
+   "branch": "W",
+   "ab": "zuus_lightning_bolt",
+   "mods": "spread_aoe:+175",
+   "fx": [
+    {
+     "t": "charges",
+     "n": 1,
+     "aw": {
+      "n": 2
+     }
+    }
+   ],
+   "ru": "Громовержец",
+   "en": "Thunderer",
+   "ru_d": "У Lightning Bolt есть запасной заряд, радиус разброса +175",
+   "en_d": "Lightning Bolt gets a spare charge, spread radius +175",
+   "ru_aw": "Пробуждение: 2 запасных заряда",
+   "en_aw": "Awakening: 2 spare charges"
+  },
+  {
+   "id": "zeus_l_jump",
+   "r": "legend",
+   "branch": "E",
+   "ab": "zuus_heavenly_jump",
+   "mods": "targets:+2;range:+300",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 5,
+     "props": {
+      "sa": 15
+     },
+     "aw": {
+      "props": {
+       "sa": 25
+      }
+     }
+    }
+   ],
+   "ru": "Небесный скачок",
+   "en": "Sky Leap",
+   "ru_d": "Heavenly Jump бьет 3 целей, дальность поиска +300; после прыжка +15% усиления способностей на 5 с",
+   "en_d": "Heavenly Jump hits 3 targets, search range +300; +15% spell amplification for 5 s after the jump",
+   "ru_aw": "Пробуждение: +25% усиления",
+   "en_aw": "Awakening: +25% amplification"
+  },
+  {
+   "id": "zeus_l_wrath",
+   "r": "legend",
+   "branch": "R",
+   "ab": "zuus_thundergods_wrath",
+   "mods": "damage:%25",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "ab",
+     "cdpct": 25,
+     "aw": {
+      "cdpct": 40
+     }
+    }
+   ],
+   "ru": "Гнев Олимпа",
+   "en": "Olympian Wrath",
+   "ru_d": "Thundergod's Wrath +25% урона; каждое убийство им сокращает перезарядку на 25%",
+   "en_d": "Thundergod's Wrath deals +25% damage; every kill with it cuts the cooldown by 25%",
+   "ru_aw": "Пробуждение: перезарядка −40% за убийство",
+   "en_aw": "Awakening: −40% cooldown per kill"
+  }
+ ]
+}

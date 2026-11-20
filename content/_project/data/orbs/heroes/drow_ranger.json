@@ -1,0 +1,346 @@
+{
+ "hero": "npc_dota_hero_drow_ranger",
+ "orbs": [
+  {
+   "id": "drow_p_grip",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "drow_ranger_frost_arrows",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "attack",
+     "heroOnly": 1,
+     "every": 4,
+     "debuff": {
+      "props": {
+       "root": 1
+      },
+      "dur": 0.6
+     }
+    }
+   ],
+   "ru": "Ледяная хватка",
+   "en": "Icy Grip",
+   "ru_d": "Каждая 4-я атака по одному герою обездвиживает его на 0.6 с",
+   "en_d": "Every 4th attack on the same hero roots it for 0.6 s"
+  },
+  {
+   "id": "drow_p_chill",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "drow_ranger_frost_arrows",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "attack",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "as": -10
+      },
+      "dur": 2,
+      "max": 5
+     }
+    }
+   ],
+   "ru": "Холод",
+   "en": "Chill",
+   "ru_d": "Атаки по героям снижают их скорость атаки на 10 на 2 с (до 5 раз)",
+   "en_d": "Attacks on heroes reduce their attack speed by 10 for 2 s (up to 5 times)"
+  },
+  {
+   "id": "drow_p_silent",
+   "r": "purple",
+   "branch": "W",
+   "ab": "drow_ranger_wave_of_silence",
+   "fx": [
+    {
+     "t": "vs",
+     "cond": "silenced",
+     "pct": 20
+    }
+   ],
+   "ru": "Тишина убивает",
+   "en": "Silent Death",
+   "ru_d": "+20% урона по врагам под немотой",
+   "en_d": "+20% damage against silenced enemies"
+  },
+  {
+   "id": "drow_p_gale",
+   "r": "purple",
+   "branch": "W",
+   "ab": "drow_ranger_wave_of_silence",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 3,
+     "props": {
+      "ms": 20,
+      "evasion": 20
+     }
+    }
+   ],
+   "ru": "Попутный ветер",
+   "en": "Tailwind",
+   "ru_d": "После Gust +20% скорости бега и +20% уклонения на 3 с",
+   "en_d": "After Gust +20% movement speed and +20% evasion for 3 s"
+  },
+  {
+   "id": "drow_p_hunt",
+   "r": "purple",
+   "branch": "E",
+   "ab": "drow_ranger_multishot",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 3,
+     "props": {
+      "ls": 20
+     }
+    }
+   ],
+   "ru": "Кровавая стрельба",
+   "en": "Bloody Volley",
+   "ru_d": "Во время Multishot и 1 с после — 20% вампиризма атак по героям",
+   "en_d": "During Multishot and for 1 s after — 20% lifesteal on attacks against heroes"
+  },
+  {
+   "id": "drow_p_hunter",
+   "r": "purple",
+   "branch": "E",
+   "ab": "drow_ranger_multishot",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "win",
+     "win": 3,
+     "cdpct": 60
+    }
+   ],
+   "ru": "Охотник",
+   "en": "Hunter",
+   "ru_d": "Убийство героя в течение 3 с после Multishot снимает 60% его перезарядки",
+   "en_d": "A hero kill within 3 s after Multishot removes 60% of its cooldown"
+  },
+  {
+   "id": "drow_p_precise",
+   "r": "purple",
+   "branch": "R",
+   "ab": "drow_ranger_marksmanship",
+   "fx": [
+    {
+     "t": "crit",
+     "chance": 15,
+     "mult": 160,
+     "heroOnly": 1
+    }
+   ],
+   "ru": "Точный выстрел",
+   "en": "Precise Shot",
+   "ru_d": "15% шанс нанести по герою критический удар 160%",
+   "en_d": "15% chance to deal a 160% critical strike to heroes"
+  },
+  {
+   "id": "drow_p_range",
+   "r": "purple",
+   "branch": "R",
+   "ab": "drow_ranger_marksmanship",
+   "fx": [
+    {
+     "t": "passive",
+     "props": {
+      "range": 100
+     }
+    }
+   ],
+   "ru": "Дальнобойность",
+   "en": "Long Range",
+   "ru_d": "+100 дальности атаки, пока изучен Marksmanship",
+   "en_d": "+100 attack range while Marksmanship is learned"
+  },
+  {
+   "id": "drow_l_blizzard",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "drow_ranger_frost_arrows",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "attack",
+     "heroOnly": 1,
+     "extra": {
+      "atk": 20,
+      "type": "magic"
+     },
+     "debuff": {
+      "props": {
+       "as": -20
+      },
+      "dur": 1.5
+     },
+     "aw": {
+      "extra": {
+       "atk": 35
+      }
+     }
+    }
+   ],
+   "ru": "Буран",
+   "en": "Blizzard",
+   "ru_d": "Атаки по героям наносят еще 20% урона атаки магическим уроном и снижают скорость атаки на 20 на 1.5 с",
+   "en_d": "Attacks on heroes deal an extra 20% of attack damage as magical damage and reduce attack speed by 20 for 1.5 s",
+   "ru_aw": "Пробуждение: 35% урона атаки",
+   "en_aw": "Awakening: 35% of attack damage"
+  },
+  {
+   "id": "drow_l_tempest",
+   "r": "legend",
+   "branch": "W",
+   "ab": "drow_ranger_wave_of_silence",
+   "mods": "silence_duration:+1",
+   "fx": [
+    {
+     "t": "blast",
+     "at": "self",
+     "delay": 0,
+     "radius": 600,
+     "dmg": 200,
+     "type": "magic",
+     "aw": {
+      "dmg": 350
+     }
+    }
+   ],
+   "ru": "Буря",
+   "en": "Tempest",
+   "ru_d": "Gust наносит 200 магического урона врагам в 600 вокруг Дровки, немота +1 с",
+   "en_d": "Gust deals 200 magical damage to enemies within 600 around Drow, silence +1 s",
+   "ru_aw": "Пробуждение: 350 урона",
+   "en_aw": "Awakening: 350 damage"
+  },
+  {
+   "id": "drow_l_volley",
+   "r": "legend",
+   "branch": "E",
+   "ab": "drow_ranger_multishot",
+   "mods": "arrow_count_per_wave:+2;arrow_damage_pct:+20",
+   "awmods": "wave_count:+1",
+   "ru": "Град стрел",
+   "en": "Arrow Hail",
+   "ru_d": "+2 стрелы в каждом залпе Multishot, урон стрел +20%",
+   "en_d": "+2 arrows per Multishot wave, arrow damage +20%",
+   "ru_aw": "Пробуждение: +1 залп",
+   "en_aw": "Awakening: +1 wave"
+  },
+  {
+   "id": "drow_l_eagle",
+   "r": "legend",
+   "branch": "R",
+   "ab": "drow_ranger_marksmanship",
+   "mods": "chance:+10;bonus_damage:+40",
+   "awmods": "chance:+10",
+   "fx": [
+    {
+     "t": "passive",
+     "props": {
+      "agi": 15
+     }
+    }
+   ],
+   "ru": "Орлиный глаз",
+   "en": "Eagle Eye",
+   "ru_d": "Шанс Marksmanship +10%, его урон +40, +15 ловкости",
+   "en_d": "Marksmanship chance +10%, its damage +40, +15 agility",
+   "ru_aw": "Пробуждение: еще +10% шанса",
+   "en_aw": "Awakening: another +10% chance"
+  },
+  {
+   "id": "drow_m_wavehop",
+   "r": "purple",
+   "branch": "W",
+   "ab": "drow_ranger_wave_of_silence",
+   "fx": [
+    {
+     "t": "dash",
+     "dist": 450,
+     "to": "back"
+    }
+   ],
+   "ru": "Отход с волной",
+   "en": "Retreating Gust",
+   "ru_d": "После Gust Дров отпрыгивает на 450 назад",
+   "en_d": "After Gust, Drow hops back 450",
+   "mech": 1
+  },
+  {
+   "id": "drow_m_autowave",
+   "r": "purple",
+   "branch": "W",
+   "ab": "drow_ranger_wave_of_silence",
+   "fx": [
+    {
+     "t": "auto",
+     "every": 10,
+     "range": 800,
+     "heroOnly": 1
+    }
+   ],
+   "ru": "Ветер тишины",
+   "en": "Wind of Silence",
+   "ru_d": "Раз в 10 с Gust сам летит в ближайшего вражеского героя в 800 (бесплатно)",
+   "en_d": "Every 10 s Gust flies at the nearest enemy hero within 800 by itself (free)",
+   "mech": 1
+  },
+  {
+   "id": "drow_m_shade",
+   "r": "purple",
+   "branch": "W",
+   "ab": "drow_ranger_wave_of_silence",
+   "fx": [
+    {
+     "t": "illusion",
+     "n": 1,
+     "dur": 8,
+     "out": -40,
+     "inc": 200
+    }
+   ],
+   "ru": "Тень лучницы",
+   "en": "Archer's Shade",
+   "ru_d": "Gust оставляет иллюзию Дров на 8 с (60% урона)",
+   "en_d": "Gust leaves a Drow illusion for 8 s (60% damage)",
+   "mech": 1
+  },
+  {
+   "id": "drow_m_backline",
+   "r": "purple",
+   "branch": "W",
+   "ab": "drow_ranger_wave_of_silence",
+   "fx": [
+    {
+     "t": "trap",
+     "ab": "drow_ranger_wave_of_silence",
+     "at": "self",
+     "radius": 200,
+     "arm": 1,
+     "life": 20,
+     "max": 2,
+     "dmg": 150,
+     "type": "magic",
+     "debuff": {
+      "props": {
+       "ms": -35
+      },
+      "dur": 3
+     }
+    }
+   ],
+   "ru": "Тыловой дозор",
+   "en": "Rear Guard",
+   "ru_d": "Gust оставляет под Дров ледяную ловушку на 20 с (до 2): 150 магического урона и −35% скорости на 3 с",
+   "en_d": "Gust leaves a trap under Drow for 20 s (max 2): 150 magic damage and 35% slow for 3 s",
+   "mech": 1
+  }
+ ]
+}

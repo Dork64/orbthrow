@@ -1,0 +1,74 @@
+/* ORBTHROW — экран настроек лобби */
+.SetupRoot { width: 100%; height: 100%; background-color: gradient( radial, 50% 45%, 0% 0%, 75% 75%, from( #1f2635 ), to( #05070a ) ); }
+
+#SetupBox {
+	horizontal-align: center;
+	vertical-align: center;
+	width: 660px;
+	flow-children: down;
+	padding: 26px 30px 22px 30px;
+	background-color: gradient( linear, 0% 0%, 0% 100%, from( #1b212bf4 ), to( #0b0e13f4 ) );
+	border: 1px solid #e8c26a66;
+	border-radius: 14px;
+	box-shadow: 0px 12px 40px #000000;
+}
+
+#SetupGems { horizontal-align: center; flow-children: right; margin-bottom: 6px; }
+.SetupGem { width: 18px; height: 18px; margin: 0px 5px; border-radius: 9px; border: 1px solid #ffffff66; }
+.SetupGem.grey { background-color: gradient( radial, 35% 30%, 0% 0%, 70% 70%, from( #ffffff ), to( #7d858e ) ); }
+.SetupGem.blue { background-color: gradient( radial, 35% 30%, 0% 0%, 70% 70%, from( #d8ecff ), to( #1d64cf ) ); }
+.SetupGem.purple { background-color: gradient( radial, 35% 30%, 0% 0%, 70% 70%, from( #f0dcff ), to( #7231cf ) ); }
+.SetupGem.legend { background-color: gradient( radial, 35% 30%, 0% 0%, 70% 70%, from( #fff3cf ), to( #e08a12 ) ); }
+
+#SetupTitle { horizontal-align: center; color: #f3d27c; font-size: 48px; font-weight: black; letter-spacing: 6px; text-shadow: 0px 0px 18px #e8c26a77; }
+#SetupSubtitle { horizontal-align: center; color: #c5ced8; font-size: 16px; margin-bottom: 16px; text-align: center; }
+
+.SetupSection { color: #8f9aa6; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-top: 12px; margin-bottom: 6px; }
+
+#SetupPlayers { flow-children: right-wrap; width: 100%; }
+.SetupPlayer { background-color: #ffffff0d; border: 1px solid #ffffff1a; border-radius: 12px; padding: 3px 12px; margin: 3px; color: #eef2f6; font-size: 15px; }
+.SetupPlayer.Host { border: 1px solid #f3d27c; color: #ffe8a8; }
+
+.SetupRow { flow-children: right; }
+.SetupChoice {
+	min-width: 120px;
+	padding: 7px 16px;
+	margin-right: 8px;
+	background-color: #ffffff0c;
+	border: 1px solid #ffffff26;
+	border-radius: 8px;
+	transition-property: background-color, border;
+	transition-duration: 0.12s;
+}
+.SetupChoice:hover { background-color: #ffffff1a; border: 1px solid #ffffff55; }
+.SetupChoice.Selected { background-color: gradient( linear, 0% 0%, 0% 100%, from( #8a6420 ), to( #4e360c ) ); border: 1px solid #f3d27c; }
+.SetupChoice.Small { min-width: 44px; padding: 5px 0px; }
+.SetupChoice Label { horizontal-align: center; color: #ffffff; font-size: 16px; }
+
+#SetupBotsLabel { color: #ffffff; font-size: 22px; font-weight: bold; vertical-align: center; margin: 0px 14px; min-width: 24px; text-align: center; }
+#SetupSummary { color: #dfe5eb; font-size: 16px; margin-top: 16px; padding: 8px 12px; border-radius: 8px; background-color: #ffffff08; }
+
+#SetupStart {
+	horizontal-align: center;
+	margin-top: 16px;
+	padding: 10px 56px;
+	background-color: gradient( linear, 0% 0%, 0% 100%, from( #3c8a34 ), to( #1f4d1b ) );
+	border: 1px solid #a7ec86;
+	border-radius: 10px;
+	box-shadow: 0px 0px 16px #a7ec8644;
+}
+#SetupStart:hover { box-shadow: 0px 0px 22px #a7ec86aa; }
+#SetupStart Label { color: #ffffff; font-size: 20px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; }
+#SetupStart.NotHost { visibility: collapse; }
+#SetupWait { horizontal-align: center; color: #98a3ae; font-size: 14px; margin-top: 10px; }
+.ReadOnly #BotsRow .SetupChoice { opacity: 0.45; }
+
+/* Голосование */
+.SetupChoice.Vote { min-width: 132px; flow-children: down; padding: 6px 10px 4px 10px; }
+.SetupChoice.Vote.Winning { border: 1px solid #f3d27c99; }
+.SetupChoice.Vote.Selected { border: 1px solid #f3d27c; }
+.VoteNum { horizontal-align: center; color: #ffffff; font-size: 24px; font-weight: black; }
+.VoteUnit { horizontal-align: center; color: #c5ced8; font-size: 12px; margin-top: -2px; }
+.VoteDots { horizontal-align: center; color: #f3d27c; font-size: 11px; letter-spacing: 1px; height: 14px; }
+#VoteHint { color: #8f9aa6; font-size: 13px; margin-top: 6px; }
+.SetupPlayer.Voted { background-color: #a7ec861f; }

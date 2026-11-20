@@ -1,0 +1,369 @@
+{
+ "hero": "npc_dota_hero_crystal_maiden",
+ "orbs": [
+  {
+   "id": "cm_p_frost",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "crystal_maiden_crystal_nova",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "debuff": {
+      "props": {
+       "mr": -10
+      },
+      "dur": 4
+     }
+    }
+   ],
+   "ru": "Морозная крошка",
+   "en": "Frost Shards",
+   "ru_d": "Crystal Nova снижает сопротивление магии врагов на 10% на 4 с",
+   "en_d": "Crystal Nova reduces enemies' magic resistance by 10% for 4 s"
+  },
+  {
+   "id": "cm_p_wave",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "crystal_maiden_crystal_nova",
+   "fx": [
+    {
+     "t": "blast",
+     "at": "point",
+     "delay": 1.5,
+     "radius": "radius",
+     "dmg": "nova_damage*0.5",
+     "type": "magic",
+     "pfx": "particles/units/heroes/hero_crystalmaiden/maiden_crystal_nova.vpcf",
+     "debuff": {
+      "props": {
+       "ms": -30
+      },
+      "dur": 2
+     }
+    }
+   ],
+   "ru": "Вторая волна",
+   "en": "Second Wave",
+   "ru_d": "Через 1.5 с Crystal Nova повторяется на том же месте: 50% урона и −30% скорости бега на 2 с",
+   "en_d": "1.5 s later Crystal Nova repeats in the same place: 50% damage and −30% movement speed for 2 s"
+  },
+  {
+   "id": "cm_p_brittle",
+   "r": "purple",
+   "branch": "W",
+   "ab": "crystal_maiden_frostbite",
+   "fx": [
+    {
+     "t": "vs",
+     "cond": "has:frostbite",
+     "pct": 15
+    }
+   ],
+   "ru": "Хрупкий лед",
+   "en": "Brittle Ice",
+   "ru_d": "Враги под Frostbite получают на 15% больше урона от Кристал",
+   "en_d": "Enemies under Frostbite take 15% more damage from Crystal Maiden"
+  },
+  {
+   "id": "cm_p_web",
+   "r": "purple",
+   "branch": "W",
+   "ab": "crystal_maiden_frostbite",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "splash": {
+      "radius": 300,
+      "pct": 50
+     }
+    }
+   ],
+   "ru": "Ледяная паутина",
+   "en": "Ice Web",
+   "ru_d": "Урон Frostbite задевает врагов в 300 вокруг цели (50%)",
+   "en_d": "Frostbite damage also hits enemies within 300 of the target (50%)"
+  },
+  {
+   "id": "cm_p_radiance",
+   "r": "purple",
+   "branch": "E",
+   "ab": "crystal_maiden_brilliance_aura",
+   "fx": [
+    {
+     "t": "passive",
+     "perlvl": 1,
+     "props": {
+      "sa": 3
+     }
+    }
+   ],
+   "ru": "Сияние",
+   "en": "Radiance",
+   "ru_d": "+3% усиления способностей за каждый уровень Brilliance Aura",
+   "en_d": "+3% spell amplification per Brilliance Aura level"
+  },
+  {
+   "id": "cm_p_clarity",
+   "r": "purple",
+   "branch": "E",
+   "ab": "crystal_maiden_brilliance_aura",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "any",
+     "manapct": 30,
+     "heal": 10
+    }
+   ],
+   "ru": "Ясный разум",
+   "en": "Clear Mind",
+   "ru_d": "Убийство героя восстанавливает 30% маны и 10% здоровья",
+   "en_d": "A hero kill restores 30% mana and 10% health"
+  },
+  {
+   "id": "cm_p_armor",
+   "r": "purple",
+   "branch": "R",
+   "ab": "crystal_maiden_freezing_field",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "AbilityChannelTime",
+     "props": {
+      "armor": 15,
+      "mr": 20
+     }
+    }
+   ],
+   "ru": "Ледяная броня",
+   "en": "Ice Armor",
+   "ru_d": "Во время Freezing Field +15 брони и +20% сопротивления магии",
+   "en_d": "During Freezing Field +15 armor and +20% magic resistance"
+  },
+  {
+   "id": "cm_p_numb",
+   "r": "purple",
+   "branch": "R",
+   "ab": "crystal_maiden_freezing_field",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "icd": 0.4,
+     "debuff": {
+      "props": {
+       "as": -20,
+       "ms": -10
+      },
+      "dur": 1.5,
+      "max": 5
+     }
+    }
+   ],
+   "ru": "Обморожение",
+   "en": "Numbness",
+   "ru_d": "Каждый взрыв Freezing Field по герою снижает его скорость атаки на 20 и бега на 10% на 1.5 с (до 5 раз)",
+   "en_d": "Each Freezing Field explosion on a hero reduces its attack speed by 20 and movement speed by 10% for 1.5 s (up to 5 times)"
+  },
+  {
+   "id": "cm_l_avalanche",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "crystal_maiden_crystal_nova",
+   "mods": "radius:+100",
+   "awmods": "nova_damage:+100",
+   "fx": [
+    {
+     "t": "charges",
+     "n": 1
+    }
+   ],
+   "ru": "Лавина",
+   "en": "Avalanche",
+   "ru_d": "У Crystal Nova есть запасной заряд (восстанавливается за время перезарядки), радиус +100",
+   "en_d": "Crystal Nova gets a spare charge (restores over its cooldown), radius +100",
+   "ru_aw": "Пробуждение: урон +100",
+   "en_aw": "Awakening: damage +100"
+  },
+  {
+   "id": "cm_l_deepfreeze",
+   "r": "legend",
+   "branch": "W",
+   "ab": "crystal_maiden_frostbite",
+   "mods": "duration:+1",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "extra": {
+      "maxhp": 0.5,
+      "type": "magic"
+     },
+     "aw": {
+      "extra": {
+       "maxhp": 1
+      }
+     }
+    }
+   ],
+   "ru": "Глубокая заморозка",
+   "en": "Deep Freeze",
+   "ru_d": "Frostbite длится на 1 с дольше, каждый тик наносит еще 0.5% максимального здоровья цели",
+   "en_d": "Frostbite lasts 1 s longer, and each tick deals an extra 0.5% of the target's max health",
+   "ru_aw": "Пробуждение: 1% здоровья за тик",
+   "en_aw": "Awakening: 1% of max health per tick"
+  },
+  {
+   "id": "cm_l_arcane",
+   "r": "legend",
+   "branch": "E",
+   "ab": "crystal_maiden_brilliance_aura",
+   "fx": [
+    {
+     "t": "passive",
+     "props": {
+      "sa": 12,
+      "castrange": 150
+     },
+     "aw": {
+      "props": {
+       "sa": 20,
+       "castrange": 250
+      }
+     }
+    }
+   ],
+   "ru": "Магическая аура",
+   "en": "Arcane Aura",
+   "ru_d": "+12% усиления способностей и +150 дальности способностей",
+   "en_d": "+12% spell amplification and +150 cast range",
+   "ru_aw": "Пробуждение: +20% усиления, +250 дальности",
+   "en_aw": "Awakening: +20% amplification, +250 range"
+  },
+  {
+   "id": "cm_l_blizzard",
+   "r": "legend",
+   "branch": "R",
+   "ab": "crystal_maiden_freezing_field",
+   "mods": "damage:*1.3",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "AbilityChannelTime",
+     "props": {
+      "inc": -30
+     },
+     "aw": {
+      "props": {
+       "immune": 1
+      }
+     }
+    }
+   ],
+   "ru": "Вьюга",
+   "en": "Blizzard",
+   "ru_d": "Урон Freezing Field ×1.3; во время него Кристал получает на 30% меньше урона",
+   "en_d": "Freezing Field damage ×1.3; during it Crystal Maiden takes 30% less damage",
+   "ru_aw": "Пробуждение: невосприимчивость к магии во время Freezing Field",
+   "en_aw": "Awakening: spell immunity during Freezing Field"
+  },
+  {
+   "id": "cm_m_autonova",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "crystal_maiden_crystal_nova",
+   "fx": [
+    {
+     "t": "auto",
+     "every": 7,
+     "range": 700
+    }
+   ],
+   "ru": "Вьюга",
+   "en": "Blizzard",
+   "ru_d": "Раз в 7 с Crystal Nova сама бьет по ближайшему врагу в 700 (бесплатно)",
+   "en_d": "Every 7 s Crystal Nova hits the nearest enemy within 700 by itself (free)",
+   "mech": 1
+  },
+  {
+   "id": "cm_m_icemines",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "crystal_maiden_crystal_nova",
+   "fx": [
+    {
+     "t": "trap",
+     "at": "point",
+     "radius": 230,
+     "arm": 1,
+     "life": 40,
+     "max": 3,
+     "dmg": "nova_damage*0.6",
+     "type": "magic",
+     "pfx": "particles/units/heroes/hero_crystalmaiden/maiden_freezing_field_explosion.vpcf",
+     "debuff": {
+      "props": {
+       "root": 1
+      },
+      "dur": 1.4
+     }
+    }
+   ],
+   "ru": "Ледяные мины",
+   "en": "Ice Mines",
+   "ru_d": "Crystal Nova оставляет мину (до 3): 60% урона новы и обездвиживание 1.4 с",
+   "en_d": "Crystal Nova leaves a mine (up to 3): 60% of Nova damage and a 1.4 s root",
+   "mech": 1
+  },
+  {
+   "id": "cm_m_frostpath",
+   "r": "purple",
+   "branch": "W",
+   "ab": "crystal_maiden_frostbite",
+   "fx": [
+    {
+     "t": "trail",
+     "dps": "damage_per_second*0.5",
+     "radius": 160,
+     "life": 3,
+     "type": "magic",
+     "pfx": "particles/units/heroes/hero_crystalmaiden/maiden_freezing_field_explosion.vpcf",
+     "debuff": {
+      "props": {
+       "ms": -25
+      },
+      "dur": 1
+     }
+    }
+   ],
+   "ru": "Ледяная тропа",
+   "en": "Frozen Path",
+   "ru_d": "Где идет Майден, 3 с лед: 50% урона Frostbite в секунду и −25% скорости",
+   "en_d": "Where Maiden walks, ice stays for 3 s: 50% of Frostbite damage per second and −25% speed",
+   "mech": 1
+  },
+  {
+   "id": "cm_m_novahop",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "crystal_maiden_crystal_nova",
+   "fx": [
+    {
+     "t": "dash",
+     "dist": 600,
+     "to": "point"
+    }
+   ],
+   "ru": "Ледяной скачок",
+   "en": "Ice Hop",
+   "ru_d": "После Crystal Nova Майден прыгает в центр новы (до 600)",
+   "en_d": "After Crystal Nova, Maiden leaps into its center (up to 600)",
+   "mech": 1
+  }
+ ]
+}

@@ -1,0 +1,318 @@
+{
+ "hero": "npc_dota_hero_legion_commander",
+ "orbs": [
+  {
+   "id": "lc_p_formation",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "legion_commander_overwhelming_odds",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 6,
+     "props": {
+      "armor": 6
+     }
+    }
+   ],
+   "ru": "Боевой порядок",
+   "en": "Battle Formation",
+   "ru_d": "Overwhelming Odds дает Легиону +6 брони на 6 с",
+   "en_d": "Overwhelming Odds grants Legion +6 armor for 6 s"
+  },
+  {
+   "id": "lc_p_spoils",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "legion_commander_overwhelming_odds",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "heal": 30
+    }
+   ],
+   "ru": "Трофеи",
+   "en": "Spoils",
+   "ru_d": "Overwhelming Odds лечит на 30% урона по героям",
+   "en_d": "Overwhelming Odds heals for 30% of its damage to heroes"
+  },
+  {
+   "id": "lc_p_onslaught",
+   "r": "purple",
+   "branch": "W",
+   "ab": "legion_commander_press_the_attack",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "status": 25
+     }
+    }
+   ],
+   "ru": "Натиск",
+   "en": "Onslaught",
+   "ru_d": "Press the Attack дает Легиону 25% сопротивления эффектам",
+   "en_d": "Press the Attack grants Legion 25% status resistance"
+  },
+  {
+   "id": "lc_p_fervor",
+   "r": "purple",
+   "branch": "W",
+   "ab": "legion_commander_press_the_attack",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "as": 60
+     }
+    }
+   ],
+   "ru": "Пыл",
+   "en": "Fervor",
+   "ru_d": "Press the Attack дает Легиону +60 скорости атаки",
+   "en_d": "Press the Attack grants Legion +60 attack speed"
+  },
+  {
+   "id": "lc_p_riposte",
+   "r": "purple",
+   "branch": "E",
+   "ab": "legion_commander_moment_of_courage",
+   "mods": "trigger_attacks:-1",
+   "ru": "Выпад",
+   "en": "Riposte",
+   "ru_d": "Moment of Courage срабатывает на 1 атаку раньше",
+   "en_d": "Moment of Courage triggers 1 attack sooner"
+  },
+  {
+   "id": "lc_p_counter",
+   "r": "purple",
+   "branch": "E",
+   "ab": "legion_commander_moment_of_courage",
+   "mods": "secondary_attack_damage:+40",
+   "ru": "Встречный удар",
+   "en": "Counterstrike",
+   "ru_d": "Ответная атака Moment of Courage наносит +40% урона",
+   "en_d": "The Moment of Courage counterattack deals +40% damage"
+  },
+  {
+   "id": "lc_p_victor",
+   "r": "purple",
+   "branch": "R",
+   "ab": "legion_commander_duel",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "win",
+     "win": "duration",
+     "heal": 40
+    }
+   ],
+   "ru": "Победитель",
+   "en": "Victor",
+   "ru_d": "Победа в дуэли (убийство героя во время Duel) лечит на 40% здоровья",
+   "en_d": "Winning a duel (a hero kill during Duel) heals 40% of max health"
+  },
+  {
+   "id": "lc_p_steadfast",
+   "r": "purple",
+   "branch": "R",
+   "ab": "legion_commander_duel",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "armor": 10,
+      "status": 30
+     }
+    }
+   ],
+   "ru": "Стойкость дуэлянта",
+   "en": "Duelist's Resolve",
+   "ru_d": "Во время Duel +10 брони и +30% сопротивления эффектам",
+   "en_d": "During Duel +10 armor and +30% status resistance"
+  },
+  {
+   "id": "lc_l_campaign",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "legion_commander_overwhelming_odds",
+   "ru": "Ветеран похода",
+   "en": "Campaign Veteran",
+   "ru_d": "Убийство героя в течение 6 с после Overwhelming Odds лечит на 15% здоровья и навсегда даёт +1 брони, до 6 убийств",
+   "en_d": "Killing a hero within 6 s of Overwhelming Odds heals 15% max health and permanently grants +1 armor, up to 6 kills",
+   "ru_aw": "Пробуждение: лечение 20%, броня за убийство 1.5 (до 9)",
+   "en_aw": "Awakening: 20% healing, 1.5 armor per kill (up to 9)",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "win",
+     "win": 6,
+     "heal": 15,
+     "stack": {
+      "props": {
+       "armor": 1
+      },
+      "max": 6,
+      "perm": 1
+     },
+     "aw": {
+      "heal": 20,
+      "stack": {
+       "props": {
+        "armor": 1.5
+       },
+       "max": 6,
+       "perm": 1
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "lc_l_frenzy",
+   "r": "legend",
+   "branch": "W",
+   "ab": "legion_commander_press_the_attack",
+   "mods": "hp_regen:+40",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "as": 80
+     },
+     "aw": {
+      "props": {
+       "dmg": 15
+      }
+     }
+    }
+   ],
+   "ru": "Неистовство",
+   "en": "Frenzy",
+   "ru_d": "Press the Attack лечит на 40 в секунду больше и дает +80 скорости атаки",
+   "en_d": "Press the Attack heals 40 more per second and grants +80 attack speed",
+   "ru_aw": "Пробуждение: еще +15% урона",
+   "en_aw": "Awakening: also +15% damage"
+  },
+  {
+   "id": "lc_l_courage",
+   "r": "legend",
+   "branch": "E",
+   "ab": "legion_commander_moment_of_courage",
+   "mods": "trigger_attacks:-1;hp_leech_percent:+20",
+   "awmods": "secondary_attack_damage:+50",
+   "ru": "Бесстрашие",
+   "en": "Fearlessness",
+   "ru_d": "Moment of Courage срабатывает на 1 атаку раньше, его вампиризм +20%",
+   "en_d": "Moment of Courage triggers 1 attack sooner, its lifesteal +20%",
+   "ru_aw": "Пробуждение: ответная атака +50% урона",
+   "en_aw": "Awakening: counterattack +50% damage"
+  },
+  {
+   "id": "lc_l_duel",
+   "r": "legend",
+   "branch": "R",
+   "ab": "legion_commander_duel",
+   "mods": "reward_damage:+15;duration:+1",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "win",
+     "win": "duration",
+     "cdpct": 50,
+     "aw": {
+      "cdpct": 100
+     }
+    }
+   ],
+   "ru": "Чемпион",
+   "en": "Champion",
+   "ru_d": "Duel длится на 1 с дольше, награда за победу +15 урона; победа снимает половину перезарядки Duel",
+   "en_d": "Duel lasts 1 s longer, victory reward +15 damage; winning removes half of Duel's cooldown",
+   "ru_aw": "Пробуждение: победа полностью обновляет Duel",
+   "en_aw": "Awakening: winning fully refreshes Duel"
+  },
+  {
+   "id": "lc_m_encircle",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "legion_commander_overwhelming_odds",
+   "fx": [
+    {
+     "t": "pull",
+     "at": "self",
+     "radius": "radius",
+     "dist": 300,
+     "pfx": "particles/units/heroes/hero_dark_seer/dark_seer_vacuum.vpcf"
+    }
+   ],
+   "ru": "Окружение",
+   "en": "Encircle",
+   "ru_d": "Overwhelming Odds стягивает врагов к Легионке",
+   "en_d": "Overwhelming Odds drags enemies to Legion Commander",
+   "mech": 1
+  },
+  {
+   "id": "lc_m_charge",
+   "r": "purple",
+   "branch": "W",
+   "ab": "legion_commander_press_the_attack",
+   "fx": [
+    {
+     "t": "dash",
+     "dist": 450,
+     "to": "point"
+    }
+   ],
+   "ru": "В атаку!",
+   "en": "Charge!",
+   "ru_d": "Press the Attack — рывок вперед на 450",
+   "en_d": "Press the Attack dashes forward 450",
+   "mech": 1
+  },
+  {
+   "id": "lc_m_retinue",
+   "r": "purple",
+   "branch": "R",
+   "ab": "legion_commander_duel",
+   "fx": [
+    {
+     "t": "illusion",
+     "n": 2,
+     "dur": 4,
+     "out": -60,
+     "inc": 200
+    }
+   ],
+   "ru": "Свита",
+   "en": "Retinue",
+   "ru_d": "Duel вызывает 2 иллюзии Легионки на 4 с (40% урона)",
+   "en_d": "Duel summons 2 Legion illusions for 4 s (40% damage)",
+   "mech": 1
+  },
+  {
+   "id": "lc_m_autoodds",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "legion_commander_overwhelming_odds",
+   "fx": [
+    {
+     "t": "auto",
+     "every": 8,
+     "range": 400
+    }
+   ],
+   "ru": "Безжалостная толпа",
+   "en": "Merciless Horde",
+   "ru_d": "Раз в 8 с Overwhelming Odds срабатывает сам, если рядом (400) есть враг (бесплатно)",
+   "en_d": "Every 8 s Overwhelming Odds triggers by itself when an enemy is within 400 (free)",
+   "mech": 1
+  }
+ ]
+}

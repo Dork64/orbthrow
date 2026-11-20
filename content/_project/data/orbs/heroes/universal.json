@@ -1,0 +1,35 @@
+{
+ "hero": "*",
+ "orbs": [
+  {
+   "id": "l_defiance",
+   "ru": "Вопреки судьбе",
+   "en": "Defiance",
+   "ru_d": "Пока здоровье ниже 35%: +50 скорости атаки и +15% вампиризма способностей",
+   "en_d": "While below 35% health: +50 attack speed and +15% spell lifesteal",
+   "fx": [
+    {
+     "t": "lowhp",
+     "ab": "",
+     "thr": 35,
+     "props": {
+      "as": 50,
+      "sls": 15
+     },
+     "aw": {
+      "props": {
+       "as": 75,
+       "sls": 20
+      }
+     }
+    }
+   ],
+   "ru_aw": "Пробуждение: +75 скорости атаки и 20% вампиризма способностей",
+   "en_aw": "Awakening: +75 attack speed and 20% spell lifesteal",
+   "r": "legend",
+   "branch": "H",
+   "ab": "",
+   "max": 1
+  }
+ ]
+}

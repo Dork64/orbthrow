@@ -1,0 +1,354 @@
+{
+ "hero": "npc_dota_hero_bristleback",
+ "orbs": [
+  {
+   "id": "bb_p_splash",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "bristleback_viscous_nasal_goo",
+   "fx": [
+    {
+     "t": "blast",
+     "at": "target",
+     "delay": 0,
+     "radius": 350,
+     "dmg": 0,
+     "type": "magic",
+     "debuff": {
+      "props": {
+       "as": -25
+      },
+      "dur": 5
+     }
+    }
+   ],
+   "ru": "Липкие брызги",
+   "en": "Sticky Splash",
+   "ru_d": "Nasal Goo забрызгивает врагов в 350 вокруг цели: −25 скорости атаки на 5 с",
+   "en_d": "Nasal Goo splashes enemies within 350 of the target: −25 attack speed for 5 s"
+  },
+  {
+   "id": "bb_p_weaken",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "bristleback_viscous_nasal_goo",
+   "fx": [
+    {
+     "t": "vs",
+     "cond": "has:nasal_goo",
+     "pct": 10
+    }
+   ],
+   "ru": "Ослабление",
+   "en": "Weakened",
+   "ru_d": "Враги под Nasal Goo получают на 10% больше урона от Бристлбэка",
+   "en_d": "Enemies under Nasal Goo take 10% more damage from Bristleback"
+  },
+  {
+   "id": "bb_p_feed",
+   "r": "purple",
+   "branch": "W",
+   "ab": "bristleback_quill_spray",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "heal": 15
+    }
+   ],
+   "ru": "Иглы питают",
+   "en": "Feeding Quills",
+   "ru_d": "Quill Spray лечит Бристлбэка на 15% урона по героям",
+   "en_d": "Quill Spray heals Bristleback for 15% of its damage to heroes"
+  },
+  {
+   "id": "bb_p_needles",
+   "r": "purple",
+   "branch": "W",
+   "ab": "bristleback_quill_spray",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "armor": -1
+      },
+      "dur": 5,
+      "max": 6
+     }
+    }
+   ],
+   "ru": "Шипастые раны",
+   "en": "Needled Wounds",
+   "ru_d": "Quill Spray по герою снижает его броню на 1 на 5 с (до 6 раз)",
+   "en_d": "Quill Spray reduces a hero's armor by 1 for 5 s (up to 6 times)"
+  },
+  {
+   "id": "bb_p_retort",
+   "r": "purple",
+   "branch": "E",
+   "ab": "bristleback_bristleback",
+   "fx": [
+    {
+     "t": "taken",
+     "reflect": 12
+    }
+   ],
+   "ru": "Ответный укол",
+   "en": "Retort",
+   "ru_d": "12% урона от героев возвращается атакующему (чистый урон)",
+   "en_d": "12% of the damage taken from heroes is returned to the attacker as pure damage"
+  },
+  {
+   "id": "bb_p_hide",
+   "r": "purple",
+   "branch": "E",
+   "ab": "bristleback_bristleback",
+   "fx": [
+    {
+     "t": "lowhp",
+     "thr": 40,
+     "props": {
+      "inc": -15,
+      "regen": 15
+     }
+    }
+   ],
+   "ru": "Толстая шкура",
+   "en": "Thick Hide",
+   "ru_d": "Ниже 40% здоровья Бристлбэк получает на 15% меньше урона и восстанавливает +15 здоровья в секунду",
+   "en_d": "Below 40% health Bristleback takes 15% less damage and gains +15 health regeneration"
+  },
+  {
+   "id": "bb_p_unstoppable",
+   "r": "purple",
+   "branch": "R",
+   "ab": "bristleback_warpath",
+   "fx": [
+    {
+     "t": "stacks",
+     "mod": "warpath",
+     "min": 1,
+     "perstack": 1,
+     "props": {
+      "status": 3
+     }
+    }
+   ],
+   "ru": "Не остановить",
+   "en": "Unstoppable",
+   "ru_d": "Каждый стак Warpath дает 3% сопротивления эффектам",
+   "en_d": "Each Warpath stack grants 3% status resistance"
+  },
+  {
+   "id": "bb_p_bloodlust",
+   "r": "purple",
+   "branch": "R",
+   "ab": "bristleback_warpath",
+   "fx": [
+    {
+     "t": "stacks",
+     "mod": "warpath",
+     "min": 1,
+     "perstack": 1,
+     "props": {
+      "ls": 2
+     }
+    }
+   ],
+   "ru": "Жажда крови",
+   "en": "Bloodlust",
+   "ru_d": "Каждый стак Warpath дает 2% вампиризма атак по героям",
+   "en_d": "Each Warpath stack grants 2% lifesteal on attacks against heroes"
+  },
+  {
+   "id": "bb_l_flood",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "bristleback_viscous_nasal_goo",
+   "fx": [
+    {
+     "t": "blast",
+     "at": "self",
+     "delay": 0,
+     "radius": 700,
+     "dmg": 0,
+     "type": "magic",
+     "debuff": {
+      "props": {
+       "armor": -3,
+       "ms": -15
+      },
+      "dur": 5
+     },
+     "aw": {
+      "radius": 900,
+      "debuff": {
+       "props": {
+        "armor": -5,
+        "ms": -15
+       }
+      }
+     }
+    }
+   ],
+   "ru": "Слизистый потоп",
+   "en": "Goo Flood",
+   "ru_d": "Каждое применение Nasal Goo окатывает всех врагов в 700: −3 брони и −15% скорости бега на 5 с",
+   "en_d": "Every Nasal Goo also drenches all enemies within 700: −3 armor and −15% movement speed for 5 s",
+   "ru_aw": "Пробуждение: радиус 900, −5 брони",
+   "en_aw": "Awakening: radius 900, −5 armor"
+  },
+  {
+   "id": "bb_l_porcupine",
+   "r": "legend",
+   "branch": "W",
+   "ab": "bristleback_quill_spray",
+   "mods": "quill_stack_damage:+15;max_damage:+250",
+   "fx": [
+    {
+     "t": "echo",
+     "delays": [
+      0.3
+     ],
+     "pct": 0,
+     "aw": {
+      "pct": 60
+     }
+    }
+   ],
+   "ru": "Дикобраз",
+   "en": "Porcupine",
+   "ru_d": "Урон за стак Quill Spray +15, предел урона +250",
+   "en_d": "Quill Spray damage per stack +15, damage cap +250",
+   "ru_aw": "Пробуждение: через 0.3 с Quill Spray повторно бьет тех же врагов с 60% урона",
+   "en_aw": "Awakening: 0.3 s later Quill Spray hits the same enemies again for 60% damage"
+  },
+  {
+   "id": "bb_l_spine",
+   "r": "legend",
+   "branch": "E",
+   "ab": "bristleback_bristleback",
+   "fx": [
+    {
+     "t": "passive",
+     "props": {
+      "inc": -10
+     },
+     "aw": {
+      "props": {
+       "inc": -15
+      }
+     }
+    },
+    {
+     "t": "taken",
+     "reflect": 15,
+     "aw": {
+      "reflect": 25
+     }
+    }
+   ],
+   "ru": "Стальная спина",
+   "en": "Steel Spine",
+   "ru_d": "−10% получаемого урона; 15% урона от героев возвращается атакующему",
+   "en_d": "−10% damage taken; 15% of the damage from heroes is returned to the attacker",
+   "ru_aw": "Пробуждение: −15% урона, возврат 25%",
+   "en_aw": "Awakening: −15% damage taken, 25% returned"
+  },
+  {
+   "id": "bb_l_warpath",
+   "r": "legend",
+   "branch": "R",
+   "ab": "bristleback_warpath",
+   "mods": "max_stacks:+6;stack_duration:+6",
+   "awmods": "damage_per_stack:+6",
+   "ru": "Бесконечная тропа",
+   "en": "Endless Warpath",
+   "ru_d": "Warpath копит на 6 стаков больше, стаки держатся на 6 с дольше",
+   "en_d": "Warpath holds 6 more stacks, and they last 6 s longer",
+   "ru_aw": "Пробуждение: +6 урона за стак",
+   "en_aw": "Awakening: +6 damage per stack"
+  },
+  {
+   "id": "bb_m_doublespray",
+   "r": "purple",
+   "branch": "W",
+   "ab": "bristleback_quill_spray",
+   "fx": [
+    {
+     "t": "multi",
+     "chance": 40,
+     "times": 1,
+     "delay": 0.35
+    }
+   ],
+   "ru": "Двойной залп",
+   "en": "Double Volley",
+   "ru_d": "40% шанс, что Quill Spray выстрелит еще раз",
+   "en_d": "40% chance that Quill Spray fires again",
+   "mech": 1
+  },
+  {
+   "id": "bb_m_spiketrail",
+   "r": "purple",
+   "branch": "W",
+   "ab": "bristleback_quill_spray",
+   "fx": [
+    {
+     "t": "trail",
+     "dps": "quill_base_damage*0.6",
+     "radius": 160,
+     "life": 3,
+     "type": "phys",
+     "pfx": "particles/units/heroes/hero_viper/viper_nethertoxin.vpcf"
+    }
+   ],
+   "ru": "Шипастый след",
+   "en": "Spike Trail",
+   "ru_d": "Где бежит Бристл, 3 с лежат иглы: 60% базового урона иголок в секунду",
+   "en_d": "Where Bristleback runs, quills stay on the ground for 3 s: 60% of base quill damage per second",
+   "mech": 1
+  },
+  {
+   "id": "bb_m_autogoo",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "bristleback_viscous_nasal_goo",
+   "fx": [
+    {
+     "t": "auto",
+     "every": 3,
+     "range": 650,
+     "heroOnly": 1
+    }
+   ],
+   "ru": "Сопливый туман",
+   "en": "Snot Fog",
+   "ru_d": "Раз в 3 с сопли сами летят в ближайшего вражеского героя в 650 (бесплатно)",
+   "en_d": "Every 3 s Nasal Goo flies at the nearest enemy hero within 650 by itself (free)",
+   "mech": 1
+  },
+  {
+   "id": "bb_m_goohop",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "bristleback_viscous_nasal_goo",
+   "fx": [
+    {
+     "t": "dash",
+     "dist": 300,
+     "to": "back"
+    }
+   ],
+   "ru": "Плевок и отход",
+   "en": "Spit and Run",
+   "ru_d": "После соплей Бристл отпрыгивает на 300 назад",
+   "en_d": "After Nasal Goo, Bristleback hops back 300",
+   "mech": 1
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "orbthrow",
+  "private": true,
+  "scripts": {
+    "gen": "node tools/gen.js",
+    "build:vscripts": "tstl --project src/vscripts/tsconfig.json",
+    "build:panorama": "tsc --project src/panorama/tsconfig.json",
+    "build": "node tools/clean.js && npm run gen && npm run build:vscripts && npm run build:panorama && node tools/checklua.js && node tools/assemble.js",
+    "test": "vitest run",
+    "test:lua": "node tools/luatest.js",
+    "check": "npm run build && npm test && npm run test:lua",
+    "sim": "node tools/sim/gen_consts.js && node tools/sim/gen_heroes.js && luajit tools/sim/sim.lua build/game/scripts/vscripts .sim"
+  },
+  "devDependencies": {
+    "@moddota/dota-lua-types": "4.38.2",
+    "@moddota/panorama-types": "1.39.2",
+    "typescript": "5.5.2",
+    "typescript-to-lua": "1.26.2",
+    "vitest": "3.2.4"
+  }
+}

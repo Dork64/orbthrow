@@ -1,0 +1,84 @@
+{
+ "hero": "npc_dota_hero_juggernaut",
+ "orbs": [
+  {
+   "id": "jugg_m_autofury",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "juggernaut_blade_fury",
+   "fx": [
+    {
+     "t": "auto",
+     "every": 22,
+     "range": 300,
+     "heroOnly": 1
+    }
+   ],
+   "ru": "Вихрь сам",
+   "en": "Self-Spinning Blades",
+   "ru_d": "Раз в 22 с Blade Fury раскручивается сам, если рядом (300) вражеский герой — бесплатно",
+   "en_d": "Every 22 s Blade Fury starts by itself when an enemy hero is within 300 — free",
+   "mech": 1
+  },
+  {
+   "id": "jugg_m_furytrail",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "juggernaut_blade_fury",
+   "fx": [
+    {
+     "t": "trail",
+     "win": "duration",
+     "dps": "blade_fury_damage*0.5",
+     "radius": 180,
+     "life": 3,
+     "type": "magic",
+     "pfx": "particles/units/heroes/hero_batrider/batrider_firefly_path.vpcf"
+    }
+   ],
+   "ru": "Огненный вихрь",
+   "en": "Fire Whirl",
+   "ru_d": "Во время Blade Fury за вами 3 с горит земля: 50% урона вихря в секунду",
+   "en_d": "During Blade Fury the ground behind you burns for 3 s: 50% of Blade Fury damage per second",
+   "mech": 1
+  },
+  {
+   "id": "jugg_m_wardloop",
+   "r": "purple",
+   "branch": "W",
+   "ab": "juggernaut_healing_ward",
+   "fx": [
+    {
+     "t": "rewind",
+     "delay": 5,
+     "heal": 60
+    }
+   ],
+   "ru": "Тотем-якорь",
+   "en": "Anchor Ward",
+   "ru_d": "Через 5 с после тотема Джаггернаут возвращается на место установки и восстанавливает 60% потерянного здоровья",
+   "en_d": "5 s after placing the ward Juggernaut returns to where he placed it and restores 60% of the health he lost",
+   "mech": 1
+  },
+  {
+   "id": "jugg_m_omniclones",
+   "r": "purple",
+   "branch": "R",
+   "ab": "juggernaut_omni_slash",
+   "fx": [
+    {
+     "t": "illusion",
+     "n": 2,
+     "dur": 6,
+     "out": -50,
+     "inc": 200
+    }
+   ],
+   "ru": "Школа клинка",
+   "en": "Blade School",
+   "ru_d": "Omnislash вызывает 2 иллюзии на 6 с (50% урона)",
+   "en_d": "Omnislash summons 2 illusions for 6 s (50% damage)",
+   "mech": 1
+  }
+ ]
+}

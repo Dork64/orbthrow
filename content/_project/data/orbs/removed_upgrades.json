@@ -1,0 +1,210 @@
+{
+  "date": "2026-11-20",
+  "note": "Старые сферы заменены новыми один к одному; старые идентификаторы больше не выдаются.",
+  "removed": [
+    {
+      "id": "jugg_w_heal",
+      "reason": "Повторяет изменение juggernaut_healing_ward.healing_ward_heal_amount",
+      "hero": "npc_dota_hero_juggernaut",
+      "replacement": "jugg_w_pursuit"
+    },
+    {
+      "id": "sniper_h_grenade",
+      "reason": "Улучшает способность, доступную только с Scepter/Shard",
+      "hero": "npc_dota_hero_sniper",
+      "replacement": "sniper_e_sightline"
+    },
+    {
+      "id": "sven_e_ms",
+      "reason": "Повторяет изменение sven_warcry.movespeed",
+      "hero": "npc_dota_hero_sven",
+      "replacement": "sven_e_breath"
+    },
+    {
+      "id": "pudge_w_dmg",
+      "reason": "Повторяет изменение pudge_rot.rot_damage",
+      "hero": "npc_dota_hero_pudge",
+      "replacement": "pudge_q_grip"
+    },
+    {
+      "id": "pudge_w_radius",
+      "reason": "Повторяет изменение pudge_rot.rot_radius",
+      "hero": "npc_dota_hero_pudge",
+      "replacement": "pudge_e_thrift"
+    },
+    {
+      "id": "pa_e_radius",
+      "reason": "Улучшает способность, доступную только с Scepter/Shard",
+      "hero": "npc_dota_hero_phantom_assassin",
+      "replacement": "pa_e_quiet"
+    },
+    {
+      "id": "pa_e_dur",
+      "reason": "Улучшает способность, доступную только с Scepter/Shard",
+      "hero": "npc_dota_hero_phantom_assassin",
+      "replacement": "pa_e_veil"
+    },
+    {
+      "id": "pa_e_cd",
+      "reason": "Улучшает способность, доступную только с Scepter/Shard",
+      "hero": "npc_dota_hero_phantom_assassin",
+      "replacement": "pa_e_stride"
+    },
+    {
+      "id": "es_q_cd",
+      "reason": "Повторяет изменение earthshaker_fissure.AbilityCooldown",
+      "hero": "npc_dota_hero_earthshaker",
+      "replacement": "es_q_barricade"
+    },
+    {
+      "id": "ursa_r_cd",
+      "reason": "Повторяет изменение ursa_enrage.AbilityCooldown",
+      "hero": "npc_dota_hero_ursa",
+      "replacement": "ursa_r_composure"
+    },
+    {
+      "id": "viper_q_stacks",
+      "reason": "Повторяет изменение viper_poison_attack.max_stacks",
+      "hero": "npc_dota_hero_viper",
+      "replacement": "viper_q_persistence"
+    },
+    {
+      "id": "luna_r_hits",
+      "reason": "Повторяет изменение luna_eclipse.hit_count",
+      "hero": "npc_dota_hero_luna",
+      "replacement": "luna_r_focus"
+    },
+    {
+      "id": "lc_q_radius",
+      "reason": "Повторяет изменение legion_commander_overwhelming_odds.radius",
+      "hero": "npc_dota_hero_legion_commander",
+      "replacement": "lc_q_discipline"
+    },
+    {
+      "id": "lc_w_ms",
+      "reason": "Повторяет изменение legion_commander_press_the_attack.move_speed",
+      "hero": "npc_dota_hero_legion_commander",
+      "replacement": "lc_w_resolve"
+    },
+    {
+      "id": "bs_r_cd",
+      "reason": "Повторяет изменение bloodseeker_rupture.AbilityCooldown",
+      "hero": "npc_dota_hero_bloodseeker",
+      "replacement": "bs_r_precision"
+    },
+    {
+      "id": "ogre_q_cd",
+      "reason": "Повторяет изменение ogre_magi_fireblast.AbilityCooldown",
+      "hero": "npc_dota_hero_ogre_magi",
+      "replacement": "ogre_q_thrift"
+    },
+    {
+      "id": "l_aghanim",
+      "reason": "Выдаёт Scepter и Shard",
+      "hero": "_universal",
+      "replacement": "l_defiance"
+    },
+    {
+      "id": "bs_p_bleed",
+      "reason": "Урон от максимального здоровья в Bloodrage — Shard",
+      "hero": "npc_dota_hero_bloodseeker",
+      "replacement": "bs_p_redrhythm"
+    },
+    {
+      "id": "drow_m_icetrap",
+      "reason": "Улучшает способность, доступную только с Scepter/Shard",
+      "hero": "npc_dota_hero_drow_ranger",
+      "replacement": "drow_m_backline"
+    },
+    {
+      "id": "es_l_quake",
+      "reason": "Раскол Enchant Totem — Scepter",
+      "hero": "npc_dota_hero_earthshaker",
+      "replacement": "es_l_faultline"
+    },
+    {
+      "id": "es_m_totemleap",
+      "reason": "Прыжок Enchant Totem — Scepter",
+      "hero": "npc_dota_hero_earthshaker",
+      "replacement": "es_m_stoneecho"
+    },
+    {
+      "id": "void_p_haste",
+      "reason": "Собственное ускорение Time Dilation — Shard",
+      "hero": "npc_dota_hero_faceless_void",
+      "replacement": "void_p_timeguard"
+    },
+    {
+      "id": "lc_l_odds",
+      "reason": "Повторяет изменение legion_commander_overwhelming_odds.radius",
+      "hero": "npc_dota_hero_legion_commander",
+      "replacement": "lc_l_campaign"
+    },
+    {
+      "id": "luna_p_swift",
+      "reason": "Скорость Lunar Orbit — Shard",
+      "hero": "npc_dota_hero_luna",
+      "replacement": "luna_p_thirdmoon"
+    },
+    {
+      "id": "luna_l_eclipse",
+      "reason": "Повторяет изменение luna_eclipse.hit_count",
+      "hero": "npc_dota_hero_luna",
+      "replacement": "luna_l_moonhunt"
+    },
+    {
+      "id": "mir_l_leap",
+      "reason": "Дополнительный Leap — Shard",
+      "hero": "npc_dota_hero_mirana",
+      "replacement": "mir_l_starhunt"
+    },
+    {
+      "id": "pudge_l_rot",
+      "reason": "Повторяет изменение pudge_rot.rot_radius",
+      "hero": "npc_dota_hero_pudge",
+      "replacement": "pudge_l_mire"
+    },
+    {
+      "id": "qop_p_flash",
+      "reason": "Взрыв после Blink — Shard",
+      "hero": "npc_dota_hero_queenofpain",
+      "replacement": "qop_p_masquerade"
+    },
+    {
+      "id": "sniper_m_mine",
+      "reason": "Улучшает способность, доступную только с Scepter/Shard",
+      "hero": "npc_dota_hero_sniper",
+      "replacement": "sniper_m_tripwire"
+    },
+    {
+      "id": "sven_p_shield",
+      "reason": "Щит Warcry — Shard",
+      "hero": "npc_dota_hero_sven",
+      "replacement": "sven_p_secondbreath"
+    },
+    {
+      "id": "sven_l_banner",
+      "reason": "Пассивный Warcry — дублирование эффекта Shard",
+      "hero": "npc_dota_hero_sven",
+      "replacement": "sven_l_steeltempo"
+    },
+    {
+      "id": "sven_m_boltride",
+      "reason": "Полёт за Storm Bolt — Scepter",
+      "hero": "npc_dota_hero_sven",
+      "replacement": "sven_m_thunderseal"
+    },
+    {
+      "id": "viper_l_poison",
+      "reason": "Повторяет изменение viper_poison_attack.max_stacks",
+      "hero": "npc_dota_hero_viper",
+      "replacement": "viper_l_venomcycle"
+    },
+    {
+      "id": "luna_r_beams",
+      "hero": "npc_dota_hero_luna",
+      "reason": "Число лучей Eclipse — Scepter",
+      "replacement": "luna_r_horizon"
+    }
+  ]
+}

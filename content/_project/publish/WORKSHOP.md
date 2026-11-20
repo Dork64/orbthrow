@@ -1,0 +1,81 @@
+# ORBTHROW — публикация в Мастерской Steam
+
+## Что загружать
+
+- Аддон `orbthrow` (папки `game/dota_addons/orbthrow` и `content/dota_addons/orbthrow` на ПК, их собирает выкладка).
+- Картинка превью: `publish/preview.jpg` (1024×1024, 93 КБ; Steam принимает превью до 1 МБ).
+- Название: **ORBTHROW**.
+- Описание: ниже, есть русская и английская версии (Мастерская понимает разметку BBCode).
+
+## Как опубликовать
+
+1. Запустить `launch_orbthrow.bat` и проверить партию (пункты «Перед публикацией» в `TESTING.md`).
+2. Запустить Dota 2 Workshop Tools (Steam → Dota 2 → «Launch Dota 2 - Tools»), выбрать аддон `orbthrow`.
+3. В окне Asset Browser открыть Workshop Manager (кнопка публикации в верхней панели), выбрать `orbthrow`, нажать «Publish».
+4. Заполнить название и описание, указать превью `publish/preview.jpg`.
+5. Видимость: сначала **Friends Only / Hidden**. Пройти партию с другом через Arcade. Потом переключить на **Public**.
+6. При первой публикации Steam попросит принять соглашение Мастерской. Это делается на странице предмета в Steam.
+
+Обновления публикуются так же: Workshop Manager → `orbthrow` → «Publish», в «Change notes» коротко написать, что изменилось.
+
+Точные названия кнопок в Workshop Tools могут немного отличаться от версии к версии. Официальная страница Valve про публикацию говорит только, что аддоны публикуются через Workshop Manager.
+
+## Описание (русский)
+
+```
+[h1]ORBTHROW — все против всех со сферами улучшений[/h1]
+
+Арена на 4-10 игроков: гонка убийств как в Overthrow и сферы улучшений, которые прямо в бою собирают уникальный билд героя.
+
+[h2]Как играть[/h2]
+[list]
+[*][b]Цель[/b] — первым набрать лимит убийств. Когда время выйдет, побеждает лидер.
+[*][b]Сферы[/b]: серая шкала копится сама, синяя — за лагеря, фиолетовая — за убийства и помощь. Каждая полная шкала дает выбор из 3 улучшений, среди них — уникальные механики героев: автокаст, двойные способности, мины, клоны, призыв.
+[*][b]Легендарка[/b] на 10 уровне меняет стиль игры героем, на 20 уровне она пробуждается.
+[*][b]Повелитель[/b] в центре бросает сферы, а кольцо вокруг него дает больше золота и опыта, но там видно всех.
+[*][b]Курьер с сундуком[/b] (захват за 3 секунды), [b]Гоблин-казначей[/b] и 16 лагерей.
+[*][b]Нейтральные предметы[/b] за лесных крипов, новый тир каждые 4 минуты.
+[*][b]Расходники в слотах[/b], как в 1x6: варды, дым и пыль на клавишах 1–4. Boots of Travel можно съесть ради скорости.
+[*][b]Догоняние[/b]: месть, охота на убежавшего лидера, подмога отстающим.
+[/list]
+
+[h2]Герои[/h2]
+31 герой. У каждого свои синие (9-14), фиолетовые (8), уникальные механики (4) и легендарные (4) сферы, плюс общие улучшения. [b]События арены[/b] каждые 5 минут: Кровавая луна, Золотой дождь, Гроза и Ускорение.
+Axe, Juggernaut, Sniper, Lina, Sven, Bristleback, Pudge, Drow Ranger, Phantom Assassin, Crystal Maiden, Earthshaker, Tidehunter, Dragon Knight, Ursa, Viper, Queen of Pain, Lich, Luna, Mirana, Legion Commander, Zeus, Faceless Void, Bloodseeker, Windranger, Ogre Magi, Snapfire, Puck, Slark, Razor, Necrophos, Sand King.
+
+[h2]Лобби[/h2]
+Все игроки голосуют за лимит убийств и время партии, хост выбирает число ботов. Боты добирают игроков до четырех.
+
+[h2]Благодарности[/h2]
+Карта и часть оформления — из открытого примера Overthrow от Valve. Идея сфер навеяна режимами Dota 1x6 и Overthrow 3.0. Весь код режима написан с нуля.
+```
+
+## Description (English)
+
+```
+[h1]ORBTHROW — free for all with upgrade orbs[/h1]
+
+An arena for 4-10 players: an Overthrow-style kill race plus upgrade orbs that build a unique hero right in the middle of the fight.
+
+[h2]How to play[/h2]
+[list]
+[*][b]Goal[/b]: be the first to reach the kill limit. When time runs out, the leader wins.
+[*][b]Orbs[/b]: the grey bar fills by itself, blue from camps, purple from kills and assists. Every full bar lets you choose one of 3 upgrades, including unique hero mechanics: autocasts, double casts, mines, clones, summons.
+[*][b]Legendary orb[/b] at level 10 changes how your hero plays; at level 20 it awakens.
+[*][b]The Overboss[/b] in the center throws orbs, and the ring around him gives more gold and experience, but everyone is visible there.
+[*][b]Courier chest[/b] (3-second capture), [b]Greevil Treasurer[/b] and 16 neutral camps.
+[*][b]Neutral items[/b] from jungle creeps, a new tier every 4 minutes.
+[*][b]Consumable slots[/b] like in 1x6: wards, smoke and dust on keys 1–4. Boots of Travel can be eaten for speed.
+[*][b]Catch-up[/b]: revenge, a hunt on a runaway leader, help for trailing players.
+[/list]
+
+[h2]Heroes[/h2]
+31 heroes. Each has their own blue (9-14), purple (8), unique mechanic (4) and legendary (4) orbs, plus shared upgrades. [b]Arena events[/b] every 5 minutes: Blood Moon, Gold Rain, Storm and Haste.
+Axe, Juggernaut, Sniper, Lina, Sven, Bristleback, Pudge, Drow Ranger, Phantom Assassin, Crystal Maiden, Earthshaker, Tidehunter, Dragon Knight, Ursa, Viper, Queen of Pain, Lich, Luna, Mirana, Legion Commander, Zeus, Faceless Void, Bloodseeker, Windranger, Ogre Magi, Snapfire, Puck, Slark, Razor, Necrophos, Sand King.
+
+[h2]Lobby[/h2]
+Everyone votes for the kill goal and match length; the host picks the number of bots. Bots fill the game up to four players.
+
+[h2]Credits[/h2]
+The map and some art come from Valve's open Overthrow example. The orb idea is inspired by Dota 1x6 and Overthrow 3.0. All game mode code is written from scratch.
+```

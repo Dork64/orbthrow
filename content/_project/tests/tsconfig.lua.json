@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "rootDir": "..",
+        "outDir": "../build/luatest",
+        "target": "esnext",
+        "lib": ["esnext"],
+        "types": ["@moddota/dota-lua-types/normalized"],
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "strict": true,
+        "baseUrl": ".",
+        "paths": { "vitest": ["./lua_vitest.ts"] }
+    },
+    "tstl": { "luaTarget": "JIT", "sourceMapTraceback": false, "noImplicitSelf": true },
+    "include": ["./*_test.ts", "./lua_vitest.ts", "./lua_main.ts", "../src/common/*.d.ts"],
+    "exclude": ["./*_node_test.ts"]
+}

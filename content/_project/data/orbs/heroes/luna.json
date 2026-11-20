@@ -1,0 +1,313 @@
+{
+ "hero": "npc_dota_hero_luna",
+ "orbs": [
+  {
+   "id": "luna_p_glare",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "luna_lucent_beam",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "debuff": {
+      "props": {
+       "mr": -10
+      },
+      "dur": 4
+     }
+    }
+   ],
+   "ru": "Лунный блик",
+   "en": "Moon Glare",
+   "ru_d": "Lucent Beam снижает сопротивление магии врагов на 10% на 4 с",
+   "en_d": "Lucent Beam reduces enemies' magic resistance by 10% for 4 s"
+  },
+  {
+   "id": "luna_p_flash",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "luna_lucent_beam",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "splash": {
+      "radius": 300,
+      "pct": 50
+     }
+    }
+   ],
+   "ru": "Лунная вспышка",
+   "en": "Moon Flash",
+   "ru_d": "Lucent Beam задевает врагов в 300 вокруг цели (50% урона)",
+   "en_d": "Lucent Beam also hits enemies within 300 of the target (50% damage)"
+  },
+  {
+   "id": "luna_p_guard",
+   "r": "purple",
+   "branch": "W",
+   "ab": "luna_lunar_orbit",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "rotating_glaives_duration",
+     "props": {
+      "armor": 8
+     }
+    }
+   ],
+   "ru": "Лунная стража",
+   "en": "Moon Guard",
+   "ru_d": "Lunar Orbit дает Луне +8 брони на время действия",
+   "en_d": "Lunar Orbit grants Luna +8 armor for its duration"
+  },
+  {
+   "id": "luna_p_thirdmoon",
+   "r": "purple",
+   "branch": "W",
+   "ab": "luna_lunar_orbit",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "attack",
+     "win": "rotating_glaives_duration",
+     "heroOnly": 1,
+     "every": 3,
+     "icd": 1,
+     "extra": {
+      "flat": 60,
+      "type": "magic"
+     }
+    }
+   ],
+   "ru": "Третья луна",
+   "en": "Third Moon",
+   "ru_d": "Во время Lunar Orbit каждая 3-я атака по одному герою наносит ещё 60 магического урона; не чаще раза в секунду по цели",
+   "en_d": "During Lunar Orbit every third attack on the same hero deals 60 extra magic damage; at most once per second per target"
+  },
+  {
+   "id": "luna_p_sharp",
+   "r": "purple",
+   "branch": "E",
+   "ab": "luna_moon_glaive",
+   "fx": [
+    {
+     "t": "passive",
+     "perlvl": 1,
+     "props": {
+      "as": 10
+     }
+    }
+   ],
+   "ru": "Острые глефы",
+   "en": "Sharp Glaives",
+   "ru_d": "+10 скорости атаки за каждый уровень Moon Glaive",
+   "en_d": "+10 attack speed per Moon Glaive level"
+  },
+  {
+   "id": "luna_p_bounce",
+   "r": "purple",
+   "branch": "E",
+   "ab": "luna_moon_glaive",
+   "mods": "bounces:+2",
+   "ru": "Лишний отскок",
+   "en": "Extra Bounce",
+   "ru_d": "Moon Glaive отскакивает на 2 раза больше",
+   "en_d": "Moon Glaive bounces 2 more times"
+  },
+  {
+   "id": "luna_p_night",
+   "r": "purple",
+   "branch": "R",
+   "ab": "luna_eclipse",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "AbilityDuration",
+     "props": {
+      "ms": 25,
+      "evasion": 25
+     }
+    }
+   ],
+   "ru": "Ночная охотница",
+   "en": "Night Huntress",
+   "ru_d": "Во время Eclipse +25% скорости бега и +25% уклонения",
+   "en_d": "During Eclipse +25% movement speed and +25% evasion"
+  },
+  {
+   "id": "luna_p_harvest",
+   "r": "purple",
+   "branch": "R",
+   "ab": "luna_eclipse",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "win",
+     "win": "AbilityDuration",
+     "heal": 25
+    }
+   ],
+   "ru": "Лунная жатва",
+   "en": "Moon Harvest",
+   "ru_d": "Убийство героя во время Eclipse лечит на 25% здоровья",
+   "en_d": "A hero kill during Eclipse heals 25% of max health"
+  },
+  {
+   "id": "luna_l_beam",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "luna_lucent_beam",
+   "mods": "beam_damage:+75",
+   "awmods": "stun_duration:+0.4",
+   "fx": [
+    {
+     "t": "charges",
+     "n": 1
+    }
+   ],
+   "ru": "Двойной луч",
+   "en": "Twin Beam",
+   "ru_d": "У Lucent Beam есть запасной заряд, урон +75",
+   "en_d": "Lucent Beam gets a spare charge, damage +75",
+   "ru_aw": "Пробуждение: оглушение +0.4 с",
+   "en_aw": "Awakening: stun +0.4 s"
+  },
+  {
+   "id": "luna_l_orbit",
+   "r": "legend",
+   "branch": "W",
+   "ab": "luna_lunar_orbit",
+   "mods": "rotating_glaives:+2;rotating_glaives_collision_damage:+20",
+   "awmods": "rotating_glaives_speed:+40",
+   "ru": "Лунный вихрь",
+   "en": "Moon Whirl",
+   "ru_d": "Lunar Orbit: +2 глефы, урон касания +20",
+   "en_d": "Lunar Orbit: +2 glaives, collision damage +20",
+   "ru_aw": "Пробуждение: скорость вращения глеф +40",
+   "en_aw": "Awakening: glaive rotation speed +40"
+  },
+  {
+   "id": "luna_l_glaive",
+   "r": "legend",
+   "branch": "E",
+   "ab": "luna_moon_glaive",
+   "mods": "bounces:+3;damage_reduction_percent:-15",
+   "awmods": "range:+200",
+   "ru": "Лунный клинок",
+   "en": "Moon Blade",
+   "ru_d": "Moon Glaive отскакивает на 3 раза больше, отскоки теряют на 15% меньше урона",
+   "en_d": "Moon Glaive bounces 3 more times, bounces lose 15% less damage",
+   "ru_aw": "Пробуждение: дальность отскока +200",
+   "en_aw": "Awakening: bounce range +200"
+  },
+  {
+   "id": "luna_l_moonhunt",
+   "r": "legend",
+   "branch": "R",
+   "ab": "luna_eclipse",
+   "ru": "Лунная охота",
+   "en": "Moon Hunt",
+   "ru_d": "После Eclipse на 8 с: +70 скорости атаки и +150 дальности атаки",
+   "en_d": "After Eclipse: +70 attack speed and +150 attack range for 8 s",
+   "ru_aw": "Пробуждение: +100 скорости и +200 дальности атаки",
+   "en_aw": "Awakening: +100 attack speed and +200 attack range",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 8,
+     "props": {
+      "as": 70,
+      "range": 150
+     },
+     "aw": {
+      "props": {
+       "as": 100,
+       "range": 200
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "luna_m_autobeam",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "luna_lucent_beam",
+   "fx": [
+    {
+     "t": "auto",
+     "every": 5,
+     "range": 800,
+     "heroOnly": 1
+    }
+   ],
+   "ru": "Лунный прицел",
+   "en": "Moon Sight",
+   "ru_d": "Раз в 5 с Lucent Beam сам бьет ближайшего вражеского героя в 800 (бесплатно)",
+   "en_d": "Every 5 s Lucent Beam hits the nearest enemy hero within 800 by itself (free)",
+   "mech": 1
+  },
+  {
+   "id": "luna_m_doublebeam",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "luna_lucent_beam",
+   "fx": [
+    {
+     "t": "multi",
+     "chance": 40,
+     "times": 1,
+     "delay": 0.3
+    }
+   ],
+   "ru": "Двойной луч",
+   "en": "Double Beam",
+   "ru_d": "40% шанс второго Lucent Beam",
+   "en_d": "40% chance of a second Lucent Beam",
+   "mech": 1
+  },
+  {
+   "id": "luna_m_moonpath",
+   "r": "purple",
+   "branch": "W",
+   "ab": "luna_lunar_orbit",
+   "fx": [
+    {
+     "t": "trail",
+     "win": "rotating_glaives_duration",
+     "dps": "rotating_glaives_collision_damage*2",
+     "radius": 170,
+     "life": 3,
+     "type": "magic",
+     "pfx": "particles/units/heroes/hero_crystalmaiden/maiden_freezing_field_explosion.vpcf"
+    }
+   ],
+   "ru": "Лунная тропа",
+   "en": "Moon Path",
+   "ru_d": "Во время Lunar Orbit за Луной 3 с светится земля: двойной урон глеф орбиты в секунду",
+   "en_d": "During Lunar Orbit the ground behind Luna glows for 3 s: double orbit glaive damage per second",
+   "mech": 1
+  },
+  {
+   "id": "luna_m_wolves",
+   "r": "purple",
+   "branch": "R",
+   "ab": "luna_eclipse",
+   "fx": [
+    {
+     "t": "summon",
+     "unit": "npc_dota_neutral_alpha_wolf",
+     "n": 2,
+     "dur": 15
+    }
+   ],
+   "ru": "Волки луны",
+   "en": "Moon Wolves",
+   "ru_d": "Eclipse призывает 2 волков на 15 с (растут со временем партии)",
+   "en_d": "Eclipse summons 2 wolves for 15 s (they scale with match time)",
+   "mech": 1
+  }
+ ]
+}

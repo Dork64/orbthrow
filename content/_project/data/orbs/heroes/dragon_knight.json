@@ -1,0 +1,340 @@
+{
+ "hero": "npc_dota_hero_dragon_knight",
+ "orbs": [
+  {
+   "id": "dk_p_melt",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "dragon_knight_breathe_fire",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "debuff": {
+      "props": {
+       "armor": -4
+      },
+      "dur": 5
+     }
+    }
+   ],
+   "ru": "Плавленая броня",
+   "en": "Molten Armor",
+   "ru_d": "Breathe Fire снижает броню врагов на 4 на 5 с",
+   "en_d": "Breathe Fire reduces enemies' armor by 4 for 5 s"
+  },
+  {
+   "id": "dk_p_heat",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "dragon_knight_breathe_fire",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "heal": 20
+    }
+   ],
+   "ru": "Жар дракона",
+   "en": "Dragon's Heat",
+   "ru_d": "Breathe Fire лечит Дракона на 20% урона по героям",
+   "en_d": "Breathe Fire heals Dragon Knight for 20% of its damage to heroes"
+  },
+  {
+   "id": "dk_p_double",
+   "r": "purple",
+   "branch": "W",
+   "ab": "dragon_knight_dragon_tail",
+   "fx": [
+    {
+     "t": "refund",
+     "chance": 30,
+     "cdpct": 100
+    }
+   ],
+   "ru": "Двойной удар хвостом",
+   "en": "Double Tail",
+   "ru_d": "30% шанс, что Dragon Tail не уйдет на перезарядку",
+   "en_d": "30% chance that Dragon Tail does not go on cooldown"
+  },
+  {
+   "id": "dk_p_crush",
+   "r": "purple",
+   "branch": "W",
+   "ab": "dragon_knight_dragon_tail",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "extra": {
+      "atk": 100,
+      "type": "phys"
+     }
+    }
+   ],
+   "ru": "Сокрушительный хвост",
+   "en": "Crushing Tail",
+   "ru_d": "Dragon Tail наносит еще 100% урона атаки (физический урон)",
+   "en_d": "Dragon Tail deals an extra 100% of attack damage as physical damage"
+  },
+  {
+   "id": "dk_p_smolder",
+   "r": "purple",
+   "branch": "E",
+   "ab": "dragon_knight_wyrms_wrath",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "attack",
+     "heroOnly": 1,
+     "debuff": {
+      "props": {
+       "healred": 25
+      },
+      "dur": 3
+     }
+    }
+   ],
+   "ru": "Тлеющие раны",
+   "en": "Smoldering Wounds",
+   "ru_d": "Атаки по героям снижают получаемое ими лечение на 25% на 3 с",
+   "en_d": "Attacks on heroes reduce their healing received by 25% for 3 s"
+  },
+  {
+   "id": "dk_p_blood",
+   "r": "purple",
+   "branch": "H",
+   "ab": "dragon_knight_dragon_blood",
+   "fx": [
+    {
+     "t": "passive",
+     "props": {
+      "regen": 6,
+      "armor": 3
+     }
+    }
+   ],
+   "ru": "Кипящая кровь",
+   "en": "Boiling Blood",
+   "ru_d": "+6 восстановления здоровья и +3 брони",
+   "en_d": "+6 health regeneration and +3 armor"
+  },
+  {
+   "id": "dk_p_resolve",
+   "r": "purple",
+   "branch": "R",
+   "ab": "dragon_knight_elder_dragon_form",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "status": 20,
+      "slowres": 20
+     }
+    }
+   ],
+   "ru": "Драконья стойкость",
+   "en": "Draconic Resolve",
+   "ru_d": "В облике дракона +20% сопротивления эффектам и замедлению",
+   "en_d": "In dragon form +20% status and slow resistance"
+  },
+  {
+   "id": "dk_p_feast",
+   "r": "purple",
+   "branch": "R",
+   "ab": "dragon_knight_elder_dragon_form",
+   "fx": [
+    {
+     "t": "kill",
+     "by": "win",
+     "win": "duration",
+     "heal": 15
+    }
+   ],
+   "ru": "Пир дракона",
+   "en": "Dragon's Feast",
+   "ru_d": "Убийство героя в облике дракона лечит на 15% здоровья",
+   "en_d": "A hero kill in dragon form heals 15% of max health"
+  },
+  {
+   "id": "dk_l_inferno",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "dragon_knight_breathe_fire",
+   "mods": "damage:*1.4;range:+200",
+   "awmods": "end_radius:+100",
+   "ru": "Пекло",
+   "en": "Inferno",
+   "ru_d": "Урон Breathe Fire ×1.4, дальность +200",
+   "en_d": "Breathe Fire damage ×1.4, range +200",
+   "ru_aw": "Пробуждение: ширина пламени в конце +100",
+   "en_aw": "Awakening: flame end width +100"
+  },
+  {
+   "id": "dk_l_tailwhip",
+   "r": "legend",
+   "branch": "W",
+   "ab": "dragon_knight_dragon_tail",
+   "awmods": "stun_duration:+0.5",
+   "fx": [
+    {
+     "t": "charges",
+     "n": 1
+    },
+    {
+     "t": "hit",
+     "by": "ab",
+     "splash": {
+      "radius": 300,
+      "pct": 100
+     }
+    }
+   ],
+   "ru": "Удар хвостом",
+   "en": "Tail Whip",
+   "ru_d": "У Dragon Tail есть запасной заряд; удар задевает врагов в 300 вокруг цели",
+   "en_d": "Dragon Tail gets a spare charge; the hit also strikes enemies within 300 of the target",
+   "ru_aw": "Пробуждение: оглушение +0.5 с",
+   "en_aw": "Awakening: stun +0.5 s"
+  },
+  {
+   "id": "dk_l_wyrm",
+   "r": "legend",
+   "branch": "E",
+   "ab": "dragon_knight_wyrms_wrath",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "attack",
+     "heroOnly": 1,
+     "splash": {
+      "radius": 250,
+      "pct": 40
+     },
+     "aw": {
+      "splash": {
+       "pct": 70
+      }
+     }
+    }
+   ],
+   "ru": "Ярость змея",
+   "en": "Wyrm's Fury",
+   "ru_d": "Атаки по героям задевают врагов в 250 вокруг цели (40% урона)",
+   "en_d": "Attacks on heroes also hit enemies within 250 of the target (40% damage)",
+   "ru_aw": "Пробуждение: 70% урона",
+   "en_aw": "Awakening: 70% damage"
+  },
+  {
+   "id": "dk_l_ancient",
+   "r": "legend",
+   "branch": "R",
+   "ab": "dragon_knight_elder_dragon_form",
+   "mods": "duration:+20",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "hp": 600,
+      "regenpct": 1
+     },
+     "aw": {
+      "props": {
+       "hp": 1000
+      }
+     }
+    }
+   ],
+   "ru": "Древний дракон",
+   "en": "Ancient Dragon",
+   "ru_d": "Облик дракона длится на 20 с дольше и дает +600 здоровья и +1% восстановления здоровья в секунду",
+   "en_d": "Dragon form lasts 20 s longer and grants +600 health and +1% health regeneration per second",
+   "ru_aw": "Пробуждение: +1000 здоровья",
+   "en_aw": "Awakening: +1000 health"
+  },
+  {
+   "id": "dk_m_doublefire",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "dragon_knight_breathe_fire",
+   "fx": [
+    {
+     "t": "multi",
+     "chance": 40,
+     "times": 1,
+     "delay": 0.4
+    }
+   ],
+   "ru": "Двойное пламя",
+   "en": "Double Breath",
+   "ru_d": "40% шанс второго Breathe Fire",
+   "en_d": "40% chance of a second Breathe Fire",
+   "mech": 1
+  },
+  {
+   "id": "dk_m_dragonpath",
+   "r": "purple",
+   "branch": "R",
+   "ab": "dragon_knight_elder_dragon_form",
+   "fx": [
+    {
+     "t": "trail",
+     "win": "duration",
+     "dps": 80,
+     "radius": 180,
+     "life": 3,
+     "type": "magic",
+     "pfx": "particles/units/heroes/hero_batrider/batrider_firefly_path.vpcf"
+    }
+   ],
+   "ru": "Огненный путь",
+   "en": "Fire Path",
+   "ru_d": "В форме дракона за ДК 3 с горит земля: 80 урона в секунду",
+   "en_d": "In dragon form the ground behind DK burns for 3 s: 80 damage per second",
+   "mech": 1
+  },
+  {
+   "id": "dk_m_wings",
+   "r": "purple",
+   "branch": "R",
+   "ab": "dragon_knight_elder_dragon_form",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": "duration",
+     "props": {
+      "fly": 1,
+      "scale": 120
+     }
+    }
+   ],
+   "ru": "Крылья",
+   "en": "Wings",
+   "ru_d": "В форме дракона ДК летает: деревья и обрывы не мешают",
+   "en_d": "In dragon form DK flies over trees and cliffs",
+   "mech": 1
+  },
+  {
+   "id": "dk_m_autotail",
+   "r": "purple",
+   "branch": "W",
+   "ab": "dragon_knight_dragon_tail",
+   "fx": [
+    {
+     "t": "auto",
+     "every": 9,
+     "range": 220,
+     "heroOnly": 1
+    }
+   ],
+   "ru": "Хвост сам",
+   "en": "Tail Whip",
+   "ru_d": "Раз в 9 с Dragon Tail сам бьет вражеского героя рядом (220)",
+   "en_d": "Every 9 s Dragon Tail hits an adjacent enemy hero (220) by itself",
+   "mech": 1
+  }
+ ]
+}

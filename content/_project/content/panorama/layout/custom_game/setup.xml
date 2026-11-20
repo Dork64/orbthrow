@@ -1,0 +1,35 @@
+<root>
+	<styles>
+		<include src="s2r://panorama/styles/dotastyles.vcss_c" />
+		<include src="file://{resources}/styles/custom_game/setup.css" />
+	</styles>
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/util.js" />
+		<include src="file://{resources}/scripts/custom_game/setup.js" />
+	</scripts>
+	<Panel class="SetupRoot" hittest="true">
+		<Panel id="SetupBox">
+			<Panel id="SetupGems">
+				<Panel class="SetupGem grey" /><Panel class="SetupGem blue" /><Panel class="SetupGem purple" /><Panel class="SetupGem legend" />
+			</Panel>
+			<Label id="SetupTitle" text="ORBTHROW" />
+			<Label id="SetupSubtitle" text="#orb_setup_subtitle" />
+			<Label class="SetupSection" text="#orb_setup_players" />
+			<Panel id="SetupPlayers" />
+			<Label class="SetupSection" text="#orb_setup_vote_kills" />
+			<Panel id="VoteKills" class="SetupRow" />
+			<Label class="SetupSection" text="#orb_setup_vote_minutes" />
+			<Panel id="VoteMinutes" class="SetupRow" />
+			<Label id="VoteHint" text="#orb_setup_vote_hint" />
+			<Label class="SetupSection" text="#orb_setup_bots" />
+			<Panel id="BotsRow" class="SetupRow">
+				<Button class="SetupChoice Small" onactivate="SetupBots(-1)"><Label text="−" /></Button>
+				<Label id="SetupBotsLabel" text="0" />
+				<Button class="SetupChoice Small" onactivate="SetupBots(1)"><Label text="+" /></Button>
+			</Panel>
+			<Label id="SetupSummary" text="" />
+			<Button id="SetupStart" onactivate="SetupStart()"><Label text="#orb_setup_start" /></Button>
+			<Label id="SetupWait" text="" />
+		</Panel>
+	</Panel>
+</root>
