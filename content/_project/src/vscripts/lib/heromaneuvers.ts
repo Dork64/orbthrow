@@ -4,8 +4,6 @@ import { FxManeuver, fxModifierName } from "../core/fxtypes";
 const RING = "particles/ui_mouseactions/range_display.vpcf";
 const SWING = "particles/items_fx/battlefury_cleave.vpcf";
 const WIND = "particles/units/heroes/hero_windrunner/windrunner_spell_powershot.vpcf";
-const JUGG_OMNI = "modifier_juggernaut_omnislash";
-const SVEN_GOD = "modifier_sven_gods_strength";
 const PA_BLUR = "modifier_phantom_assassin_blur_active";
 
 type Mode = FxManeuver["mode"];
@@ -62,11 +60,8 @@ export class HeroManeuvers {
     private defs = new Map<Mode, FxManeuver>();
     private states = new Map<Mode, Stage>();
     private ready = new Map<Mode, number>();
-    private ward?: CDOTA_BaseNPC;
     private pendingDagger?: { unit: CDOTA_BaseNPC; ability: CDOTABaseAbility; until: number };
     private lastPos?: Vector;
-    private lastMove = 0;
-    private movingSince?: number;
     private starts = new Map<string, { at: number; pos: Vector }>();
     private awake = false;
 
@@ -79,17 +74,11 @@ export class HeroManeuvers {
         for (const mode of this.states.keys()) if (!this.defs.has(mode)) this.clearMode(mode);
     }
 
-    rememberWard(unit: CDOTA_BaseNPC) { this.ward = unit; }
-
     private ability(f: FxManeuver) { return this.owner.FindAbilityByName(f.ab); }
     private learned(f: FxManeuver) { return (this.ability(f)?.GetLevel() ?? 0) > 0; }
     private enemies(pos: Vector, range: number): CDOTA_BaseNPC[] {
         return FindUnitsInRadius(this.owner.GetTeamNumber(), pos, undefined, range, UnitTargetTeam.ENEMY, UnitTargetType.HERO,
             UnitTargetFlags.NO_INVIS + UnitTargetFlags.FOW_VISIBLE, FindOrder.CLOSEST, false).filter(u => fighter(u));
-    }
-    private line(a: Vector, b: Vector, width: number): CDOTA_BaseNPC[] {
-        return FindUnitsInLine(this.owner.GetTeamNumber(), a, b, undefined, width, UnitTargetTeam.ENEMY, UnitTargetType.HERO,
-            UnitTargetFlags.NO_INVIS + UnitTargetFlags.FOW_VISIBLE).filter(u => fighter(u));
     }
     private stage(f: FxManeuver, now: number, dur: number, pos: Vector, radius = 0): Stage {
         this.clearMode(f.mode);
@@ -111,11 +100,9 @@ export class HeroManeuvers {
     }
     clear() {
         for (const mode of this.states.keys()) this.clearMode(mode);
-        this.ward = undefined;
         this.pendingDagger = undefined;
         this.starts.clear();
         this.lastPos = undefined;
-        this.movingSince = undefined;
     }
     private isReady(mode: Mode, now: number) { return now >= (this.ready.get(mode) ?? 0); }
     private cooldown(mode: Mode, now: number, cd: number) { this.ready.set(mode, now + cd); }
@@ -127,7 +114,7 @@ export class HeroManeuvers {
 
     start(a: CDOTABaseAbility, now: number) {
         const ab = a.GetAbilityName();
-        if (ab !== "juggernaut_omni_slash" && ab !== "ursa_earthshock" && ab !== "phantom_assassin_phantom_strike") return;
+        if (ab !== "ursa_earthshock" && ab !== "phantom_assassin_phantom_strike") return;
         this.starts.set(ab, { at: now, pos: this.owner.GetAbsOrigin() });
     }
 
@@ -160,10 +147,6 @@ export class HeroManeuvers {
             if (f.ab !== ab) continue;
             if (f.mode === "dagger" && fighter(target)) this.pendingDagger = { unit: target, ability: a, until: now + 1.75 };
             switch (f.mode) {
-                case "ward": this.ward = undefined; this.stage(f, now, 26, pos); break;
-                case "omni": this.stage(f, now, Math.max(1, a.GetSpecialValueFor("duration")) + 0.9, from ?? pos, 115); break;
-                case "ram": this.stage(f, now, 5.5, pos); break;
-                case "sword": this.stage(f, now, Math.max(1, a.GetSpecialValueFor("AbilityDuration") || 30), pos); break;
                 case "blindside": this.stage(f, now, f.seconds ?? 7, pos); break;
                 case "burrow": {
                     const s = this.stage(f, now, 1.35, from ?? pos);
@@ -205,28 +188,6 @@ export class HeroManeuvers {
         const victim = e.target;
         if (!alive(this.owner) || !fighter(victim) || victim.GetTeamNumber() === this.owner.GetTeamNumber() || (e.no_attack_cooldown ?? false)) return;
         const pos = this.owner.GetAbsOrigin(), to = victim.GetAbsOrigin();
-        const cleave = this.defs.get("rift");
-        if (cleave !== undefined && this.learned(cleave)) {
-            const s = this.states.get("rift");
-            if (s !== undefined && now >= s.arm && now < s.until && s.end !== undefined && s.dir !== undefined) {
-                const a = s.pos, b = s.end, dir = s.dir;
-                this.clearMode("rift");
-                for (const u of this.line(a, b, 115)) {
-                    if (!u.IsDebuffImmune()) this.push(u, dir, this.awake ? 330 : 245, 0.31);
-                    this.strike(u, this.owner.GetAverageTrueAttackDamage(u) * 0.65, cleave);
-                }
-                flash(a);
-            } else if (s === undefined && this.isReady("rift", now)) {
-                const dir = norm(delta(to, pos));
-                const n = this.stage(cleave, now, 4, to, 115);
-                n.arm = now + 0.35;
-                n.dir = dir;
-                n.end = shift(to, dir, this.awake ? 670 : 525);
-                n.endMarker = ring(n.end, 95, 230, 165, 75);
-                this.cooldown("rift", now, 7);
-            }
-        }
-
         const blade = this.states.get("blade");
         if (blade !== undefined && blade.unit === victim && now < blade.until && blade.dir !== undefined &&
             distance(pos, blade.pos) >= 170 && distance(pos, blade.pos) <= 660 && dot(blade.dir, norm(delta(pos, to))) < 0.25) {
@@ -259,89 +220,10 @@ export class HeroManeuvers {
         }
     }
 
-    taken(e: ModifierInstanceEvent, now: number) {
-        const s = this.states.get("parry");
-        const foe = e.attacker;
-        if (s === undefined || !fighter(this.owner) || !fighter(foe) || foe.GetTeamNumber() === this.owner.GetTeamNumber() ||
-            e.damage_category !== DamageCategory.ATTACK || !movable(this.owner) || now >= s.until) return;
-        const pos = this.owner.GetAbsOrigin(), to = foe.GetAbsOrigin();
-        const dir = norm(delta(to, pos));
-        if (distance(pos, to) > 330 || dot(dir, this.owner.GetForwardVector()) < 0.45) return;
-        this.clearMode("parry");
-        this.cooldown("parry", now, 8);
-        const side = Vector(-dir.y, dir.x, 0);
-        const landing = shift(to, side, 115);
-        if (this.nearMap(landing)) FindClearSpaceForUnit(this.owner, landing, true);
-        flash(to);
-        this.pin(foe, s.f, this.awake ? 1.45 : 0.9);
-        this.strike(foe, this.owner.GetAverageTrueAttackDamage(foe), s.f);
-    }
-
-    order(kind: UnitOrder, target: CDOTA_BaseNPC | undefined, point: Vector, now: number): boolean {
-        const parent = this.owner;
-        if (!alive(parent)) return false;
-        const pos = parent.GetAbsOrigin();
-        const ward = this.states.get("ward");
-        if (kind === UnitOrder.MOVE_TO_TARGET && ward !== undefined && now < ward.until && target === this.ward &&
-            alive(target) && movable(parent) && !parent.IsChanneling()) {
-            const to = target.GetAbsOrigin();
-            const dist = distance(pos, to);
-            if (dist >= 240 && dist <= (this.awake ? 1100 : 850)) {
-                this.clearMode("ward");
-                FindClearSpaceForUnit(target, pos, true);
-                FindClearSpaceForUnit(parent, to, true);
-                flash(to);
-                return true;
-            }
-        }
-
-        const omni = this.states.get("omni");
-        if (kind === UnitOrder.MOVE_TO_POSITION && omni !== undefined && now < omni.until && distance(point, omni.pos) <= 115) {
-            const native = parent.FindModifierByName(JUGG_OMNI);
-            if (native !== undefined || (this.awake && omni.phase === 2 && now < omni.arm)) {
-                native?.Destroy();
-                parent.RemoveModifierByName("modifier_juggernaut_omnislash_invulnerability");
-                this.clearMode("omni");
-                FindClearSpaceForUnit(parent, omni.pos, true);
-                flash(omni.pos);
-                return true;
-            }
-        }
-
-        const sword = this.states.get("sword");
-        if (sword !== undefined && now < sword.until && parent.HasModifier(SVEN_GOD)) {
-            if (kind === UnitOrder.ATTACK_MOVE && distance(pos, point) <= 145 && sword.phase === undefined && movable(parent)) {
-                sword.pos = pos;
-                sword.marker = ring(pos, 155, 255, 160, 60);
-                sword.phase = 1;
-                sword.arm = now + 0.65;
-                sword.until = Math.min(sword.until, now + 4.5);
-                sword.buff = this.pin(parent, sword.f, sword.until - now);
-                return true;
-            }
-            if (kind === UnitOrder.MOVE_TO_POSITION && sword.phase === 1 && now >= sword.arm &&
-                distance(point, sword.pos) <= 155 && distance(pos, sword.pos) <= (this.awake ? 780 : 620) && movable(parent)) {
-                const to = sword.pos;
-                this.clearMode("sword");
-                FindClearSpaceForUnit(parent, to, true);
-                flash(to);
-                for (const foe of this.enemies(to, 315)) {
-                    if (!foe.IsDebuffImmune()) this.push(foe, norm(delta(foe.GetAbsOrigin(), to)), 250, 0.34);
-                    this.strike(foe, 180, sword.f);
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
     tick(now: number) {
         const owner = this.owner, pos = owner.GetAbsOrigin();
         const motion = this.lastPos === undefined ? Vector(0, 0, 0) : delta(pos, this.lastPos);
-        const speed = length(motion);
         this.lastPos = pos;
-        if (speed > 13 && speed < 115) { this.lastMove = now; this.movingSince ??= now; }
-        else this.movingSince = undefined;
 
         const dagger = this.pendingDagger;
         if (dagger !== undefined) {
@@ -350,28 +232,9 @@ export class HeroManeuvers {
                 m.GetName() === "modifier_phantom_assassin_stiflingdagger" && m.GetCaster() === owner))
                 this.spellHit(dagger.unit, dagger.ability, now);
         }
-        const parry = this.defs.get("parry");
-        if (parry !== undefined && this.learned(parry) && !this.states.has("parry") && this.isReady("parry", now) &&
-            now - this.lastMove >= 0.55 && now - this.lastMove <= 0.75 && this.enemies(pos, 360).length > 0 && movable(owner)) {
-            this.stage(parry, now, 0.8, pos, 135);
-            this.cooldown("parry", now, 5);
-        }
         for (const [mode, s] of this.states) {
             if (now >= s.until) { this.clearMode(mode); continue; }
             switch (mode) {
-                case "parry": if (speed > 16) this.clearMode(mode); break;
-                case "omni":
-                    if (owner.HasModifier(JUGG_OMNI)) s.phase = 1;
-                    else if (s.phase === 1) {
-                        if (!this.awake) this.clearMode(mode);
-                        else { s.phase = 2; s.arm = Math.min(s.until, now + 0.85); }
-                    } else if (s.phase === 2 && now >= s.arm) this.clearMode(mode);
-                    break;
-                case "ram": this.tickRam(s, pos, motion, now); break;
-                case "sword":
-                    if (s.phase === 1 && (!owner.HasModifier(SVEN_GOD) ||
-                        (now >= s.arm + 0.65 && this.enemies(s.pos, 125).length > 0))) this.clearMode(mode);
-                    break;
                 case "dagger":
                     if (!fighter(s.unit)) { this.clearMode(mode); break; }
                     if (distance(s.unit.GetAbsOrigin(), s.pos) > 155) s.phase = 1;
@@ -403,30 +266,6 @@ export class HeroManeuvers {
                 case "vault": this.tickVault(s, pos, motion); break;
             }
         }
-    }
-
-    private tickRam(s: Stage, pos: Vector, motion: Vector, now: number) {
-        const running = this.movingSince !== undefined && movable(this.owner);
-        const dir = norm(motion);
-        if (!running || s.dir === undefined || dot(s.dir, dir) < 0.82) {
-            if (s.marker !== undefined) {
-                ParticleManager.DestroyParticle(s.marker, true);
-                ParticleManager.ReleaseParticleIndex(s.marker);
-                s.marker = undefined;
-            }
-            s.dir = running ? dir : undefined;
-            s.arm = now + (this.awake ? 0.45 : 0.63);
-            return;
-        }
-        if (now < s.arm) return;
-        if (s.marker === undefined) s.marker = ring(pos, 105, 255, 170, 65);
-        else ParticleManager.SetParticleControl(s.marker, 0, pos);
-        const foe = this.enemies(pos, 170).find(u => !u.IsDebuffImmune() && dot(dir, norm(delta(u.GetAbsOrigin(), pos))) > 0.45);
-        if (foe === undefined) return;
-        this.clearMode("ram");
-        this.push(foe, dir, 380, 0.42);
-        this.push(this.owner, dir, 270, 0.42);
-        flash(pos);
     }
 
     private tickBurrow(s: Stage, pos: Vector, now: number) {

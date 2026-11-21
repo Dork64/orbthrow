@@ -16,7 +16,6 @@ declare global {
     var modifier_orb_axe_arena_buff: unknown;
     var modifier_orb_axe_free_cull: unknown;
     var modifier_orb_jugg_ward_armor: unknown;
-    var modifier_orb_jugg_immune: unknown;
     /* eslint-enable no-var */
 }
 
@@ -164,18 +163,6 @@ export class ModifierOrbJuggWardArmor extends ModBase {
     GetModifierPhysicalArmorBonus() { return HERO_CODE.wardArmor; }
 }
 
-/** Неуловимый: невосприимчивость к магии после Омнислэша. */
-export class ModifierOrbJuggImmune extends ModBase {
-    IsHidden() { return false; }
-    IsPurgable() { return false; }
-    GetTexture() { return "juggernaut_omni_slash"; }
-    GetStatusEffectName() { return "particles/status_fx/status_effect_avatar.vpcf"; }
-    StatusEffectPriority() { return ModifierPriority.HIGH; }
-    CheckState(): Partial<Record<ModifierState, boolean>> {
-        return { [ModifierState.MAGIC_IMMUNE]: true };
-    }
-}
-
 modifier_orb_axe_iron_will = registerModifier("modifier_orb_axe_iron_will", ModifierOrbAxeIronWill);
 modifier_orb_axe_lacerate = registerModifier("modifier_orb_axe_lacerate", ModifierOrbAxeLacerate);
 modifier_orb_axe_spin = registerModifier("modifier_orb_axe_spin", ModifierOrbAxeSpin);
@@ -184,4 +171,3 @@ modifier_orb_axe_arena = registerModifier("modifier_orb_axe_arena", ModifierOrbA
 modifier_orb_axe_arena_buff = registerModifier("modifier_orb_axe_arena_buff", ModifierOrbAxeArenaBuff);
 modifier_orb_axe_free_cull = registerModifier("modifier_orb_axe_free_cull", ModifierOrbAxeFreeCull);
 modifier_orb_jugg_ward_armor = registerModifier("modifier_orb_jugg_ward_armor", ModifierOrbJuggWardArmor);
-modifier_orb_jugg_immune = registerModifier("modifier_orb_jugg_immune", ModifierOrbJuggImmune);

@@ -4055,26 +4055,15 @@ ____exports.UPGRADE_DEFS = {
         code = false
     },
     {
-        id = "jugg_p_hurricane",
-        rarity = "purple",
-        hero = "npc_dota_hero_juggernaut",
-        branch = "Q",
-        ability = "juggernaut_blade_fury",
-        mods = {{key = "bonus_movespeed", add = 45, unit = "", base = 0}, {key = "movement_slow", add = 20, unit = "", base = 0}},
-        cd = 0,
-        max = 1,
-        code = false
-    },
-    {
         id = "jugg_p_dispel",
         rarity = "purple",
         hero = "npc_dota_hero_juggernaut",
         branch = "R",
         ability = "juggernaut_omni_slash",
-        mods = {{key = "dispel", add = 1, unit = "", base = 0}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false
+        code = true
     },
     {
         id = "jugg_p_roaming_ward",
@@ -5661,6 +5650,17 @@ ____exports.UPGRADE_DEFS = {
         code = true
     },
     {
+        id = "jugg_p_hurricane",
+        rarity = "purple",
+        hero = "npc_dota_hero_juggernaut",
+        branch = "Q",
+        ability = "juggernaut_blade_fury",
+        mods = {{key = "bonus_movespeed", add = 45, unit = "", base = 0}},
+        cd = 0,
+        max = 1,
+        code = false
+    },
+    {
         id = "jugg_m_autofury",
         rarity = "purple",
         hero = "npc_dota_hero_juggernaut",
@@ -5717,8 +5717,7 @@ ____exports.UPGRADE_DEFS = {
         mods = {},
         cd = 0,
         max = 1,
-        code = true,
-        mech = true
+        code = true
     },
     {
         id = "jugg_l_cuts",
@@ -5729,8 +5728,7 @@ ____exports.UPGRADE_DEFS = {
         mods = {},
         cd = 0,
         max = 1,
-        code = true,
-        mech = true
+        code = true
     },
     {
         id = "jugg_l_endless",
@@ -5741,8 +5739,7 @@ ____exports.UPGRADE_DEFS = {
         mods = {},
         cd = 0,
         max = 1,
-        code = true,
-        mech = true
+        code = true
     },
     {
         id = "lc_p_formation",
@@ -7787,10 +7784,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_pudge",
         branch = "E",
         ability = "pudge_flesh_heap",
-        mods = {{key = "damage_block", add = 8, unit = "", base = 26}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false
+        code = true
     },
     {
         id = "pudge_l_dismember",
@@ -7798,10 +7795,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_pudge",
         branch = "R",
         ability = "pudge_dismember",
-        mods = {{key = "dismember_damage", add = 40, unit = "", base = 120}, {key = "strength_damage", add = 0.3, unit = "", base = 0.7}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false
+        code = true
     },
     {
         id = "pudge_m_doublehook",
@@ -9500,8 +9497,7 @@ ____exports.UPGRADE_DEFS = {
         mods = {},
         cd = 0,
         max = 1,
-        code = true,
-        mech = true
+        code = true
     },
     {
         id = "sven_l_steeltempo",
@@ -9512,8 +9508,7 @@ ____exports.UPGRADE_DEFS = {
         mods = {},
         cd = 0,
         max = 1,
-        code = true,
-        mech = true
+        code = true
     },
     {
         id = "sven_l_avatar",
@@ -9524,8 +9519,7 @@ ____exports.UPGRADE_DEFS = {
         mods = {},
         cd = 0,
         max = 1,
-        code = true,
-        mech = true
+        code = true
     },
     {
         id = "sven_m_thunderseal",

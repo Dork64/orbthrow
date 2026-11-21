@@ -1,5 +1,5 @@
+import type { PudgeLegends } from "../modifiers/modifier_orb_pudge_legend";
 import type { TuskOrbs } from "../modifiers/modifier_orb_tusk";
-import type { ModifierOrbHero } from "../modifiers/modifier_orb_hero";
 import { resetItemsNet } from "./itemsnet";
 // Ход партии: настройки Доты, состояния игры, главный цикл, победа.
 
@@ -92,24 +92,16 @@ function configureGameRules() {
 
 /** Сундук и мешки золота поднимают только настоящие герои (не курьер, не иллюзия). */
 function orderFilter(e: ExecuteOrderFilterEvent): boolean {
-    const kind = e.order_type;
     const selected = Object.keys(e.units);
     if (selected.length === 1) {
         const unit = EntIndexToHScript(e.units[selected[0]]) as CDOTA_BaseNPC | undefined;
-        if (isValid(unit) && unit.GetUnitName() === "npc_dota_hero_tusk" && unit.GetPlayerOwnerID() === e.issuer_player_id_const) {
-            const tusk = unit.FindModifierByName("modifier_orb_tusk") as unknown as TuskOrbs | undefined;
-            if (tusk && !tusk.order(e)) return false;
-        }
-    }
-    if (kind === UnitOrder.MOVE_TO_POSITION || kind === UnitOrder.MOVE_TO_TARGET || kind === UnitOrder.ATTACK_MOVE) {
-        // Особый приказ относится только к своему герою, выделенному отдельно.
-        const units = Object.keys(e.units);
-        if (units.length === 1) {
-            const hero = EntIndexToHScript(e.units[units[0]]) as CDOTA_BaseNPC | undefined;
-            if (isValid(hero) && hero.IsRealHero() && hero.GetPlayerOwnerID() === e.issuer_player_id_const) {
-                const mod = hero.FindModifierByName("modifier_orb_hero") as unknown as ModifierOrbHero | undefined;
-                const target = e.entindex_target > 0 ? EntIndexToHScript(e.entindex_target) as CDOTA_BaseNPC | undefined : undefined;
-                if (mod?.ManeuverOrder(kind, target, Vector(e.position_x ?? 0, e.position_y ?? 0, e.position_z ?? 0))) return false;
+        if (isValid(unit) && unit.GetPlayerOwnerID() === e.issuer_player_id_const) {
+            if (unit.GetUnitName() === "npc_dota_hero_tusk") {
+                const tusk = unit.FindModifierByName("modifier_orb_tusk") as unknown as TuskOrbs | undefined;
+                if (tusk && !tusk.order(e)) return false;
+            } else if (unit.GetUnitName() === "npc_dota_hero_pudge" && e.order_type === UnitOrder.MOVE_TO_POSITION) {
+                const pudge = unit.FindModifierByName("modifier_orb_pudge_legend") as unknown as PudgeLegends | undefined;
+                if (pudge && !pudge.order(e)) return false;
             }
         }
     }

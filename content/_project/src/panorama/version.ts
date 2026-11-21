@@ -1,1 +1,1 @@
-const BUILD_VERSION = "2026-11-21 19:54 МСК";
+const BUILD_VERSION = "2026-11-21 23:12 МСК";

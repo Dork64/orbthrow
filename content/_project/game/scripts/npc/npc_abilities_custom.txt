@@ -2,6 +2,61 @@
 {
 	"Version"	"1"
 
+	"orb_pudge_counter"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_pudge"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_IGNORE_CHANNEL | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE"
+		"AbilityTextureName" "pudge_eject"
+		"MaxLevel" "1"
+	}
+
+	"orb_sven_redirect"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_sven"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING"
+		"AbilityTextureName" "sven_great_cleave"
+		"AbilityCastRange" "1050"
+		"MaxLevel" "4"
+	}
+
+	"orb_sven_weight"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_sven"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING"
+		"AbilityTextureName" "sven_wrath_of_god"
+		"AbilityCastRange" "1050"
+		"AbilityCastPoint" "0.6"
+		"AbilityCastAnimation" "ACT_DOTA_ATTACK_EVENT"
+		"MaxLevel" "1"
+	}
+
+	"orb_jugg_three_cuts"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_juggernaut"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+		"AbilityTextureName" "juggernaut_blade_dance_arcana"
+		"AbilityCooldown" "14"
+		"MaxLevel" "4"
+	}
+
+	"orb_jugg_encore"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_juggernaut"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE"
+		"AbilityUnitTargetTeam" "DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitTargetType" "DOTA_UNIT_TARGET_HERO"
+		"AbilityUnitTargetFlags" "DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES"
+		"AbilityTextureName" "juggernaut_swift_slash"
+		"AbilityCastRange" "450"
+		"AbilityCastPoint" "0.15"
+		"MaxLevel" "1"
+	}
+
 	"orb_slot_observer"
 	{
 		"BaseClass" "ability_lua"

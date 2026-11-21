@@ -97,13 +97,8 @@ ____exports.HERO_CODE = {
     executionerWindowAwake = 2.5,
     executionerRange = 200,
     wardArmor = 5,
-    healingFuryRange = 1200,
-    deathDanceCdr = 1,
     finisherChance = 12,
     finisherHealthPct = 40,
-    bloodyOmniHeal = 0.25,
-    dispelImmunity = 1.5,
-    stormPullPerSecond = 60,
-    critRatio = 1.3
+    stormPullPerSecond = 60
 }
 return ____exports

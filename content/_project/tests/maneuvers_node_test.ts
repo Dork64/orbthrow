@@ -56,17 +56,15 @@ function setup(modes: FxManeuver["mode"][], awake = false) {
         cast: (at: number, target?: typeof owner, name = effects[0].ab) =>
             engine.cast({ ...ability, GetAbilityName: () => name } as never, target as never, at),
         attack: (at: number, target = enemy) => engine.attack({ target, attacker: owner } as never, at),
-        order: (kind: number, at: number, point = vec(0), target?: typeof owner) =>
-            engine.order(kind, target as never, point as never, at),
     };
 }
 
 afterEach(() => vi.unstubAllGlobals());
 
-describe("пять наборов легендарок", () => {
+describe("легендарные манёвры", () => {
     it("у каждого героя три новые механики и сохранена выбранная ветка", () => {
         for (const [hero, keep] of Object.entries({
-            juggernaut: "jugg_l_storm", sven: "sven_l_hammer", phantom_assassin: "pa_l_shadow",
+            phantom_assassin: "pa_l_shadow",
             ursa: "ursa_l_enrage", windrunner: "wr_l_focus",
         })) {
             const legends = UPGRADE_DEFS.filter(o => o.hero === "npc_dota_hero_" + hero && o.rarity === "legend");
@@ -76,66 +74,6 @@ describe("пять наборов легендарок", () => {
             expect(newIds).toHaveLength(3);
             expect(newIds).not.toContain(keep);
         }
-    });
-
-    it("меняет местами ровно свой живой тотем и героя, один раз", () => {
-        const f = setup(["ward"]);
-        f.cast(0);
-        f.engine.rememberWard(f.enemy as never);
-        expect(f.order(2, 0.5, vec(0), f.third)).toBe(false);
-        expect(f.order(2, 1, vec(0), f.enemy)).toBe(true);
-        expect(f.owner.x).toBe(450);
-        expect(f.enemy.x).toBe(0);
-        expect(f.order(2, 2, vec(0), f.enemy)).toBe(false);
-    });
-
-    it("возврат Omnislash снимает invulnerability и заканчивает саму серию", () => {
-        const f = setup(["omni"]);
-        f.engine.start(f.ability as never, 0);
-        f.owner.x = 500; f.cast(0.3);
-        const destroy = vi.fn();
-        f.owner.statuses.set("modifier_juggernaut_omnislash", { Destroy: destroy });
-        expect(f.order(1, 1, vec(300))).toBe(false);
-        expect(f.order(1, 1.5, vec(25))).toBe(true);
-        expect(destroy).toHaveBeenCalledTimes(1);
-        expect(f.owner.RemoveModifierByName).toHaveBeenCalledWith("modifier_juggernaut_omnislash_invulnerability");
-        expect(f.owner.x).toBe(0);
-    });
-
-    it("стойка отвечает на лицевую ближнюю атаку, а заклинание её не расходует", () => {
-        const f = setup(["parry"]);
-        f.enemy.x = 200;
-        f.engine.tick(0.6);
-        f.engine.taken({ attacker: f.enemy, damage_category: 0 } as never, 0.7);
-        expect(f.strike).not.toHaveBeenCalled();
-        f.engine.taken({ attacker: f.enemy, damage_category: 1 } as never, 0.8);
-        expect(f.strike.mock.calls[0][0]).toBe(f.enemy);
-        expect(f.move).toHaveBeenCalledTimes(1);
-    });
-
-    it("таран после Warcry требует непрерывного разбега; BKB его не расходует", () => {
-        const f = setup(["ram"]);
-        f.enemy.x = 460; f.third.x = 1000;
-        f.cast(0); f.engine.tick(0);
-        f.enemy.immune = true;
-        for (let i = 1; i <= 8; i++) { f.owner.x += 40; f.engine.tick(i / 10); }
-        expect(f.push).not.toHaveBeenCalled();
-        f.enemy.immune = false;
-        f.owner.x += 40; f.engine.tick(0.9);
-        expect(f.push.mock.calls.map(call => call[0])).toEqual([f.enemy, f.owner]);
-    });
-
-    it("меч под Божьей силой требует явного приказа и может быть погашен соперником", () => {
-        const f = setup(["sword"]);
-        f.cast(0);
-        f.owner.statuses.set("modifier_sven_gods_strength", {});
-        expect(f.order(4, 0.1)).toBe(true);
-        f.owner.x = 450;
-        expect(f.order(1, 0.4)).toBe(false);
-        f.enemy.x = 20; f.engine.tick(1.5);
-        expect(f.order(1, 1.6)).toBe(false);
-        expect(f.move).not.toHaveBeenCalled();
-        expect(f.owner.AddNewModifier.mock.results[0].value.Destroy).toHaveBeenCalledTimes(1);
     });
 
     it("кинжал работает только после успешной посадки W и расходуется при переносе", () => {
@@ -201,19 +139,6 @@ describe("пять наборов легендарок", () => {
 });
 
 describe("геометрия и окна контригры", () => {
-    it("борозда Свена привязана к первому удару; ушедшего героя не задевает", () => {
-        const f = setup(["rift"]);
-        f.enemy.x = 250;
-        f.third.x = 600;
-        vi.stubGlobal("FindUnitsInLine", (team: number, a: ReturnType<typeof vec>, b: ReturnType<typeof vec>, _: unknown, width: number) =>
-            [f.enemy, f.third].filter(u => u.team !== team && u.x >= a.x && u.x <= b.x && Math.abs(u.y) <= width));
-        f.attack(0);
-        f.enemy.y = 160;
-        f.attack(1);
-        expect(f.push.mock.calls.map(c => c[0])).toEqual([f.third]);
-        expect(f.strike.mock.calls.map(c => c[0])).toEqual([f.third]);
-    });
-
     it("Blur вскрывается, когда враг переводит взгляд на Фантомку", () => {
         const f = setup(["blindside"]);
         f.enemy.x = 170;

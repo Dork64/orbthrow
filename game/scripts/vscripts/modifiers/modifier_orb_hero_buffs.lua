@@ -293,29 +293,6 @@ end
 function ModifierOrbJuggWardArmor.prototype.GetModifierPhysicalArmorBonus(self)
     return HERO_CODE.wardArmor
 end
---- Неуловимый: невосприимчивость к магии после Омнислэша.
-____exports.ModifierOrbJuggImmune = __TS__Class()
-local ModifierOrbJuggImmune = ____exports.ModifierOrbJuggImmune
-ModifierOrbJuggImmune.name = "ModifierOrbJuggImmune"
-__TS__ClassExtends(ModifierOrbJuggImmune, ModBase)
-function ModifierOrbJuggImmune.prototype.IsHidden(self)
-    return false
-end
-function ModifierOrbJuggImmune.prototype.IsPurgable(self)
-    return false
-end
-function ModifierOrbJuggImmune.prototype.GetTexture(self)
-    return "juggernaut_omni_slash"
-end
-function ModifierOrbJuggImmune.prototype.GetStatusEffectName(self)
-    return "particles/status_fx/status_effect_avatar.vpcf"
-end
-function ModifierOrbJuggImmune.prototype.StatusEffectPriority(self)
-    return MODIFIER_PRIORITY_HIGH
-end
-function ModifierOrbJuggImmune.prototype.CheckState(self)
-    return {[MODIFIER_STATE_MAGIC_IMMUNE] = true}
-end
 modifier_orb_axe_iron_will = registerModifier("modifier_orb_axe_iron_will", ____exports.ModifierOrbAxeIronWill)
 modifier_orb_axe_lacerate = registerModifier("modifier_orb_axe_lacerate", ____exports.ModifierOrbAxeLacerate)
 modifier_orb_axe_spin = registerModifier("modifier_orb_axe_spin", ____exports.ModifierOrbAxeSpin)
@@ -324,5 +301,4 @@ modifier_orb_axe_arena = registerModifier("modifier_orb_axe_arena", ____exports.
 modifier_orb_axe_arena_buff = registerModifier("modifier_orb_axe_arena_buff", ____exports.ModifierOrbAxeArenaBuff)
 modifier_orb_axe_free_cull = registerModifier("modifier_orb_axe_free_cull", ____exports.ModifierOrbAxeFreeCull)
 modifier_orb_jugg_ward_armor = registerModifier("modifier_orb_jugg_ward_armor", ____exports.ModifierOrbJuggWardArmor)
-modifier_orb_jugg_immune = registerModifier("modifier_orb_jugg_immune", ____exports.ModifierOrbJuggImmune)
 return ____exports

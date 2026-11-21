@@ -17,7 +17,7 @@
 		<include src="file://{resources}/scripts/custom_game/test_panel.js" />
 	</scripts>
 	<Panel class="OrbHud" hittest="false">
-		<Panel id="WorldMarks" hittest="false" />
+        <Panel id="WorldMarks" hittest="false" />
 		<Panel id="OrbChargeOverlay" hittest="false" hittestchildren="false" />
 		<Panel id="ChestArrow" class="Hidden" hittest="false">
 			<Panel id="ChestArrowIcon" hittest="false" />

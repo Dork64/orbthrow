@@ -29,18 +29,18 @@
      "t": "hit",
      "by": "ab",
      "heroOnly": 1,
-     "cdr": {
-      "abs": [
-       "self"
-      ],
-      "sec": 4
+     "debuff": {
+      "props": {
+       "ms": -26
+      },
+      "dur": 2.6
      }
     }
    ],
-   "ru": "Снова крюк",
-   "en": "Rehook",
-   "ru_d": "Попадание Meat Hook по герою сокращает его перезарядку на 4 с",
-   "en_d": "Hitting a hero with Meat Hook reduces its cooldown by 4 s"
+   "ru": "Крючья с зазубринами",
+   "en": "Barbed Hooks",
+   "ru_d": "Meat Hook замедляет героя на 26% на 2,6 с с момента попадания. Действует от каждого крюка «Мясника».",
+   "en_d": "Meat Hook slows heroes by 26% for 2.6 s from impact. Works with either charge of Butcher."
   },
   {
    "id": "pudge_p_stench",
@@ -54,7 +54,7 @@
      "heroOnly": 1,
      "debuff": {
       "props": {
-       "as": -15
+       "as": -25
       },
       "dur": 0.5
      }
@@ -62,8 +62,8 @@
    ],
    "ru": "Вонь",
    "en": "Stench",
-   "ru_d": "Rot снижает скорость атаки героев на 15",
-   "en_d": "Rot reduces heroes' attack speed by 15"
+   "ru_d": "Rot снижает скорость атаки героев на 25. «Котёл» взводится на 0,2 с раньше.",
+   "en_d": "Rot reduces hero attack speed by 25. Boiler arms 0.2 s faster."
   },
   {
    "id": "pudge_p_feast",
@@ -80,8 +80,8 @@
    ],
    "ru": "Пир гнили",
    "en": "Rot Feast",
-   "ru_d": "Rot лечит Пуджа на 30% урона по героям",
-   "en_d": "Rot heals Pudge for 30% of its damage to heroes"
+   "ru_d": "Пудж лечится на 30% урона Rot по героям, включая взрыв «Котла».",
+   "en_d": "Pudge heals for 30% of Rot damage dealt to heroes, including the Boiler burst."
   },
   {
    "id": "pudge_p_lard",
@@ -99,68 +99,41 @@
    ],
    "ru": "Сало",
    "en": "Lard",
-   "ru_d": "Flesh Heap дает +6 брони на время действия",
-   "en_d": "Flesh Heap grants +6 armor for its duration"
+   "ru_d": "Flesh Heap даёт +6 брони. После повторного E на удар «Ответным укусом» есть 5 с вместо 4.",
+   "en_d": "Flesh Heap grants 6 armor. After pressing E again you have 5 s to land Payback Bite instead of 4."
   },
   {
    "id": "pudge_p_glutton",
    "r": "purple",
    "branch": "E",
    "ab": "pudge_flesh_heap",
-   "fx": [
-    {
-     "t": "kill",
-     "by": "any",
-     "stack": {
-      "props": {
-       "str": 2
-      },
-      "max": 12,
-      "perm": 1
-     }
-    }
-   ],
-   "ru": "Обжора",
-   "en": "Glutton",
-   "ru_d": "+2 силы за каждое убийство героя (до 12 раз, навсегда)",
-   "en_d": "+2 strength per hero kill (up to 12 times, permanent)"
+   "ru": "Крепкая хватка",
+   "en": "Firm Grip",
+   "ru_d": "Первый обычный удар по герою под Flesh Heap замедляет на 25% на 1,4 с. «Ответный укус» также накладывает это замедление.",
+   "en_d": "The first normal hit on a hero during Flesh Heap slows by 25% for 1.4 s. Payback Bite also applies this slow.",
+   "code": true
   },
   {
    "id": "pudge_p_chew",
    "r": "purple",
    "branch": "R",
    "ab": "pudge_dismember",
-   "fx": [
-    {
-     "t": "hit",
-     "by": "ab",
-     "heroOnly": 1,
-     "heal": 40
-    }
-   ],
-   "ru": "Жевание",
-   "en": "Chew",
-   "ru_d": "Dismember лечит Пуджа на 40% урона",
-   "en_d": "Dismember heals Pudge for 40% of its damage"
+   "ru": "Последний кусок",
+   "en": "Last Bite",
+   "ru_d": "После полного Dismember есть 4 с, чтобы ударить жертву. Удар добавляет 120 + 40% силы физическим уроном, до 350, и лечит на половину этого урона. С «Тащи к столу» бонус срабатывает на последнем укусе.",
+   "en_d": "After fully channeling Dismember, hit the victim within 4 s for 120 + 40% strength as extra physical damage (up to 350) and heal for half. With Drag to the Table the final bite gains the bonus instead.",
+   "code": true
   },
   {
    "id": "pudge_p_bulk",
    "r": "purple",
    "branch": "R",
    "ab": "pudge_dismember",
-   "fx": [
-    {
-     "t": "buff",
-     "dur": "AbilityChannelTime",
-     "props": {
-      "inc": -25
-     }
-    }
-   ],
-   "ru": "Туша",
-   "en": "Bulk",
-   "ru_d": "Во время Dismember Пудж получает на 25% меньше урона",
-   "en_d": "During Dismember Pudge takes 25% less damage"
+   "ru": "Вцепился",
+   "en": "Locked Jaws",
+   "ru_d": "Пока Dismember держит героя, Пудж получает на 25% меньше урона от вражеских героев. Скорость перетаскивания «Тащи к столу» выше на 5 п.п.",
+   "en_d": "While Dismember holds a hero, Pudge takes 25% less damage from enemy heroes. Drag to the Table gains 5 percentage points of drag speed.",
+   "code": true
   },
   {
    "id": "pudge_l_hook",
@@ -187,100 +160,39 @@
    "r": "legend",
    "branch": "W",
    "ab": "pudge_rot",
-   "ru": "Топь мясника",
-   "en": "Butcher Mire",
-   "ru_d": "Rot раз в 2 с по каждому герою наносит ещё 2% его текущего здоровья магическим уроном и снижает его урон на 10% на 2 с",
-   "en_d": "Rot deals 2% of each hero's current health as extra magic damage and reduces their damage by 10% for 2 s, once per 2 s per target",
-   "ru_aw": "Пробуждение: 3% текущего здоровья, снижение урона 15%",
-   "en_aw": "Awakening: 3% current health, 15% damage reduction",
-   "fx": [
-    {
-     "t": "hit",
-     "by": "ab",
-     "heroOnly": 1,
-     "icd": 2,
-     "extra": {
-      "curhp": 2,
-      "type": "magic"
-     },
-     "debuff": {
-      "props": {
-       "dmg": -10
-      },
-      "dur": 2
-     },
-     "aw": {
-      "extra": {
-       "curhp": 3,
-       "type": "magic"
-      },
-      "debuff": {
-       "props": {
-        "dmg": -15
-       },
-       "dur": 2
-      }
-     }
-    }
-   ]
+   "ru": "Котёл",
+   "en": "Boiler",
+   "ru_d": "Продержите героя в Rot 1,5 с и выключите W. На его месте появится нарыв: через 0,65 с он взорвётся в радиусе 290 на 180 + 10% макс. здоровья магическим уроном, до 650. Перезарядка 6 с.",
+   "en_d": "Keep a hero inside Rot for 1.5 s, then turn W off. A boil forms at their feet and bursts after 0.65 s in a 290 radius for 180 + 10% max health magic damage, capped at 650. 6 s cooldown.",
+   "ru_aw": "Пробуждение: достаточно 1,1 с в Rot.",
+   "en_aw": "Awakening: only 1.1 s inside Rot is needed.",
+   "code": true
   },
   {
    "id": "pudge_l_heap",
    "r": "legend",
    "branch": "E",
    "ab": "pudge_flesh_heap",
-   "mods": "damage_block:+8",
-   "fx": [
-    {
-     "t": "guard",
-     "win": 5,
-     "thr": 12,
-     "icd": 14,
-     "radius": 345,
-     "dmg": 135,
-     "heal": 5,
-     "dur": 3,
-     "props": {
-      "slowres": 35
-     },
-     "aw": {
-      "dmg": 190,
-      "heal": 7,
-      "props": {
-       "slowres": 45
-      }
-     }
-    }
-   ],
-   "ru": "Гора мяса",
-   "en": "Meat Mountain",
-   "ru_d": "Flesh Heap блокирует ещё 8 урона. Если за первые 5 с Пудж получит от героев 12% макс. здоровья уроном, он ударит в радиусе 345 на 135 магического, вылечит 5% и получит 35% сопротивления замедлению на 3 с.",
-   "en_d": "Flesh Heap blocks 8 more damage. Taking 12% max health in hero damage in the first 5 s retaliates for 135 magic damage in 345, heals 5% max health and grants 35% slow resistance for 3 s.",
-   "ru_aw": "Пробуждение: 190 урона, 7% здоровья, 45% сопротивления замедлению.",
-   "en_aw": "Awakening: 190 damage, 7% healing and 45% slow resistance."
+   "ru": "Ответный укус",
+   "en": "Payback Bite",
+   "ru_d": "Под Flesh Heap накапливается 55% полученного от героев урона, до 600. Нажмите E ещё раз и за 4 с ударьте героя обычной атакой. Она добавит физический урон на накопленную сумму и исцелит Пуджа на 45% нанесённого бонусного урона.",
+   "en_d": "While Flesh Heap is active, store 55% of hero damage taken, up to 600. Press E again and land a normal attack on a hero within 4 s. The attack adds the stored amount as physical damage and heals Pudge for 45% of the extra damage dealt.",
+   "ru_aw": "Пробуждение: можно накопить до 750.",
+   "en_aw": "Awakening: store up to 750.",
+   "code": true
   },
   {
    "id": "pudge_l_dismember",
    "r": "legend",
    "branch": "R",
    "ab": "pudge_dismember",
-   "mods": "dismember_damage:+40;strength_damage:+0.3",
-   "fx": [
-    {
-     "t": "kill",
-     "by": "ab",
-     "cdpct": 0,
-     "aw": {
-      "cdpct": 100
-     }
-    }
-   ],
-   "ru": "Разделка",
-   "en": "Carving",
-   "ru_d": "Урон Dismember +40, от силы +0.3 за единицу",
-   "en_d": "Dismember damage +40, +0.3 per strength",
-   "ru_aw": "Пробуждение: убийство Dismember обновляет его",
-   "en_aw": "Awakening: a Dismember kill refreshes it"
+   "ru": "Тащи к столу",
+   "en": "Drag to the Table",
+   "ru_d": "Во время Dismember нажимайте ПКМ по земле, чтобы идти и тащить жертву со скоростью 55% от скорости бега. Полностью завершив канал, Пудж наносит ещё 12% недостающего здоровья жертвы магическим уроном. Стоп отменяет канал.",
+   "en_d": "During Dismember, right-click the ground to walk and drag the victim at 55% movement speed. Finishing the channel deals another 12% of the victim’s missing health as magic damage. Stop cancels the channel.",
+   "ru_aw": "Пробуждение: скорость перетаскивания 70%.",
+   "en_aw": "Awakening: drag at 70% movement speed.",
+   "code": true
   },
   {
    "id": "pudge_m_doublehook",

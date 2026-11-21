@@ -176,7 +176,7 @@ function ModifierOrbFx.prototype.IsPurgable(self)
 end
 function ModifierOrbFx.prototype.IgnoreTenacity(self)
     local f = self:fx()
-    return (f and f.t) == "thunderball" or (f and f.t) == "maneuver" and f.mode == "sword"
+    return (f and f.t) == "thunderball"
 end
 function ModifierOrbFx.prototype.RemoveOnDeath(self)
     local f = self:fx()

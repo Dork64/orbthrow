@@ -40,8 +40,6 @@ function ModifierOrbHero.prototype.____constructor(self, ...)
     ModBase.prototype.____constructor(self, ...)
     self.callUntil = 0
     self.furyUntil = 0
-    self.omniUntil = 0
-    self.omniWasActive = false
     self.hunger = __TS__New(Map)
     self.spreading = false
     self.lastHelixAt = -100
@@ -94,14 +92,6 @@ function ModifierOrbHero.prototype.OnDestroy(self)
     if IsServer() and self.engine ~= nil then
         self.engine:clear()
     end
-end
-function ModifierOrbHero.prototype.ManeuverOrder(self, kind, target, point)
-    local ____opt_0 = self.engine
-    local ____temp_2 = ____opt_0 and ____opt_0:maneuverOrder(kind, target, point)
-    if ____temp_2 == nil then
-        ____temp_2 = false
-    end
-    return ____temp_2
 end
 function ModifierOrbHero.prototype.fx(self, b)
     local e = self.engine
@@ -166,9 +156,9 @@ function ModifierOrbHero.prototype.OnAbilityStart(self, e)
     if not IsServer() or e.unit ~= self:GetParent() or e.ability == nil then
         return
     end
-    local ____opt_3 = self.engine
-    if ____opt_3 ~= nil then
-        ____opt_3:maneuverStart(e.ability)
+    local ____opt_0 = self.engine
+    if ____opt_0 ~= nil then
+        ____opt_0:maneuverStart(e.ability)
     end
 end
 function ModifierOrbHero.prototype.OnAbilityFullyCast(self, e)
@@ -238,9 +228,6 @@ function ModifierOrbHero.prototype.OnAbilityFullyCast(self, e)
         end
     elseif name == "juggernaut_blade_fury" then
         self.furyUntil = now + ability:GetSpecialValueFor("duration")
-    elseif name == "juggernaut_omni_slash" or name == "juggernaut_swift_slash" then
-        local dur = ability:GetSpecialValueFor("duration")
-        self.omniUntil = now + math.max(0.5, dur)
     elseif name == "juggernaut_healing_ward" then
         self.ward = nil
         self.wardSearchUntil = now + 1
@@ -265,7 +252,7 @@ function ModifierOrbHero.prototype.spreadHunger(self, ability, target, dur)
     for ____, u in ipairs(others) do
         do
             if u == target or not u:IsAlive() then
-                goto __continue56
+                goto __continue54
             end
             parent:SetCursorCastTarget(u)
             ability:OnSpellStart()
@@ -274,7 +261,7 @@ function ModifierOrbHero.prototype.spreadHunger(self, ability, target, dur)
                 now + dur
             )
         end
-        ::__continue56::
+        ::__continue54::
     end
     parent:SetCursorCastTarget(target)
     self.spreading = false
@@ -345,17 +332,14 @@ function ModifierOrbHero.prototype.OnTakeDamage(self, e)
             end
         end
     end
-    if not reflected and now < self.omniUntil and victim:IsRealHero() and self:has("jugg_p_bloody_omni", b) and e.damage_category == DOTA_DAMAGE_CATEGORY_ATTACK then
-        parent:Heal(e.damage * H.bloodyOmniHeal, nil)
-    end
 end
 function ModifierOrbHero.prototype.OnAttackLanded(self, e)
     if not IsServer() then
         return
     end
-    local ____opt_5 = self.engine
-    if ____opt_5 ~= nil then
-        ____opt_5:onObservedAttack(e)
+    local ____opt_2 = self.engine
+    if ____opt_2 ~= nil then
+        ____opt_2:onObservedAttack(e)
     end
     local parent = self:GetParent()
     if e.attacker ~= parent then
@@ -370,31 +354,20 @@ function ModifierOrbHero.prototype.OnAttackLanded(self, e)
     if not isEnemyHero(parent, t) then
         return
     end
-    local dance = self:has("jugg_p_death_dance", b)
-    if not dance then
-        return
-    end
-    local avg = parent:GetAverageTrueAttackDamage(t)
-    if avg <= 0 or e.damage < avg * H.critRatio then
-        return
-    end
-    if dance then
-        for ____, n in ipairs({"juggernaut_blade_fury", "juggernaut_omni_slash"}) do
-            do
-                local a = parent:FindAbilityByName(n)
-                if a == nil then
-                    goto __continue86
-                end
-                local left = a:GetCooldownTimeRemaining()
-                if left <= 0 then
-                    goto __continue86
-                end
-                a:EndCooldown()
-                if left > H.deathDanceCdr then
-                    a:StartCooldown(left - H.deathDanceCdr)
-                end
-            end
-            ::__continue86::
+    local ward = self.ward
+    if self:has("jugg_p_healing_fury", b) and ward ~= nil and IsValidEntity(ward) and ward:IsAlive() and not t:IsDebuffImmune() and not e.no_attack_cooldown and e.damage > 0 then
+        local center = ward:GetAbsOrigin()
+        local function range(u)
+            local p = u:GetAbsOrigin()
+            return (p.x - center.x) ^ 2 + (p.y - center.y) ^ 2 <= 475 ^ 2 and math.abs(p.z - center.z) <= 150
+        end
+        if range(t) and range(parent) then
+            t:AddNewModifier(
+                parent,
+                parent:FindAbilityByName("juggernaut_healing_ward"),
+                "modifier_orb_jugg_guardcut",
+                {duration = 1.2}
+            )
         end
     end
 end
@@ -455,7 +428,7 @@ function ModifierOrbHero.prototype.jumpHunger(self, dead)
     for ____, u in ipairs(near) do
         do
             if u == dead or not u:IsAlive() or not u:IsRealHero() then
-                goto __continue103
+                goto __continue95
             end
             self.spreading = true
             parent:SetCursorCastTarget(u)
@@ -467,7 +440,7 @@ function ModifierOrbHero.prototype.jumpHunger(self, dead)
             )
             return
         end
-        ::__continue103::
+        ::__continue95::
     end
 end
 function ModifierOrbHero.prototype.onCullKill(self, ability, b)
@@ -498,7 +471,6 @@ function ModifierOrbHero.prototype.OnIntervalThink(self)
     self:thinkCull(parent, now)
     self:thinkWard(parent, b, now)
     self:thinkStorm(parent, b, now)
-    self:thinkOmniEnd(parent, b, now)
 end
 function ModifierOrbHero.prototype.thinkOneArmy(self, parent, b)
     local bonus = 0
@@ -547,11 +519,11 @@ function ModifierOrbHero.prototype.thinkHunt(self, parent, b, now)
                 if u == nil or not IsValidEntity(u) or u:IsAlive() or ____until <= now then
                     self.hunger:delete(id)
                 end
-                goto __continue120
+                goto __continue112
             end
             n = n + 1
         end
-        ::__continue120::
+        ::__continue112::
     end
     if not self:has("axe_l_hunt", b) then
         return
@@ -577,9 +549,7 @@ function ModifierOrbHero.prototype.thinkCull(self, parent, now)
 end
 function ModifierOrbHero.prototype.thinkWard(self, parent, b, now)
     local roaming = self:has("jugg_p_roaming_ward", b)
-    local fury = self:has("jugg_p_healing_fury", b)
-    local relay = self:has("jugg_l_sanctuary", b)
-    if not roaming and not fury and not relay then
+    if not roaming and not self:has("jugg_p_healing_fury", b) then
         return
     end
     if self.ward == nil and now < self.wardSearchUntil and self.wardSearchPos ~= nil then
@@ -597,18 +567,12 @@ function ModifierOrbHero.prototype.thinkWard(self, parent, b, now)
         for ____, u in ipairs(units) do
             do
                 if u:GetUnitName() ~= WARD_UNIT or u:GetPlayerOwnerID() ~= parent:GetPlayerOwnerID() then
-                    goto __continue133
+                    goto __continue125
                 end
                 self.ward = u
-                if relay then
-                    local ____opt_7 = self.engine
-                    if ____opt_7 ~= nil then
-                        ____opt_7:rememberWard(u)
-                    end
-                end
                 break
             end
-            ::__continue133::
+            ::__continue125::
         end
     end
     local w = self.ward
@@ -630,14 +594,6 @@ function ModifierOrbHero.prototype.thinkWard(self, parent, b, now)
     end
     if roaming and dist <= radius then
         parent:AddNewModifier(parent, healAbility, "modifier_orb_jugg_ward_armor", {duration = 0.25})
-    end
-    if fury and now < self.furyUntil and dist <= H.healingFuryRange and healAbility ~= nil then
-        local pct = healAbility:GetSpecialValueFor("healing_ward_heal_amount")
-        local extra = dist <= radius and pct or pct * 2
-        parent:Heal(
-            parent:GetMaxHealth() * extra / 100 * THINK,
-            healAbility
-        )
     end
 end
 function ModifierOrbHero.prototype.thinkStorm(self, parent, b, now)
@@ -662,30 +618,18 @@ function ModifierOrbHero.prototype.thinkStorm(self, parent, b, now)
     for ____, u in ipairs(units) do
         do
             if not u:IsAlive() then
-                goto __continue144
+                goto __continue134
             end
             local o = u:GetAbsOrigin()
             local d = (o - c):Length2D()
             if d <= 120 then
-                goto __continue144
+                goto __continue134
             end
             local dir = (c - o):Normalized()
             FindClearSpaceForUnit(u, o + dir * step, false)
         end
-        ::__continue144::
+        ::__continue134::
     end
-end
-function ModifierOrbHero.prototype.thinkOmniEnd(self, parent, b, now)
-    local active = now < self.omniUntil
-    if self.omniWasActive and not active and self:has("jugg_p_dispel", b) and parent:IsAlive() then
-        parent:AddNewModifier(
-            parent,
-            parent:FindAbilityByName("juggernaut_omni_slash"),
-            "modifier_orb_jugg_immune",
-            {duration = H.dispelImmunity}
-        )
-    end
-    self.omniWasActive = active
 end
 modifier_orb_hero = registerModifier("modifier_orb_hero", ____exports.ModifierOrbHero)
 return ____exports

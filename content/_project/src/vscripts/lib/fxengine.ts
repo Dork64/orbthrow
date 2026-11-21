@@ -109,12 +109,6 @@ export class FxEngine {
 
     maneuverStart(ability: CDOTABaseAbility) { this.maneuvers?.start(ability, GameRules.GetGameTime()); }
 
-    rememberWard(ward: CDOTA_BaseNPC) { this.maneuvers?.rememberWard(ward); }
-
-    maneuverOrder(kind: UnitOrder, target: CDOTA_BaseNPC | undefined, point: Vector): boolean {
-        return this.maneuvers?.order(kind, target, point, GameRules.GetGameTime()) ?? false;
-    }
-
     // ---------- Активные эффекты ----------
 
     refresh(b: OrbBonuses) {
@@ -677,7 +671,6 @@ export class FxEngine {
         if (!isEnemy(parent, a) || !a.IsRealHero() || e.damage <= 0) return;
         if ((e.damage_flags & DamageFlag.REFLECTION) !== 0) return;
         const now = GameRules.GetGameTime();
-        this.maneuvers?.taken(e, now);
         for (const f of this.list) {
             if (f.t === "guard") { this.guardHit(f, e.damage, now); continue; }
             if (f.t !== "taken" || !this.inWindow(f, f.win, now)) continue;

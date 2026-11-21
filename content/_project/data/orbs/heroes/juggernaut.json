@@ -2,6 +2,30 @@
  "hero": "npc_dota_hero_juggernaut",
  "orbs": [
   {
+   "id": "jugg_p_hurricane",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "juggernaut_blade_fury",
+   "mods": "bonus_movespeed:+45",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "debuff": {
+      "dur": 0.5,
+      "props": {
+       "ms": -20
+      }
+     }
+    }
+   ],
+   "ru": "Ураган",
+   "en": "Hurricane",
+   "ru_d": "Во время Blade Fury Джаггернаут получает +45 скорости бега, а враги в радиусе замедляются на 20%.",
+   "en_d": "During Blade Fury Juggernaut gains 45 movement speed and slows enemies within its radius by 20%."
+  },
+  {
    "id": "jugg_m_autofury",
    "r": "purple",
    "branch": "Q",
@@ -85,60 +109,39 @@
    "r": "legend",
    "branch": "W",
    "ab": "juggernaut_healing_ward",
-   "ru": "Подмена тотема",
-   "en": "Ward Switch",
-   "ru_d": "ПКМ по своему живому Healing Ward с 240–850 меняет Джаггера и тотем местами. Один раз за тотем. Тотем продолжает лечить, но враг может убить его до подмены.",
-   "en_d": "Right-click your living Healing Ward from 240–850 to swap places, once per ward. The ward keeps healing, but enemies can destroy it before you swap.",
-   "ru_aw": "Пробуждение: подмена доступна с 1100.",
-   "en_aw": "Awakening: swap range extends to 1100.",
-   "fx": [
-    {
-     "t": "maneuver",
-     "mode": "ward"
-    }
-   ]
+   "ru": "Тотем последнего слова",
+   "en": "Last Word Ward",
+   "ru_d": "Две обычные атаки по одному герою рядом с живым Healing Ward взводят его. Через 0,65 с волна лезвий схлопывается к центру, наносит 380 + 10% макс. здоровья магическим уроном (до 700), стягивает и обездвиживает на 0,9 с. Затем тотем исчезает.",
+   "en_d": "Two normal hits on the same hero near a living Healing Ward arm it. After 0.65 s, blades sweep inward, dealing 380 + 10% max health magic damage (up to 700), pulling and rooting for 0.9 s. The ward then breaks.",
+   "ru_aw": "Пробуждение: тотем переживает взрыв и продолжает лечить. Вторая волна не появляется.",
+   "en_aw": "Awakening: the ward survives and keeps healing. One wave per ward.",
+   "code": true
   },
   {
    "id": "jugg_l_cuts",
    "r": "legend",
    "branch": "E",
    "ab": "juggernaut_blade_dance",
-   "ru": "Ответная стойка",
-   "en": "Riposte Stance",
-   "ru_d": "Остановитесь на полсекунды рядом с врагом: на земле появится короткая стойка. Если герой атакует в лицо с близкой дистанции, после попадания Джаггер уйдёт ему за бок, ответит ударом и ненадолго обезоружит. Движение отменяет стойку.",
-   "en_d": "Stop briefly near an enemy hero to take a visible stance. A close attack from the front makes Juggernaut sidestep around its attacker, strike back and briefly disarm them. Moving cancels the stance.",
-   "ru_aw": "Пробуждение: ответ обезоруживает дольше.",
-   "en_aw": "Awakening: the riposte disarms for longer.",
-   "fx": [
-    {
-     "t": "maneuver",
-     "mode": "parry",
-     "debuff": {
-      "dur": 0.9,
-      "props": {
-       "disarm": 1
-      }
-     }
-    }
-   ]
+   "ru": "Три реза",
+   "en": "Three Cuts",
+   "ru_d": "Нажмите E, чтобы начать серию на 5 с. Бейте одного героя. Второй удар проводит Джаггера за спину цели, если туда можно шагнуть. Третий удар гарантированно критует на 300%. Штатный пассивный крит сохраняется.",
+   "en_d": "Press E to start a 5 s series on one hero. The second hit steps behind them if the path is clear. The third hit is a guaranteed 300% critical strike. The native passive remains.",
+   "ru_aw": "Пробуждение: третий рез критует на 350%.",
+   "en_aw": "Awakening: the third cut crits for 350%.",
+   "code": true
   },
   {
    "id": "jugg_l_endless",
    "r": "legend",
    "branch": "R",
    "ab": "juggernaut_omni_slash",
-   "ru": "Выход из танца",
-   "en": "Cut the Dance",
-   "ru_d": "Omnislash оставляет кольцо на старте. ПКМ по кольцу обрывает серию и возвращает Джаггера туда: остаток ударов и неуязвимость пропадают. Соперник может ждать у кольца.",
-   "en_d": "Omnislash leaves a ring at its starting point. Right-click the ring to end the slashes and return there, giving up the remaining hits and invulnerability. Enemies can wait at the ring.",
-   "ru_aw": "Пробуждение: можно вернуться и в течение 0,85 с после естественного конца серии.",
-   "en_aw": "Awakening: you can also return for 0.85 s after the slashes end naturally.",
-   "fx": [
-    {
-     "t": "maneuver",
-     "mode": "omni"
-    }
-   ]
+   "ru": "На бис",
+   "en": "Encore",
+   "ru_d": "После окончания Omnislash есть 5 с на второй заход. Через 0,9 с кнопка R становится «На бис». Выберите вражеского героя: Джаггер наносит ему до трёх атак. Linken может заблокировать этот заход отдельно.",
+   "en_d": "After Omnislash ends, you have 5 s to make a second pass. After 0.9 s, R becomes Encore. Pick an enemy hero to strike them up to three times. Linken's Sphere can block this cast separately.",
+   "ru_aw": "Пробуждение: на выбор цели даётся 6 с.",
+   "en_aw": "Awakening: the window lasts 6 s.",
+   "code": true
   }
  ]
 }

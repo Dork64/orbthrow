@@ -226,9 +226,10 @@ describe("бонусы сфер", () => {
         expect(overrideValue(storm, "juggernaut_blade_fury", "blade_fury_damage", 175)).toBeUndefined();
     });
     it("все взятые сферы видны эффектам-коду (и данные, и код)", () => {
-        const b = computeBonuses({ jugg_p_dispel: 1 }, 1);
+        const b = computeBonuses({ jugg_p_dispel: 1, jugg_p_critfury: 1 }, 1);
         expect(b.code["jugg_p_dispel"]).toBe(1);
-        expect(b.specials["juggernaut_omni_slash"]["dispel"]).toBe(1);
+        expect(b.code["jugg_p_critfury"]).toBe(1);
+        expect(b.specials["juggernaut_blade_fury"]["can_crit"]).toBe(1);
     });
 });
 

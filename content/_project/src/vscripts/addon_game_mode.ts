@@ -25,7 +25,7 @@ Precache = function (this: void, context: CScriptPrecacheContext) {
     for (const m of PRECACHE_MODELS) PrecacheResource("model", m, context);
     PrecacheResource("soundfile", "soundevents/game_sounds_overthrow.vsndevts", context);
     // Звуки механик сфер (мультикаст, гроза, петля времени, обмен, мины)
-    for (const h of ["ogre_magi", "zuus", "weaver", "vengefulspirit", "techies"]) {
+    for (const h of ["ogre_magi", "zuus", "weaver", "vengefulspirit", "techies", "pudge"]) {
         PrecacheResource("soundfile", "soundevents/game_sounds_heroes/game_sounds_" + h + ".vsndevts", context);
     }
     for (const n of ALL_NEUTRAL_NAMES) PrecacheUnitByNameSync(n, context);

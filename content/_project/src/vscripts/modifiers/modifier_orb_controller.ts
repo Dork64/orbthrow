@@ -31,6 +31,7 @@ export class ModifierOrbController extends ModBase {
     burnFx?: ParticleID;
     graveReadyAt = 0;
     meteorReadyAt = 0;
+    private orbCriticals?: Map<number, { target: CDOTA_BaseNPC; bonus: number }>;
 
     IsHidden() { return true; }
     IsPurgable() { return false; }
@@ -75,13 +76,13 @@ export class ModifierOrbController extends ModBase {
             ModifierFunction.STATS_STRENGTH_BONUS,
             ModifierFunction.STATS_AGILITY_BONUS,
             ModifierFunction.STATS_INTELLECT_BONUS,
-            ModifierFunction.COOLDOWN_PERCENTAGE_STACKING,
             ModifierFunction.STATUS_RESISTANCE_STACKING,
             ModifierFunction.SLOW_RESISTANCE_STACKING,
             ModifierFunction.ON_TAKEDAMAGE,
             ModifierFunction.OVERRIDE_ABILITY_SPECIAL,
             ModifierFunction.OVERRIDE_ABILITY_SPECIAL_VALUE,
-            ModifierFunction.PREATTACK_CRITICALSTRIKE,
+            ModifierFunction.ON_ATTACK_RECORD,
+            ModifierFunction.ON_ATTACK_RECORD_DESTROY,
             ModifierFunction.ON_ATTACK_LANDED,
             ModifierFunction.TOTALDAMAGEOUTGOING_PERCENTAGE,
             ModifierFunction.ON_ABILITY_FULLY_CAST,
@@ -107,7 +108,9 @@ export class ModifierOrbController extends ModBase {
     GetModifierStatusResistanceStacking() {
         const b = this.b();
         const sources: number[] = [];
-        for (const mod of this.GetParent().FindAllModifiers()) {
+        const parent = this.GetParent();
+        const modifiers = typeof parent.FindAllModifiers === "function" ? parent.FindAllModifiers() : [];
+        for (const mod of modifiers) {
             const source = mod as CDOTA_Buff & { OrbStatusResistance?: () => number };
             if (source.OrbStatusResistance !== undefined) sources.push(source.OrbStatusResistance());
         }
@@ -119,8 +122,9 @@ export class ModifierOrbController extends ModBase {
 
     /** Первые три способности героя (для «Мастера способностей»). */
     private isBasicAbility(ability: CDOTABaseAbility): boolean {
-        if (ability.IsItem() || ability.GetAbilityType() === ULTIMATE) return false;
+        if (this.isItem(ability) || this.isUltimate(ability)) return false;
         const parent = this.GetParent();
+        if (typeof parent.GetAbilityByIndex !== "function") return false;
         for (let i = 0; i < 3; i++) {
             const a = parent.GetAbilityByIndex(i);
             if (a !== undefined && a === ability) return true;
@@ -128,67 +132,75 @@ export class ModifierOrbController extends ModBase {
         return false;
     }
 
-    /** Перезарядка: серая, синие, легендарки — вместе умножением. */
-    GetModifierPercentageCooldownStacking(e?: ModifierAbilityEvent): number {
-        const ability = e?.ability;
-        if (ability === undefined || ability.IsItem()) return 0;
-        const b = this.b();
-        let keep = (100 - b.cdr) / 100;
-        keep *= (100 - (b.abilityCdr[ability.GetAbilityName()] ?? 0)) / 100;
+    private isItem(ability: CDOTABaseAbility): boolean {
+        return typeof ability.IsItem === "function" ? ability.IsItem() : ability.GetAbilityName().startsWith("item_");
+    }
+
+    private isUltimate(ability: CDOTABaseAbility): boolean {
+        return typeof ability.GetAbilityType === "function" && ability.GetAbilityType() === ULTIMATE;
+    }
+
+    /** Сферы меняют базовое время способности. Процент предметов движок применяет к нему отдельно. */
+    private orbCooldownFactor(b: OrbBonuses, ability: CDOTABaseAbility, name: string): number {
+        if (this.isItem(ability)) return 1;
+        let keep = (1 - b.cdr / 100) * (1 - (b.abilityCdr[name] ?? 0) / 100);
         if ((b.code["l_master"] ?? 0) > 0 && this.isBasicAbility(ability)) keep *= b.awake ? 0.65 : 0.75;
-        if ((b.code["l_double_ult"] ?? 0) > 0 && b.awake && ability.GetAbilityType() === ULTIMATE) keep *= 0.8;
-        return boundedOrbCooldown(ability.GetAbilityName(), 100 - keep * 100);
+        if (b.awake && (b.code["l_double_ult"] ?? 0) > 0 && this.isUltimate(ability)) keep *= 0.8;
+        return 1 - boundedOrbCooldown(name, 100 - keep * 100) / 100;
+    }
+
+    private extraCharges(b: OrbBonuses, ability: CDOTABaseAbility, name: string): number {
+        if (typeof ability.IsPassive === "function" && ability.IsPassive()) return 0;
+        return bonusAbilityCharges(b, name, this.isUltimate(ability));
     }
 
     GetModifierOverrideAbilitySpecial(e: ModifierOverrideAbilitySpecialEvent): 0 | 1 {
         const ability = e.ability;
         if (ability === undefined) return 0;
         const b = this.b();
-        const name = ability.GetAbilityName();
-        const k = e.ability_special_value;
-        if (replacesWrathDamage(b, name, k)) return 1;
-        if (k === "AbilityCharges" || k === "AbilityCooldown" || k === "AbilityChargeRestoreTime") {
-            const extra = ability.IsPassive() ? 0 : bonusAbilityCharges(b, name, ability.GetAbilityType() === ULTIMATE);
-            if (extra > 0) {
-                if (k === "AbilityCharges") return 1;
-                if (ability.GetLevelSpecialValueNoOverride("AbilityCharges", e.ability_special_level) <= 0 &&
-                    (k === "AbilityCooldown" || ability.GetCooldownTimeRemaining() > 0)) return 1;
-            }
+        const name = ability.GetAbilityName(), key = e.ability_special_value;
+        if (replacesWrathDamage(b, name, key)) return 1;
+        if (key === "AbilityCharges" || key === "AbilityCooldown" || key === "AbilityChargeRestoreTime") {
+            const extra = this.extraCharges(b, ability, name);
+            if (key === "AbilityCharges" && extra > 0) return 1;
+            if (key === "AbilityCooldown" && extra > 0 &&
+                ability.GetLevelSpecialValueNoOverride("AbilityCharges", e.ability_special_level) <= 0) return 1;
+            if (key !== "AbilityCharges" && this.orbCooldownFactor(b, ability, name) < 1) return 1;
         }
-        if (b.specials[name]?.[k] !== undefined || b.specialsSet[name]?.[k] !== undefined || b.specialsMul[name]?.[k] !== undefined) return 1;
+        if (b.specials[name]?.[key] !== undefined || b.specialsSet[name]?.[key] !== undefined || b.specialsMul[name]?.[key] !== undefined) return 1;
         return 0;
     }
 
     GetModifierOverrideAbilitySpecialValue(e: ModifierOverrideAbilitySpecialEvent): number {
-        const ability = e.ability;
-        const base = ability.GetLevelSpecialValueNoOverride(e.ability_special_value, e.ability_special_level);
-        const b = this.b();
-        const key = e.ability_special_value;
-        if (IsServer() && replacesWrathDamage(b, ability.GetAbilityName(), key)) return 0;
-        if (key === "AbilityCharges" || key === "AbilityCooldown" || key === "AbilityChargeRestoreTime") {
-            const extra = ability.IsPassive() ? 0 : bonusAbilityCharges(b, ability.GetAbilityName(), ability.GetAbilityType() === ULTIMATE);
-            if (extra > 0) {
-                if (key === "AbilityCharges") return nativeChargeCount(base, extra);
-                if (ability.GetLevelSpecialValueNoOverride("AbilityCharges", e.ability_special_level) <= 0) {
-                    if (key === "AbilityCooldown") return 0;
-                    const remaining = ability.GetCooldownTimeRemaining();
-                    if (remaining > 0) return remaining;
-                }
-            }
-        }
-        const v = overrideValue(b, ability.GetAbilityName(), e.ability_special_value, base);
-        return v !== undefined ? v : base;
+        const ability = e.ability, key = e.ability_special_value, level = e.ability_special_level;
+        const name = ability.GetAbilityName(), b = this.b();
+        const base = ability.GetLevelSpecialValueNoOverride(key, level);
+        if (IsServer() && replacesWrathDamage(b, name, key)) return 0;
+        if (key === "AbilityCharges") {
+            const extra = this.extraCharges(b, ability, name);
+            if (extra > 0) return nativeChargeCount(base, extra);
+        } else if (key === "AbilityCooldown" && this.extraCharges(b, ability, name) > 0 &&
+            ability.GetLevelSpecialValueNoOverride("AbilityCharges", level) <= 0) return 0;
+        const adjusted = overrideValue(b, name, key, base) ?? base;
+        if (key === "AbilityCooldown" || key === "AbilityChargeRestoreTime")
+            return adjusted * this.orbCooldownFactor(b, ability, name);
+        return adjusted;
     }
 
-    /** Критический удар (фиолетовая): 20% шанс, 200% / 250%. */
-    GetModifierPreAttack_CriticalStrike(e: ModifierAttackEvent): number {
-        if (!IsServer()) return 0;
-        // Эффекты-код фиолетовых и легендарок на иллюзиях не работают (DESIGN 12.1.11)
-        if (this.GetParent().IsIllusion()) return 0;
+    /** Отдельный бросок на атаку, чтобы слоты штатных критов и крита сферы не конкурировали. */
+    OnAttackRecord(e: ModifierAttackEvent) {
+        const parent = this.GetParent(), target = e.target;
+        if (!IsServer() || e.attacker !== parent || parent.IsIllusion() || e.record === undefined || e.no_attack_cooldown ||
+            target === undefined || target.IsBuilding() || target.IsWard() ||
+            target.GetTeamNumber() === parent.GetTeamNumber()) return;
         const n = this.b().code["p_crit"] ?? 0;
-        if (n <= 0 || e.target === undefined || e.target.IsBuilding()) return 0;
-        if (!RollPseudoRandomPercentage(20, PseudoRandom.CUSTOM_GAME_1, this.GetParent())) return 0;
-        return Math.min(450, 150 + 50 * n);
+        if (n <= 0 || !RollPseudoRandomPercentage(20, PseudoRandom.CUSTOM_GAME_1, parent)) return;
+        this.orbCriticals ??= new Map();
+        this.orbCriticals.set(e.record, { target, bonus: Math.min(350, 50 + 50 * n) });
+    }
+
+    OnAttackRecordDestroy(e: ModifierAttackEvent) {
+        if (IsServer() && e.attacker === this.GetParent()) this.orbCriticals?.delete(e.record);
     }
 
     /** Раскол / Рикошет (фиолетовая). */
@@ -196,8 +208,10 @@ export class ModifierOrbController extends ModBase {
         if (!IsServer()) return;
         const parent = this.GetParent();
         if (e.attacker !== parent || parent.IsIllusion()) return;
-        const n = this.b().code["p_cleave"] ?? 0;
         const target = e.target;
+        if (e.damage > 0 && target !== undefined && this.orbCriticals?.get(e.record)?.target === target && IsValidEntity(target))
+            SendOverheadEventMessage(undefined, OverheadAlert.CRITICAL, target, Math.round(e.damage), undefined);
+        const n = this.b().code["p_cleave"] ?? 0;
         if (n <= 0 || target === undefined || !IsValidEntity(target) || target.IsBuilding() || target.GetTeamNumber() === parent.GetTeamNumber()) return;
         if (!parent.IsRangedAttacker()) {
             DoCleaveAttack(parent, target, undefined, e.damage * 0.4 * n, 150, 360, 650, CLEAVE_PARTICLE);
@@ -219,14 +233,14 @@ export class ModifierOrbController extends ModBase {
         if (this.GetParent().IsIllusion()) return 0;
         const b = this.b();
         let pct = 0;
-        const target = e.target;
+        const target = e?.target;
         if ((b.code["p_executioner"] ?? 0) > 0 && target !== undefined && target.IsHero() && target.GetHealthPercent() < 30) pct += 20 * (b.code["p_executioner"] ?? 0);
-        const inflictor = e.inflictor;
-        if (inflictor !== undefined && !inflictor.IsItem()) {
-            if ((b.code["l_master"] ?? 0) > 0 && this.isBasicAbility(inflictor)) pct += b.awake ? 30 : 20;
-    
-        }
-        return pct;
+        const inflictor = e?.inflictor;
+        if (inflictor !== undefined && (b.code["l_master"] ?? 0) > 0 && this.isBasicAbility(inflictor)) pct += b.awake ? 30 : 20;
+        const crit = IsServer() && e?.attacker === this.GetParent() && e.damage_category === DamageCategory.ATTACK &&
+            inflictor === undefined && e.record !== undefined ? this.orbCriticals?.get(e.record) : undefined;
+        const bonus = crit !== undefined && crit.target === target ? crit.bonus : 0;
+        return pct + bonus + pct * bonus / 100;
     }
 
     /** Неупокоенный: пока готов — здоровье не падает ниже 1 (срабатывание — в OnTakeDamage). */
@@ -242,7 +256,8 @@ export class ModifierOrbController extends ModBase {
         const now = GameRules.GetGameTime();
         if (now < this.meteorReadyAt) return;
         const level = Math.max(0, ability.GetLevel() - 1);
-        const cooldown = ability.GetMaxAbilityCharges(level) > 0 ? ability.GetAbilityChargeRestoreTime(level) : ability.GetCooldown(level);
+        const key = ability.GetMaxAbilityCharges(level) > 0 ? "AbilityChargeRestoreTime" : "AbilityCooldown";
+        const cooldown = ability.GetLevelSpecialValueNoOverride(key, level);
         if (cooldown < 3) return;
         this.meteorReadyAt = now + 3;
         const t = ability.GetCursorTarget();
@@ -309,12 +324,12 @@ export class ModifierOrbController extends ModBase {
             if (unit === undefined || unit.GetTeamNumber() === parent.GetTeamNumber() || unit.IsBuilding()) return;
             const flags = e.damage_flags;
             if ((flags & DamageFlag.REFLECTION) !== 0 || (flags & DamageFlag.HPLOSS) !== 0) return;
-            const spell = e.inflictor !== undefined;
+            const spell = e.damage_category !== undefined ? e.damage_category === DamageCategory.SPELL : e.inflictor !== undefined;
             if (!parent.IsAlive() || (spell && (flags & DamageFlag.NO_SPELL_LIFESTEAL) !== 0)) return;
             let pct = b.lifesteal;
             if (unit.IsHero()) pct += 12 * (b.code["p_bloodsucker"] ?? 0);
             if (pct > 0)
-                parent.HealWithParams(e.damage * pct / 100, e.inflictor as CDOTABaseAbility, true, true, parent, spell);
+                parent.HealWithParams(e.damage * pct / 100, e.inflictor as CDOTABaseAbility, true, true, parent, spell && e.inflictor !== undefined);
             return;
         }
         // Урон по нам: Щит битвы и Второе дыхание

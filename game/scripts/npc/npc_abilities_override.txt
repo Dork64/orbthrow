@@ -18,6 +18,13 @@
 	{
 		"AbilityCastRange"	"2000"
 		"AbilityCooldown"	"30 25 20"
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"30 25 20"
+			}
+		}
 	}
 	"mirana_arrow"
 	{
@@ -30,6 +37,716 @@
 	"item_black_king_bar"
 	{
 		"AbilityCooldown"	"50"
+	}
+	"axe_berserkers_call"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"18 16 14 12"
+			}
+		}
+	}
+	"axe_battle_hunger"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"20 15 10 5"
+			}
+		}
+	}
+	"axe_culling_blade"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"80 75 70"
+			}
+		}
+	}
+	"sniper_take_aim"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"22 20 18 16"
+			}
+		}
+	}
+	"sniper_concussive_grenade"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"10"
+			}
+		}
+	}
+	"lina_light_strike_array"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"13 11 9 7"
+			}
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"13 11 9 7"
+			}
+		}
+	}
+	"lina_flame_cloak"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"25"
+			}
+		}
+	}
+	"sven_warcry"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"36 32 28 24"
+			}
+		}
+	}
+	"bristleback_viscous_nasal_goo"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"1.75"
+			}
+		}
+	}
+	"bristleback_quill_spray"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"3.0 3.0 3.0 3.0"
+			}
+		}
+	}
+	"bristleback_hairball"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"15"
+			}
+		}
+	}
+	"pudge_flesh_heap"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"20 19 18 17"
+			}
+		}
+	}
+	"drow_ranger_glacier"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"25"
+			}
+		}
+	}
+	"phantom_assassin_phantom_strike"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"0.1"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"21 18 15 12"
+			}
+		}
+	}
+	"phantom_assassin_fan_of_knives"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"14"
+			}
+		}
+	}
+	"crystal_maiden_crystal_clone"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"12"
+			}
+		}
+	}
+	"crystal_maiden_freezing_field_stop"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"1"
+			}
+		}
+	}
+	"tidehunter_gush"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"12"
+			}
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"12"
+			}
+		}
+	}
+	"tidehunter_anchor_smash"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"7.0 6.0 5.0 4.0"
+			}
+		}
+	}
+	"tidehunter_dead_in_the_water"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"35"
+			}
+		}
+	}
+	"dragon_knight_dragon_tail"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"16 14 12 10"
+			}
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"16 14 12 10"
+			}
+		}
+	}
+	"dragon_knight_fireball"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"20"
+			}
+		}
+	}
+	"dragon_knight_elder_dragon_form"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"100"
+			}
+		}
+	}
+	"ursa_overpower"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"12 11 10 9"
+			}
+		}
+	}
+	"viper_nethertoxin"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"14.0"
+			}
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"14.0"
+			}
+		}
+	}
+	"viper_nose_dive"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"25.0"
+			}
+		}
+	}
+	"queenofpain_shadow_strike"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"11 9 7 5"
+			}
+		}
+	}
+	"lich_frost_shield"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"30 25 20 15"
+			}
+		}
+	}
+	"lich_sinister_gaze"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"24 22 20 18"
+			}
+		}
+	}
+	"lich_ice_spire"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"25"
+			}
+		}
+	}
+	"lich_chain_frost"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"100.0 80.0 60.0"
+			}
+		}
+	}
+	"mirana_leap"
+	{
+		"AbilityValues"
+		{
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"45 35 25 15"
+			}
+		}
+	}
+	"mirana_celestial_quiver"
+	{
+		"AbilityValues"
+		{
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"7.0"
+			}
+		}
+	}
+	"legion_commander_press_the_attack"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"16.0 15.0 14.0 13.0"
+			}
+		}
+	}
+	"legion_commander_moment_of_courage"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"0.3"
+			}
+		}
+	}
+	"zuus_lightning_bolt"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"6.0 6.0 6.0 6.0"
+			}
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"6.0 6.0 6.0 6.0"
+			}
+		}
+	}
+	"zuus_cloud"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"45"
+			}
+		}
+	}
+	"zuus_thundergods_wrath"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"130"
+			}
+		}
+	}
+	"faceless_void_time_dilation"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"24 21 18 15"
+			}
+		}
+	}
+	"faceless_void_time_walk_reverse"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"0.5"
+			}
+		}
+	}
+	"faceless_void_chronosphere"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"155 145 135"
+			}
+		}
+	}
+	"bloodseeker_bloodrage"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"14 12 10 8"
+			}
+		}
+	}
+	"windrunner_powershot"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"12 11 10 9"
+			}
+		}
+	}
+	"windrunner_gale_force"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"25"
+			}
+		}
+	}
+	"ogre_magi_ignite"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"17"
+			}
+		}
+	}
+	"ogre_magi_bloodlust"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"20 18 16 14"
+			}
+		}
+	}
+	"ogre_magi_smash"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"15"
+			}
+		}
+	}
+	"snapfire_scatterblast"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"17 14 11 8"
+			}
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"17 14 11 8"
+			}
+		}
+	}
+	"snapfire_lil_shredder"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"21 18 15 12"
+			}
+		}
+	}
+	"snapfire_gobble_up"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"40"
+			}
+		}
+	}
+	"snapfire_mortimer_kisses"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"120 110 100"
+			}
+		}
+	}
+	"slark_saltwater_shiv"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"12.0 10.5 9.0 7.5"
+			}
+		}
+	}
+	"slark_depth_shroud"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"75"
+			}
+		}
+	}
+	"slark_shadow_dance"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"50 40 30"
+			}
+		}
+	}
+	"razor_plasma_field"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"13 12 11 10"
+			}
+		}
+	}
+	"razor_static_link"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"44 36 28 20"
+			}
+		}
+	}
+	"razor_eye_of_the_storm"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"80 70 60"
+			}
+		}
+	}
+	"necrolyte_death_seeker"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"20"
+			}
+		}
+	}
+	"necrolyte_reapers_scythe"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"100"
+			}
+		}
+	}
+	"sandking_sand_storm"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"40 34 28 22"
+			}
+		}
+	}
+	"sandking_scorpion_strike"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"15.0 12.0 9.0 6.0"
+			}
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"15.0 12.0 9.0 6.0"
+			}
+		}
+	}
+	"tusk_tag_team"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"24 21 18 15"
+			}
+		}
+	}
+	"tusk_drinking_buddies"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"14"
+			}
+		}
+	}
+	"tusk_walrus_kick"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"12"
+			}
+		}
+	}
+	"tusk_walrus_punch"
+	{
+		"AbilityValues"
+		{
+			"AbilityCooldown"
+			{
+				"value"	"16 13 10"
+			}
+		}
 	}
 	"bloodseeker_blood_bath"
 	{
@@ -60,20 +777,6 @@
 			}
 		}
 	}
-	"dragon_knight_dragon_tail"
-	{
-		"AbilityValues"
-		{
-			"AbilityCharges"
-			{
-				"value"	"0"
-			}
-			"AbilityChargeRestoreTime"
-			{
-				"value"	"16 14 12 10"
-			}
-		}
-	}
 	"earthshaker_fissure"
 	{
 		"AbilityValues"
@@ -101,20 +804,6 @@
 			{
 				"value"	"21 16 11 6"
 				"special_bonus_unique_faceless_void_5"	"-1.0"
-			}
-		}
-	}
-	"lina_light_strike_array"
-	{
-		"AbilityValues"
-		{
-			"AbilityCharges"
-			{
-				"value"	"0"
-			}
-			"AbilityChargeRestoreTime"
-			{
-				"value"	"13 11 9 7"
 			}
 		}
 	}
@@ -192,34 +881,6 @@
 			}
 		}
 	}
-	"sandking_scorpion_strike"
-	{
-		"AbilityValues"
-		{
-			"AbilityCharges"
-			{
-				"value"	"0"
-			}
-			"AbilityChargeRestoreTime"
-			{
-				"value"	"15.0 12.0 9.0 6.0"
-			}
-		}
-	}
-	"snapfire_scatterblast"
-	{
-		"AbilityValues"
-		{
-			"AbilityCharges"
-			{
-				"value"	"0"
-			}
-			"AbilityChargeRestoreTime"
-			{
-				"value"	"17 14 11 8"
-			}
-		}
-	}
 	"sven_storm_bolt"
 	{
 		"AbilityValues"
@@ -235,20 +896,6 @@
 			}
 		}
 	}
-	"tidehunter_gush"
-	{
-		"AbilityValues"
-		{
-			"AbilityCharges"
-			{
-				"value"	"0"
-			}
-			"AbilityChargeRestoreTime"
-			{
-				"value"	"12"
-			}
-		}
-	}
 	"tusk_ice_shards"
 	{
 		"AbilityValues"
@@ -260,34 +907,6 @@
 			"AbilityChargeRestoreTime"
 			{
 				"value"	"23 20 17 14"
-			}
-		}
-	}
-	"viper_nethertoxin"
-	{
-		"AbilityValues"
-		{
-			"AbilityCharges"
-			{
-				"value"	"0"
-			}
-			"AbilityChargeRestoreTime"
-			{
-				"value"	"14.0"
-			}
-		}
-	}
-	"zuus_lightning_bolt"
-	{
-		"AbilityValues"
-		{
-			"AbilityCharges"
-			{
-				"value"	"0"
-			}
-			"AbilityChargeRestoreTime"
-			{
-				"value"	"6.0 6.0 6.0 6.0"
 			}
 		}
 	}

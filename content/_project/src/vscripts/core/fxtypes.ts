@@ -453,7 +453,7 @@ export interface FxThunderball extends FxBase {
 
 export interface FxManeuver extends FxBase {
     t: "maneuver";
-    mode: "ward" | "parry" | "omni" | "rift" | "ram" | "sword" | "dagger" | "blindside" | "blade" |
+    mode: "dagger" | "blindside" | "blade" |
         "burrow" | "sidestep" | "trailhunt" | "reel" | "windlane" | "vault";
     seconds?: number;
     debuff?: FxDebuff;

@@ -131,7 +131,7 @@ export class ModifierOrbFx extends ModBase {
     IsPurgable() { return !this.IgnoreTenacity() && this.IsDebuff(); }
     IgnoreTenacity() {
         const f = this.fx();
-        return f?.t === "thunderball" || (f?.t === "maneuver" && f.mode === "sword");
+        return f?.t === "thunderball";
     }
     RemoveOnDeath() {
         const f = this.fx();

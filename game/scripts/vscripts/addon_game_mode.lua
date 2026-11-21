@@ -26,7 +26,8 @@ Precache = function(context)
         "zuus",
         "weaver",
         "vengefulspirit",
-        "techies"
+        "techies",
+        "pudge"
     }) do
         PrecacheResource("soundfile", ("soundevents/game_sounds_heroes/game_sounds_" .. h) .. ".vsndevts", context)
     end

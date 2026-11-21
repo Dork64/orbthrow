@@ -1337,6 +1337,17 @@ ____exports.FX_LIST = {
     },
     {
         ab = "juggernaut_blade_fury",
+        t = "hit",
+        by = "ab",
+        heroOnly = 1,
+        debuff = {dur = 0.5, props = {ms = -20}},
+        key = "jugg_p_hurricane_1",
+        orb = "jugg_p_hurricane",
+        hero = "npc_dota_hero_juggernaut",
+        icon = "juggernaut_blade_fury"
+    },
+    {
+        ab = "juggernaut_blade_fury",
         t = "auto",
         every = 22,
         range = 300,
@@ -1379,34 +1390,6 @@ ____exports.FX_LIST = {
         inc = 200,
         key = "jugg_m_omniclones_1",
         orb = "jugg_m_omniclones",
-        hero = "npc_dota_hero_juggernaut",
-        icon = "juggernaut_omni_slash"
-    },
-    {
-        ab = "juggernaut_healing_ward",
-        t = "maneuver",
-        mode = "ward",
-        key = "jugg_l_sanctuary_1",
-        orb = "jugg_l_sanctuary",
-        hero = "npc_dota_hero_juggernaut",
-        icon = "juggernaut_healing_ward"
-    },
-    {
-        ab = "juggernaut_blade_dance",
-        t = "maneuver",
-        mode = "parry",
-        debuff = {dur = 0.9, props = {disarm = 1}},
-        key = "jugg_l_cuts_1",
-        orb = "jugg_l_cuts",
-        hero = "npc_dota_hero_juggernaut",
-        icon = "juggernaut_blade_dance"
-    },
-    {
-        ab = "juggernaut_omni_slash",
-        t = "maneuver",
-        mode = "omni",
-        key = "jugg_l_endless_1",
-        orb = "jugg_l_endless",
         hero = "npc_dota_hero_juggernaut",
         icon = "juggernaut_omni_slash"
     },
@@ -3058,7 +3041,7 @@ ____exports.FX_LIST = {
         t = "hit",
         by = "ab",
         heroOnly = 1,
-        cdr = {abs = {"self"}, sec = 4},
+        debuff = {props = {ms = -26}, dur = 2.6},
         key = "pudge_p_rehook_1",
         orb = "pudge_p_rehook",
         hero = "npc_dota_hero_pudge",
@@ -3069,7 +3052,7 @@ ____exports.FX_LIST = {
         t = "hit",
         by = "ab",
         heroOnly = 1,
-        debuff = {props = {as = -15}, dur = 0.5},
+        debuff = {props = {as = -25}, dur = 0.5},
         key = "pudge_p_stench_1",
         orb = "pudge_p_stench",
         hero = "npc_dota_hero_pudge",
@@ -3097,37 +3080,6 @@ ____exports.FX_LIST = {
         icon = "pudge_flesh_heap"
     },
     {
-        ab = "pudge_flesh_heap",
-        t = "kill",
-        by = "any",
-        stack = {props = {str = 2}, max = 12, perm = 1},
-        key = "pudge_p_glutton_1",
-        orb = "pudge_p_glutton",
-        hero = "npc_dota_hero_pudge",
-        icon = "pudge_flesh_heap"
-    },
-    {
-        ab = "pudge_dismember",
-        t = "hit",
-        by = "ab",
-        heroOnly = 1,
-        heal = 40,
-        key = "pudge_p_chew_1",
-        orb = "pudge_p_chew",
-        hero = "npc_dota_hero_pudge",
-        icon = "pudge_dismember"
-    },
-    {
-        ab = "pudge_dismember",
-        t = "buff",
-        dur = "AbilityChannelTime",
-        props = {inc = -25},
-        key = "pudge_p_bulk_1",
-        orb = "pudge_p_bulk",
-        hero = "npc_dota_hero_pudge",
-        icon = "pudge_dismember"
-    },
-    {
         ab = "pudge_meat_hook",
         t = "charges",
         n = 1,
@@ -3135,48 +3087,6 @@ ____exports.FX_LIST = {
         orb = "pudge_l_hook",
         hero = "npc_dota_hero_pudge",
         icon = "pudge_meat_hook"
-    },
-    {
-        ab = "pudge_rot",
-        t = "hit",
-        by = "ab",
-        heroOnly = 1,
-        icd = 2,
-        extra = {curhp = 2, type = "magic"},
-        debuff = {props = {dmg = -10}, dur = 2},
-        aw = {extra = {curhp = 3, type = "magic"}, debuff = {props = {dmg = -15}, dur = 2}},
-        key = "pudge_l_mire_1",
-        orb = "pudge_l_mire",
-        hero = "npc_dota_hero_pudge",
-        icon = "pudge_rot"
-    },
-    {
-        ab = "pudge_flesh_heap",
-        t = "guard",
-        win = 5,
-        thr = 12,
-        icd = 14,
-        radius = 345,
-        dmg = 135,
-        heal = 5,
-        dur = 3,
-        props = {slowres = 35},
-        aw = {dmg = 190, heal = 7, props = {slowres = 45}},
-        key = "pudge_l_heap_1",
-        orb = "pudge_l_heap",
-        hero = "npc_dota_hero_pudge",
-        icon = "pudge_flesh_heap"
-    },
-    {
-        ab = "pudge_dismember",
-        t = "kill",
-        by = "ab",
-        cdpct = 0,
-        aw = {cdpct = 100},
-        key = "pudge_l_dismember_1",
-        orb = "pudge_l_dismember",
-        hero = "npc_dota_hero_pudge",
-        icon = "pudge_dismember"
     },
     {
         ab = "pudge_meat_hook",
@@ -4522,8 +4432,8 @@ ____exports.FX_LIST = {
     {
         ab = "sven_warcry",
         t = "buff",
-        dur = "duration",
-        props = {regenpct = 1.5},
+        dur = 2.5,
+        props = {msc = 35},
         key = "sven_p_secondbreath_1",
         orb = "sven_p_secondbreath",
         hero = "npc_dota_hero_sven",
@@ -4541,27 +4451,6 @@ ____exports.FX_LIST = {
         icon = "sven_warcry"
     },
     {
-        ab = "sven_gods_strength",
-        t = "buff",
-        dur = "AbilityDuration",
-        props = {status = 40},
-        key = "sven_p_untamed_1",
-        orb = "sven_p_untamed",
-        hero = "npc_dota_hero_sven",
-        icon = "sven_gods_strength"
-    },
-    {
-        ab = "sven_gods_strength",
-        t = "kill",
-        by = "win",
-        win = "AbilityDuration",
-        ext = {parts = {"gods_strength"}, sec = 4},
-        key = "sven_p_eternal_1",
-        orb = "sven_p_eternal",
-        hero = "npc_dota_hero_sven",
-        icon = "sven_gods_strength"
-    },
-    {
         ab = "sven_storm_bolt",
         t = "charges",
         n = 1,
@@ -4569,34 +4458,6 @@ ____exports.FX_LIST = {
         orb = "sven_l_hammer",
         hero = "npc_dota_hero_sven",
         icon = "sven_storm_bolt"
-    },
-    {
-        ab = "sven_great_cleave",
-        t = "maneuver",
-        mode = "rift",
-        key = "sven_l_cleave_1",
-        orb = "sven_l_cleave",
-        hero = "npc_dota_hero_sven",
-        icon = "sven_great_cleave"
-    },
-    {
-        ab = "sven_warcry",
-        t = "maneuver",
-        mode = "ram",
-        key = "sven_l_steeltempo_1",
-        orb = "sven_l_steeltempo",
-        hero = "npc_dota_hero_sven",
-        icon = "sven_warcry"
-    },
-    {
-        ab = "sven_gods_strength",
-        t = "maneuver",
-        mode = "sword",
-        debuff = {dur = 4.5, props = {disarm = 1}},
-        key = "sven_l_avatar_1",
-        orb = "sven_l_avatar",
-        hero = "npc_dota_hero_sven",
-        icon = "sven_gods_strength"
     },
     {
         ab = "sven_storm_bolt",

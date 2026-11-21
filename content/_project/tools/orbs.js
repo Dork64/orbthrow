@@ -143,7 +143,7 @@ function validateFx(f, summary) {
         if (!Array.isArray(f.abs) || new Set(f.abs).size !== f.abs.length || f.need < 2 || f.need > f.abs.length || !(f.within > 0) || !(f.icd >= f.within)) errs.push("combo: неверные ограничения");
         for (const name of f.abs || []) if (!abOk(name)) errs.push("combo: нет способности " + name);
     }
-    if (f.t === "maneuver" && !["ward", "parry", "omni", "rift", "ram", "sword", "dagger", "blindside", "blade",
+    if (f.t === "maneuver" && !["dagger", "blindside", "blade",
         "burrow", "sidestep", "trailhunt", "reel", "windlane", "vault"].includes(f.mode)) errs.push("maneuver: неизвестный режим");
     if (f.t === "zone" && (!(f.radius > (f.inner || 0)) || f.inner < 0 || !(f.every >= 0.5) || !["self", "point", "target"].includes(f.at))) errs.push("zone: неверная геометрия/период");
     if (f.t === "tether" && (!(f.every >= 0.5) || !(f.maxDist > (f.minDist || 0)) || f.breakRange < f.maxDist || !(f.range > 0))) errs.push("tether: неверные дистанции/период");

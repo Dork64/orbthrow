@@ -218,19 +218,12 @@ function cardValues(op, id)
         ab:GetLevel()
     ) or 1
     if d.cd > 0 then
-        local base = ab ~= nil and ab:GetCooldown(lvl - 1) or 0
         local function cut(k)
             return diminishing(k, d.cd, ORB.blueCdCap)
         end
-        if base <= 0 then
-            return {
-                ("−" .. fmt(cut(n))) .. "%",
-                ("−" .. fmt(cut(n + 1))) .. "%"
-            }
-        end
         return {
-            fmt(base * (1 - cut(n) / 100)) .. "s",
-            fmt(base * (1 - cut(n + 1) / 100)) .. "s"
+            ("−" .. fmt(cut(n))) .. "%",
+            ("−" .. fmt(cut(n + 1))) .. "%"
         }
     end
     if d.code or #d.mods ~= 1 or d.rarity ~= "blue" then
@@ -381,6 +374,15 @@ local function ensureExtras(op, h)
     if h:GetUnitName() == "npc_dota_hero_tusk" and not h:HasModifier("modifier_orb_tusk") then
         h:AddNewModifier(h, nil, "modifier_orb_tusk", {})
     end
+    if h:GetUnitName() == "npc_dota_hero_juggernaut" and not h:HasModifier("modifier_orb_jugg_legend") then
+        h:AddNewModifier(h, nil, "modifier_orb_jugg_legend", {})
+    end
+    if h:GetUnitName() == "npc_dota_hero_pudge" and not h:HasModifier("modifier_orb_pudge_legend") then
+        h:AddNewModifier(h, nil, "modifier_orb_pudge_legend", {})
+    end
+    if h:GetUnitName() == "npc_dota_hero_sven" and not h:HasModifier("modifier_orb_sven_legend") then
+        h:AddNewModifier(h, nil, "modifier_orb_sven_legend", {})
+    end
     if not h:HasModifier("modifier_orb_hero") then
         h:AddNewModifier(h, nil, "modifier_orb_hero", {})
     end
@@ -488,16 +490,16 @@ local function bloodFeast(pid)
                     a:GetAbilityName(),
                     "orb_slot_"
                 ) then
-                    goto __continue37
+                    goto __continue40
                 end
                 local left = a:GetCooldownTimeRemaining()
                 if left <= 0 then
-                    goto __continue37
+                    goto __continue40
                 end
                 a:EndCooldown()
                 a:StartCooldown(left * math.max(0.1, 1 - share - 0.2))
             end
-            ::__continue37::
+            ::__continue40::
             i = i + 1
         end
     end
@@ -514,12 +516,12 @@ function ____exports.grantMechanics(pid)
     for ____, u in ipairs(heroUpgrades(h:GetUnitName())) do
         do
             if u.rarity ~= "purple" or u.mech ~= true or (op.stacks[u.id] or 0) > 0 then
-                goto __continue42
+                goto __continue45
             end
             applyCard(op, u.id)
             n = n + 1
         end
-        ::__continue42::
+        ::__continue45::
     end
     for ____, id in ipairs({
         "p_grave",
@@ -531,12 +533,12 @@ function ____exports.grantMechanics(pid)
     }) do
         do
             if (op.stacks[id] or 0) > 0 then
-                goto __continue45
+                goto __continue48
             end
             applyCard(op, id)
             n = n + 1
         end
-        ::__continue45::
+        ::__continue48::
     end
     pushPlayer(op, true)
     return n
@@ -724,7 +726,7 @@ local function onHeroSpawned(p, hero)
     for ____, d in ipairs(heroUpgrades(hero:GetUnitName())) do
         do
             if d.code or d.ability == "" then
-                goto __continue90
+                goto __continue93
             end
             if op.disabled[d.id] == nil then
                 local ab = hero:FindAbilityByName(d.ability)
@@ -734,7 +736,7 @@ local function onHeroSpawned(p, hero)
                 end
             end
         end
-        ::__continue90::
+        ::__continue93::
     end
     setBonuses(op.pid, op.stacks, op.primaryAttr, op.version)
     if not hero:HasModifier(CONTROLLER) then
@@ -784,14 +786,14 @@ function ____exports.orbsTick()
                 local timeout = now - op.offer.openedAt >= ORB.autoPickSeconds
                 if timeout or p ~= nil and (p.left or p.isBot) then
                     ____exports.pick(op.pid, op.offer.seq, op.offer.cards[1].id)
-                    goto __continue102
+                    goto __continue105
                 end
             end
             if op.dirty or now - op.lastPush >= 1 then
                 pushPlayer(op, false)
             end
         end
-        ::__continue102::
+        ::__continue105::
     end
 end
 function ____exports.initOrbs()

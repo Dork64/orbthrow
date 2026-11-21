@@ -106,7 +106,9 @@ describe("штатные заряды от сфер", () => {
 
 it("итоговый KV содержит штатные настройки зарядов Bolt и Nova прямо в файле overrides", () => {
     const { DOTAAbilities: kv } = require("../tools/kv.js").loadHeroFile("build/game/scripts/npc/npc_abilities_override.txt");
+    expect(kv.axe_berserkers_call.AbilityValues.AbilityCooldown).toEqual({ value: "18 16 14 12" });
     expect(kv.zuus_lightning_bolt.AbilityValues).toEqual({
+        AbilityCooldown: { value: "6.0 6.0 6.0 6.0" },
         AbilityCharges: { value: "0" },
         AbilityChargeRestoreTime: { value: "6.0 6.0 6.0 6.0" },
     });

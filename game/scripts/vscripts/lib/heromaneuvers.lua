@@ -15,8 +15,6 @@ local fxModifierName = ____fxtypes.fxModifierName
 local RING = "particles/ui_mouseactions/range_display.vpcf"
 local SWING = "particles/items_fx/battlefury_cleave.vpcf"
 local WIND = "particles/units/heroes/hero_windrunner/windrunner_spell_powershot.vpcf"
-local JUGG_OMNI = "modifier_juggernaut_omnislash"
-local SVEN_GOD = "modifier_sven_gods_strength"
 local PA_BLUR = "modifier_phantom_assassin_blur_active"
 local function delta(a, b)
     return Vector(a.x - b.x, a.y - b.y, 0)
@@ -93,7 +91,6 @@ function HeroManeuvers.prototype.____constructor(self, owner, strike, push)
     self.defs = __TS__New(Map)
     self.states = __TS__New(Map)
     self.ready = __TS__New(Map)
-    self.lastMove = 0
     self.starts = __TS__New(Map)
     self.awake = false
 end
@@ -108,9 +105,6 @@ function HeroManeuvers.prototype.configure(self, effects, awake)
             self:clearMode(mode)
         end
     end
-end
-function HeroManeuvers.prototype.rememberWard(self, unit)
-    self.ward = unit
 end
 function HeroManeuvers.prototype.ability(self, f)
     return self.owner:FindAbilityByName(f.ab)
@@ -131,21 +125,6 @@ function HeroManeuvers.prototype.enemies(self, pos, range)
             256 + 128,
             1,
             false
-        ),
-        function(____, u) return fighter(u) end
-    )
-end
-function HeroManeuvers.prototype.line(self, a, b, width)
-    return __TS__ArrayFilter(
-        FindUnitsInLine(
-            self.owner:GetTeamNumber(),
-            a,
-            b,
-            nil,
-            width,
-            2,
-            1,
-            256 + 128
         ),
         function(____, u) return fighter(u) end
     )
@@ -171,12 +150,12 @@ function HeroManeuvers.prototype.clearMode(self, mode)
     for ____, marker in ipairs({s.marker, s.endMarker}) do
         do
             if marker == nil then
-                goto __continue31
+                goto __continue28
             end
             ParticleManager:DestroyParticle(marker, true)
             ParticleManager:ReleaseParticleIndex(marker)
         end
-        ::__continue31::
+        ::__continue28::
     end
     if s.buff ~= nil and not s.buff:IsNull() then
         s.buff:Destroy()
@@ -186,11 +165,9 @@ function HeroManeuvers.prototype.clear(self)
     for ____, mode in __TS__Iterator(self.states:keys()) do
         self:clearMode(mode)
     end
-    self.ward = nil
     self.pendingDagger = nil
     self.starts:clear()
     self.lastPos = nil
-    self.movingSince = nil
 end
 function HeroManeuvers.prototype.isReady(self, mode, now)
     return now >= (self.ready:get(mode) or 0)
@@ -214,7 +191,7 @@ function HeroManeuvers.prototype.nearMap(self, pos)
 end
 function HeroManeuvers.prototype.start(self, a, now)
     local ab = a:GetAbilityName()
-    if ab ~= "juggernaut_omni_slash" and ab ~= "ursa_earthshock" and ab ~= "phantom_assassin_phantom_strike" then
+    if ab ~= "ursa_earthshock" and ab ~= "phantom_assassin_phantom_strike" then
         return
     end
     self.starts:set(
@@ -274,58 +251,20 @@ function HeroManeuvers.prototype.cast(self, a, target, now)
                 end
             end
             if f.ab ~= ab then
-                goto __continue47
+                goto __continue44
             end
             if f.mode == "dagger" and fighter(target) then
                 self.pendingDagger = {unit = target, ability = a, ["until"] = now + 1.75}
             end
             repeat
-                local ____switch54 = f.mode
-                local ____cond54 = ____switch54 == "ward"
-                if ____cond54 then
-                    self.ward = nil
-                    self:stage(f, now, 26, pos)
-                    break
-                end
-                ____cond54 = ____cond54 or ____switch54 == "omni"
-                if ____cond54 then
-                    self:stage(
-                        f,
-                        now,
-                        math.max(
-                            1,
-                            a:GetSpecialValueFor("duration")
-                        ) + 0.9,
-                        from or pos,
-                        115
-                    )
-                    break
-                end
-                ____cond54 = ____cond54 or ____switch54 == "ram"
-                if ____cond54 then
-                    self:stage(f, now, 5.5, pos)
-                    break
-                end
-                ____cond54 = ____cond54 or ____switch54 == "sword"
-                if ____cond54 then
-                    self:stage(
-                        f,
-                        now,
-                        math.max(
-                            1,
-                            a:GetSpecialValueFor("AbilityDuration") or 30
-                        ),
-                        pos
-                    )
-                    break
-                end
-                ____cond54 = ____cond54 or ____switch54 == "blindside"
-                if ____cond54 then
+                local ____switch51 = f.mode
+                local ____cond51 = ____switch51 == "blindside"
+                if ____cond51 then
                     self:stage(f, now, f.seconds or 7, pos)
                     break
                 end
-                ____cond54 = ____cond54 or ____switch54 == "burrow"
-                if ____cond54 then
+                ____cond51 = ____cond51 or ____switch51 == "burrow"
+                if ____cond51 then
                     do
                         local s = self:stage(f, now, 1.35, from or pos)
                         s.dir = self.owner:GetForwardVector()
@@ -333,13 +272,13 @@ function HeroManeuvers.prototype.cast(self, a, target, now)
                         break
                     end
                 end
-                ____cond54 = ____cond54 or ____switch54 == "sidestep"
-                if ____cond54 then
+                ____cond51 = ____cond51 or ____switch51 == "sidestep"
+                if ____cond51 then
                     self:stage(f, now, 8, pos)
                     break
                 end
-                ____cond54 = ____cond54 or ____switch54 == "windlane"
-                if ____cond54 then
+                ____cond51 = ____cond51 or ____switch51 == "windlane"
+                if ____cond51 then
                     do
                         local dir = norm(delta(
                             a:GetCursorPosition(),
@@ -354,8 +293,8 @@ function HeroManeuvers.prototype.cast(self, a, target, now)
                         break
                     end
                 end
-                ____cond54 = ____cond54 or ____switch54 == "vault"
-                if ____cond54 then
+                ____cond51 = ____cond51 or ____switch51 == "vault"
+                if ____cond51 then
                     self:stage(
                         f,
                         now,
@@ -367,8 +306,8 @@ function HeroManeuvers.prototype.cast(self, a, target, now)
                     )
                     break
                 end
-                ____cond54 = ____cond54 or ____switch54 == "reel"
-                if ____cond54 then
+                ____cond51 = ____cond51 or ____switch51 == "reel"
+                if ____cond51 then
                     if fighter(target) then
                         local s = self:stage(
                             f,
@@ -382,7 +321,7 @@ function HeroManeuvers.prototype.cast(self, a, target, now)
                 end
             until true
         end
-        ::__continue47::
+        ::__continue44::
     end
 end
 function HeroManeuvers.prototype.spellHit(self, target, ability, now)
@@ -419,47 +358,6 @@ function HeroManeuvers.prototype.attack(self, e, now)
     end
     local pos = self.owner:GetAbsOrigin()
     local to = victim:GetAbsOrigin()
-    local cleave = self.defs:get("rift")
-    if cleave ~= nil and self:learned(cleave) then
-        local s = self.states:get("rift")
-        if s ~= nil and now >= s.arm and now < s["until"] and s["end"] ~= nil and s.dir ~= nil then
-            local a = s.pos
-            local b = s["end"]
-            local dir = s.dir
-            self:clearMode("rift")
-            for ____, u in ipairs(self:line(a, b, 115)) do
-                if not u:IsDebuffImmune() then
-                    self.push(u, dir, self.awake and 330 or 245, 0.31)
-                end
-                self.strike(
-                    u,
-                    self.owner:GetAverageTrueAttackDamage(u) * 0.65,
-                    cleave
-                )
-            end
-            flash(a)
-        elseif s == nil and self:isReady("rift", now) then
-            local dir = norm(delta(to, pos))
-            local n = self:stage(
-                cleave,
-                now,
-                4,
-                to,
-                115
-            )
-            n.arm = now + 0.35
-            n.dir = dir
-            n["end"] = shift(to, dir, self.awake and 670 or 525)
-            n.endMarker = ring(
-                n["end"],
-                95,
-                230,
-                165,
-                75
-            )
-            self:cooldown("rift", now, 7)
-        end
-    end
     local blade = self.states:get("blade")
     if blade ~= nil and blade.unit == victim and now < blade["until"] and blade.dir ~= nil and distance(pos, blade.pos) >= 170 and distance(pos, blade.pos) <= 660 and dot(
         blade.dir,
@@ -508,123 +406,11 @@ function HeroManeuvers.prototype.attack(self, e, now)
         )
     end
 end
-function HeroManeuvers.prototype.taken(self, e, now)
-    local s = self.states:get("parry")
-    local foe = e.attacker
-    if s == nil or not fighter(self.owner) or not fighter(foe) or foe:GetTeamNumber() == self.owner:GetTeamNumber() or e.damage_category ~= DOTA_DAMAGE_CATEGORY_ATTACK or not movable(self.owner) or now >= s["until"] then
-        return
-    end
-    local pos = self.owner:GetAbsOrigin()
-    local to = foe:GetAbsOrigin()
-    local dir = norm(delta(to, pos))
-    if distance(pos, to) > 330 or dot(
-        dir,
-        self.owner:GetForwardVector()
-    ) < 0.45 then
-        return
-    end
-    self:clearMode("parry")
-    self:cooldown("parry", now, 8)
-    local side = Vector(-dir.y, dir.x, 0)
-    local landing = shift(to, side, 115)
-    if self:nearMap(landing) then
-        FindClearSpaceForUnit(self.owner, landing, true)
-    end
-    flash(to)
-    self:pin(foe, s.f, self.awake and 1.45 or 0.9)
-    self.strike(
-        foe,
-        self.owner:GetAverageTrueAttackDamage(foe),
-        s.f
-    )
-end
-function HeroManeuvers.prototype.order(self, kind, target, point, now)
-    local parent = self.owner
-    if not alive(parent) then
-        return false
-    end
-    local pos = parent:GetAbsOrigin()
-    local ward = self.states:get("ward")
-    if kind == DOTA_UNIT_ORDER_MOVE_TO_TARGET and ward ~= nil and now < ward["until"] and target == self.ward and alive(target) and movable(parent) and not parent:IsChanneling() then
-        local to = target:GetAbsOrigin()
-        local dist = distance(pos, to)
-        if dist >= 240 and dist <= (self.awake and 1100 or 850) then
-            self:clearMode("ward")
-            FindClearSpaceForUnit(target, pos, true)
-            FindClearSpaceForUnit(parent, to, true)
-            flash(to)
-            return true
-        end
-    end
-    local omni = self.states:get("omni")
-    if kind == DOTA_UNIT_ORDER_MOVE_TO_POSITION and omni ~= nil and now < omni["until"] and distance(point, omni.pos) <= 115 then
-        local native = parent:FindModifierByName(JUGG_OMNI)
-        if native ~= nil or self.awake and omni.phase == 2 and now < omni.arm then
-            if native ~= nil then
-                native:Destroy()
-            end
-            parent:RemoveModifierByName("modifier_juggernaut_omnislash_invulnerability")
-            self:clearMode("omni")
-            FindClearSpaceForUnit(parent, omni.pos, true)
-            flash(omni.pos)
-            return true
-        end
-    end
-    local sword = self.states:get("sword")
-    if sword ~= nil and now < sword["until"] and parent:HasModifier(SVEN_GOD) then
-        if kind == DOTA_UNIT_ORDER_ATTACK_MOVE and distance(pos, point) <= 145 and sword.phase == nil and movable(parent) then
-            sword.pos = pos
-            sword.marker = ring(
-                pos,
-                155,
-                255,
-                160,
-                60
-            )
-            sword.phase = 1
-            sword.arm = now + 0.65
-            sword["until"] = math.min(sword["until"], now + 4.5)
-            sword.buff = self:pin(parent, sword.f, sword["until"] - now)
-            return true
-        end
-        if kind == DOTA_UNIT_ORDER_MOVE_TO_POSITION and sword.phase == 1 and now >= sword.arm and distance(point, sword.pos) <= 155 and distance(pos, sword.pos) <= (self.awake and 780 or 620) and movable(parent) then
-            local to = sword.pos
-            self:clearMode("sword")
-            FindClearSpaceForUnit(parent, to, true)
-            flash(to)
-            for ____, foe in ipairs(self:enemies(to, 315)) do
-                if not foe:IsDebuffImmune() then
-                    self.push(
-                        foe,
-                        norm(delta(
-                            foe:GetAbsOrigin(),
-                            to
-                        )),
-                        250,
-                        0.34
-                    )
-                end
-                self.strike(foe, 180, sword.f)
-            end
-            return true
-        end
-    end
-    return false
-end
 function HeroManeuvers.prototype.tick(self, now)
     local owner = self.owner
     local pos = owner:GetAbsOrigin()
     local motion = self.lastPos == nil and Vector(0, 0, 0) or delta(pos, self.lastPos)
-    local speed = length(motion)
     self.lastPos = pos
-    if speed > 13 and speed < 115 then
-        self.lastMove = now
-        if self.movingSince == nil then
-            self.movingSince = now
-        end
-    else
-        self.movingSince = nil
-    end
     local dagger = self.pendingDagger
     if dagger ~= nil then
         if not fighter(dagger.unit) or now >= dagger["until"] then
@@ -636,64 +422,18 @@ function HeroManeuvers.prototype.tick(self, now)
             self:spellHit(dagger.unit, dagger.ability, now)
         end
     end
-    local parry = self.defs:get("parry")
-    if parry ~= nil and self:learned(parry) and not self.states:has("parry") and self:isReady("parry", now) and now - self.lastMove >= 0.55 and now - self.lastMove <= 0.75 and #self:enemies(pos, 360) > 0 and movable(owner) then
-        self:stage(
-            parry,
-            now,
-            0.8,
-            pos,
-            135
-        )
-        self:cooldown("parry", now, 5)
-    end
     for ____, ____value in __TS__Iterator(self.states) do
         local mode = ____value[1]
         local s = ____value[2]
         do
             if now >= s["until"] then
                 self:clearMode(mode)
-                goto __continue100
+                goto __continue72
             end
             repeat
-                local ____switch102 = mode
-                local ____cond102 = ____switch102 == "parry"
-                if ____cond102 then
-                    if speed > 16 then
-                        self:clearMode(mode)
-                    end
-                    break
-                end
-                ____cond102 = ____cond102 or ____switch102 == "omni"
-                if ____cond102 then
-                    if owner:HasModifier(JUGG_OMNI) then
-                        s.phase = 1
-                    elseif s.phase == 1 then
-                        if not self.awake then
-                            self:clearMode(mode)
-                        else
-                            s.phase = 2
-                            s.arm = math.min(s["until"], now + 0.85)
-                        end
-                    elseif s.phase == 2 and now >= s.arm then
-                        self:clearMode(mode)
-                    end
-                    break
-                end
-                ____cond102 = ____cond102 or ____switch102 == "ram"
-                if ____cond102 then
-                    self:tickRam(s, pos, motion, now)
-                    break
-                end
-                ____cond102 = ____cond102 or ____switch102 == "sword"
-                if ____cond102 then
-                    if s.phase == 1 and (not owner:HasModifier(SVEN_GOD) or now >= s.arm + 0.65 and #self:enemies(s.pos, 125) > 0) then
-                        self:clearMode(mode)
-                    end
-                    break
-                end
-                ____cond102 = ____cond102 or ____switch102 == "dagger"
-                if ____cond102 then
+                local ____switch74 = mode
+                local ____cond74 = ____switch74 == "dagger"
+                if ____cond74 then
                     if not fighter(s.unit) then
                         self:clearMode(mode)
                         break
@@ -709,8 +449,8 @@ function HeroManeuvers.prototype.tick(self, now)
                     end
                     break
                 end
-                ____cond102 = ____cond102 or ____switch102 == "blindside"
-                if ____cond102 then
+                ____cond74 = ____cond74 or ____switch74 == "blindside"
+                if ____cond74 then
                     if not owner:HasModifier(PA_BLUR) then
                         break
                     end
@@ -729,23 +469,23 @@ function HeroManeuvers.prototype.tick(self, now)
                     end
                     break
                 end
-                ____cond102 = ____cond102 or ____switch102 == "burrow"
-                if ____cond102 then
+                ____cond74 = ____cond74 or ____switch74 == "burrow"
+                if ____cond74 then
                     self:tickBurrow(s, pos, now)
                     break
                 end
-                ____cond102 = ____cond102 or ____switch102 == "sidestep"
-                if ____cond102 then
+                ____cond74 = ____cond74 or ____switch74 == "sidestep"
+                if ____cond74 then
                     self:tickSidestep(s, pos, motion)
                     break
                 end
-                ____cond102 = ____cond102 or ____switch102 == "trailhunt"
-                if ____cond102 then
+                ____cond74 = ____cond74 or ____switch74 == "trailhunt"
+                if ____cond74 then
                     self:tickTrail(s, pos, motion)
                     break
                 end
-                ____cond102 = ____cond102 or ____switch102 == "reel"
-                if ____cond102 then
+                ____cond74 = ____cond74 or ____switch74 == "reel"
+                if ____cond74 then
                     if s.phase == nil and fighter(s.unit) and __TS__ArraySome(
                         s.unit:FindAllModifiers(),
                         function(____, m) return m:GetName() == "modifier_windrunner_shackle_shot" and m:GetCaster() == owner end
@@ -766,65 +506,20 @@ function HeroManeuvers.prototype.tick(self, now)
                     end
                     break
                 end
-                ____cond102 = ____cond102 or ____switch102 == "windlane"
-                if ____cond102 then
+                ____cond74 = ____cond74 or ____switch74 == "windlane"
+                if ____cond74 then
                     self:tickWind(s, now)
                     break
                 end
-                ____cond102 = ____cond102 or ____switch102 == "vault"
-                if ____cond102 then
+                ____cond74 = ____cond74 or ____switch74 == "vault"
+                if ____cond74 then
                     self:tickVault(s, pos, motion)
                     break
                 end
             until true
         end
-        ::__continue100::
+        ::__continue72::
     end
-end
-function HeroManeuvers.prototype.tickRam(self, s, pos, motion, now)
-    local running = self.movingSince ~= nil and movable(self.owner)
-    local dir = norm(motion)
-    if not running or s.dir == nil or dot(s.dir, dir) < 0.82 then
-        if s.marker ~= nil then
-            ParticleManager:DestroyParticle(s.marker, true)
-            ParticleManager:ReleaseParticleIndex(s.marker)
-            s.marker = nil
-        end
-        s.dir = running and dir or nil
-        s.arm = now + (self.awake and 0.45 or 0.63)
-        return
-    end
-    if now < s.arm then
-        return
-    end
-    if s.marker == nil then
-        s.marker = ring(
-            pos,
-            105,
-            255,
-            170,
-            65
-        )
-    else
-        ParticleManager:SetParticleControl(s.marker, 0, pos)
-    end
-    local foe = __TS__ArrayFind(
-        self:enemies(pos, 170),
-        function(____, u) return not u:IsDebuffImmune() and dot(
-            dir,
-            norm(delta(
-                u:GetAbsOrigin(),
-                pos
-            ))
-        ) > 0.45 end
-    )
-    if foe == nil then
-        return
-    end
-    self:clearMode("ram")
-    self.push(foe, dir, 380, 0.42)
-    self.push(self.owner, dir, 270, 0.42)
-    flash(pos)
 end
 function HeroManeuvers.prototype.tickBurrow(self, s, pos, now)
     if now < s.arm or s.dir == nil then
@@ -857,7 +552,7 @@ function HeroManeuvers.prototype.tickBurrow(self, s, pos, now)
                     s.pos
                 ))
             ) < 0.3 then
-                goto __continue132
+                goto __continue89
             end
             self.push(
                 foe,
@@ -870,7 +565,7 @@ function HeroManeuvers.prototype.tickBurrow(self, s, pos, now)
                 break
             end
         end
-        ::__continue132::
+        ::__continue89::
     end
 end
 function HeroManeuvers.prototype.tickSidestep(self, s, pos, motion)
@@ -994,14 +689,14 @@ function HeroManeuvers.prototype.tickWind(self, s, now)
                 u:GetForwardVector(),
                 s.dir
             ) < 0.76 then
-                goto __continue152
+                goto __continue109
             end
             local dir = s.dir
             self:clearMode("windlane")
             self.push(u, dir, self.awake and 535 or 420, 0.36)
             return
         end
-        ::__continue152::
+        ::__continue109::
     end
 end
 function HeroManeuvers.prototype.tickVault(self, s, pos, motion)

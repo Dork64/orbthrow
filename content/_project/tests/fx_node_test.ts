@@ -48,11 +48,20 @@ describe("данные сфер героев", () => {
             expect(legend.map(l => l.branch).sort()).toEqual(["E", "Q", "R", "W"]);
         }
     });
+    it("у Джаггернаута, Свена и Пуджа по две обычные фиолетовые на ветку легендарки", () => {
+        for (const hero of ["juggernaut", "sven", "pudge"]) {
+            const own = UPGRADE_DEFS.filter(o => o.hero === "npc_dota_hero_" + hero && o.rarity === "purple" && o.mech !== true);
+            for (const branch of ["Q", "W", "E", "R"]) expect(own.filter(o => o.branch === branch)).toHaveLength(2);
+        }
+        expect(UPGRADE_DEFS.some(o => o.hero === "*" && o.rarity === "purple")).toBe(true);
+    });
     it("у каждой сферы-кода есть эффект или изменение значений", () => {
         for (const u of UPGRADE_DEFS) {
             if (u.hero === "*" || u.rarity === "blue") continue;
             const ok = u.cd > 0 || fxOfOrb(u.id).length > 0 || u.mods.length > 0 || (u.awmods ?? []).length > 0 ||
-                ["tusk_l_roll", "tusk_l_counter", "tusk_l_ko"].includes(u.id) ||
+                ["tusk_l_roll", "tusk_l_counter", "tusk_l_ko", "sven_l_cleave", "sven_l_steeltempo", "sven_l_avatar",
+                    "pudge_l_mire", "pudge_l_heap", "pudge_l_dismember",
+                    "pudge_p_glutton", "pudge_p_chew", "pudge_p_bulk", "sven_p_untamed", "sven_p_eternal"].includes(u.id) ||
                 ["axe_", "jugg_"].some(p => u.id.startsWith(p));
             expect([u.id, ok]).toEqual([u.id, true]);
         }

@@ -94,16 +94,16 @@
    "fx": [
     {
      "t": "buff",
-     "dur": "duration",
+     "dur": 2.5,
      "props": {
-      "regenpct": 1.5
+      "msc": 35
      }
     }
    ],
-   "ru": "Дыхание воина",
-   "en": "Warrior Breath",
-   "ru_d": "Warcry восстанавливает 1.5% максимального здоровья в секунду на время действия",
-   "en_d": "Warcry restores 1.5% max health per second for its duration"
+   "ru": "Боевой марш",
+   "en": "Battle March",
+   "ru_d": "Warcry даёт ещё +35 скорости бега на первые 2,5 с. Свен быстрее набирает дистанцию для тарана.",
+   "en_d": "Warcry gives 35 extra movement speed for the first 2.5 s. Sven reaches his Running Smash distance sooner."
   },
   {
    "id": "sven_p_fearless",
@@ -130,42 +130,22 @@
    "r": "purple",
    "branch": "R",
    "ab": "sven_gods_strength",
-   "fx": [
-    {
-     "t": "buff",
-     "dur": "AbilityDuration",
-     "props": {
-      "status": 40
-     }
-    }
-   ],
-   "ru": "Неукротимый",
-   "en": "Untamed",
-   "ru_d": "God's Strength дает 40% сопротивления эффектам",
-   "en_d": "God's Strength grants 40% status resistance"
+   "ru": "Тяжёлая рука",
+   "en": "Heavy Hand",
+   "ru_d": "Под «Божьей силой» первые две обычные атаки по каждому герою снижают его броню на 2,5 за удар на 5 с. «Вес меча» наносит больше урона цели с ослабленной бронёй.",
+   "en_d": "The first two normal hits on each hero during God’s Strength reduce their armor by 2.5 per hit for 5 s. Weight of the Blade hits targets with reduced armor harder.",
+   "code": true
   },
   {
    "id": "sven_p_eternal",
    "r": "purple",
    "branch": "R",
    "ab": "sven_gods_strength",
-   "fx": [
-    {
-     "t": "kill",
-     "by": "win",
-     "win": "AbilityDuration",
-     "ext": {
-      "parts": [
-       "gods_strength"
-      ],
-      "sec": 4
-     }
-    }
-   ],
-   "ru": "Вечная сила",
-   "en": "Everlasting Strength",
-   "ru_d": "Убийство героя во время God's Strength продлевает его на 4 с",
-   "en_d": "A hero kill during God's Strength extends it by 4 s"
+   "ru": "Не сбавлять",
+   "en": "Keep Swinging",
+   "ru_d": "Обычные атаки по героям продлевают «Божью силу» на 0,5 с за удар, до 3 с за применение. Атаки после «Веса меча» тоже продлевают оставшееся время.",
+   "en_d": "Normal hits on heroes extend God’s Strength by 0.5 s each, up to 3 s per cast. Hits after Weight of the Blade extend the remaining duration too.",
+   "code": true
   },
   {
    "id": "sven_l_hammer",
@@ -192,60 +172,39 @@
    "r": "legend",
    "branch": "W",
    "ab": "sven_great_cleave",
-   "ru": "Раскол в два удара",
-   "en": "Double Hew",
-   "ru_d": "Первая атака по герою намечает борозду от цели вперёд. После короткой паузы следующая атака по любому герою раскрывает борозду: врагов на линии ранит и сдвигает вперёд.",
-   "en_d": "Your first hit on a hero marks a fault running past them. After a short windup, another attack on any hero opens the fault, damaging enemies on its line and pushing them forward.",
-   "ru_aw": "Пробуждение: борозда длиннее, толчок дальше.",
-   "en_aw": "Awakening: a longer fault and stronger push.",
-   "fx": [
-    {
-     "t": "maneuver",
-     "mode": "rift"
-    }
-   ]
+   "ru": "Меч на отскок",
+   "en": "Rebounding Blade",
+   "ru_d": "Обычная атака по герою выпускает за него летящий клинок. Пока клинок в 450 от Свена, нажмите W и укажите точку, чтобы один раз отбить клинок в новом направлении. Возвращённый клинок наносит 155% среднего урона атаки + 110 физического урона (до 950), в том числе первой цели. Перезарядка запуска — 7 с.",
+   "en_d": "A normal hit on a hero launches a blade past them. When the blade is within 450 of Sven, press W and aim to redirect it once. The redirected blade deals 155% average attack damage + 110 physical damage (up to 950), including to the original target. Launch cooldown: 7 s.",
+   "ru_aw": "Пробуждение: отбитый клинок летит на 140 дальше.",
+   "en_aw": "Awakening: the redirected blade travels 140 farther.",
+   "code": true
   },
   {
    "id": "sven_l_steeltempo",
    "r": "legend",
    "branch": "E",
    "ab": "sven_warcry",
-   "ru": "Плечом вперёд",
-   "en": "Shoulder First",
-   "ru_d": "После Warcry разбегитесь по прямой. При первом столкновении с героем Свен протащит его вперёд и продвинется вслед. Резкий поворот сбрасывает разбег; можно увернуться вбок.",
-   "en_d": "After Warcry, get a straight running start. Sven carries the first hero he collides with forward and follows them. A sharp turn resets the run; enemies can step aside.",
-   "ru_aw": "Пробуждение: нужен более короткий разбег.",
-   "en_aw": "Awakening: needs a shorter running start.",
-   "fx": [
-    {
-     "t": "maneuver",
-     "mode": "ram"
-    }
-   ]
+   "ru": "Таран с упором",
+   "en": "Running Smash",
+   "ru_d": "Под Warcry пробегите 220 по прямой. Первого героя на пути Свен протащит вперёд вместе с собой и ударит на 100% среднего урона атаки + 75 (до 540). Если впереди стена или другая преграда, удар сильнее: 210% + 180 (до 1100) и оглушение. Один таран за Warcry.",
+   "en_d": "During Warcry, run 220 in a straight line. Sven drives the first hero in his path forward and hits for 100% average attack damage + 75 (up to 540). If terrain stops the charge, it deals 210% + 180 (up to 1100) and stuns. One charge per Warcry.",
+   "ru_aw": "Пробуждение: разбег сокращается до 150.",
+   "en_aw": "Awakening: only 150 running distance is required.",
+   "code": true
   },
   {
    "id": "sven_l_avatar",
    "r": "legend",
    "branch": "R",
    "ab": "sven_gods_strength",
-   "ru": "Положить меч",
-   "en": "Plant the Sword",
-   "ru_d": "Под God's Strength нажмите A и щёлкните рядом с собой, чтобы оставить меч. Пока он там, Свен обезоружен. После взвода ПКМ по кольцу возвращает к мечу и разбрасывает врагов. Соперник может первым подойти к мечу и погасить его.",
-   "en_d": "During God's Strength, attack-move near your feet to plant your sword and become disarmed. Once it arms, right-click its ring to return to it and sweep enemies away. An enemy can reach it first to ground it.",
-   "ru_aw": "Пробуждение: меч можно забрать с большей дистанции.",
-   "en_aw": "Awakening: retrieve the sword from farther away.",
-   "fx": [
-    {
-     "t": "maneuver",
-     "mode": "sword",
-     "debuff": {
-      "dur": 4.5,
-      "props": {
-       "disarm": 1
-      }
-     }
-    }
-   ]
+   "ru": "Вес меча",
+   "en": "Weight of the Blade",
+   "ru_d": "Во время «Божьей силы» нажмите R и укажите направление. После замаха 0,6 с Свен тратит 7 с оставшейся ульты и рубит сектор перед собой. Ближайший герой получает 260% среднего урона атаки + 100 физического урона (до 1550), остальные — 55% от этой величины. Один удар за ульту.",
+   "en_d": "During God’s Strength, press R and aim. After a 0.6 s windup, Sven spends 7 s of remaining ult duration to cleave the area ahead. The closest hero takes 260% average attack damage + 100 physical damage (up to 1550), and other heroes take 55% of that. One swing per ult.",
+   "ru_aw": "Пробуждение: удар тратит 5 с и достаёт до 725 вместо 625.",
+   "en_aw": "Awakening: the swing costs 5 s and reaches 725 instead of 625.",
+   "code": true
   },
   {
    "id": "sven_m_thunderseal",

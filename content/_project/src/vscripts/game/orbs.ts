@@ -172,6 +172,12 @@ function ensureExtras(op: OrbPlayer, h: CDOTA_BaseNPC_Hero) {
     // Эффекты фиолетовых и легендарных сфер (у каждого героя)
     if (h.GetUnitName() === "npc_dota_hero_tusk" && !h.HasModifier("modifier_orb_tusk"))
         h.AddNewModifier(h, undefined, "modifier_orb_tusk", {});
+    if (h.GetUnitName() === "npc_dota_hero_juggernaut" && !h.HasModifier("modifier_orb_jugg_legend"))
+        h.AddNewModifier(h, undefined, "modifier_orb_jugg_legend", {});
+    if (h.GetUnitName() === "npc_dota_hero_pudge" && !h.HasModifier("modifier_orb_pudge_legend"))
+        h.AddNewModifier(h, undefined, "modifier_orb_pudge_legend", {});
+    if (h.GetUnitName() === "npc_dota_hero_sven" && !h.HasModifier("modifier_orb_sven_legend"))
+        h.AddNewModifier(h, undefined, "modifier_orb_sven_legend", {});
     if (!h.HasModifier("modifier_orb_hero")) h.AddNewModifier(h, undefined, "modifier_orb_hero", {});
 
 }
@@ -475,10 +481,8 @@ function cardValues(op: OrbPlayer, id: string): [string, string] {
     const ab = h?.FindAbilityByName(d.ability);
     const lvl = ab !== undefined ? Math.max(1, ab.GetLevel()) : 1;
     if (d.cd > 0) {
-        const base = ab !== undefined ? ab.GetCooldown(lvl - 1) : 0;
         const cut = (k: number) => diminishing(k, d.cd, ORB.blueCdCap);
-        if (base <= 0) return ["−" + fmt(cut(n)) + "%", "−" + fmt(cut(n + 1)) + "%"];
-        return [fmt(base * (1 - cut(n) / 100)) + "s", fmt(base * (1 - cut(n + 1) / 100)) + "s"];
+        return ["−" + fmt(cut(n)) + "%", "−" + fmt(cut(n + 1)) + "%"];
     }
     // У сфер-кода (фиолетовые и легендарки) нет чисел способности — только описание.
     if (d.code || d.mods.length !== 1 || d.rarity !== "blue") return ["", ""];

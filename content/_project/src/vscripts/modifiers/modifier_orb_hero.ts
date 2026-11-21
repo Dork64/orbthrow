@@ -35,8 +35,6 @@ export class ModifierOrbHero extends ModBase {
     // Окна действия способностей (игровое время)
     callUntil = 0;
     furyUntil = 0;
-    omniUntil = 0;
-    omniWasActive = false;
     // Голод: цель → когда кончается
     hunger = new Map<EntityIndex, number>();
     spreading = false;
@@ -77,10 +75,6 @@ export class ModifierOrbHero extends ModBase {
     }
 
     OnDestroy() { if (IsServer() && this.engine !== undefined) this.engine.clear(); }
-
-    ManeuverOrder(kind: UnitOrder, target: CDOTA_BaseNPC | undefined, point: Vector): boolean {
-        return this.engine?.maneuverOrder(kind, target, point) ?? false;
-    }
 
     /** Движок эффектов с актуальным списком взятых сфер. */
     private fx(b?: OrbBonuses): FxEngine | undefined {
@@ -180,9 +174,6 @@ export class ModifierOrbHero extends ModBase {
             }
         } else if (name === "juggernaut_blade_fury") {
             this.furyUntil = now + ability.GetSpecialValueFor("duration");
-        } else if (name === "juggernaut_omni_slash" || name === "juggernaut_swift_slash") {
-            const dur = ability.GetSpecialValueFor("duration");
-            this.omniUntil = now + Math.max(0.5, dur);
         } else if (name === "juggernaut_healing_ward") {
             this.ward = undefined;
             this.wardSearchUntil = now + 1;
@@ -258,11 +249,6 @@ export class ModifierOrbHero extends ModBase {
                 }
             }
         }
-        // Кровавый омнислэш: удары по героям во время Омнислэша лечат
-        if (!reflected && now < this.omniUntil && victim.IsRealHero() && this.has("jugg_p_bloody_omni", b) &&
-            e.damage_category === DamageCategory.ATTACK) {
-            parent.Heal(e.damage * H.bloodyOmniHeal, undefined);
-        }
     }
 
     OnAttackLanded(e: ModifierAttackEvent) {
@@ -275,20 +261,16 @@ export class ModifierOrbHero extends ModBase {
         if (engine !== undefined) engine.onAttack(e);
         const t = e.target;
         if (!isEnemyHero(parent, t)) return;
-        const dance = this.has("jugg_p_death_dance", b);
-        if (!dance) return;
-        // Крит узнаем по урону: заметно больше среднего урона атаки
-        const avg = parent.GetAverageTrueAttackDamage(t);
-        if (avg <= 0 || e.damage < avg * H.critRatio) return;
-        if (dance) {
-            for (const n of ["juggernaut_blade_fury", "juggernaut_omni_slash"]) {
-                const a = parent.FindAbilityByName(n);
-                if (a === undefined) continue;
-                const left = a.GetCooldownTimeRemaining();
-                if (left <= 0) continue;
-                a.EndCooldown();
-                if (left > H.deathDanceCdr) a.StartCooldown(left - H.deathDanceCdr);
-            }
+        const ward = this.ward;
+        if (this.has("jugg_p_healing_fury", b) && ward !== undefined && IsValidEntity(ward) && ward.IsAlive() &&
+            !t.IsDebuffImmune() && !e.no_attack_cooldown && e.damage > 0) {
+            const center = ward.GetAbsOrigin();
+            const range = (u: CDOTA_BaseNPC) => {
+                const p = u.GetAbsOrigin();
+                return (p.x - center.x) ** 2 + (p.y - center.y) ** 2 <= 475 ** 2 && Math.abs(p.z - center.z) <= 150;
+            };
+            if (range(t) && range(parent)) t.AddNewModifier(parent, parent.FindAbilityByName("juggernaut_healing_ward"),
+                "modifier_orb_jugg_guardcut", { duration: 1.2 });
         }
     }
 
@@ -361,7 +343,6 @@ export class ModifierOrbHero extends ModBase {
         this.thinkCull(parent, now);
         this.thinkWard(parent, b, now);
         this.thinkStorm(parent, b, now);
-        this.thinkOmniEnd(parent, b, now);
     }
 
     private thinkOneArmy(parent: CDOTA_BaseNPC, b: OrbBonuses) {
@@ -412,9 +393,7 @@ export class ModifierOrbHero extends ModBase {
 
     private thinkWard(parent: CDOTA_BaseNPC, b: OrbBonuses, now: number) {
         const roaming = this.has("jugg_p_roaming_ward", b);
-        const fury = this.has("jugg_p_healing_fury", b);
-        const relay = this.has("jugg_l_sanctuary", b);
-        if (!roaming && !fury && !relay) return;
+        if (!roaming && !this.has("jugg_p_healing_fury", b)) return;
         // Найти свой новый тотем рядом с точкой применения
         if (this.ward === undefined && now < this.wardSearchUntil && this.wardSearchPos !== undefined) {
             const units = FindUnitsInRadius(parent.GetTeamNumber(), this.wardSearchPos, undefined, 500,
@@ -422,7 +401,6 @@ export class ModifierOrbHero extends ModBase {
             for (const u of units) {
                 if (u.GetUnitName() !== WARD_UNIT || u.GetPlayerOwnerID() !== parent.GetPlayerOwnerID()) continue;
                 this.ward = u;
-                if (relay) this.engine?.rememberWard(u);
                 break;
             }
         }
@@ -442,12 +420,6 @@ export class ModifierOrbHero extends ModBase {
             w.MoveToNPC(parent);
         }
         if (roaming && dist <= radius) parent.AddNewModifier(parent, healAbility, "modifier_orb_jugg_ward_armor", { duration: 0.25 });
-        if (fury && now < this.furyUntil && dist <= H.healingFuryRange && healAbility !== undefined) {
-            const pct = healAbility.GetSpecialValueFor("healing_ward_heal_amount");
-            // В радиусе тотем уже лечит сам — добавляем столько же; дальше — двойное лечение целиком
-            const extra = dist <= radius ? pct : pct * 2;
-            parent.Heal(parent.GetMaxHealth() * extra / 100 * THINK, healAbility);
-        }
     }
 
     private thinkStorm(parent: CDOTA_BaseNPC, b: OrbBonuses, now: number) {
@@ -468,13 +440,6 @@ export class ModifierOrbHero extends ModBase {
         }
     }
 
-    private thinkOmniEnd(parent: CDOTA_BaseNPC, b: OrbBonuses, now: number) {
-        const active = now < this.omniUntil;
-        if (this.omniWasActive && !active && this.has("jugg_p_dispel", b) && parent.IsAlive()) {
-            parent.AddNewModifier(parent, parent.FindAbilityByName("juggernaut_omni_slash"), "modifier_orb_jugg_immune", { duration: H.dispelImmunity });
-        }
-        this.omniWasActive = active;
-    }
 }
 
 modifier_orb_hero = registerModifier("modifier_orb_hero", ModifierOrbHero);

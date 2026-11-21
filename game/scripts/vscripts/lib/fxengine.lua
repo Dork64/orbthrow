@@ -94,25 +94,6 @@ function FxEngine.prototype.maneuverStart(self, ability)
         )
     end
 end
-function FxEngine.prototype.rememberWard(self, ward)
-    local ____opt_2 = self.maneuvers
-    if ____opt_2 ~= nil then
-        ____opt_2:rememberWard(ward)
-    end
-end
-function FxEngine.prototype.maneuverOrder(self, kind, target, point)
-    local ____opt_4 = self.maneuvers
-    local ____temp_6 = ____opt_4 and ____opt_4:order(
-        kind,
-        target,
-        point,
-        GameRules:GetGameTime()
-    )
-    if ____temp_6 == nil then
-        ____temp_6 = false
-    end
-    return ____temp_6
-end
 function FxEngine.prototype.refresh(self, b)
     if self.listFor == b then
         return
@@ -123,13 +104,13 @@ function FxEngine.prototype.refresh(self, b)
     for id in pairs(b.code) do
         do
             if (b.code[id] or 0) <= 0 then
-                goto __continue14
+                goto __continue12
             end
             for ____, f in ipairs(fxOfOrb(id)) do
                 out[#out + 1] = fxView(f, b.awake)
             end
         end
-        ::__continue14::
+        ::__continue12::
     end
     self.list = out
     local plans = __TS__ArrayFilter(
@@ -142,20 +123,20 @@ function FxEngine.prototype.refresh(self, b)
                 HeroManeuvers,
                 self.parent,
                 function(victim, amount, effect, magical)
-                    local ____self_damage_10 = self.damage
-                    local ____victim_8 = victim
-                    local ____amount_9 = amount
-                    local ____magical_7
+                    local ____self_damage_5 = self.damage
+                    local ____victim_3 = victim
+                    local ____amount_4 = amount
+                    local ____magical_2
                     if magical then
-                        ____magical_7 = DAMAGE_TYPE_MAGICAL
+                        ____magical_2 = DAMAGE_TYPE_MAGICAL
                     else
-                        ____magical_7 = DAMAGE_TYPE_PHYSICAL
+                        ____magical_2 = DAMAGE_TYPE_PHYSICAL
                     end
-                    return ____self_damage_10(
+                    return ____self_damage_5(
                         self,
-                        ____victim_8,
-                        ____amount_9,
-                        ____magical_7,
+                        ____victim_3,
+                        ____amount_4,
+                        ____magical_2,
                         effect
                     )
                 end,
@@ -208,8 +189,8 @@ function FxEngine.prototype.later(self, delay, run)
     if delay <= 0.01 then
         run()
     else
-        local ____self_pending_11 = self.pending
-        ____self_pending_11[#____self_pending_11 + 1] = {
+        local ____self_pending_6 = self.pending
+        ____self_pending_6[#____self_pending_6 + 1] = {
             at = GameRules:GetGameTime() + delay,
             run = run
         }
@@ -441,7 +422,7 @@ function FxEngine.prototype.act(self, f, victim, dealt)
                     nil,
                     true
                 ) or 0) - 1 < 0 then
-                    goto __continue74
+                    goto __continue72
                 end
                 if m:GetStackCount() < max then
                     m:IncrementStackCount()
@@ -451,7 +432,7 @@ function FxEngine.prototype.act(self, f, victim, dealt)
                 end
                 break
             end
-            ::__continue74::
+            ::__continue72::
         end
     end
 end
@@ -460,18 +441,18 @@ function FxEngine.prototype.reduceCooldowns(self, f, names, sec)
         do
             local a = self:ab(n == "self" and f.ab or n)
             if a == nil then
-                goto __continue80
+                goto __continue78
             end
             local left = a:GetCooldownTimeRemaining()
             if left <= 0 then
-                goto __continue80
+                goto __continue78
             end
             a:EndCooldown()
             if left > sec then
                 a:StartCooldown(left - sec)
             end
         end
-        ::__continue80::
+        ::__continue78::
     end
 end
 function FxEngine.prototype.condOk(self, cond, lowhp, t)
@@ -549,23 +530,23 @@ function FxEngine.prototype.onCast(self, ability, target)
         name,
         ability:GetCursorPosition()
     )
-    local ____opt_12 = self.maneuvers
-    if ____opt_12 ~= nil then
-        ____opt_12:cast(ability, target, now)
+    local ____opt_7 = self.maneuvers
+    if ____opt_7 ~= nil then
+        ____opt_7:cast(ability, target, now)
     end
     for ____, f in ipairs(self.list) do
         do
             if f.t == "combo" then
                 self:comboCast(f, name, now)
-                goto __continue106
+                goto __continue104
             end
             if f.ab ~= name then
-                goto __continue106
+                goto __continue104
             end
             if f.t == "spring" or f.t == "thunderball" then
-                local ____self_14, ____zeus_15 = self, "zeus"
-                if ____self_14[____zeus_15] == nil then
-                    ____self_14[____zeus_15] = __TS__New(
+                local ____self_9, ____zeus_10 = self, "zeus"
+                if ____self_9[____zeus_10] == nil then
+                    ____self_9[____zeus_10] = __TS__New(
                         ZeusLegends,
                         parent,
                         function(victim, amount, effect, flags) return self:damage(
@@ -583,19 +564,19 @@ function FxEngine.prototype.onCast(self, ability, target)
                 elseif self.listFor ~= nil then
                     zeus:castBall(f, ability, self.listFor, now)
                 end
-                goto __continue106
+                goto __continue104
             end
             if f.t == "wire" then
                 self:castWire(f, now)
-                goto __continue106
+                goto __continue104
             end
             if f.t == "zone" then
                 self:startZone(f, ability, target)
-                goto __continue106
+                goto __continue104
             end
             if f.t == "tether" then
                 self:startTether(f, target)
-                goto __continue106
+                goto __continue104
             end
             if f.t == "mark" and f.by == "cast" and target ~= nil then
                 self:markHit(
@@ -605,7 +586,7 @@ function FxEngine.prototype.onCast(self, ability, target)
                     now,
                     true
                 )
-                goto __continue106
+                goto __continue104
             end
             if f.t == "guard" then
                 local state = self.guards:get(f.key) or ({["until"] = 0, readyAt = 0, damage = 0})
@@ -614,7 +595,7 @@ function FxEngine.prototype.onCast(self, ability, target)
                     state["until"] = now + f.win
                     self.guards:set(f.key, state)
                 end
-                goto __continue106
+                goto __continue104
             end
             if f.t == "buff" then
                 if (f.dispel or 0) > 0 then
@@ -681,7 +662,7 @@ function FxEngine.prototype.onCast(self, ability, target)
                 self:rewind(f)
             end
         end
-        ::__continue106::
+        ::__continue104::
     end
 end
 function FxEngine.prototype.freeCast(self, ability, target, point)
@@ -798,13 +779,13 @@ function FxEngine.prototype.pull(self, f, ability, target)
     local radius = self:num(f.radius, f)
     local dist = self:num(f.dist, f)
     local dmg = self:num(f.dmg, f)
-    local ____temp_17
+    local ____temp_12
     if f.at == "self" then
-        ____temp_17 = nil
+        ____temp_12 = nil
     else
-        ____temp_17 = f.at == "target" and target ~= nil and target:GetAbsOrigin() or ability:GetCursorPosition()
+        ____temp_12 = f.at == "target" and target ~= nil and target:GetAbsOrigin() or ability:GetCursorPosition()
     end
-    local center = ____temp_17
+    local center = ____temp_12
     self:later(
         self:num(f.delay, f),
         function()
@@ -836,7 +817,7 @@ function FxEngine.prototype.pull(self, f, ability, target)
             for ____, u in ipairs(units) do
                 do
                     if not u:IsAlive() then
-                        goto __continue157
+                        goto __continue155
                     end
                     local v = c - u:GetAbsOrigin()
                     local d = v:Length2D()
@@ -858,7 +839,7 @@ function FxEngine.prototype.pull(self, f, ability, target)
                         )
                     end
                 end
-                ::__continue157::
+                ::__continue155::
             end
         end
     )
@@ -932,8 +913,8 @@ function FxEngine.prototype.plantTrap(self, f, ability, target)
         1,
         Vector(f.radius, 0, 0)
     )
-    local ____self_traps_18 = self.traps
-    ____self_traps_18[#____self_traps_18 + 1] = {
+    local ____self_traps_13 = self.traps
+    ____self_traps_13[#____self_traps_13 + 1] = {
         f = f,
         pos = pos,
         armAt = now + f.arm,
@@ -978,7 +959,7 @@ function FxEngine.prototype.summon(self, f, ability)
                     parent:GetTeamNumber()
                 )
                 if u == nil then
-                    goto __continue178
+                    goto __continue176
                 end
                 u:SetOwner(parent)
                 if pid >= 0 then
@@ -1006,7 +987,7 @@ function FxEngine.prototype.summon(self, f, ability)
                     u:MoveToTargetToAttack(foes[1])
                 end
             end
-            ::__continue178::
+            ::__continue176::
             i = i + 1
         end
     end
@@ -1087,7 +1068,7 @@ function FxEngine.prototype.blast(self, f, ability, target)
         for ____, u in ipairs(units) do
             do
                 if not u:IsAlive() then
-                    goto __continue195
+                    goto __continue193
                 end
                 self:damage(
                     u,
@@ -1099,7 +1080,7 @@ function FxEngine.prototype.blast(self, f, ability, target)
                     self:applyDebuff(f, f.debuff, u)
                 end
             end
-            ::__continue195::
+            ::__continue193::
         end
     end
     self:later(
@@ -1126,23 +1107,23 @@ function FxEngine.prototype.onDealt(self, e)
     local name = inflictor:GetAbilityName()
     local now = GameRules:GetGameTime()
     if name == "zuus_lightning_bolt" then
-        local ____opt_19 = self.zeus
-        if ____opt_19 ~= nil then
-            ____opt_19:bolt(victim, now)
+        local ____opt_14 = self.zeus
+        if ____opt_14 ~= nil then
+            ____opt_14:bolt(victim, now)
         end
     end
-    local ____opt_21 = self.maneuvers
-    if ____opt_21 ~= nil then
-        ____opt_21:spellHit(victim, inflictor, now)
+    local ____opt_16 = self.maneuvers
+    if ____opt_16 ~= nil then
+        ____opt_16:spellHit(victim, inflictor, now)
     end
     for ____, f in ipairs(self.list) do
         do
             if f.t == "mark" then
                 self:markHit(f, victim, name, now)
-                goto __continue205
+                goto __continue203
             end
             if f.ab ~= name then
-                goto __continue205
+                goto __continue203
             end
             if f.t == "hit" and f.by == "ab" then
                 if self:hitAllowed(f, victim, now) then
@@ -1164,7 +1145,7 @@ function FxEngine.prototype.onDealt(self, e)
                 end
             end
         end
-        ::__continue205::
+        ::__continue203::
     end
 end
 function FxEngine.prototype.onObservedAttack(self, e)
@@ -1182,23 +1163,23 @@ function FxEngine.prototype.onAttack(self, e)
         return
     end
     local now = GameRules:GetGameTime()
-    local ____opt_23 = self.maneuvers
-    if ____opt_23 ~= nil then
-        ____opt_23:attack(e, now)
+    local ____opt_18 = self.maneuvers
+    if ____opt_18 ~= nil then
+        ____opt_18:attack(e, now)
     end
     for ____, f in ipairs(self.list) do
         do
             if f.t == "mark" then
                 self:markHit(f, t, "attack", now)
-                goto __continue220
+                goto __continue218
             end
             if f.t ~= "hit" or f.by ~= "attack" then
-                goto __continue220
+                goto __continue218
             end
             if f.ab ~= "" then
                 local a = self:ab(f.ab)
                 if a == nil or a:GetLevel() <= 0 then
-                    goto __continue220
+                    goto __continue218
                 end
             end
             if f.every ~= nil and f.every > 1 then
@@ -1206,7 +1187,7 @@ function FxEngine.prototype.onAttack(self, e)
                 local n = (self.hits:get(k) or 0) + 1
                 if n < f.every then
                     self.hits:set(k, n)
-                    goto __continue220
+                    goto __continue218
                 end
                 self.hits:set(k, 0)
             end
@@ -1214,7 +1195,7 @@ function FxEngine.prototype.onAttack(self, e)
                 self:act(f, t, e.damage)
             end
         end
-        ::__continue220::
+        ::__continue218::
     end
 end
 function FxEngine.prototype.onTaken(self, e)
@@ -1230,18 +1211,14 @@ function FxEngine.prototype.onTaken(self, e)
         return
     end
     local now = GameRules:GetGameTime()
-    local ____opt_25 = self.maneuvers
-    if ____opt_25 ~= nil then
-        ____opt_25:taken(e, now)
-    end
     for ____, f in ipairs(self.list) do
         do
             if f.t == "guard" then
                 self:guardHit(f, e.damage, now)
-                goto __continue233
+                goto __continue231
             end
             if f.t ~= "taken" or not self:inWindow(f, f.win, now) then
-                goto __continue233
+                goto __continue231
             end
             self:damage(
                 a,
@@ -1251,7 +1228,7 @@ function FxEngine.prototype.onTaken(self, e)
                 DOTA_DAMAGE_FLAG_REFLECTION
             )
         end
-        ::__continue233::
+        ::__continue231::
     end
 end
 function FxEngine.prototype.onKill(self, victim, inflictor)
@@ -1264,13 +1241,13 @@ function FxEngine.prototype.onKill(self, victim, inflictor)
     for ____, f in ipairs(self.list) do
         do
             if f.t ~= "kill" then
-                goto __continue239
+                goto __continue237
             end
             if f.by == "ab" and iname ~= f.ab then
-                goto __continue239
+                goto __continue237
             end
             if f.by == "win" and not self:inWindow(f, f.win, now) then
-                goto __continue239
+                goto __continue237
             end
             if f.refresh ~= nil then
                 for ____, n in ipairs(f.refresh) do
@@ -1331,7 +1308,7 @@ function FxEngine.prototype.onKill(self, victim, inflictor)
                 end
             end
         end
-        ::__continue239::
+        ::__continue237::
     end
 end
 function FxEngine.prototype.crit(self, t)
@@ -1343,26 +1320,26 @@ function FxEngine.prototype.crit(self, t)
     for ____, f in ipairs(self.list) do
         do
             if f.t ~= "crit" then
-                goto __continue264
+                goto __continue262
             end
             if (f.heroOnly or 0) > 0 and not t:IsRealHero() then
-                goto __continue264
+                goto __continue262
             end
             if not self:inWindow(f, f.win, now) then
-                goto __continue264
+                goto __continue262
             end
             if f.lowhp ~= nil and t:GetHealthPercent() >= f.lowhp then
-                goto __continue264
+                goto __continue262
             end
             if RandomFloat(0, 100) >= self:num(f.chance, f) then
-                goto __continue264
+                goto __continue262
             end
             best = math.max(
                 best,
                 self:num(f.mult, f)
             )
         end
-        ::__continue264::
+        ::__continue262::
     end
     return best
 end
@@ -1374,17 +1351,17 @@ function FxEngine.prototype.outgoing(self, t, inflictor)
     for ____, f in ipairs(self.list) do
         do
             if f.t ~= "vs" then
-                goto __continue273
+                goto __continue271
             end
             if (f.attackOnly or 0) > 0 and inflictor ~= nil then
-                goto __continue273
+                goto __continue271
             end
             if not self:condOk(f.cond, f.lowhp, t) then
-                goto __continue273
+                goto __continue271
             end
             pct = pct + self:num(f.pct, f)
         end
-        ::__continue273::
+        ::__continue271::
     end
     return pct
 end
@@ -1399,7 +1376,7 @@ function FxEngine.prototype.syncCharges(self)
             do
                 local ability = self.parent:GetAbilityByIndex(i)
                 if ability == nil or ability:IsPassive() or ability:GetLevel() <= 0 then
-                    goto __continue280
+                    goto __continue278
                 end
                 local extra = bonusAbilityCharges(
                     b,
@@ -1408,12 +1385,12 @@ function FxEngine.prototype.syncCharges(self)
                 )
                 local granted = self.grantedCharges:get(ability) or 0
                 if extra <= granted then
-                    goto __continue280
+                    goto __continue278
                 end
                 local level = ability:GetLevel() - 1
                 local nativeMax = ability:GetMaxAbilityCharges(level)
                 if nativeMax <= 0 then
-                    goto __continue280
+                    goto __continue278
                 end
                 local converting = granted == 0 and ability:GetLevelSpecialValueNoOverride("AbilityCharges", level) <= 0
                 local oldCooldown = converting and ability:GetCooldownTimeRemaining() or 0
@@ -1428,7 +1405,7 @@ function FxEngine.prototype.syncCharges(self)
                 ability:MarkAbilityButtonDirty()
                 self.grantedCharges:set(ability, extra)
             end
-            ::__continue280::
+            ::__continue278::
             i = i + 1
         end
     end
@@ -1503,12 +1480,12 @@ function FxEngine.prototype.think(self)
         elseif f.t == "storm" and alive and self:inWindow(f, f.win, now) then
             self:stormTick(f, now)
         else
-            local ____temp_29 = f.t == "trail" and alive and self:inWindow(f, f.win, now)
-            if ____temp_29 then
-                local ____opt_27 = self:ab(f.ab)
-                ____temp_29 = (____opt_27 and ____opt_27:GetLevel() or 1) > 0
+            local ____temp_22 = f.t == "trail" and alive and self:inWindow(f, f.win, now)
+            if ____temp_22 then
+                local ____opt_20 = self:ab(f.ab)
+                ____temp_22 = (____opt_20 and ____opt_20:GetLevel() or 1) > 0
             end
-            if ____temp_29 then
+            if ____temp_22 then
                 if now - self.lastTrailAt >= 0.3 and self.lastPos ~= nil and now - self.stillSince < 0.15 then
                     self.lastTrailAt = now
                     local fx
@@ -1521,27 +1498,27 @@ function FxEngine.prototype.think(self)
                             Vector(f.radius, f.radius, f.radius)
                         )
                     end
-                    local ____self_trail_30 = self.trail
-                    ____self_trail_30[#____self_trail_30 + 1] = {f = f, pos = pos, ["until"] = now + f.life, fx = fx}
+                    local ____self_trail_23 = self.trail
+                    ____self_trail_23[#____self_trail_23 + 1] = {f = f, pos = pos, ["until"] = now + f.life, fx = fx}
                 end
             elseif f.t == "aura" and auraTick and alive and self:inWindow(f, f.win, now) then
                 local r = self:num(f.radius, f)
-                local ____FindUnitsInRadius_34 = FindUnitsInRadius
-                local ____temp_32 = parent:GetTeamNumber()
-                local ____DOTA_UNIT_TARGET_TEAM_ENEMY_33 = DOTA_UNIT_TARGET_TEAM_ENEMY
-                local ____temp_31
+                local ____FindUnitsInRadius_27 = FindUnitsInRadius
+                local ____temp_25 = parent:GetTeamNumber()
+                local ____DOTA_UNIT_TARGET_TEAM_ENEMY_26 = DOTA_UNIT_TARGET_TEAM_ENEMY
+                local ____temp_24
                 if (f.heroOnly or 0) > 0 then
-                    ____temp_31 = DOTA_UNIT_TARGET_HERO
+                    ____temp_24 = DOTA_UNIT_TARGET_HERO
                 else
-                    ____temp_31 = DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC
+                    ____temp_24 = DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC
                 end
-                local units = ____FindUnitsInRadius_34(
-                    ____temp_32,
+                local units = ____FindUnitsInRadius_27(
+                    ____temp_25,
                     pos,
                     nil,
                     r,
-                    ____DOTA_UNIT_TARGET_TEAM_ENEMY_33,
-                    ____temp_31,
+                    ____DOTA_UNIT_TARGET_TEAM_ENEMY_26,
+                    ____temp_24,
                     DOTA_UNIT_TARGET_FLAG_NONE,
                     FIND_ANY_ORDER,
                     false
@@ -1576,13 +1553,13 @@ function FxEngine.prototype.autoTick(self, f, now)
         return
     end
     local range = self:num(f.range, f)
-    local ____temp_35
+    local ____temp_28
     if (f.heroOnly or 0) > 0 then
-        ____temp_35 = DOTA_UNIT_TARGET_HERO
+        ____temp_28 = DOTA_UNIT_TARGET_HERO
     else
-        ____temp_35 = DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC
+        ____temp_28 = DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC
     end
-    local ____type = ____temp_35
+    local ____type = ____temp_28
     local foes = FindUnitsInRadius(
         parent:GetTeamNumber(),
         parent:GetAbsOrigin(),
@@ -1700,7 +1677,7 @@ function FxEngine.prototype.trailTick(self, now)
         for ____, u in ipairs(units) do
             do
                 if hit:has(u) or not u:IsAlive() then
-                    goto __continue334
+                    goto __continue332
                 end
                 hit:add(u)
                 self:damage(
@@ -1713,7 +1690,7 @@ function FxEngine.prototype.trailTick(self, now)
                     self:applyDebuff(tp.f, tp.f.debuff, u)
                 end
             end
-            ::__continue334::
+            ::__continue332::
         end
     end
 end
@@ -1726,10 +1703,10 @@ function FxEngine.prototype.trapTick(self, now)
         do
             if now >= t["until"] then
                 self:removeTrap(t)
-                goto __continue341
+                goto __continue339
             end
             if now < t.armAt then
-                goto __continue341
+                goto __continue339
             end
             local foes = FindUnitsInRadius(
                 parent:GetTeamNumber(),
@@ -1746,7 +1723,7 @@ function FxEngine.prototype.trapTick(self, now)
                 foes,
                 function(____, u) return u:IsAlive() and u:IsRealHero() end
             ) then
-                goto __continue341
+                goto __continue339
             end
             self:removeTrap(t)
             if t.f.pfx ~= nil then
@@ -1774,7 +1751,7 @@ function FxEngine.prototype.trapTick(self, now)
             for ____, u in ipairs(all) do
                 do
                     if not u:IsAlive() then
-                        goto __continue347
+                        goto __continue345
                     end
                     self:damage(
                         u,
@@ -1786,10 +1763,10 @@ function FxEngine.prototype.trapTick(self, now)
                         self:applyDebuff(t.f, t.f.debuff, u)
                     end
                 end
-                ::__continue347::
+                ::__continue345::
             end
         end
-        ::__continue341::
+        ::__continue339::
     end
 end
 function FxEngine.prototype.comboCast(self, f, name, now)
@@ -1883,7 +1860,7 @@ function FxEngine.prototype.startZone(self, f, ability, target)
     for ____, radius in ipairs({f.radius, f.inner or 0}) do
         do
             if radius <= 0 then
-                goto __continue371
+                goto __continue369
             end
             local fx = ParticleManager:CreateParticle(RING_PFX, PATTACH_WORLDORIGIN, nil)
             ParticleManager:SetParticleControl(fx, 0, pos)
@@ -1899,11 +1876,11 @@ function FxEngine.prototype.startZone(self, f, ability, target)
             )
             rings[#rings + 1] = fx
         end
-        ::__continue371::
+        ::__continue369::
     end
     local now = GameRules:GetGameTime()
-    local ____self_zones_36 = self.zones
-    ____self_zones_36[#____self_zones_36 + 1] = {
+    local ____self_zones_29 = self.zones
+    ____self_zones_29[#____self_zones_29 + 1] = {
         f = f,
         pos = pos,
         ["until"] = now + self:num(f.dur, f),
@@ -1979,17 +1956,17 @@ function FxEngine.prototype.markHit(self, f, target, source, now, cast)
         return
     end
     local consume = not cast and __TS__ArrayIncludes(f.consume, source)
-    local ____temp_38 = f.ab == source
-    if ____temp_38 then
-        local ____cast_37
+    local ____temp_31 = f.ab == source
+    if ____temp_31 then
+        local ____cast_30
         if cast then
-            ____cast_37 = f.by == "cast"
+            ____cast_30 = f.by == "cast"
         else
-            ____cast_37 = f.by == "ab"
+            ____cast_30 = f.by == "ab"
         end
-        ____temp_38 = ____cast_37
+        ____temp_31 = ____cast_30
     end
-    local place = ____temp_38 or source == "attack" and f.nativeMark ~= nil and self:hasOwnCombatModifier(target, f.nativeMark)
+    local place = ____temp_31 or source == "attack" and f.nativeMark ~= nil and self:hasOwnCombatModifier(target, f.nativeMark)
     if not consume and not place then
         return
     end
@@ -2109,8 +2086,8 @@ function FxEngine.prototype.wireMarker(self, pos)
     return fx
 end
 function FxEngine.prototype.clearWire(self)
-    local ____opt_39 = self.wire
-    local particles = ____opt_39 and ____opt_39.particles or (self.wireAnchor == nil and ({}) or ({self.wireAnchor.marker}))
+    local ____opt_32 = self.wire
+    local particles = ____opt_32 and ____opt_32.particles or (self.wireAnchor == nil and ({}) or ({self.wireAnchor.marker}))
     for ____, fx in ipairs(particles) do
         ParticleManager:DestroyParticle(fx, true)
         ParticleManager:ReleaseParticleIndex(fx)
@@ -2121,14 +2098,14 @@ end
 function FxEngine.prototype.castWire(self, f, now)
     local parent = self.parent
     local pos = parent:GetAbsOrigin()
-    local ____now_46 = now
-    local ____opt_41 = self.wire
-    local ____temp_45 = ____opt_41 and ____opt_41["until"]
-    if ____temp_45 == nil then
-        local ____opt_43 = self.wireAnchor
-        ____temp_45 = ____opt_43 and ____opt_43["until"]
+    local ____now_39 = now
+    local ____opt_34 = self.wire
+    local ____temp_38 = ____opt_34 and ____opt_34["until"]
+    if ____temp_38 == nil then
+        local ____opt_36 = self.wireAnchor
+        ____temp_38 = ____opt_36 and ____opt_36["until"]
     end
-    if ____now_46 >= (____temp_45 or math.huge) then
+    if ____now_39 >= (____temp_38 or math.huge) then
         self:clearWire()
     end
     local wire = self.wire
@@ -2190,14 +2167,14 @@ function FxEngine.prototype.castWire(self, f, now)
     self.wireReadyAt = now + f.icd
 end
 function FxEngine.prototype.tickWire(self, now)
-    local ____now_52 = now
-    local ____opt_47 = self.wire
-    local ____temp_51 = ____opt_47 and ____opt_47["until"]
-    if ____temp_51 == nil then
-        local ____opt_49 = self.wireAnchor
-        ____temp_51 = ____opt_49 and ____opt_49["until"]
+    local ____now_45 = now
+    local ____opt_40 = self.wire
+    local ____temp_44 = ____opt_40 and ____opt_40["until"]
+    if ____temp_44 == nil then
+        local ____opt_42 = self.wireAnchor
+        ____temp_44 = ____opt_42 and ____opt_42["until"]
     end
-    if ____now_52 >= (____temp_51 or math.huge) then
+    if ____now_45 >= (____temp_44 or math.huge) then
         self:clearWire()
     end
     local wire = self.wire
@@ -2232,7 +2209,7 @@ function FxEngine.prototype.tickWire(self, now)
     for ____, target in ipairs(targets) do
         do
             if not target:IsRealHero() or not target:IsAlive() or target:IsInvulnerable() or target:IsDebuffImmune() or wire.hit:has(target:entindex()) then
-                goto __continue422
+                goto __continue420
             end
             local p = target:GetAbsOrigin()
             local along = math.max(
@@ -2243,7 +2220,7 @@ function FxEngine.prototype.tickWire(self, now)
             local ny = p.y - (start.y + along * dy)
             local d = length2D(nx, ny)
             if d > f.radius or math.abs(p.z - (start.z + along * (____end.z - start.z))) > 135 then
-                goto __continue422
+                goto __continue420
             end
             local direction = d > 0.01 and Vector(nx / d, ny / d, 0) or Vector(-dy / length, dx / length, 0)
             wire.hit:add(target:entindex())
@@ -2256,7 +2233,7 @@ function FxEngine.prototype.tickWire(self, now)
                 return
             end
         end
-        ::__continue422::
+        ::__continue420::
     end
 end
 function FxEngine.prototype.combatTick(self, now)
@@ -2266,22 +2243,22 @@ function FxEngine.prototype.combatTick(self, now)
         return
     end
     self:tickWire(now)
-    local ____opt_53 = self.zeus
-    if ____opt_53 ~= nil then
-        ____opt_53:tick(now)
+    local ____opt_46 = self.zeus
+    if ____opt_46 ~= nil then
+        ____opt_46:tick(now)
     end
-    local ____opt_55 = self.maneuvers
-    if ____opt_55 ~= nil then
-        ____opt_55:tick(now)
+    local ____opt_48 = self.maneuvers
+    if ____opt_48 ~= nil then
+        ____opt_48:tick(now)
     end
     for ____, zone in ipairs(__TS__ArraySlice(self.zones)) do
         do
             if now >= zone["until"] then
                 self:removeZone(zone)
-                goto __continue429
+                goto __continue427
             end
             if now < zone.next then
-                goto __continue429
+                goto __continue427
             end
             zone.next = now + zone.f.every
             local f = zone.f
@@ -2303,7 +2280,7 @@ function FxEngine.prototype.combatTick(self, now)
                         f.inner or 0,
                         f.radius
                     ) then
-                        goto __continue432
+                        goto __continue430
                     end
                     local id = u:entindex()
                     local entry = not zone.entered:has(id) and self:num(f.entryDmg, f) or 0
@@ -2318,10 +2295,10 @@ function FxEngine.prototype.combatTick(self, now)
                         self:applyDebuff(f, f.debuff, u)
                     end
                 end
-                ::__continue432::
+                ::__continue430::
             end
         end
-        ::__continue429::
+        ::__continue427::
     end
     for ____, ____value in __TS__Iterator(self.tethers) do
         local key = ____value[1]
@@ -2331,7 +2308,7 @@ function FxEngine.prototype.combatTick(self, now)
             local target = link.target
             if now >= link["until"] or not IsValidEntity(target) or not target:IsAlive() or f.ownerMod ~= nil and not self:hasOwnCombatModifier(parent, f.ownerMod) and not self:hasOwnCombatModifier(target, f.ownerMod) or not self:hasOwnCombatModifier(target, f.targetMod) then
                 self.tethers:delete(key)
-                goto __continue437
+                goto __continue435
             end
             local band = tetherBand(
                 (target:GetAbsOrigin() - parent:GetAbsOrigin()):Length2D(),
@@ -2341,14 +2318,14 @@ function FxEngine.prototype.combatTick(self, now)
             )
             if band == "broken" then
                 self.tethers:delete(key)
-                goto __continue437
+                goto __continue435
             end
             if band ~= "active" or target:IsInvulnerable() or target:IsDebuffImmune() then
                 link.streak = 0
-                goto __continue437
+                goto __continue435
             end
             if now < link.next then
-                goto __continue437
+                goto __continue435
             end
             link.next = now + f.every
             if f.isolated ~= nil then
@@ -2368,7 +2345,7 @@ function FxEngine.prototype.combatTick(self, now)
                     function(____, u) return u ~= target and u:IsAlive() and u:IsRealHero() end
                 ) then
                     link.streak = 0
-                    goto __continue437
+                    goto __continue435
                 end
             end
             link.streak = link.streak + 1
@@ -2397,19 +2374,19 @@ function FxEngine.prototype.combatTick(self, now)
             )
             ParticleManager:ReleaseParticleIndex(fx)
         end
-        ::__continue437::
+        ::__continue435::
     end
 end
 function FxEngine.prototype.clearCombat(self)
     self.combatEpoch = self.combatEpoch + 1
     self:clearWire()
-    local ____opt_57 = self.zeus
-    if ____opt_57 ~= nil then
-        ____opt_57:clear()
+    local ____opt_50 = self.zeus
+    if ____opt_50 ~= nil then
+        ____opt_50:clear()
     end
-    local ____opt_59 = self.maneuvers
-    if ____opt_59 ~= nil then
-        ____opt_59:clear()
+    local ____opt_52 = self.maneuvers
+    if ____opt_52 ~= nil then
+        ____opt_52:clear()
     end
     for ____, zone in ipairs(__TS__ArraySlice(self.zones)) do
         self:removeZone(zone)

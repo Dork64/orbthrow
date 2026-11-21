@@ -38,6 +38,27 @@ function buildNativeCharges(root, { pool, ups, fxList }) {
 
     const relative = "game/scripts/npc/npc_abilities_override.txt";
     const { DOTAAbilities: overrides } = loadHeroFile(path.join(root, relative));
+    // Динамический override должен видеть КД как AbilityValue даже у старых KV с полем в корне.
+    let normalized = 0;
+    for (const summary of summaries.values()) {
+        for (const ability of summary.slots) {
+            const def = summary.defs[ability];
+            const authored = overrides[ability] ?? {};
+            const abilityValues = { ...authored.AbilityValues };
+            let changed = false;
+            for (const key of ["AbilityCooldown", "AbilityChargeRestoreTime"]) {
+                const legacy = authored[key] ?? def?.[key];
+                if (abilityValues[key] !== undefined || def?.AbilityValues?.[key] !== undefined || !hasPositive(legacy)) continue;
+                abilityValues[key] = { value: legacy };
+                changed = true;
+            }
+            if (changed) {
+                normalized++;
+                overrides[ability] = { ...authored, AbilityValues: abilityValues };
+            }
+        }
+    }
+
     let prepared = 0;
     for (const [ability, hero] of [...selected].sort(([a], [b]) => a.localeCompare(b))) {
         const def = summaries.get(hero)?.defs[ability];
@@ -62,7 +83,7 @@ function buildNativeCharges(root, { pool, ups, fxList }) {
     const output = path.join(root, "build", relative);
     fs.mkdirSync(path.dirname(output), { recursive: true });
     fs.writeFileSync(output, `// Сгенерировано tools/native-charges.js из игровых данных и сфер.\n${kvEntries({ DOTAAbilities: overrides }, "")}\n`);
-    console.log(`Штатные заряды: ${selected.size} способностей, подготовлено ${prepared}`);
+    console.log(`Штатные заряды: ${selected.size} способностей, подготовлено ${prepared}; КД перенесён в AbilityValues у ${normalized}`);
 }
 
 module.exports = { buildNativeCharges };

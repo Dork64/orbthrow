@@ -99,35 +99,18 @@ local isValid = ____util.isValid
 local log = ____util.log
 local safe = ____util.safe
 function orderFilter(e)
-    local kind = e.order_type
     local selected = __TS__ObjectKeys(e.units)
     if #selected == 1 then
         local unit = EntIndexToHScript(e.units[selected[1]])
-        if isValid(unit) and unit:GetUnitName() == "npc_dota_hero_tusk" and unit:GetPlayerOwnerID() == e.issuer_player_id_const then
-            local tusk = unit:FindModifierByName("modifier_orb_tusk")
-            if tusk and not tusk:order(e) then
-                return false
-            end
-        end
-    end
-    if kind == DOTA_UNIT_ORDER_MOVE_TO_POSITION or kind == DOTA_UNIT_ORDER_MOVE_TO_TARGET or kind == DOTA_UNIT_ORDER_ATTACK_MOVE then
-        local units = __TS__ObjectKeys(e.units)
-        if #units == 1 then
-            local hero = EntIndexToHScript(e.units[units[1]])
-            if isValid(hero) and hero:IsRealHero() and hero:GetPlayerOwnerID() == e.issuer_player_id_const then
-                local mod = hero:FindModifierByName("modifier_orb_hero")
-                local ____temp_4
-                if e.entindex_target > 0 then
-                    ____temp_4 = EntIndexToHScript(e.entindex_target)
-                else
-                    ____temp_4 = nil
+        if isValid(unit) and unit:GetPlayerOwnerID() == e.issuer_player_id_const then
+            if unit:GetUnitName() == "npc_dota_hero_tusk" then
+                local tusk = unit:FindModifierByName("modifier_orb_tusk")
+                if tusk and not tusk:order(e) then
+                    return false
                 end
-                local target = ____temp_4
-                if mod and mod:ManeuverOrder(
-                    kind,
-                    target,
-                    Vector(e.position_x or 0, e.position_y or 0, e.position_z or 0)
-                ) then
+            elseif unit:GetUnitName() == "npc_dota_hero_pudge" and e.order_type == DOTA_UNIT_ORDER_MOVE_TO_POSITION then
+                local pudge = unit:FindModifierByName("modifier_orb_pudge_legend")
+                if pudge and not pudge:order(e) then
                     return false
                 end
             end
@@ -163,19 +146,19 @@ function forceHeroes()
             do
                 local id = i
                 if not PlayerResource:IsValidPlayerID(id) or PlayerResource:IsFakeClient(id) then
-                    goto __continue39
+                    goto __continue38
                 end
                 if PlayerResource:HasSelectedHero(id) then
-                    goto __continue39
+                    goto __continue38
                 end
                 local player = PlayerResource:GetPlayer(id)
                 if player == nil then
-                    goto __continue39
+                    goto __continue38
                 end
                 player:MakeRandomHeroSelection()
                 log("игрок", id, "не выбрал героя — случайный")
             end
-            ::__continue39::
+            ::__continue38::
             i = i + 1
         end
     end

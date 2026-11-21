@@ -1,6 +1,9 @@
 local ____lualib = require("lualib_bundle")
 local __TS__Class = ____lualib.__TS__Class
 local __TS__ClassExtends = ____lualib.__TS__ClassExtends
+local __TS__StringStartsWith = ____lualib.__TS__StringStartsWith
+local Map = ____lualib.Map
+local __TS__New = ____lualib.__TS__New
 local __TS__Number = ____lualib.__TS__Number
 local ____exports = {}
 local ____combatpatterns = require("core.combatpatterns")
@@ -93,13 +96,13 @@ function ModifierOrbController.prototype.DeclareFunctions(self)
         MODIFIER_PROPERTY_STATS_STRENGTH_BONUS,
         MODIFIER_PROPERTY_STATS_AGILITY_BONUS,
         MODIFIER_PROPERTY_STATS_INTELLECT_BONUS,
-        MODIFIER_PROPERTY_COOLDOWN_PERCENTAGE_STACKING,
         MODIFIER_PROPERTY_STATUS_RESISTANCE_STACKING,
         MODIFIER_PROPERTY_SLOW_RESISTANCE_STACKING,
         MODIFIER_EVENT_ON_TAKEDAMAGE,
         MODIFIER_PROPERTY_OVERRIDE_ABILITY_SPECIAL,
         MODIFIER_PROPERTY_OVERRIDE_ABILITY_SPECIAL_VALUE,
-        MODIFIER_PROPERTY_PREATTACK_CRITICALSTRIKE,
+        MODIFIER_EVENT_ON_ATTACK_RECORD,
+        MODIFIER_EVENT_ON_ATTACK_RECORD_DESTROY,
         MODIFIER_EVENT_ON_ATTACK_LANDED,
         MODIFIER_PROPERTY_TOTALDAMAGEOUTGOING_PERCENTAGE,
         MODIFIER_EVENT_ON_ABILITY_FULLY_CAST,
@@ -148,7 +151,9 @@ end
 function ModifierOrbController.prototype.GetModifierStatusResistanceStacking(self)
     local b = self:b()
     local sources = {}
-    for ____, mod in ipairs(self:GetParent():FindAllModifiers()) do
+    local parent = self:GetParent()
+    local modifiers = type(parent.FindAllModifiers) == "function" and parent:FindAllModifiers() or ({})
+    for ____, mod in ipairs(modifiers) do
         local source = mod
         if source.OrbStatusResistance ~= nil then
             sources[#sources + 1] = source:OrbStatusResistance()
@@ -164,10 +169,13 @@ function ModifierOrbController.prototype.GetModifierSlowResistance_Stacking(self
     )
 end
 function ModifierOrbController.prototype.isBasicAbility(self, ability)
-    if ability:IsItem() or ability:GetAbilityType() == ULTIMATE then
+    if self:isItem(ability) or self:isUltimate(ability) then
         return false
     end
     local parent = self:GetParent()
+    if type(parent.GetAbilityByIndex) ~= "function" then
+        return false
+    end
     do
         local i = 0
         while i < 3 do
@@ -180,23 +188,42 @@ function ModifierOrbController.prototype.isBasicAbility(self, ability)
     end
     return false
 end
-function ModifierOrbController.prototype.GetModifierPercentageCooldownStacking(self, e)
-    local ability = e and e.ability
-    if ability == nil or ability:IsItem() then
-        return 0
+function ModifierOrbController.prototype.isItem(self, ability)
+    local ____temp_0
+    if type(ability.IsItem) == "function" then
+        ____temp_0 = ability:IsItem()
+    else
+        ____temp_0 = __TS__StringStartsWith(
+            ability:GetAbilityName(),
+            "item_"
+        )
     end
-    local b = self:b()
-    local keep = (100 - b.cdr) / 100
-    keep = keep * ((100 - (b.abilityCdr[ability:GetAbilityName()] or 0)) / 100)
+    return ____temp_0
+end
+function ModifierOrbController.prototype.isUltimate(self, ability)
+    return type(ability.GetAbilityType) == "function" and ability:GetAbilityType() == ULTIMATE
+end
+function ModifierOrbController.prototype.orbCooldownFactor(self, b, ability, name)
+    if self:isItem(ability) then
+        return 1
+    end
+    local keep = (1 - b.cdr / 100) * (1 - (b.abilityCdr[name] or 0) / 100)
     if (b.code.l_master or 0) > 0 and self:isBasicAbility(ability) then
         keep = keep * (b.awake and 0.65 or 0.75)
     end
-    if (b.code.l_double_ult or 0) > 0 and b.awake and ability:GetAbilityType() == ULTIMATE then
+    if b.awake and (b.code.l_double_ult or 0) > 0 and self:isUltimate(ability) then
         keep = keep * 0.8
     end
-    return boundedOrbCooldown(
-        ability:GetAbilityName(),
-        100 - keep * 100
+    return 1 - boundedOrbCooldown(name, 100 - keep * 100) / 100
+end
+function ModifierOrbController.prototype.extraCharges(self, b, ability, name)
+    if type(ability.IsPassive) == "function" and ability:IsPassive() then
+        return 0
+    end
+    return bonusAbilityCharges(
+        b,
+        name,
+        self:isUltimate(ability)
     )
 end
 function ModifierOrbController.prototype.GetModifierOverrideAbilitySpecial(self, e)
@@ -206,101 +233,90 @@ function ModifierOrbController.prototype.GetModifierOverrideAbilitySpecial(self,
     end
     local b = self:b()
     local name = ability:GetAbilityName()
-    local k = e.ability_special_value
-    if replacesWrathDamage(b, name, k) then
+    local key = e.ability_special_value
+    if replacesWrathDamage(b, name, key) then
         return 1
     end
-    if k == "AbilityCharges" or k == "AbilityCooldown" or k == "AbilityChargeRestoreTime" then
-        local extra = ability:IsPassive() and 0 or bonusAbilityCharges(
-            b,
-            name,
-            ability:GetAbilityType() == ULTIMATE
-        )
-        if extra > 0 then
-            if k == "AbilityCharges" then
-                return 1
-            end
-            if ability:GetLevelSpecialValueNoOverride("AbilityCharges", e.ability_special_level) <= 0 and (k == "AbilityCooldown" or ability:GetCooldownTimeRemaining() > 0) then
-                return 1
-            end
+    if key == "AbilityCharges" or key == "AbilityCooldown" or key == "AbilityChargeRestoreTime" then
+        local extra = self:extraCharges(b, ability, name)
+        if key == "AbilityCharges" and extra > 0 then
+            return 1
+        end
+        if key == "AbilityCooldown" and extra > 0 and ability:GetLevelSpecialValueNoOverride("AbilityCharges", e.ability_special_level) <= 0 then
+            return 1
+        end
+        if key ~= "AbilityCharges" and self:orbCooldownFactor(b, ability, name) < 1 then
+            return 1
         end
     end
-    local ____opt_2 = b.specials[name]
-    local ____temp_6 = (____opt_2 and ____opt_2[k]) ~= nil
-    if not ____temp_6 then
-        local ____opt_4 = b.specialsSet[name]
-        ____temp_6 = (____opt_4 and ____opt_4[k]) ~= nil
+    local ____opt_1 = b.specials[name]
+    local ____temp_5 = (____opt_1 and ____opt_1[key]) ~= nil
+    if not ____temp_5 then
+        local ____opt_3 = b.specialsSet[name]
+        ____temp_5 = (____opt_3 and ____opt_3[key]) ~= nil
     end
-    local ____temp_6_9 = ____temp_6
-    if not ____temp_6_9 then
-        local ____opt_7 = b.specialsMul[name]
-        ____temp_6_9 = (____opt_7 and ____opt_7[k]) ~= nil
+    local ____temp_5_8 = ____temp_5
+    if not ____temp_5_8 then
+        local ____opt_6 = b.specialsMul[name]
+        ____temp_5_8 = (____opt_6 and ____opt_6[key]) ~= nil
     end
-    if ____temp_6_9 then
+    if ____temp_5_8 then
         return 1
     end
     return 0
 end
 function ModifierOrbController.prototype.GetModifierOverrideAbilitySpecialValue(self, e)
     local ability = e.ability
-    local base = ability:GetLevelSpecialValueNoOverride(e.ability_special_value, e.ability_special_level)
-    local b = self:b()
     local key = e.ability_special_value
-    if IsServer() and replacesWrathDamage(
-        b,
-        ability:GetAbilityName(),
-        key
-    ) then
+    local level = e.ability_special_level
+    local name = ability:GetAbilityName()
+    local b = self:b()
+    local base = ability:GetLevelSpecialValueNoOverride(key, level)
+    if IsServer() and replacesWrathDamage(b, name, key) then
         return 0
     end
-    if key == "AbilityCharges" or key == "AbilityCooldown" or key == "AbilityChargeRestoreTime" then
-        local extra = ability:IsPassive() and 0 or bonusAbilityCharges(
-            b,
-            ability:GetAbilityName(),
-            ability:GetAbilityType() == ULTIMATE
-        )
+    if key == "AbilityCharges" then
+        local extra = self:extraCharges(b, ability, name)
         if extra > 0 then
-            if key == "AbilityCharges" then
-                return nativeChargeCount(base, extra)
-            end
-            if ability:GetLevelSpecialValueNoOverride("AbilityCharges", e.ability_special_level) <= 0 then
-                if key == "AbilityCooldown" then
-                    return 0
-                end
-                local remaining = ability:GetCooldownTimeRemaining()
-                if remaining > 0 then
-                    return remaining
-                end
-            end
+            return nativeChargeCount(base, extra)
         end
+    elseif key == "AbilityCooldown" and self:extraCharges(b, ability, name) > 0 and ability:GetLevelSpecialValueNoOverride("AbilityCharges", level) <= 0 then
+        return 0
     end
-    local v = overrideValue(
-        b,
-        ability:GetAbilityName(),
-        e.ability_special_value,
-        base
-    )
-    return v ~= nil and v or base
+    local adjusted = overrideValue(b, name, key, base) or base
+    if key == "AbilityCooldown" or key == "AbilityChargeRestoreTime" then
+        return adjusted * self:orbCooldownFactor(b, ability, name)
+    end
+    return adjusted
 end
-function ModifierOrbController.prototype.GetModifierPreAttack_CriticalStrike(self, e)
-    if not IsServer() then
-        return 0
-    end
-    if self:GetParent():IsIllusion() then
-        return 0
+function ModifierOrbController.prototype.OnAttackRecord(self, e)
+    local parent = self:GetParent()
+    local target = e.target
+    if not IsServer() or e.attacker ~= parent or parent:IsIllusion() or e.record == nil or e.no_attack_cooldown or target == nil or target:IsBuilding() or target:IsWard() or target:GetTeamNumber() == parent:GetTeamNumber() then
+        return
     end
     local n = self:b().code.p_crit or 0
-    if n <= 0 or e.target == nil or e.target:IsBuilding() then
-        return 0
+    if n <= 0 or not RollPseudoRandomPercentage(20, DOTA_PSEUDO_RANDOM_CUSTOM_GAME_1, parent) then
+        return
     end
-    if not RollPseudoRandomPercentage(
-        20,
-        DOTA_PSEUDO_RANDOM_CUSTOM_GAME_1,
-        self:GetParent()
-    ) then
-        return 0
+    if self.orbCriticals == nil then
+        self.orbCriticals = __TS__New(Map)
     end
-    return math.min(450, 150 + 50 * n)
+    self.orbCriticals:set(
+        e.record,
+        {
+            target = target,
+            bonus = math.min(350, 50 + 50 * n)
+        }
+    )
+end
+function ModifierOrbController.prototype.OnAttackRecordDestroy(self, e)
+    if IsServer() and e.attacker == self:GetParent() then
+        local ____opt_9 = self.orbCriticals
+        if ____opt_9 ~= nil then
+            ____opt_9:delete(e.record)
+        end
+    end
 end
 function ModifierOrbController.prototype.OnAttackLanded(self, e)
     if not IsServer() then
@@ -310,8 +326,23 @@ function ModifierOrbController.prototype.OnAttackLanded(self, e)
     if e.attacker ~= parent or parent:IsIllusion() then
         return
     end
-    local n = self:b().code.p_cleave or 0
     local target = e.target
+    local ____temp_15 = e.damage > 0 and target ~= nil
+    if ____temp_15 then
+        local ____opt_13 = self.orbCriticals
+        local ____opt_11 = ____opt_13 and ____opt_13:get(e.record)
+        ____temp_15 = (____opt_11 and ____opt_11.target) == target
+    end
+    if ____temp_15 and IsValidEntity(target) then
+        SendOverheadEventMessage(
+            nil,
+            OVERHEAD_ALERT_CRITICAL,
+            target,
+            math.floor(e.damage + 0.5),
+            nil
+        )
+    end
+    local n = self:b().code.p_cleave or 0
     if n <= 0 or target == nil or not IsValidEntity(target) or target:IsBuilding() or target:GetTeamNumber() == parent:GetTeamNumber() then
         return
     end
@@ -346,7 +377,7 @@ function ModifierOrbController.prototype.OnAttackLanded(self, e)
                 break
             end
             if u == target or not u:IsAlive() then
-                goto __continue66
+                goto __continue70
             end
             ApplyDamage({
                 victim = u,
@@ -357,7 +388,7 @@ function ModifierOrbController.prototype.OnAttackLanded(self, e)
             })
             hits = hits + 1
         end
-        ::__continue66::
+        ::__continue70::
     end
 end
 function ModifierOrbController.prototype.GetModifierTotalDamageOutgoing_Percentage(self, e)
@@ -366,17 +397,24 @@ function ModifierOrbController.prototype.GetModifierTotalDamageOutgoing_Percenta
     end
     local b = self:b()
     local pct = 0
-    local target = e.target
+    local target = e and e.target
     if (b.code.p_executioner or 0) > 0 and target ~= nil and target:IsHero() and target:GetHealthPercent() < 30 then
         pct = pct + 20 * (b.code.p_executioner or 0)
     end
-    local inflictor = e.inflictor
-    if inflictor ~= nil and not inflictor:IsItem() then
-        if (b.code.l_master or 0) > 0 and self:isBasicAbility(inflictor) then
-            pct = pct + (b.awake and 30 or 20)
-        end
+    local inflictor = e and e.inflictor
+    if inflictor ~= nil and (b.code.l_master or 0) > 0 and self:isBasicAbility(inflictor) then
+        pct = pct + (b.awake and 30 or 20)
     end
-    return pct
+    local ____temp_24
+    if IsServer() and (e and e.attacker) == self:GetParent() and e.damage_category == DOTA_DAMAGE_CATEGORY_ATTACK and inflictor == nil and e.record ~= nil then
+        local ____opt_22 = self.orbCriticals
+        ____temp_24 = ____opt_22 and ____opt_22:get(e.record)
+    else
+        ____temp_24 = nil
+    end
+    local crit = ____temp_24
+    local bonus = crit ~= nil and crit.target == target and crit.bonus or 0
+    return pct + bonus + pct * bonus / 100
 end
 function ModifierOrbController.prototype.GetMinHealth(self)
     if not IsServer() or self:GetParent():IsIllusion() then
@@ -397,7 +435,8 @@ function ModifierOrbController.prototype.meteor(self, ability, n)
         0,
         ability:GetLevel() - 1
     )
-    local cooldown = ability:GetMaxAbilityCharges(level) > 0 and ability:GetAbilityChargeRestoreTime(level) or ability:GetCooldown(level)
+    local key = ability:GetMaxAbilityCharges(level) > 0 and "AbilityChargeRestoreTime" or "AbilityCooldown"
+    local cooldown = ability:GetLevelSpecialValueNoOverride(key, level)
     if cooldown < 3 then
         return
     end
@@ -444,12 +483,12 @@ function ModifierOrbController.prototype.meteor(self, ability, n)
             for ____, u in ipairs(enemies) do
                 do
                     if not u:IsAlive() then
-                        goto __continue83
+                        goto __continue86
                     end
                     ApplyDamage({victim = u, attacker = parent, damage = dmg, damage_type = DAMAGE_TYPE_MAGICAL})
                     u:AddNewModifier(parent, nil, "modifier_stunned", {duration = 0.4})
                 end
-                ::__continue83::
+                ::__continue86::
             end
             return nil
         end,
@@ -508,7 +547,13 @@ function ModifierOrbController.prototype.OnTakeDamage(self, e)
         if bit.band(flags, DOTA_DAMAGE_FLAG_REFLECTION) ~= 0 or bit.band(flags, DOTA_DAMAGE_FLAG_HPLOSS) ~= 0 then
             return
         end
-        local spell = e.inflictor ~= nil
+        local ____temp_25
+        if e.damage_category ~= nil then
+            ____temp_25 = e.damage_category == DOTA_DAMAGE_CATEGORY_SPELL
+        else
+            ____temp_25 = e.inflictor ~= nil
+        end
+        local spell = ____temp_25
         if not parent:IsAlive() or spell and bit.band(flags, DOTA_DAMAGE_FLAG_NO_SPELL_LIFESTEAL) ~= 0 then
             return
         end
@@ -523,7 +568,7 @@ function ModifierOrbController.prototype.OnTakeDamage(self, e)
                 true,
                 true,
                 parent,
-                spell
+                spell and e.inflictor ~= nil
             )
         end
         return
@@ -599,11 +644,11 @@ function ModifierOrbController.prototype.OnIntervalThink(self)
     for ____, u in ipairs(enemies) do
         do
             if not u:IsAlive() then
-                goto __continue112
+                goto __continue115
             end
             ApplyDamage({victim = u, attacker = parent, damage = dps * BURN_INTERVAL, damage_type = DAMAGE_TYPE_MAGICAL})
         end
-        ::__continue112::
+        ::__continue115::
     end
 end
 modifier_orb_controller = registerModifier("modifier_orb_controller", ____exports.ModifierOrbController)

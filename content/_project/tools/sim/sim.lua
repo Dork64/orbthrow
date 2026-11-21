@@ -153,6 +153,8 @@ function EntityBase:IsNull() return self.__removed == true end
 function EntityBase:GetAbsOrigin() return Vector(self.pos.x, self.pos.y, self.pos.z) end
 function EntityBase:GetOrigin() return self:GetAbsOrigin() end
 function EntityBase:SetAbsOrigin(v) assert(isVec(v), "SetAbsOrigin: нужен Vector") self.pos = Vector(v.x, v.y, v.z) end
+function EntityBase:SetLocalScale(s) self.scale = s end
+function EntityBase:SetAngles(pitch, yaw, roll) self.angles = Vector(pitch, yaw, roll) end
 function EntityBase:SetOrigin(v) self:SetAbsOrigin(v) end
 function EntityBase:GetName() return self.name or "" end
 function EntityBase:GetClassname() return self.classname or "" end
@@ -180,6 +182,11 @@ local function newEntity(proto, fields)
   return e
 end
 
+_G.SpawnEntityFromTableSynchronous = function(class, kv)
+  assert(class == "prop_dynamic" and type(kv.model) == "string", "SpawnEntityFromTableSynchronous: модель")
+  return newEntity({ __name = class }, { classname = class, pos = Vector(0, 0, 0) })
+end
+
 _G.UTIL_Remove = function(e)
   if e == nil then return end
   e.__removed = true
@@ -198,6 +205,8 @@ _G.LinkLuaModifier = function(name, path, motion)
 end
 local BUILTIN_MODS = {
   modifier_knockback = true, modifier_invulnerable = true, modifier_invisible = true, modifier_item_ultimate_scepter_consumed = true,
+  modifier_sven_warcry = true, modifier_sven_gods_strength = true,
+  modifier_pudge_flesh_heap_block = true, modifier_pudge_dismember = true,
   modifier_item_aghanims_shard = true, modifier_stunned = true, modifier_kill = true, modifier_truesight = true,
 }
 local function loadModifierClass(name)
@@ -299,6 +308,10 @@ function Ability:IsCooldownReady() return (self.cdUntil or 0) <= now end
 function Ability:IsInAbilityPhase() return false end
 function Ability:GetHeroLevelRequiredToUpgrade() return self.ult and (6 + self.level * 6) or (1 + self.level * 2) end
 function Ability:GetCaster() return self.owner end
+function Ability:GetToggleState() return self.toggled == true end
+function Ability:GetChannelTime() return self:GetSpecialValueFor("AbilityChannelTime") end
+function Ability:GetChannelStartTime() return self.channelStart or 0 end
+function Ability:IsChanneling() return self.channelEnd ~= nil and now < self.channelEnd end
 local function levelValue(values, key, level)
   local arr = values[key]
   if arr == nil then return 0 end
@@ -311,15 +324,16 @@ function Ability:GetLevelSpecialValueNoOverride(key, level)
   return levelValue(self.values, key, level)
 end
 -- Значение с учетом модификаторов OVERRIDE_ABILITY_SPECIAL (так подсказки и логика видят сферы)
-function Ability:GetSpecialValueFor(key)
-  local base = levelValue(self.values, key, math.max(0, self.level - 1))
+function Ability:GetSpecialValueFor(key, level)
+  level = level or math.max(0, self.level - 1)
+  local base = levelValue(self.values, key, level)
   local owner = self.owner
   if owner and owner.modifiers then
     for _, m in ipairs(owner.modifiers) do
       if not m.__dead then
         local d = declared(m)
         if d.GetModifierOverrideAbilitySpecial then
-          local ev = { ability = self, ability_special_value = key, ability_special_level = math.max(0, self.level - 1) }
+          local ev = { ability = self, ability_special_value = key, ability_special_level = level }
           if callMod(m, "GetModifierOverrideAbilitySpecial", ev) == 1 then
             local v = callMod(m, "GetModifierOverrideAbilitySpecialValue", ev)
             if type(v) ~= "number" then fail(m.__name .. ": OverrideAbilitySpecialValue вернул не число") else return v end
@@ -341,11 +355,11 @@ function Ability:SetCurrentAbilityCharges(charges) self.charges = charges end
 function Ability:MarkAbilityButtonDirty() end
 function Ability:RefreshCharges() self.charges = self:GetMaxAbilityCharges(self.level - 1) end
 function Ability:GetAbilityChargeRestoreTime(level)
-  local duration = self:GetSpecialValueFor("AbilityChargeRestoreTime")
+  local duration = self:GetSpecialValueFor("AbilityChargeRestoreTime", level)
   if duration > 0 then return duration end
   return self:GetLevelSpecialValueNoOverride("AbilityCooldown", level)
 end
-function Ability:GetCooldown(level) return levelValue(self.values, "AbilityCooldown", level) end
+function Ability:GetCooldown(level) return self:GetSpecialValueFor("AbilityCooldown", level) end
 function Ability:GetEffectiveCooldown(level)
   local cd = self:GetCooldown(level)
   local owner = self.owner
@@ -485,6 +499,7 @@ function NPC:IsIllusion() return self.illusion == true end
 function NPC:IsTempestDouble() return false end
 function NPC:IsClone() return false end
 function NPC:IsBuilding() return self.building == true end
+function NPC:IsWard() return self.unitName == "npc_dota_observer_wards" or self.unitName == "npc_dota_sentry_wards" end
 function NPC:IsCreep() return not self.isHero end
 function NPC:IsNeutralUnitType() return self.team == DOTA_TEAM_NEUTRALS end
 function NPC:IsInvulnerable() return modStates(self)[MODIFIER_STATE_INVULNERABLE] == true end
@@ -494,6 +509,7 @@ function NPC:IsReincarnating() return false end
 function NPC:IsChanneling() return false end
 function NPC:IsMuted() return modStates(self)[MODIFIER_STATE_MUTED] == true end
 function NPC:IsHexed() return modStates(self)[MODIFIER_STATE_HEXED] == true end
+function NPC:IsAttackImmune() return modStates(self)[MODIFIER_STATE_ATTACK_IMMUNE] == true end
 function NPC:IsOutOfGame() return modStates(self)[MODIFIER_STATE_OUT_OF_GAME] == true end
 function NPC:IsStunned() return modStates(self)[MODIFIER_STATE_STUNNED] == true end
 function NPC:IsInvisible() return modStates(self)[MODIFIER_STATE_INVISIBLE] == true end
@@ -519,6 +535,8 @@ function NPC:GetStrength() return 20 + (self.level or 1) * 3 end
 function NPC:GetAgility() return 20 + (self.level or 1) * 2 end
 function NPC:IsSilenced() return modStates(self)[MODIFIER_STATE_SILENCED] == true end
 function NPC:IsCurrentlyHorizontalMotionControlled() return false end
+function NPC:IsDisarmed() return modStates(self)[MODIFIER_STATE_DISARMED] == true end
+function NPC:PassivesDisabled() return modStates(self)[MODIFIER_STATE_PASSIVES_DISABLED] == true end
 function NPC:IsRooted() return modStates(self)[MODIFIER_STATE_ROOTED] == true end
 function NPC:GiveMana(m) assert(type(m) == "number", "GiveMana: число") self.mana = math.min(self.maxmana or 0, (self.mana or 0) + m) end
 function NPC:SetCursorCastTarget(t) if t ~= nil then assert(IsValidEntity(t), "SetCursorCastTarget: цель") end self.cursorTarget = t end
@@ -537,6 +555,17 @@ function NPC:GetAbilityByIndex(i) return (self.abilities or {})[i + 1] end
 function NPC:FindAbilityByName(n)
   for _, a in ipairs(self.abilities or {}) do if a.name == n then return a end end
   return nil
+end
+function NPC:SwapAbilities(a, b, ena, enb)
+  local i, j
+  for k, ab in ipairs(self.abilities) do
+    if ab.name == a then i = k end
+    if ab.name == b then j = k end
+  end
+  assert(i and j, "SwapAbilities: обе способности должны существовать")
+  self.abilities[i]:SetActivated(ena)
+  self.abilities[j]:SetActivated(enb)
+  self.abilities[i], self.abilities[j] = self.abilities[j], self.abilities[i]
 end
 function NPC:UpgradeAbility(a)
   if (self.abilityPoints or 0) <= 0 then fail("UpgradeAbility без очков") return end
@@ -695,7 +724,8 @@ function NPC:AddNewModifier(caster, ability, name, params)
       and method ~= "GetModifierPreAttack_CriticalStrike"
       and method ~= "GetModifierTotalDamageOutgoing_Percentage" and method ~= "GetModifierIncomingDamageConstant" then
       local v = callMod(m, method, {})
-      if v ~= nil and type(v) ~= "number" then fail(name .. ":" .. method .. " вернул " .. type(v)) end
+      local expected = method == "GetModifierModelChange" and "string" or "number"
+      if v ~= nil and type(v) ~= expected then fail(name .. ":" .. method .. " вернул " .. type(v)) end
     end
   end
   for _, s in ipairs({ "IsHidden", "IsPurgable", "IsDebuff", "GetTexture", "CheckState", "GetEffectName", "GetEffectAttachType" }) do
@@ -707,13 +737,12 @@ function NPC:MoveToPosition(v) assert(isVec(v), "MoveToPosition: нужен Vect
 function NPC:MoveToPositionAggressive(v) assert(isVec(v), "MoveToPositionAggressive: нужен Vector") self.order = { kind = "move", pos = v, aggressive = true } end
 function NPC:MoveToTargetToAttack(t) assert(IsValidEntity(t), "MoveToTargetToAttack: неверная цель") self.order = { kind = "attack", target = t } end
 function NPC:Stop() self.order = nil end
-local function castEvent(u, a, t)
-  -- Событие «способность применена» получают все модификаторы (как в Доте)
+local function castEvent(method, u, a, t)
   local ev = { unit = u, ability = a, target = t }
   for _, x in ipairs(allUnits) do
     if not x.__removed then
       for _, m in ipairs(x.modifiers) do
-        if not m.__dead and declared(m).OnAbilityFullyCast then callMod(m, "OnAbilityFullyCast", ev) end
+        if not m.__dead and declared(m)[method] then callMod(m, method, ev) end
       end
     end
   end
@@ -734,7 +763,28 @@ function NPC:CastAbilityNoTarget(a, pid, t)
     return
   end
   if a.StartCooldown then a:StartCooldown(math.max(1, a:GetEffectiveCooldown(math.max(0, a.level - 1)))) end
-  if a.owner == self and not (a.IsItem and a:IsItem()) then castEvent(self, a, t) end
+  if a.owner == self and not (a.IsItem and a:IsItem()) then
+    if a.name == "sven_warcry" then
+      self:AddNewModifier(self, a, "modifier_sven_warcry", { duration = a:GetSpecialValueFor("duration") })
+    elseif a.name == "sven_gods_strength" then
+      self:AddNewModifier(self, a, "modifier_sven_gods_strength", { duration = a:GetSpecialValueFor("AbilityDuration") })
+    end
+    if a.name == "pudge_rot" then
+      a.toggled = not a.toggled
+    elseif a.name == "pudge_flesh_heap" then
+      self:AddNewModifier(self, a, "modifier_pudge_flesh_heap_block", { duration = a:GetSpecialValueFor("duration") })
+    elseif a.name == "pudge_dismember" and t and t.team ~= self.team then
+      a.channelStart = now
+      local duration = a:GetChannelTime()
+      a.channelEnd = now + duration
+      t:AddNewModifier(self, a, "modifier_pudge_dismember", { duration = duration })
+      self:SetContextThink("sim_pudge_dismember", function()
+        castEvent("OnAbilityEndChannel", self, a, t)
+      end, duration)
+    end
+    castEvent("OnAbilityExecuted", self, a, t)
+    castEvent("OnAbilityFullyCast", self, a, t)
+  end
 end
 function NPC:CastAbilityOnTarget(t, a, pid)
   assert(IsValidEntity(t), "CastAbilityOnTarget: цель")
@@ -840,6 +890,7 @@ _G.ParticleManager = {
   DestroyParticle = function(_, id, imm) end,
   ReleaseParticleIndex = function(_, id) end,
   SetParticleControlEnt = function() end,
+  SetParticleControlForward = function(_, id, cp, v) assert(type(id) == "number" and isVec(v), "SetParticleControlForward: аргументы") end,
   CreateParticleForTeam = function(self, name, attach, owner, team)
     assert(type(team) == "number", "CreateParticleForTeam: команда")
     return self:CreateParticle(name, attach, owner)
@@ -924,7 +975,9 @@ applyDamageImpl = function(t)
     end
   end
   if attacker and attacker.modifiers then
-    local out = sumProp(attacker, "GetModifierTotalDamageOutgoing_Percentage", { attacker = attacker, target = victim, damage = dmg, inflictor = t.ability })
+    local out = sumProp(attacker, "GetModifierTotalDamageOutgoing_Percentage", { attacker = attacker, target = victim, damage = dmg,
+      damage_category = t.__attack and DOTA_DAMAGE_CATEGORY_ATTACK or DOTA_DAMAGE_CATEGORY_SPELL,
+      inflictor = t.ability, record = t.__record })
     dmg = dmg * (1 + out / 100)
   end
   victim.hp = victim.hp - dmg
@@ -1280,6 +1333,7 @@ end
 -- Простая физика: движение, атаки, подбор, руны, возрождение
 ------------------------------------------------------------------------------------------------
 local lastAttack = {}
+local attackRecord = 0
 local function stepUnits(dt)
   for _, u in ipairs(allUnits) do
     if not u.__removed and u.alive and not u.dummy then
@@ -1305,19 +1359,28 @@ local function stepUnits(dt)
               if (lastAttack[id] or -10) + 1.3 <= now then
                 lastAttack[id] = now
                 if t.team ~= u.team and not t:IsInvulnerable() and not modStates(u)[MODIFIER_STATE_DISARMED] then
+                  attackRecord = attackRecord + 1
+                  local ev = { attacker = u, target = t, record = attackRecord, ranged_attack = u.ranged,
+                    damage_category = DOTA_DAMAGE_CATEGORY_ATTACK }
+                  for _, m in ipairs(u.modifiers) do
+                    if not m.__dead and declared(m).OnAttackRecord then callMod(m, "OnAttackRecord", ev) end
+                  end
                   local dmg = u:GetAttackDamage() + (u.isHero and sumProp(u, "GetModifierPreAttack_BonusDamage") or 0)
                   local crit = 0
                   for _, m in ipairs(u.modifiers) do
                     if not m.__dead and declared(m).GetModifierPreAttack_CriticalStrike then
-                      local c = callMod(m, "GetModifierPreAttack_CriticalStrike", { attacker = u, target = t })
+                      local c = callMod(m, "GetModifierPreAttack_CriticalStrike", ev)
                       if type(c) == "number" and c > crit then crit = c end
                     end
                   end
                   if crit > 0 then dmg = dmg * crit / 100 end
                   if u.isHero then dmg = dmg * 2.2 end -- герои в симуляции чуть быстрее убивают
-                  local done = applyDamage({ victim = t, attacker = u, damage = dmg, damage_type = DAMAGE_TYPE_PHYSICAL, __attack = true })
-                  local ev = { attacker = u, target = t, damage = done, ranged_attack = u.ranged }
-                  for _, m in ipairs(u.modifiers) do if not m.__dead and declared(m).OnAttackLanded then callMod(m, "OnAttackLanded", ev) end end
+                  ev.damage = applyDamage({ victim = t, attacker = u, damage = dmg, damage_type = DAMAGE_TYPE_PHYSICAL,
+                    __attack = true, __record = ev.record })
+                  for _, m in ipairs(u.modifiers) do
+                    if not m.__dead and declared(m).OnAttackLanded then callMod(m, "OnAttackLanded", ev) end
+                    if not m.__dead and declared(m).OnAttackRecordDestroy then callMod(m, "OnAttackRecordDestroy", ev) end
+                  end
                   -- Нейтралы отвечают
                   if t.alive and t.team == DOTA_TEAM_NEUTRALS and not t.order and t.unitName ~= "npc_orb_goblin" then t.order = { kind = "attack", target = u } end
                 end

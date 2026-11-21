@@ -3,7 +3,7 @@
   "_universal": [
     ["p_grave", "H", "", "code", 1, "Неупокоенный", "Undying", "Смертельный урон оставляет вас с 1 здоровьем: 1.5 с неуязвимости и +25% здоровья (раз в 90 с; каждая копия — на 20 с чаще)", "Lethal damage leaves you at 1 health: 1.5 s of invulnerability and +25% health (once per 90 s; each copy 20 s more often)"],
     ["p_feast", "H", "", "code", 1, "Кровавый пир", "Blood Feast", "Убийство или помощь: +30% здоровья и маны и −50% оставшейся перезарядки обычных способностей (каждая копия +15%)", "Kill or assist: +30% health and mana and −50% remaining cooldown of basic abilities (each copy +15%)"],
-    ["p_meteor", "H", "", "code", 1, "Метеор", "Meteor", "Способность с перезарядкой от 3 с роняет метеор в точку или цель через 0.7 с: 60 + 6 × минута урона в 275 и оглушение 0.4 с (раз в 3 с; копии — больше урона)", "An ability with a 3 s+ cooldown drops a meteor on the point or target after 0.7 s: 60 + 6 × minute damage in 275 and a 0.4 s stun (once per 3 s; copies add damage)"],
+    ["p_meteor", "H", "", "code", 1, "Метеор", "Meteor", "Способность с базовой перезарядкой от 3 с роняет метеор в точку или цель через 0.7 с: 60 + 6 × минута урона в 275 и оглушение 0.4 с (раз в 3 с; копии — больше урона)", "An ability with a 3 s+ base cooldown drops a meteor on the point or target after 0.7 s: 60 + 6 × minute damage in 275 and a 0.4 s stun (once per 3 s; copies add damage)"],
     ["p_martyr", "H", "", "code", 1, "Последний залп", "Last Salvo", "При смерти вы взрываетесь: 20% макс. здоровья магического урона врагам в 450 (убийство засчитывается вам; каждая копия +10%)", "On death you explode: 20% of max health as magic damage to enemies within 450 (kills count for you; each copy +10%)"],
     ["p_vanish", "H", "", "code", 1, "Исчезновение", "Vanish", "После ультимейта вы невидимы 2.5 с (атака или способность снимают) и получаете +20% скорости бега (каждая копия +1 с)", "After your ultimate you turn invisible for 2.5 s (attacking or casting breaks it) and get +20% movement speed (each copy +1 s)"],
     ["p_hunter", "H", "", "code", 1, "Охотник за сокровищами", "Treasure Hunter", "Сферы Повелителя, сферы у края и сундуки захватываются в 1.75 раза быстрее (копии — еще быстрее)", "Overboss orbs, edge orbs and chests are captured 1.75× faster (copies are faster still)"],
@@ -26,8 +26,8 @@
       2,
       "Критический удар",
       "Critical strike",
-      "20% шанс нанести атакой 200% урона; каждая следующая такая сфера — еще +50% к силе крита",
-      "20% chance to deal 200% attack damage; each extra copy adds +50% crit damage"
+      "20% шанс удвоить урон обычной атаки. Действует вместе с критом предмета или способности. Каждая следующая сфера даёт +50 п.п. к множителю сферы, до 450%.",
+      "20% chance to double normal attack damage. Stacks with item and ability crits. Each additional orb adds 50 percentage points to the orb multiplier, up to 450%."
     ],
     [
       "p_burn_aura",
@@ -104,31 +104,20 @@
       "can_crit:1",
       1,
       "Режущий вихрь",
-      "Critical Fury",
-      "Вихрь клинков может наносить критический удар Blade Dance",
-      "Blade Fury can critically strike with Blade Dance"
-    ],
-    [
-      "jugg_p_hurricane",
-      "Q",
-      "juggernaut_blade_fury",
-      "bonus_movespeed:45;movement_slow:20",
-      1,
-      "Ураган",
-      "Hurricane",
-      "Во время Вихря +45 скорости бега, враги в радиусе замедлены на 20%",
-      "During Blade Fury +45 movement speed, enemies inside are slowed by 20%"
+      "Cutting Spin",
+      "Blade Fury может критовать через Blade Dance. «Буря клинков» помогает дольше удерживать цель внутри.",
+      "Blade Fury can crit through Blade Dance. Blade Storm helps keep enemies inside the spin."
     ],
     [
       "jugg_p_dispel",
       "R",
       "juggernaut_omni_slash",
-      "dispel:1",
+      "code",
       1,
-      "Неуловимый",
-      "Elusive",
-      "Омнислэш снимает с Джаггернаута отрицательные эффекты, после него 1.5 с невосприимчивости к магии",
-      "Omnislash dispels Juggernaut and grants 1.5 s of spell immunity after it ends"
+      "Антракт",
+      "Intermission",
+      "После Omnislash появляется щит на 170 + 30 за уровень ульты на 1,5 с. С «На бис» щит действует 2,2 с.",
+      "After Omnislash gain a barrier for 170 + 30 per ultimate level for 1.5 s. With Encore it lasts 2.2 s."
     ],
     [
       "jugg_p_roaming_ward",
@@ -147,10 +136,10 @@
       "juggernaut_healing_ward",
       "code",
       1,
-      "Целебный вихрь",
-      "Healing Fury",
-      "Во время Вихря лечение тотема удваивается и действует в 1200 от тотема",
-      "During Blade Fury the ward heals twice as much and reaches 1200 range"
+      "Укол стража",
+      "Guardian Cut",
+      "Обычная атака замедляет героя на 25% на 1,2 с, если он и Джаггернаут в пределах 475 от Healing Ward. Помогает нанести второй удар для взвода тотема.",
+      "A normal attack slows a hero by 25% for 1.2 s when both are within 475 of Healing Ward. Helps land the second hit to arm Last Word Ward."
     ],
     [
       "jugg_p_death_dance",
@@ -159,9 +148,9 @@
       "code",
       1,
       "Танец смерти",
-      "Dance of Death",
-      "Каждый крит по герою сокращает перезарядку Вихря и Омнислэша на 1 с",
-      "Each critical strike on a hero reduces Blade Fury and Omnislash cooldowns by 1 s"
+      "Death Dance",
+      "Три обычных удара по одному герою за 5 с снимают 1 с оставшейся перезарядки Blade Fury и Omnislash, раз в 5 с. Удары «Трёх резов» засчитываются.",
+      "Three normal hits on one hero within 5 s remove 1 s of remaining Blade Fury and Omnislash cooldown, once every 5 s. Hits during Three Cuts count."
     ],
     [
       "jugg_p_finisher",
@@ -171,8 +160,8 @@
       1,
       "Добивание",
       "Finisher",
-      "+12% шанса крита по героям ниже 40% здоровья",
-      "+12% critical strike chance against heroes below 40% health"
+      "Против героев ниже 40% здоровья даёт дополнительный бросок на крит Blade Dance с шансом 12%. Третий рез по такой цели получает ещё +35 п.п. к криту.",
+      "Grants an additional 12% Blade Dance crit roll against heroes below 40% health. The third cut gets another 35 percentage points of crit damage against them."
     ],
     [
       "jugg_p_bloody_omni",
@@ -180,10 +169,10 @@
       "juggernaut_omni_slash",
       "code",
       1,
-      "Кровавый омнислэш",
-      "Bloody Omnislash",
-      "Удары Омнислэша по героям лечат Джаггернаута на 25% урона",
-      "Omnislash strikes on heroes heal Juggernaut for 25% of the damage"
+      "Открытая рана",
+      "Open Wound",
+      "Два удара Omnislash по одному герою оставляют метку на 5 с. Следующая обычная атака или удар «На бис» снимает метку и добавляет 140 + 8% недостающего здоровья физическим уроном, до 400.",
+      "Two Omnislash hits on one hero mark them for 5 s. Your next normal or Encore hit consumes it to deal 140 + 8% missing health as physical damage, up to 400."
     ]
   ],
   "npc_dota_hero_lina": [
