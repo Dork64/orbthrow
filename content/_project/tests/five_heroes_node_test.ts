@@ -11,7 +11,7 @@ afterEach(() => vi.unstubAllGlobals());
 
 describe("новая пятёрка", () => {
     it("все герои доступны, у каждого 12 синих, 8 обычных фиолетовых, 4 механики, 4 легендарки", () => {
-        expect(HERO_POOL.length).toBe(31);
+        expect(HERO_POOL.length).toBe(32);
         const list = readFileSync("game/scripts/npc/herolist.txt", "utf8");
         for (const name of heroes) {
             const hero = "npc_dota_hero_" + name;

@@ -4774,6 +4774,59 @@ ____exports.FX_LIST = {
         icon = "tidehunter_kraken_shell"
     },
     {
+        ab = "tusk_ice_shards",
+        t = "hit",
+        by = "ab",
+        heroOnly = 1,
+        icd = 1,
+        debuff = {dur = 4, props = {armor = -5}},
+        key = "tusk_m_0_1",
+        orb = "tusk_m_0",
+        hero = "npc_dota_hero_tusk",
+        icon = "tusk_ice_shards"
+    },
+    {
+        ab = "tusk_snowball",
+        t = "hit",
+        by = "ab",
+        heroOnly = 1,
+        icd = 1,
+        heal = 35,
+        key = "tusk_m_1_1",
+        orb = "tusk_m_1",
+        hero = "npc_dota_hero_tusk",
+        icon = "tusk_snowball"
+    },
+    {
+        ab = "tusk_tag_team",
+        t = "buff",
+        dur = 4,
+        props = {as = 55},
+        key = "tusk_m_2_1",
+        orb = "tusk_m_2",
+        hero = "npc_dota_hero_tusk",
+        icon = "tusk_tag_team"
+    },
+    {
+        ab = "tusk_walrus_punch",
+        t = "buff",
+        dur = 4,
+        props = {armor = 12},
+        key = "tusk_m_3_1",
+        orb = "tusk_m_3",
+        hero = "npc_dota_hero_tusk",
+        icon = "tusk_walrus_punch"
+    },
+    {
+        ab = "tusk_ice_shards",
+        t = "charges",
+        n = 1,
+        key = "tusk_l_wall_1",
+        orb = "tusk_l_wall",
+        hero = "npc_dota_hero_tusk",
+        icon = "tusk_ice_shards"
+    },
+    {
         ab = "",
         t = "lowhp",
         thr = 35,

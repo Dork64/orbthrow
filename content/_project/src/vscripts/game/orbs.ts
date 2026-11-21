@@ -170,6 +170,8 @@ function openNext(op: OrbPlayer) {
 /** Постоянный исполнитель геройских эффектов сфер. */
 function ensureExtras(op: OrbPlayer, h: CDOTA_BaseNPC_Hero) {
     // Эффекты фиолетовых и легендарных сфер (у каждого героя)
+    if (h.GetUnitName() === "npc_dota_hero_tusk" && !h.HasModifier("modifier_orb_tusk"))
+        h.AddNewModifier(h, undefined, "modifier_orb_tusk", {});
     if (!h.HasModifier("modifier_orb_hero")) h.AddNewModifier(h, undefined, "modifier_orb_hero", {});
 
 }

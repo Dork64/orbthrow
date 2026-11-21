@@ -14,9 +14,9 @@ describe("сферы 20.11: новые пулы и баланс", () => {
             expect(UPGRADE_DEFS.find(o => o.id === row.id)).toBeUndefined();
             expect(UPGRADE_DEFS.filter(o => o.id === row.replacement).length).toBe(1);
         }
-        expect(UPGRADE_DEFS.filter(o => o.rarity === "blue").length).toBe(369);
-        expect(UPGRADE_DEFS.filter(o => o.rarity === "purple").length).toBe(386);
-        expect(UPGRADE_DEFS.filter(o => o.rarity === "legend").length).toBe(128);
+        expect(UPGRADE_DEFS.filter(o => o.rarity === "blue").length).toBe(381);
+        expect(UPGRADE_DEFS.filter(o => o.rarity === "purple").length).toBe(398);
+        expect(UPGRADE_DEFS.filter(o => o.rarity === "legend").length).toBe(132);
     });
 
     it("сопротивление доходит до 50%, все геройские баффы входят в общий предел", () => {

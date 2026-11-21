@@ -79,6 +79,14 @@ local HERO_BUILDS = {
         "item_octarine_core",
         "item_sheepstick"
     },
+    npc_dota_hero_tusk = {
+        "item_phase_boots",
+        "item_blink",
+        "item_desolator",
+        "item_black_king_bar",
+        "item_assault",
+        "item_abyssal_blade"
+    },
     npc_dota_hero_sand_king = {
         "item_arcane_boots",
         "item_blink",

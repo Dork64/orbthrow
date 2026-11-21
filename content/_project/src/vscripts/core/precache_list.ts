@@ -38,6 +38,7 @@ export const PRECACHE_MODELS = [
     "models/courier/greevil/gold_greevil.vmdl",
     "models/courier/lockjaw/lockjaw_flying.vmdl",
     "models/development/invisiblebox.vmdl",
+    "models/particle/snowball.vmdl",
     "models/props_gameplay/gold_coin_overthrow.vmdl",
     "models/props_gameplay/rune_arcane.vmdl",
     "models/props_gameplay/rune_doubledamage01.vmdl",

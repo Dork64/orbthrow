@@ -249,6 +249,20 @@
 			}
 		}
 	}
+	"tusk_ice_shards"
+	{
+		"AbilityValues"
+		{
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"23 20 17 14"
+			}
+		}
+	}
 	"viper_nethertoxin"
 	{
 		"AbilityValues"

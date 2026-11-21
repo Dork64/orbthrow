@@ -1,4 +1,6 @@
 {
+  "DOTA_Tooltip_modifier_orb_tusk_stance": "Tusk stance",
+  "DOTA_Tooltip_modifier_orb_tusk_stance_Description": "Steer the avalanche with move orders. Press Stop after the Tag Team combo to parry. Recast Punch to release early.",
   "addon_game_name": "ORBTHROW",
   "DOTA_Tooltip_modifier_orb_spawn_protection": "Spawn Protection",
   "DOTA_Tooltip_modifier_orb_spawn_protection_Description": "Invulnerable, but cannot attack, cast spells or use items until moving away from the respawn point.",

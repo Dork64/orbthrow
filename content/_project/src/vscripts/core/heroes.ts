@@ -11,6 +11,6 @@ export const HEROES_B = [
     "npc_dota_hero_zuus", "npc_dota_hero_faceless_void", "npc_dota_hero_bloodseeker", "npc_dota_hero_windrunner",
     "npc_dota_hero_ogre_magi", "npc_dota_hero_snapfire",
     // 20.11: полный набор сфер и механик
-    "npc_dota_hero_puck", "npc_dota_hero_slark", "npc_dota_hero_razor", "npc_dota_hero_necrolyte", "npc_dota_hero_sand_king",
+    "npc_dota_hero_puck", "npc_dota_hero_slark", "npc_dota_hero_razor", "npc_dota_hero_necrolyte", "npc_dota_hero_sand_king", "npc_dota_hero_tusk",
 ];
 export const HERO_POOL = [...HEROES_A, ...HEROES_B];

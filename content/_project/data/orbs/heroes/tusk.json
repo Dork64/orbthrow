@@ -1,0 +1,372 @@
+{
+ "hero": "npc_dota_hero_tusk",
+ "orbs": [
+  {
+   "id": "tusk_b_00",
+   "r": "blue",
+   "branch": "Q",
+   "ab": "tusk_ice_shards",
+   "max": 4,
+   "ru": "Колотый лёд",
+   "en": "Crushed Ice",
+   "mods": "shard_damage:%16"
+  },
+  {
+   "id": "tusk_b_01",
+   "r": "blue",
+   "branch": "Q",
+   "ab": "tusk_ice_shards",
+   "max": 3,
+   "ru": "Долгая зима",
+   "en": "Long Winter",
+   "mods": "shard_duration:0.8:s"
+  },
+  {
+   "id": "tusk_b_02",
+   "r": "blue",
+   "branch": "Q",
+   "ab": "tusk_ice_shards",
+   "max": 4,
+   "ru": "Быстрый залп",
+   "en": "Rapid Volley",
+   "mods": "shard_speed:150"
+  },
+  {
+   "id": "tusk_b_10",
+   "r": "blue",
+   "branch": "W",
+   "ab": "tusk_snowball",
+   "max": 4,
+   "ru": "Тяжёлый накат",
+   "en": "Heavy Roll",
+   "mods": "snowball_damage:%16"
+  },
+  {
+   "id": "tusk_b_11",
+   "r": "blue",
+   "branch": "W",
+   "ab": "tusk_snowball",
+   "max": 4,
+   "ru": "Разгон",
+   "en": "Acceleration",
+   "mods": "snowball_speed:45"
+  },
+  {
+   "id": "tusk_b_12",
+   "r": "blue",
+   "branch": "W",
+   "ab": "tusk_snowball",
+   "max": 3,
+   "ru": "Широкий шар",
+   "en": "Wider Ball",
+   "mods": "snowball_radius:18"
+  },
+  {
+   "id": "tusk_b_20",
+   "r": "blue",
+   "branch": "E",
+   "ab": "tusk_tag_team",
+   "max": 4,
+   "ru": "Тяжёлая перчатка",
+   "en": "Heavy Glove",
+   "mods": "bonus_damage:14"
+  },
+  {
+   "id": "tusk_b_21",
+   "r": "blue",
+   "branch": "E",
+   "ab": "tusk_tag_team",
+   "max": 3,
+   "ru": "Лишний раунд",
+   "en": "Extra Round",
+   "mods": "debuff_duration:0.65:s"
+  },
+  {
+   "id": "tusk_b_22",
+   "r": "blue",
+   "branch": "E",
+   "ab": "tusk_tag_team",
+   "max": 3,
+   "ru": "Длинные руки",
+   "en": "Long Reach",
+   "mods": "radius:45"
+  },
+  {
+   "id": "tusk_b_30",
+   "r": "blue",
+   "branch": "R",
+   "ab": "tusk_walrus_punch",
+   "max": 4,
+   "ru": "Вес удара",
+   "en": "Punch Weight",
+   "mods": "bonus_damage:18"
+  },
+  {
+   "id": "tusk_b_31",
+   "r": "blue",
+   "branch": "R",
+   "ab": "tusk_walrus_punch",
+   "max": 4,
+   "ru": "Точный удар",
+   "en": "Clean Hit",
+   "mods": "crit_multiplier:20"
+  },
+  {
+   "id": "tusk_b_32",
+   "r": "blue",
+   "branch": "R",
+   "ab": "tusk_walrus_punch",
+   "max": 3,
+   "ru": "Высокий подброс",
+   "en": "High Launch",
+   "mods": "air_time:0.12:s"
+  },
+  {
+   "id": "tusk_p_00",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "tusk_ice_shards",
+   "max": 1,
+   "ru": "Зимний запас",
+   "en": "Winter Stock",
+   "mods": "AbilityManaCost:-25",
+   "ru_d": "Стоимость Shards −25 маны.",
+   "en_d": "Shards costs 25 less mana."
+  },
+  {
+   "id": "tusk_p_01",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "tusk_ice_shards",
+   "max": 1,
+   "ru": "Дальний раскол",
+   "en": "Long Fracture",
+   "mods": "AbilityCastRange:200",
+   "ru_d": "Дальность Shards +200.",
+   "en_d": "Shards gains 200 cast range."
+  },
+  {
+   "id": "tusk_p_10",
+   "r": "purple",
+   "branch": "W",
+   "ab": "tusk_snowball",
+   "max": 1,
+   "ru": "Быстрый старт",
+   "en": "Quick Start",
+   "mods": "cd:12",
+   "ru_d": "Перезарядка Snowball −12%.",
+   "en_d": "Snowball cooldown reduced by 12%."
+  },
+  {
+   "id": "tusk_p_11",
+   "r": "purple",
+   "branch": "W",
+   "ab": "tusk_snowball",
+   "max": 1,
+   "ru": "Жёсткая посадка",
+   "en": "Rough Landing",
+   "mods": "stun_duration:0.25:s",
+   "ru_d": "Оглушение Snowball +0,25 с.",
+   "en_d": "Snowball stuns for 0.25s longer."
+  },
+  {
+   "id": "tusk_p_20",
+   "r": "purple",
+   "branch": "E",
+   "ab": "tusk_tag_team",
+   "max": 1,
+   "ru": "Второе дыхание",
+   "en": "Second Breath",
+   "mods": "cd:15",
+   "ru_d": "Перезарядка Tag Team −15%.",
+   "en_d": "Tag Team cooldown reduced by 15%."
+  },
+  {
+   "id": "tusk_p_21",
+   "r": "purple",
+   "branch": "E",
+   "ab": "tusk_tag_team",
+   "max": 1,
+   "ru": "Липкий лёд",
+   "en": "Sticky Ice",
+   "mods": "slow_duration:0.35:s",
+   "ru_d": "Замедление удара под Tag Team дольше на 0,35 с.",
+   "en_d": "Tag Team attack slow lasts 0.35s longer."
+  },
+  {
+   "id": "tusk_p_30",
+   "r": "purple",
+   "branch": "R",
+   "ab": "tusk_walrus_punch",
+   "max": 1,
+   "ru": "Лёгкий замах",
+   "en": "Light Swing",
+   "mods": "AbilityManaCost:-25",
+   "ru_d": "Стоимость Punch −25 маны.",
+   "en_d": "Punch costs 25 less mana."
+  },
+  {
+   "id": "tusk_p_31",
+   "r": "purple",
+   "branch": "R",
+   "ab": "tusk_walrus_punch",
+   "max": 1,
+   "ru": "Реванш",
+   "en": "Rematch",
+   "mods": "cd:14",
+   "ru_d": "Перезарядка Punch −14%.",
+   "en_d": "Punch cooldown reduced by 14%."
+  },
+  {
+   "id": "tusk_m_0",
+   "r": "purple",
+   "branch": "Q",
+   "ab": "tusk_ice_shards",
+   "max": 1,
+   "ru": "Раскол брони",
+   "en": "Armor Crack",
+   "mech": 1,
+   "ru_d": "Попадание Shards по герою снижает броню на 5 на 4 с.",
+   "en_d": "Shards hits reduce hero armor by 5 for 4s.",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "icd": 1,
+     "debuff": {
+      "dur": 4,
+      "props": {
+       "armor": -5
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "tusk_m_1",
+   "r": "purple",
+   "branch": "W",
+   "ab": "tusk_snowball",
+   "max": 1,
+   "ru": "Белая горячка",
+   "en": "Snow Rush",
+   "mech": 1,
+   "ru_d": "Урон Snowball по герою лечит на 35% нанесённого урона, раз в секунду по цели.",
+   "en_d": "Snowball heals for 35% of hero damage, once per second per target.",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "icd": 1,
+     "heal": 35
+    }
+   ]
+  },
+  {
+   "id": "tusk_m_2",
+   "r": "purple",
+   "branch": "E",
+   "ab": "tusk_tag_team",
+   "max": 1,
+   "ru": "Серия джебов",
+   "en": "Jab Combo",
+   "mech": 1,
+   "ru_d": "Tag Team даёт +55 скорости атаки на 4 с.",
+   "en_d": "Tag Team grants 55 attack speed for 4s.",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 4,
+     "props": {
+      "as": 55
+     }
+    }
+   ]
+  },
+  {
+   "id": "tusk_m_3",
+   "r": "purple",
+   "branch": "R",
+   "ab": "tusk_walrus_punch",
+   "max": 1,
+   "ru": "Стойка чемпиона",
+   "en": "Champion Stance",
+   "mech": 1,
+   "ru_d": "После применения Punch на 4 с даёт +12 брони.",
+   "en_d": "Casting Punch grants 12 armor for 4s.",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 4,
+     "props": {
+      "armor": 12
+     }
+    }
+   ]
+  },
+  {
+   "id": "tusk_l_wall",
+   "r": "legend",
+   "branch": "Q",
+   "ab": "tusk_ice_shards",
+   "max": 1,
+   "ru": "К стенке",
+   "en": "Against the Wall",
+   "code": true,
+   "ru_d": "Два заряда Shards. В точке стены возникает ледяной упор. Удар по герою в сторону упора с расстояния до 220 от него отбрасывает врага и ломает упор: физический урон двух атак плюс магический урон Shards.",
+   "en_d": "Two Shards charges. A strike post forms at the wall. Attack a hero toward a post within 220 to knock them back and break it for two attacks of physical damage plus Shards magic damage.",
+   "ru_aw": "Дальность толчка 300.",
+   "en_aw": "Push reach increases to 300.",
+   "fx": [
+    {
+     "t": "charges",
+     "n": 1
+    }
+   ]
+  },
+  {
+   "id": "tusk_l_roll",
+   "r": "legend",
+   "branch": "W",
+   "ab": "tusk_snowball",
+   "max": 1,
+   "ru": "Лавина",
+   "en": "Avalanche",
+   "code": true,
+   "ru_d": "После попадания штатного Snowball по герою 4 с управляй шаром через ПКМ. Выйди за радиус цели и развернись: второй и третий наезды наносят 150% и 200% урона Snowball. Стоп завершает накат.",
+   "en_d": "After a Snowball hero impact steer with move orders for 4s. Leave the hit radius and turn back for hits dealing 150% and 200% Snowball damage. Stop to exit.",
+   "ru_aw": "Накат 5 с, поворот быстрее.",
+   "en_aw": "Roll lasts 5s and turns faster."
+  },
+  {
+   "id": "tusk_l_counter",
+   "r": "legend",
+   "branch": "E",
+   "ab": "tusk_tag_team",
+   "max": 1,
+   "ru": "Работа вторым номером",
+   "en": "Counterpunch",
+   "code": true,
+   "ru_d": "Во время Tag Team каждый третий удар по герою открывает на 1,5 с парирование. Нажми Стоп: на 1 с блокируешь одну атаку героя или направленное заклинание и прыгаешь с контрударом на 200% атаки плюс урон Tag Team в пределах его удвоенного радиуса.",
+   "en_d": "Every third hero attack during Tag Team opens a 1.5s parry opportunity. Press Stop to block one hero attack or targeted spell for 1s and counter within twice the Tag Team radius for 200% attack damage plus Tag Team damage.",
+   "ru_aw": "Парирование доступно после каждых двух атак.",
+   "en_aw": "Parry opens every two attacks."
+  },
+  {
+   "id": "tusk_l_ko",
+   "r": "legend",
+   "branch": "R",
+   "ab": "tusk_walrus_punch",
+   "max": 1,
+   "ru": "Нокаут",
+   "en": "Knockout",
+   "code": true,
+   "ru_d": "Нажми R по герою вручную для замаха. Можно двигаться. Повторное R бьёт сразу. Через 1,5 с в радиусе удара Туск автоматически проводит усиленный Punch: добавляет ещё один крит и при приземлении наносит 15% недостающего здоровья. Стан сбивает замах.",
+   "en_d": "Manually target a hero with R to wind up while moving. Cast again to punch early. After 1.5s in strike range, punch automatically for an extra critical hit plus 15% missing health upon landing. Stuns interrupt the wind-up.",
+   "ru_aw": "Полный замах 1,1 с.",
+   "en_aw": "Full wind-up takes 1.1s."
+  }
+ ]
+}

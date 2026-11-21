@@ -30,6 +30,7 @@ const HERO_BUILDS: Record<string, string[]> = {
     npc_dota_hero_slark: ["item_power_treads", "item_diffusal_blade", "item_echo_sabre", "item_black_king_bar", "item_skadi", "item_basher", "item_abyssal_blade"],
     npc_dota_hero_razor: ["item_phase_boots", "item_falcon_blade", "item_black_king_bar", "item_sange_and_yasha", "item_shivas_guard", "item_satanic", "item_refresher"],
     npc_dota_hero_necrolyte: ["item_arcane_boots", "item_kaya_and_sange", "item_blink", "item_shivas_guard", "item_black_king_bar", "item_octarine_core", "item_sheepstick"],
+    npc_dota_hero_tusk: ["item_phase_boots", "item_blink", "item_desolator", "item_black_king_bar", "item_assault", "item_abyssal_blade"],
     npc_dota_hero_sand_king: ["item_arcane_boots", "item_blink", "item_kaya_and_sange", "item_black_king_bar", "item_shivas_guard", "item_octarine_core", "item_refresher"],
 };
 

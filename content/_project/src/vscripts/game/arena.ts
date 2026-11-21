@@ -1,3 +1,4 @@
+import type { TuskOrbs } from "../modifiers/modifier_orb_tusk";
 import type { ModifierOrbHero } from "../modifiers/modifier_orb_hero";
 import { resetItemsNet } from "./itemsnet";
 // Ход партии: настройки Доты, состояния игры, главный цикл, победа.
@@ -92,6 +93,14 @@ function configureGameRules() {
 /** Сундук и мешки золота поднимают только настоящие герои (не курьер, не иллюзия). */
 function orderFilter(e: ExecuteOrderFilterEvent): boolean {
     const kind = e.order_type;
+    const selected = Object.keys(e.units);
+    if (selected.length === 1) {
+        const unit = EntIndexToHScript(e.units[selected[0]]) as CDOTA_BaseNPC | undefined;
+        if (isValid(unit) && unit.GetUnitName() === "npc_dota_hero_tusk" && unit.GetPlayerOwnerID() === e.issuer_player_id_const) {
+            const tusk = unit.FindModifierByName("modifier_orb_tusk") as unknown as TuskOrbs | undefined;
+            if (tusk && !tusk.order(e)) return false;
+        }
+    }
     if (kind === UnitOrder.MOVE_TO_POSITION || kind === UnitOrder.MOVE_TO_TARGET || kind === UnitOrder.ATTACK_MOVE) {
         // Особый приказ относится только к своему герою, выделенному отдельно.
         const units = Object.keys(e.units);

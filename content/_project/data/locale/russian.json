@@ -1,4 +1,6 @@
 {
+  "DOTA_Tooltip_modifier_orb_tusk_stance": "Стойка Туска",
+  "DOTA_Tooltip_modifier_orb_tusk_stance_Description": "Следи за значком способности. Снежком управляй ПКМ. После серии под Tag Team нажми Стоп для парирования. Нажми Punch повторно для раннего удара.",
   "addon_game_name": "ORBTHROW",
   "DOTA_Tooltip_modifier_orb_spawn_protection": "Защита возрождения",
   "DOTA_Tooltip_modifier_orb_spawn_protection_Description": "Неуязвим, но не может атаковать, применять способности и предметы, пока не отойдет от места возрождения.",

@@ -36,7 +36,8 @@ ____exports.HEROES_B = {
     "npc_dota_hero_slark",
     "npc_dota_hero_razor",
     "npc_dota_hero_necrolyte",
-    "npc_dota_hero_sand_king"
+    "npc_dota_hero_sand_king",
+    "npc_dota_hero_tusk"
 }
 local ____array_0 = __TS__SparseArrayNew(unpack(____exports.HEROES_A))
 __TS__SparseArrayPush(

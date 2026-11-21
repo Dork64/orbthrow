@@ -12,6 +12,8 @@ const FX_FILE = "modifiers/modifier_orb_fx";
 /** [имя модификатора, файл относительно scripts/vscripts без .lua] */
 export const MODIFIER_LINKS: [string, string][] = [
     ["modifier_orb_battle_shield", "modifiers/modifier_orb_battle_shield"],
+    ["modifier_orb_tusk", "modifiers/modifier_orb_tusk"],
+    ["modifier_orb_tusk_stance", "modifiers/modifier_orb_tusk"],
     ["modifier_orb_controller", "modifiers/modifier_orb_controller"],
     ["modifier_orb_ferocity", "modifiers/modifier_orb_ferocity"],
     ["modifier_orb_goblin", "modifiers/modifier_orb_goblin"],

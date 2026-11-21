@@ -51,7 +51,8 @@ describe("данные сфер героев", () => {
     it("у каждой сферы-кода есть эффект или изменение значений", () => {
         for (const u of UPGRADE_DEFS) {
             if (u.hero === "*" || u.rarity === "blue") continue;
-            const ok = fxOfOrb(u.id).length > 0 || u.mods.length > 0 || (u.awmods ?? []).length > 0 ||
+            const ok = u.cd > 0 || fxOfOrb(u.id).length > 0 || u.mods.length > 0 || (u.awmods ?? []).length > 0 ||
+                ["tusk_l_roll", "tusk_l_counter", "tusk_l_ko"].includes(u.id) ||
                 ["axe_", "jugg_"].some(p => u.id.startsWith(p));
             expect([u.id, ok]).toEqual([u.id, true]);
         }

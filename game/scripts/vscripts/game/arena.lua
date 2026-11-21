@@ -100,6 +100,16 @@ local log = ____util.log
 local safe = ____util.safe
 function orderFilter(e)
     local kind = e.order_type
+    local selected = __TS__ObjectKeys(e.units)
+    if #selected == 1 then
+        local unit = EntIndexToHScript(e.units[selected[1]])
+        if isValid(unit) and unit:GetUnitName() == "npc_dota_hero_tusk" and unit:GetPlayerOwnerID() == e.issuer_player_id_const then
+            local tusk = unit:FindModifierByName("modifier_orb_tusk")
+            if tusk and not tusk:order(e) then
+                return false
+            end
+        end
+    end
     if kind == DOTA_UNIT_ORDER_MOVE_TO_POSITION or kind == DOTA_UNIT_ORDER_MOVE_TO_TARGET or kind == DOTA_UNIT_ORDER_ATTACK_MOVE then
         local units = __TS__ObjectKeys(e.units)
         if #units == 1 then
@@ -153,19 +163,19 @@ function forceHeroes()
             do
                 local id = i
                 if not PlayerResource:IsValidPlayerID(id) or PlayerResource:IsFakeClient(id) then
-                    goto __continue36
+                    goto __continue39
                 end
                 if PlayerResource:HasSelectedHero(id) then
-                    goto __continue36
+                    goto __continue39
                 end
                 local player = PlayerResource:GetPlayer(id)
                 if player == nil then
-                    goto __continue36
+                    goto __continue39
                 end
                 player:MakeRandomHeroSelection()
                 log("игрок", id, "не выбрал героя — случайный")
             end
-            ::__continue36::
+            ::__continue39::
             i = i + 1
         end
     end
