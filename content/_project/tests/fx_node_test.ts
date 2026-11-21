@@ -29,9 +29,9 @@ describe("Пробуждение меняет параметры эффекта"
         expect(fxView(f, false)).toBe(f);
     });
     it("вложенные объекты (цепь) сливаются по полям", () => {
-        const f = fxOfOrb("lina_l_chain")[0];
+        const f = fxOfOrb("lina_l_chain").find(effect => effect.t === "hit")!;
         const a = fxView(f, true) as unknown as { chain: { jumps: number; radius: number; pct: number } };
-        expect(a.chain).toEqual({ jumps: 2, radius: 500, pct: 75 });
+        expect(a.chain).toEqual({ jumps: 1, radius: 500, pct: 45 });
     });
 });
 
@@ -69,9 +69,9 @@ describe("данные сфер героев", () => {
         const b = computeBonuses({ sniper_l_barrage: 1, sniper_p_charge: 1 }, 1);
         expect(overrideValue(b, "sniper_shrapnel", "AbilityCharges", 3)).toBe(6);
         expect(overrideValue(b, "sniper_shrapnel", "shrapnel_damage", 75)).toBeCloseTo(105, 5);
-        const s = computeBonuses({ sven_l_cleave: 1 }, 0);
-        expect(overrideValue(s, "sven_great_cleave", "great_cleave_damage", 90)).toBe(120);
-        const sa = computeBonuses({ sven_l_cleave: 1, awake: 1 }, 0);
-        expect(overrideValue(sa, "sven_great_cleave", "great_cleave_damage", 90)).toBe(150);
+        const wr = computeBonuses({ wr_l_focus: 1 }, 0);
+        expect(overrideValue(wr, "windrunner_focusfire", "focusfire_damage_reduction", -18)).toBe(0);
+        const s = computeBonuses({ sven_l_cleave: 1, awake: 1 }, 0);
+        expect(overrideValue(s, "sven_great_cleave", "great_cleave_damage", 90)).toBeUndefined();
     });
 });

@@ -1,6 +1,6 @@
 const fs = require("node:fs");
 const path = require("node:path");
-const { heroSummary } = require("./kv.js");
+const { heroSummary, loadHeroFile } = require("./kv.js");
 
 function valueOf(value) {
     return typeof value === "object" ? value.value : value;
@@ -36,29 +36,33 @@ function buildNativeCharges(root, { pool, ups, fxList }) {
         }
     }
 
-    const overrides = {};
+    const relative = "game/scripts/npc/npc_abilities_override.txt";
+    const { DOTAAbilities: overrides } = loadHeroFile(path.join(root, relative));
+    let prepared = 0;
     for (const [ability, hero] of [...selected].sort(([a], [b]) => a.localeCompare(b))) {
         const def = summaries.get(hero)?.defs[ability];
         if (def === undefined) throw new Error(`Штатные заряды: не найдена способность ${ability}`);
-        const values = def.AbilityValues ?? {};
-        const charges = values.AbilityCharges ?? def.AbilityCharges;
-        const restore = values.AbilityChargeRestoreTime ?? def.AbilityChargeRestoreTime;
+        const authored = overrides[ability] ?? {};
+        const values = { ...def.AbilityValues, ...authored.AbilityValues };
+        const charges = authored.AbilityCharges ?? values.AbilityCharges ?? def.AbilityCharges;
+        const restore = authored.AbilityChargeRestoreTime ?? values.AbilityChargeRestoreTime ?? def.AbilityChargeRestoreTime;
         if (charges !== undefined && hasPositive(restore)) continue;
         const abilityValues = {};
-        if (charges === undefined) abilityValues.AbilityCharges = "0";
+        if (charges === undefined) abilityValues.AbilityCharges = { value: "0" };
         if (!hasPositive(restore)) {
-            const cooldown = values.AbilityCooldown ?? def.AbilityCooldown;
+            const cooldown = authored.AbilityValues?.AbilityCooldown ?? authored.AbilityCooldown ?? def.AbilityValues?.AbilityCooldown ?? def.AbilityCooldown;
             if (!hasPositive(cooldown)) throw new Error(`Штатные заряды: нет времени восстановления для ${ability}`);
             // При нуле зарядов остаётся обычный КД. После сферы движок берёт его значения, включая таланты, для восстановления зарядов.
-            abilityValues.AbilityChargeRestoreTime = cooldown;
+            abilityValues.AbilityChargeRestoreTime = typeof cooldown === "object" ? cooldown : { value: cooldown };
         }
-        overrides[ability] = { AbilityValues: abilityValues };
+        overrides[ability] = { ...authored, AbilityValues: { ...authored.AbilityValues, ...abilityValues } };
+        prepared++;
     }
 
-    const output = path.join(root, "build/game/scripts/npc/orb_ability_charges.txt");
+    const output = path.join(root, "build", relative);
     fs.mkdirSync(path.dirname(output), { recursive: true });
     fs.writeFileSync(output, `// Сгенерировано tools/native-charges.js из игровых данных и сфер.\n${kvEntries({ DOTAAbilities: overrides }, "")}\n`);
-    console.log(`Штатные заряды: ${selected.size} способностей, подготовлено ${Object.keys(overrides).length}`);
+    console.log(`Штатные заряды: ${selected.size} способностей, подготовлено ${prepared}`);
 }
 
 module.exports = { buildNativeCharges };

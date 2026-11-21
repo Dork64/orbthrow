@@ -1,4 +1,3 @@
-#base "orb_ability_charges.txt"
 // Правки стандартных способностей и предметов для режима (DESIGN 3.6 и 10.4).
 "DOTAAbilities"
 {

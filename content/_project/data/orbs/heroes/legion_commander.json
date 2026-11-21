@@ -143,33 +143,26 @@
    "ab": "legion_commander_overwhelming_odds",
    "ru": "Ветеран похода",
    "en": "Campaign Veteran",
-   "ru_d": "Убийство героя в течение 6 с после Overwhelming Odds лечит на 15% здоровья и навсегда даёт +1 брони, до 6 убийств",
-   "en_d": "Killing a hero within 6 s of Overwhelming Odds heals 15% max health and permanently grants +1 armor, up to 6 kills",
-   "ru_aw": "Пробуждение: лечение 20%, броня за убийство 1.5 (до 9)",
-   "en_aw": "Awakening: 20% healing, 1.5 armor per kill (up to 9)",
+   "ru_d": "Overwhelming Odds метит до 4 героев на 4 с. Атака по метке наносит 135 магического урона и лечит Легионку на 4% макс. здоровья.",
+   "en_d": "Overwhelming Odds marks up to 4 heroes for 4 s. A follow-up attack deals 135 magic damage and heals Legion for 4% max health.",
+   "ru_aw": "Пробуждение: 195 урона и лечение 6%.",
+   "en_aw": "Awakening: 195 damage and 6% healing.",
    "fx": [
     {
-     "t": "kill",
-     "by": "win",
-     "win": 6,
-     "heal": 15,
-     "stack": {
-      "props": {
-       "armor": 1
-      },
-      "max": 6,
-      "perm": 1
-     },
+     "t": "mark",
+     "by": "ab",
+     "consume": [
+      "attack"
+     ],
+     "dur": 4,
+     "icd": 8,
+     "max": 4,
+     "dmg": 135,
      "aw": {
-      "heal": 20,
-      "stack": {
-       "props": {
-        "armor": 1.5
-       },
-       "max": 6,
-       "perm": 1
-      }
-     }
+      "dmg": 195,
+      "heal": 6
+     },
+     "heal": 4
     }
    ]
   },
@@ -219,24 +212,24 @@
    "r": "legend",
    "branch": "R",
    "ab": "legion_commander_duel",
-   "mods": "reward_damage:+15;duration:+1",
+   "mods": "reward_damage:+8;duration:+0.4",
    "fx": [
     {
      "t": "kill",
      "by": "win",
      "win": "duration",
-     "cdpct": 50,
+     "cdpct": 40,
      "aw": {
-      "cdpct": 100
+      "cdpct": 60
      }
     }
    ],
    "ru": "Чемпион",
    "en": "Champion",
-   "ru_d": "Duel длится на 1 с дольше, награда за победу +15 урона; победа снимает половину перезарядки Duel",
-   "en_d": "Duel lasts 1 s longer, victory reward +15 damage; winning removes half of Duel's cooldown",
-   "ru_aw": "Пробуждение: победа полностью обновляет Duel",
-   "en_aw": "Awakening: winning fully refreshes Duel"
+   "ru_d": "Duel длится на 0,4 с дольше, даёт +8 урона за победу. Убийство героя во время Duel сокращает его оставшийся КД на 40%.",
+   "en_d": "Duel lasts 0.4 s longer and grants 8 extra damage for a win. Killing a hero during Duel removes 40% remaining cooldown.",
+   "ru_aw": "Пробуждение: КД сокращается на 60%.",
+   "en_aw": "Awakening: 60% remaining cooldown removed."
   },
   {
    "id": "lc_m_encircle",

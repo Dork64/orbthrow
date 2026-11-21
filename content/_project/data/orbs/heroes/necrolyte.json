@@ -417,8 +417,8 @@
    "max": 1,
    "ru": "Сад увядания",
    "en": "Withering Garden",
-   "ru_d": "Death Pulse отмечает до 4 героев на 8 с. Повторный Pulse спустя хотя бы 0,65 с наносит отмеченному герою 155 магического урона сверх обычного и лечит Некрофоса на 3% макс. здоровья. Метка на цель — раз в 9 с.",
-   "en_d": "Death Pulse marks up to 4 heroes for 8 s. A later Pulse after at least 0.65 s deals 155 extra magic damage and heals Necrophos for 3% max health. Marks have a 9 s cooldown per hero.",
+   "ru_d": "Death Pulse метит до 4 героев на 8 с. Следующий Pulse по ним наносит ещё 155 магического урона и лечит Некрофоса на 4% макс. здоровья за цель. Метка на героя — раз в 8 с.",
+   "en_d": "Death Pulse marks up to 4 heroes for 8 s. Another Pulse detonates each mark for 155 magic damage and heals Necrophos for 4% max health. Once per hero per 8 s.",
    "fx": [
     {
      "t": "mark",
@@ -427,19 +427,20 @@
       "necrolyte_death_pulse"
      ],
      "dur": 8,
-     "icd": 9,
+     "icd": 8,
      "max": 4,
      "dmg": 155,
-     "arm": 0.65,
-     "heal": 3,
      "aw": {
-      "dmg": 230,
-      "heal": 4
-     }
+      "dmg": 215,
+      "heal": 5
+     },
+     "arm": 0.35,
+     "nextCast": true,
+     "heal": 4
     }
    ],
-   "ru_aw": "Пробуждение: 230 урона и лечение 4% за метку.",
-   "en_aw": "Awakening: 230 damage and 4% healing per mark."
+   "ru_aw": "Пробуждение: 215 урона, лечение 5%.",
+   "en_aw": "Awakening: 215 damage and 5% healing."
   },
   {
    "id": "necro_l_breathcycle",
@@ -449,23 +450,35 @@
    "max": 1,
    "ru": "Между жизнью и смертью",
    "en": "Between Life and Death",
-   "ru_d": "В течение 5 с после Ghost Shroud урон от героев в 12% макс. здоровья запускает ответ: 200 магического урона в 430, лечение 8% макс. здоровья и −15% получаемого урона на 3 с. КД 13 с.",
-   "en_d": "For 5 s after Ghost Shroud, taking hero damage equal to 12% max health retaliates for 200 magic damage within 430, heals 8% max health and grants 15% damage reduction for 3 s. 13 s cooldown.",
+   "ru_d": "Ghost Shroud даёт +17% скорости на 3 с. Если за 5 с получено 12% макс. здоровья уроном от героев, Некрофос отвечает на 175 магического урона в 430, лечится на 8% и на 3 с получает на 15% меньше урона. КД ответа 13 с.",
+   "en_d": "Ghost Shroud grants 17% movement speed for 3 s. Taking 12% max health in hero damage within 5 s retaliates for 175 magic damage in 430, heals 8% max health and reduces incoming damage by 15% for 3 s. Retaliation cooldown 13 s.",
    "fx": [
+    {
+     "t": "buff",
+     "dur": 3,
+     "props": {
+      "ms": 17
+     },
+     "aw": {
+      "props": {
+       "ms": 23
+      }
+     }
+    },
     {
      "t": "guard",
      "win": 5,
      "thr": 12,
      "icd": 13,
      "radius": 430,
-     "dmg": 200,
+     "dmg": 175,
      "dur": 3,
      "props": {
       "inc": -15
      },
      "heal": 8,
      "aw": {
-      "dmg": 285,
+      "dmg": 245,
       "heal": 10,
       "props": {
        "inc": -20
@@ -473,8 +486,8 @@
      }
     }
    ],
-   "ru_aw": "Пробуждение: 285 урона, лечение 10%, снижение урона 20%.",
-   "en_aw": "Awakening: 285 damage, 10% healing and 20% damage reduction."
+   "ru_aw": "Пробуждение: +23% скорости, 245 урона, 10% лечения, −20% входящего урона.",
+   "en_aw": "Awakening: 23% movement speed, 245 damage, 10% healing and 20% damage reduction."
   },
   {
    "id": "necro_l_lastcircle",
@@ -484,36 +497,38 @@
    "max": 1,
    "ru": "Круг немощи",
    "en": "Circle of Frailty",
-   "ru_d": "Death Pulse оставляет зону 425 на 4 с. Первый тик по герою наносит 145 магического урона, остальные по 30. В зоне лечение слабее на 32%.",
-   "en_d": "Death Pulse leaves a 425-radius zone for 4 s. The first tick per hero deals 145 magic damage, later ticks deal 30. Healing is reduced by 32% inside.",
+   "ru_d": "Death Pulse оставляет зону радиусом 480 на 4 с. Первый тик наносит 130 магического урона, остальные по 28. В зоне лечение слабее на 32%, скорость ниже на 14%.",
+   "en_d": "Death Pulse leaves a 480-radius zone for 4 s. The first tick deals 130 magic damage; later ticks deal 28. Enemies in the zone receive 32% less healing and move 14% slower.",
    "fx": [
     {
      "t": "zone",
-     "ab": "necrolyte_death_pulse",
      "at": "self",
-     "radius": 425,
+     "radius": 480,
      "dur": 4,
-     "dmg": 30,
-     "entryDmg": 115,
      "every": 1,
+     "dmg": 28,
+     "entryDmg": 102,
+     "ab": "necrolyte_death_pulse",
      "debuff": {
+      "dur": 1.2,
       "props": {
-       "healred": 32
-      },
-      "dur": 1.2
+       "healred": 32,
+       "ms": -14
+      }
      },
      "aw": {
-      "entryDmg": 165,
+      "entryDmg": 147,
       "debuff": {
        "props": {
-        "healred": 40
+        "healred": 40,
+        "ms": -20
        }
       }
      }
     }
    ],
-   "ru_aw": "Пробуждение: первый тик наносит 195, лечение слабее на 40%.",
-   "en_aw": "Awakening: 195 first tick damage, 40% healing reduction."
+   "ru_aw": "Пробуждение: первый тик 175, −40% лечения, −20% скорости.",
+   "en_aw": "Awakening: 175 first tick, 40% healing reduction and 20% slow."
   },
   {
    "id": "necro_l_testament",
@@ -523,28 +538,36 @@
    "max": 1,
    "ru": "Завещание",
    "en": "Testament",
-   "ru_d": "Коса метит цель на 5 с. Следующий Death Pulse по ней наносит ещё 240 магического урона и лечит Некрофоса на 8% максимального здоровья. Метка не взрывается от самой Косы.",
-   "en_d": "Scythe marks its target for 5 s. The next Death Pulse deals 240 extra magic damage to it and heals Necrophos for 8% max health. Scythe itself cannot detonate the mark.",
+   "ru_d": "Если герой выжил после урона Reaper’s Scythe, Death Pulse в следующие 5 с взрывает метку на 220 урона и лечит Некрофоса на 5% макс. здоровья. Убийство самой Косой снимает 22% оставшегося КД.",
+   "en_d": "If a hero survives Reaper’s Scythe damage, Death Pulse within 5 s detonates the mark for 220 damage and heals Necrophos for 5% max health. A Scythe kill removes 22% remaining cooldown.",
    "fx": [
     {
      "t": "mark",
-     "by": "cast",
+     "by": "ab",
      "consume": [
       "necrolyte_death_pulse"
      ],
      "dur": 5,
      "icd": 10,
      "max": 1,
-     "dmg": 240,
-     "heal": 8,
+     "dmg": 220,
      "aw": {
-      "dmg": 350,
-      "heal": 11
+      "dmg": 315,
+      "heal": 8
+     },
+     "heal": 5
+    },
+    {
+     "t": "kill",
+     "by": "ab",
+     "cdpct": 22,
+     "aw": {
+      "cdpct": 32
      }
     }
    ],
-   "ru_aw": "Пробуждение: 350 урона и лечение 11%.",
-   "en_aw": "Awakening: 350 damage and 11% healing."
+   "ru_aw": "Пробуждение: 315 урона, лечение 8%, −32% оставшегося КД за убийство.",
+   "en_aw": "Awakening: 315 damage, 8% healing and 32% remaining cooldown removed on a kill."
   }
  ]
 }

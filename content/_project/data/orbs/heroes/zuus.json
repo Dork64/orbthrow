@@ -256,14 +256,36 @@
    "r": "legend",
    "branch": "Q",
    "ab": "zuus_arc_lightning",
-   "mods": "jump_count:+6;radius:+150",
-   "awmods": "has_unlimited_jumps:=1",
-   "ru": "Бесконечная дуга",
-   "en": "Endless Arc",
-   "ru_d": "Arc Lightning прыгает еще 6 раз, радиус прыжка +150",
-   "en_d": "Arc Lightning jumps 6 more times, jump radius +150",
-   "ru_aw": "Пробуждение: прыжки без ограничения",
-   "en_aw": "Awakening: unlimited jumps"
+   "ru": "Грозовая рамка",
+   "en": "Stormgate",
+   "ru_d": "Первый Arc Lightning оставляет полюс на 5 с. Примените Q снова с расстояния 300–850 от полюса: между точками появится линия на 4 с. Она отталкивает и замедляет первого задевшего её героя. Для отхода выйдите из кольца конца, вернитесь в любое кольцо и нажмите Q: Зевс переместится на другой конец, линия погаснет. КД 10 с с замыкания.",
+   "en_d": "Arc Lightning leaves a pole for 5 s. Cast again 300–850 away to connect both points for 4 s. The first enemy hero to touch the wire is pushed away and slowed. Leave the endpoint ring, then step into either ring and cast Q to jump to the other end and consume the wire. 10 s cooldown from linking.",
+   "ru_aw": "Пробуждение: минимальная дистанция 220. Линия выдерживает два контакта с разными героями.",
+   "en_aw": "Awakening: 220 minimum range. The wire survives one extra contact with a different hero.",
+   "fx": [
+    {
+     "t": "wire",
+     "within": 5,
+     "dur": 4,
+     "arm": 0.55,
+     "icd": 10,
+     "minDist": 300,
+     "maxDist": 850,
+     "radius": 85,
+     "dist": 225,
+     "max": 1,
+     "debuff": {
+      "dur": 1.65,
+      "props": {
+       "ms": -40
+      }
+     },
+     "aw": {
+      "minDist": 220,
+      "max": 2
+     }
+    }
+   ]
   },
   {
    "id": "zeus_l_bolt",
@@ -292,50 +314,51 @@
    "r": "legend",
    "branch": "E",
    "ab": "zuus_heavenly_jump",
-   "mods": "targets:+2;range:+300",
    "fx": [
     {
-     "t": "buff",
-     "dur": 5,
-     "props": {
-      "sa": 15
-     },
+     "t": "spring",
+     "radius": 120,
+     "dur": 6,
+     "arm": 0.65,
+     "delay": 0.5,
+     "dist": 525,
+     "range": 500,
      "aw": {
-      "props": {
-       "sa": 25
-      }
+      "ownerReturn": true
      }
     }
    ],
-   "ru": "Небесный скачок",
-   "en": "Sky Leap",
-   "ru_d": "Heavenly Jump бьет 3 целей, дальность поиска +300; после прыжка +15% усиления способностей на 5 с",
-   "en_d": "Heavenly Jump hits 3 targets, search range +300; +15% spell amplification for 5 s after the jump",
-   "ru_aw": "Пробуждение: +25% усиления",
-   "en_aw": "Awakening: +25% amplification"
+   "ru": "Чужой прыжок",
+   "en": "Borrowed Leap",
+   "ru_d": "Heavenly Jump оставляет на месте отрыва трамплин на 6 с. Через короткую паузу он подбрасывает первого наступившего героя на 525 по направлению его взгляда. Зевс должен сначала выйти из кольца. Если прыгает Зевс, при посадке он бьёт ближайшего врага уроном Heavenly Jump.",
+   "en_d": "Heavenly Jump leaves a springboard for 6 s. After a short windup, the first hero who steps on it is launched 525 units in the direction they face. Zeus must step out first. If Zeus takes it, he zaps the closest enemy hero on landing for Heavenly Jump damage.",
+   "ru_aw": "Пробуждение: после прыжка врага трамплин взводится ещё раз только для Зевса.",
+   "en_aw": "Awakening: after an enemy uses the board, it arms again for Zeus only."
   },
   {
    "id": "zeus_l_wrath",
    "r": "legend",
    "branch": "R",
    "ab": "zuus_thundergods_wrath",
-   "mods": "damage:%25",
    "fx": [
     {
-     "t": "kill",
-     "by": "ab",
-     "cdpct": 25,
+     "t": "thunderball",
+     "range": 1050,
+     "dur": 5,
+     "delay": 0.75,
+     "dist": 475,
+     "pct": 140,
      "aw": {
-      "cdpct": 40
+      "bolt": true
      }
     }
    ],
-   "ru": "Гнев Олимпа",
-   "en": "Olympian Wrath",
-   "ru_d": "Thundergod's Wrath +25% урона; каждое убийство им сокращает перезарядку на 25%",
-   "en_d": "Thundergod's Wrath deals +25% damage; every kill with it cuts the cooldown by 25%",
-   "ru_aw": "Пробуждение: перезарядка −40% за убийство",
-   "en_aw": "Awakening: −40% cooldown per kill"
+   "ru": "Гром с рук",
+   "en": "Pass the Thunder",
+   "ru_d": "Вместо глобального урона Wrath даёт ближайшему видимому врагу в 1050 шаровую молнию на 5 с. Если врага нет, шар получает Зевс. Носитель передаёт шар успешной атакой с расстояния до 475, в том числе обратно Зевсу. Время не сбрасывается. В конце шар бьёт носителя на 140% урона Wrath. Возвращённый шар не может убить Зевса.",
+   "en_d": "Wrath replaces its global damage with a five-second thunderball on the closest visible enemy hero within 1050. Zeus takes it if nobody is nearby. The carrier passes it by landing an attack within 475, including back to Zeus. The timer never resets. At expiry, it hits its carrier for 140% Wrath damage. A returned ball cannot kill Zeus.",
+   "ru_aw": "Пробуждение: когда шар у Зевса, он может передать его попаданием Lightning Bolt.",
+   "en_aw": "Awakening: when Zeus carries the ball, he can pass it by landing Lightning Bolt."
   }
  ]
 }

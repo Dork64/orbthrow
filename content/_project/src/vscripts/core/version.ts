@@ -1,1 +1,1 @@
-export const BUILD_VERSION = "2026-11-21 16:47 МСК";
+export const BUILD_VERSION = "2026-11-21 19:23 МСК";

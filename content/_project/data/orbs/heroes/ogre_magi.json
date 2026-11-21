@@ -316,14 +316,14 @@
    "r": "legend",
    "branch": "R",
    "ab": "ogre_magi_multicast",
-   "mods": "multicast_2_times:+15;multicast_3_times:+15;multicast_4_times:+10",
-   "awmods": "multicast_4_times:+15",
+   "mods": "multicast_2_times:+10;multicast_3_times:+7;multicast_4_times:+4",
+   "awmods": "multicast_4_times:+6",
    "ru": "Безумная удача",
    "en": "Insane Luck",
-   "ru_d": "Multicast: шанс двойного +15%, тройного +15%, четверного +10%",
-   "en_d": "Multicast: double +15%, triple +15%, quadruple +10% chance",
-   "ru_aw": "Пробуждение: четверной еще +15%",
-   "en_aw": "Awakening: quadruple +15% more"
+   "ru_d": "Multicast: шанс двойного +10 п. п., тройного +7, четверного +4.",
+   "en_d": "Multicast gains 10 points of double, 7 of triple and 4 of quadruple cast chance.",
+   "ru_aw": "Пробуждение: шанс четверного +10 п. п. от базового.",
+   "en_aw": "Awakening: 10 extra points of quadruple cast chance."
   }
  ]
 }

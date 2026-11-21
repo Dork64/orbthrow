@@ -12,11 +12,13 @@
 		<include src="file://{resources}/scripts/custom_game/boss.js" />
 		<include src="file://{resources}/scripts/custom_game/help.js" />
 		<include src="file://{resources}/scripts/custom_game/slots.js" />
+		<include src="file://{resources}/scripts/custom_game/ability_charges.js" />
 		<include src="file://{resources}/scripts/custom_game/neutrals.js" />
 		<include src="file://{resources}/scripts/custom_game/test_panel.js" />
 	</scripts>
 	<Panel class="OrbHud" hittest="false">
 		<Panel id="WorldMarks" hittest="false" />
+		<Panel id="OrbChargeOverlay" hittest="false" hittestchildren="false" />
 		<Panel id="ChestArrow" class="Hidden" hittest="false">
 			<Panel id="ChestArrowIcon" hittest="false" />
 			<Label id="ChestArrowText" text="" hittest="false" />

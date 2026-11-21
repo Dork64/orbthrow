@@ -1,3 +1,4 @@
+import type { ModifierOrbHero } from "../modifiers/modifier_orb_hero";
 import { resetItemsNet } from "./itemsnet";
 // Ход партии: настройки Доты, состояния игры, главный цикл, победа.
 
@@ -90,6 +91,19 @@ function configureGameRules() {
 
 /** Сундук и мешки золота поднимают только настоящие герои (не курьер, не иллюзия). */
 function orderFilter(e: ExecuteOrderFilterEvent): boolean {
+    const kind = e.order_type;
+    if (kind === UnitOrder.MOVE_TO_POSITION || kind === UnitOrder.MOVE_TO_TARGET || kind === UnitOrder.ATTACK_MOVE) {
+        // Особый приказ относится только к своему герою, выделенному отдельно.
+        const units = Object.keys(e.units);
+        if (units.length === 1) {
+            const hero = EntIndexToHScript(e.units[units[0]]) as CDOTA_BaseNPC | undefined;
+            if (isValid(hero) && hero.IsRealHero() && hero.GetPlayerOwnerID() === e.issuer_player_id_const) {
+                const mod = hero.FindModifierByName("modifier_orb_hero") as unknown as ModifierOrbHero | undefined;
+                const target = e.entindex_target > 0 ? EntIndexToHScript(e.entindex_target) as CDOTA_BaseNPC | undefined : undefined;
+                if (mod?.ManeuverOrder(kind, target, Vector(e.position_x ?? 0, e.position_y ?? 0, e.position_z ?? 0))) return false;
+            }
+        }
+    }
     if (e.order_type !== UnitOrder.PICKUP_ITEM) return true;
     const phys = EntIndexToHScript(e.entindex_target) as CDOTA_Item_Physical | undefined;
     if (!isValid(phys)) return true;

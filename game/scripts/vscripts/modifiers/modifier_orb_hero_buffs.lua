@@ -293,82 +293,6 @@ end
 function ModifierOrbJuggWardArmor.prototype.GetModifierPhysicalArmorBonus(self)
     return HERO_CODE.wardArmor
 end
---- Святилище: меньше получаемого урона рядом с тотемом (стаки — процент).
-____exports.ModifierOrbJuggSanctuary = __TS__Class()
-local ModifierOrbJuggSanctuary = ____exports.ModifierOrbJuggSanctuary
-ModifierOrbJuggSanctuary.name = "ModifierOrbJuggSanctuary"
-__TS__ClassExtends(ModifierOrbJuggSanctuary, ModBase)
-function ModifierOrbJuggSanctuary.prototype.IsHidden(self)
-    return false
-end
-function ModifierOrbJuggSanctuary.prototype.IsPurgable(self)
-    return false
-end
-function ModifierOrbJuggSanctuary.prototype.GetTexture(self)
-    return "juggernaut_healing_ward"
-end
-function ModifierOrbJuggSanctuary.prototype.DeclareFunctions(self)
-    return {MODIFIER_PROPERTY_INCOMING_DAMAGE_PERCENTAGE}
-end
-function ModifierOrbJuggSanctuary.prototype.GetModifierIncomingDamage_Percentage(self)
-    return -self:GetStackCount()
-end
---- Тысяча порезов: кровотечение, каждое наложение — отдельный экземпляр.
-____exports.ModifierOrbJuggBleed = __TS__Class()
-local ModifierOrbJuggBleed = ____exports.ModifierOrbJuggBleed
-ModifierOrbJuggBleed.name = "ModifierOrbJuggBleed"
-__TS__ClassExtends(ModifierOrbJuggBleed, ModBase)
-function ModifierOrbJuggBleed.prototype.____constructor(self, ...)
-    ModBase.prototype.____constructor(self, ...)
-    self.perTick = 0
-end
-function ModifierOrbJuggBleed.prototype.IsHidden(self)
-    return false
-end
-function ModifierOrbJuggBleed.prototype.IsDebuff(self)
-    return true
-end
-function ModifierOrbJuggBleed.prototype.IsPurgable(self)
-    return true
-end
-function ModifierOrbJuggBleed.prototype.GetTexture(self)
-    return "juggernaut_blade_dance"
-end
-function ModifierOrbJuggBleed.prototype.GetAttributes(self)
-    return MODIFIER_ATTRIBUTE_MULTIPLE
-end
-function ModifierOrbJuggBleed.prototype.GetEffectName(self)
-    return "particles/units/heroes/hero_bloodseeker/bloodseeker_rupture.vpcf"
-end
-function ModifierOrbJuggBleed.prototype.GetEffectAttachType(self)
-    return PATTACH_ABSORIGIN_FOLLOW
-end
-function ModifierOrbJuggBleed.prototype.OnCreated(self, params)
-    if not IsServer() then
-        return
-    end
-    local ticks = math.max(
-        1,
-        math.floor(HERO_CODE.cutsDuration / 0.5)
-    )
-    self.perTick = (params.total or 0) / ticks
-    self:StartIntervalThink(0.5)
-end
-function ModifierOrbJuggBleed.prototype.OnIntervalThink(self)
-    local victim = self:GetParent()
-    local caster = self:GetCaster()
-    if not victim:IsAlive() or caster == nil or not IsValidEntity(caster) or self.perTick <= 0 then
-        return
-    end
-    ApplyDamage({
-        victim = victim,
-        attacker = caster,
-        damage = self.perTick,
-        damage_type = DAMAGE_TYPE_PHYSICAL,
-        damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION,
-        ability = self:GetAbility()
-    })
-end
 --- Неуловимый: невосприимчивость к магии после Омнислэша.
 ____exports.ModifierOrbJuggImmune = __TS__Class()
 local ModifierOrbJuggImmune = ____exports.ModifierOrbJuggImmune
@@ -400,7 +324,5 @@ modifier_orb_axe_arena = registerModifier("modifier_orb_axe_arena", ____exports.
 modifier_orb_axe_arena_buff = registerModifier("modifier_orb_axe_arena_buff", ____exports.ModifierOrbAxeArenaBuff)
 modifier_orb_axe_free_cull = registerModifier("modifier_orb_axe_free_cull", ____exports.ModifierOrbAxeFreeCull)
 modifier_orb_jugg_ward_armor = registerModifier("modifier_orb_jugg_ward_armor", ____exports.ModifierOrbJuggWardArmor)
-modifier_orb_jugg_sanctuary = registerModifier("modifier_orb_jugg_sanctuary", ____exports.ModifierOrbJuggSanctuary)
-modifier_orb_jugg_bleed = registerModifier("modifier_orb_jugg_bleed", ____exports.ModifierOrbJuggBleed)
 modifier_orb_jugg_immune = registerModifier("modifier_orb_jugg_immune", ____exports.ModifierOrbJuggImmune)
 return ____exports

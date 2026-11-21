@@ -192,85 +192,60 @@
    "r": "legend",
    "branch": "W",
    "ab": "sven_great_cleave",
-   "mods": "great_cleave_damage:=120",
-   "awmods": "great_cleave_damage:=150",
-   "ru": "Великий раскол",
-   "en": "Great Sunder",
-   "ru_d": "Раскол наносит 120% урона атаки",
-   "en_d": "Great Cleave deals 120% of the attack damage",
-   "ru_aw": "Пробуждение: 150% урона",
-   "en_aw": "Awakening: 150% damage"
+   "ru": "Раскол в два удара",
+   "en": "Double Hew",
+   "ru_d": "Первая атака по герою намечает борозду от цели вперёд. После короткой паузы следующая атака по любому герою раскрывает борозду: врагов на линии ранит и сдвигает вперёд.",
+   "en_d": "Your first hit on a hero marks a fault running past them. After a short windup, another attack on any hero opens the fault, damaging enemies on its line and pushing them forward.",
+   "ru_aw": "Пробуждение: борозда длиннее, толчок дальше.",
+   "en_aw": "Awakening: a longer fault and stronger push.",
+   "fx": [
+    {
+     "t": "maneuver",
+     "mode": "rift"
+    }
+   ]
   },
   {
    "id": "sven_l_steeltempo",
    "r": "legend",
    "branch": "E",
    "ab": "sven_warcry",
+   "ru": "Плечом вперёд",
+   "en": "Shoulder First",
+   "ru_d": "После Warcry разбегитесь по прямой. При первом столкновении с героем Свен протащит его вперёд и продвинется вслед. Резкий поворот сбрасывает разбег; можно увернуться вбок.",
+   "en_d": "After Warcry, get a straight running start. Sven carries the first hero he collides with forward and follows them. A sharp turn resets the run; enemies can step aside.",
+   "ru_aw": "Пробуждение: нужен более короткий разбег.",
+   "en_aw": "Awakening: needs a shorter running start.",
    "fx": [
     {
-     "t": "buff",
-     "dur": "duration",
-     "props": {
-      "range": 100
-     },
-     "aw": {
-      "props": {
-       "range": 150
-      }
-     }
-    },
-    {
-     "t": "hit",
-     "by": "attack",
-     "win": "duration",
-     "every": 3,
-     "heroOnly": 1,
-     "icd": 1,
-     "extra": {
-      "atk": 45,
-      "type": "phys"
-     },
-     "aw": {
-      "extra": {
-       "atk": 65,
-       "type": "phys"
-      }
-     }
+     "t": "maneuver",
+     "mode": "ram"
     }
-   ],
-   "ru": "Стальной ритм",
-   "en": "Steel Tempo",
-   "ru_d": "Во время Warcry: +100 дальности атаки; каждая 3-я атака по одному герою наносит ещё 45% урона атаки физическим уроном (не чаще раза в секунду по цели)",
-   "en_d": "During Warcry: +100 attack range; every third attack on the same hero deals 45% attack damage as extra physical damage (at most once per second per target)",
-   "ru_aw": "Пробуждение: дальность +150, дополнительный урон 65% атаки",
-   "en_aw": "Awakening: +150 range, 65% attack damage"
+   ]
   },
   {
    "id": "sven_l_avatar",
    "r": "legend",
    "branch": "R",
    "ab": "sven_gods_strength",
+   "ru": "Положить меч",
+   "en": "Plant the Sword",
+   "ru_d": "Под God's Strength нажмите A и щёлкните рядом с собой, чтобы оставить меч. Пока он там, Свен обезоружен. После взвода ПКМ по кольцу возвращает к мечу и разбрасывает врагов. Соперник может первым подойти к мечу и погасить его.",
+   "en_d": "During God's Strength, attack-move near your feet to plant your sword and become disarmed. Once it arms, right-click its ring to return to it and sweep enemies away. An enemy can reach it first to ground it.",
+   "ru_aw": "Пробуждение: меч можно забрать с большей дистанции.",
+   "en_aw": "Awakening: retrieve the sword from farther away.",
    "fx": [
     {
-     "t": "buff",
-     "dur": "AbilityDuration",
-     "props": {
-      "inc": -20,
-      "cleave": 100
-     },
-     "aw": {
+     "t": "maneuver",
+     "mode": "sword",
+     "debuff": {
+      "dur": 4.5,
       "props": {
-       "inc": -30
+       "disarm": 1
       }
      }
     }
-   ],
-   "ru": "Аватар",
-   "en": "Avatar",
-   "ru_d": "Во время God's Strength Свен получает на 20% меньше урона и раскалывает еще 100% урона атаки",
-   "en_d": "During God's Strength Sven takes 20% less damage and cleaves an extra 100% of his attack damage",
-   "ru_aw": "Пробуждение: −30% получаемого урона",
-   "en_aw": "Awakening: −30% damage taken"
+   ]
   },
   {
    "id": "sven_m_thunderseal",

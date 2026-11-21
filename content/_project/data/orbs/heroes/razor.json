@@ -412,28 +412,37 @@
    "max": 1,
    "ru": "Линия горизонта",
    "en": "Horizon Line",
-   "ru_d": "Первое попадание Plasma Field метит до 5 героев на 4 с. Повторное попадание спустя 0,45 с взрывает метку на 220 магического урона. Метка на цель — раз в 7 с.",
-   "en_d": "The first Plasma Field hit marks up to 5 heroes for 4 s. Another hit after 0.45 s detonates it for 220 magic damage. Marks have a 7 s cooldown per hero.",
+   "ru_d": "Первое попадание Plasma Field добавляет 65 магического урона раз в 6 с по герою. Если обратная волна попадёт по тому же герою, она взорвёт метку ещё на 160.",
+   "en_d": "Plasma Field’s first hit adds 65 magic damage once per hero per 6 s. If the returning wave hits the same hero, it detonates the mark for another 160.",
    "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "icd": 6,
+     "extra": {
+      "flat": 65,
+      "type": "magic"
+     }
+    },
     {
      "t": "mark",
      "by": "ab",
      "consume": [
       "razor_plasma_field"
      ],
-     "dur": 4,
+     "dur": 3,
      "icd": 7,
      "max": 5,
-     "dmg": 220,
-     "arm": 0.45,
+     "dmg": 160,
      "aw": {
-      "dmg": 310,
-      "arm": 0.35
-     }
+      "dmg": 230
+     },
+     "arm": 0.35
     }
    ],
-   "ru_aw": "Пробуждение: взрыв наносит 310, минимальный интервал — 0,35 с.",
-   "en_aw": "Awakening: 310 detonation damage, 0.35 s minimum interval."
+   "ru_aw": "Пробуждение: обратная волна взрывает метку на 230.",
+   "en_aw": "Awakening: 230 detonation damage on return."
   },
   {
    "id": "razor_l_tension",
@@ -476,46 +485,39 @@
    "max": 1,
    "ru": "Проводимость",
    "en": "Conductance",
-   "ru_d": "Storm Surge метит до 4 героев на 5 с. Ваша атака по метке наносит 170 магического урона. Каждый настоящий разряд Storm Surge сокращает КД Static Link на 1,25 с раз в 2 с по цели.",
-   "en_d": "Storm Surge marks up to 4 heroes for 5 s. Your attack consumes the mark for 170 magic damage. Each native Surge strike cuts Static Link cooldown by 1.25 s, once per 2 s per target.",
+   "ru_d": "Шанс штатного разряда Storm Surge +8 п. п. По герою он наносит ещё 95 магического урона и снижает броню на 4 на 3 с. Усиленный разряд — раз в 3 с по цели.",
+   "en_d": "Storm Surge’s native strike chance rises by 8 percentage points. It deals 95 bonus magic damage to a hero and reduces armor by 4 for 3 s, once per target per 3 s.",
    "fx": [
-    {
-     "t": "mark",
-     "by": "ab",
-     "consume": [
-      "attack"
-     ],
-     "dur": 5,
-     "icd": 8,
-     "max": 4,
-     "dmg": 170,
-     "aw": {
-      "dmg": 235
-     }
-    },
     {
      "t": "hit",
      "by": "ab",
      "heroOnly": 1,
-     "cdr": {
-      "abs": [
-       "razor_static_link"
-      ],
-      "sec": 1.25
+     "icd": 3,
+     "debuff": {
+      "dur": 3,
+      "props": {
+       "armor": -4
+      }
      },
-     "icd": 2,
+     "extra": {
+      "flat": 95,
+      "type": "magic"
+     },
      "aw": {
-      "cdr": {
-       "abs": [
-        "razor_static_link"
-       ],
-       "sec": 1.75
+      "extra": {
+       "flat": 145
+      },
+      "debuff": {
+       "props": {
+        "armor": -6
+       }
       }
      }
     }
    ],
-   "ru_aw": "Пробуждение: 235 урона по метке и 1,75 с сокращения КД.",
-   "en_aw": "Awakening: 235 mark damage and 1.75 s cooldown reduction."
+   "ru_aw": "Пробуждение: ещё 145 урона и −6 брони.",
+   "en_aw": "Awakening: 145 bonus damage and 6 armor reduction.",
+   "mods": "strike_pct_chance:+8"
   },
   {
    "id": "razor_l_capacitor",
@@ -525,31 +527,42 @@
    "max": 1,
    "ru": "Накопленный разряд",
    "en": "Stored Discharge",
-   "ru_d": "Первые 8 с после Eye of the Storm накопите от героев урон в 13% макс. здоровья. Тогда один раз ударьте на 250 магического урона по героям в 475 и получите +35% скорости на 3 с. КД 14 с.",
-   "en_d": "For 8 s after Eye of the Storm, taking hero damage equal to 13% max health triggers one 250 magic damage blast within 475 and grants 35% movement speed for 3 s. 14 s cooldown.",
+   "ru_d": "Первые 8 с Eye of the Storm дают Разору +45 скорости атаки и +14% к бегу. Вражеские герои в 425 теряют 3 брони и получают на 22% меньше лечения.",
+   "en_d": "For the first 8 s of Eye of the Storm, Razor gains 45 attack speed and 14% movement speed. Enemy heroes within 425 lose 3 armor and receive 22% less healing.",
    "fx": [
     {
-     "t": "guard",
-     "win": 8,
-     "thr": 13,
-     "icd": 14,
-     "radius": 475,
-     "dmg": 250,
-     "dur": 3,
+     "t": "buff",
+     "dur": 8,
      "props": {
-      "ms": 35
+      "as": 45,
+      "ms": 14
      },
      "aw": {
-      "dmg": 350,
       "props": {
-       "ms": 40
-      },
-      "heal": 6
+       "as": 65,
+       "ms": 20
+      }
+     }
+    },
+    {
+     "t": "aura",
+     "win": 8,
+     "radius": 425,
+     "heroOnly": 1,
+     "props": {
+      "healred": 22,
+      "armor": -3
+     },
+     "aw": {
+      "props": {
+       "healred": 30,
+       "armor": -4
+      }
      }
     }
    ],
-   "ru_aw": "Пробуждение: 350 урона, +40% скорости, лечение 6% максимального здоровья.",
-   "en_aw": "Awakening: 350 damage, 40% movement speed, 6% max health healed."
+   "ru_aw": "Пробуждение: +65 скорости атаки, +20% к бегу, −4 брони и −30% лечения.",
+   "en_aw": "Awakening: 65 attack speed, 20% movement speed, 4 armor and 30% healing reduction."
   }
  ]
 }

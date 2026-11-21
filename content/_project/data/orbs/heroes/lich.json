@@ -207,14 +207,29 @@
    "r": "legend",
    "branch": "R",
    "ab": "lich_chain_frost",
-   "mods": "jumps:+5;bonus_jump_damage:+10",
-   "awmods": "damage:+150",
    "ru": "Вечная цепь",
    "en": "Endless Chain",
-   "ru_d": "Chain Frost делает на 5 прыжков больше, урон за прыжок +10",
-   "en_d": "Chain Frost makes 5 more jumps, damage per jump +10",
-   "ru_aw": "Пробуждение: урон +150",
-   "en_aw": "Awakening: damage +150"
+   "ru_d": "Chain Frost метит до 4 задетых героев на 5 с. Frost Blast по метке наносит 160 дополнительного магического урона.",
+   "en_d": "Chain Frost marks up to 4 heroes it damages for 5 s. Frost Blast detonates a mark for 160 extra magic damage.",
+   "ru_aw": "Пробуждение: 235 дополнительного урона, метка на 6 с.",
+   "en_aw": "Awakening: 235 extra damage and a 6 s mark.",
+   "fx": [
+    {
+     "t": "mark",
+     "by": "ab",
+     "consume": [
+      "lich_frost_nova"
+     ],
+     "dur": 5,
+     "icd": 8,
+     "max": 4,
+     "dmg": 160,
+     "aw": {
+      "dmg": 235,
+      "dur": 6
+     }
+    }
+   ]
   },
   {
    "id": "lich_m_autonova",

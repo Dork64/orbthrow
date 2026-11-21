@@ -225,6 +225,10 @@ function ____exports.computeBonuses(stacks, primaryAttr)
     end
     return b
 end
+--- Подмена штатного удара Wrath срабатывает до действия движка. Урон шара считается отдельно.
+function ____exports.replacesWrathDamage(b, ability, key)
+    return ability == "zuus_thundergods_wrath" and key == "damage" and (b.code.zeus_l_wrath or 0) > 0
+end
 --- Итоговое значение ключа способности с учетом сфер; undefined — сферы его не меняют.
 function ____exports.overrideValue(b, ability, key, base)
     local ____opt_8 = b.specials[ability]

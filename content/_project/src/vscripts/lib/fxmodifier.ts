@@ -55,7 +55,7 @@ export function fxPropsOf(f: FxDef): FxProps | undefined {
             return f.props;
         case "kill":
             return f.stack !== undefined ? f.stack.props : undefined;
-        case "zone": case "hit": case "blast": case "trail": case "trap": case "storm":
+        case "maneuver": case "wire": case "zone": case "hit": case "blast": case "trail": case "trap": case "storm":
             return f.debuff !== undefined ? f.debuff.props : undefined;
         default:
             return undefined;
@@ -75,7 +75,7 @@ function allProps(f: FxDef): Set<PropKey> {
 }
 
 export function fxIsDebuff(f: FxDef): boolean {
-    return f.t === "mark" || f.t === "zone" || f.t === "hit" || f.t === "blast" || f.t === "aura" || f.t === "trail" || f.t === "trap" || f.t === "storm";
+    return f.t === "maneuver" || f.t === "thunderball" || f.t === "wire" || f.t === "mark" || f.t === "zone" || f.t === "hit" || f.t === "blast" || f.t === "aura" || f.t === "trail" || f.t === "trap" || f.t === "storm";
 }
 
 /** Свойства умножаются на число стаков. */
@@ -128,7 +128,11 @@ export class ModifierOrbFx extends ModBase {
         const f = this.fx();
         return f !== undefined && fxIsDebuff(f);
     }
-    IsPurgable() { return this.IsDebuff(); }
+    IsPurgable() { return !this.IgnoreTenacity() && this.IsDebuff(); }
+    IgnoreTenacity() {
+        const f = this.fx();
+        return f?.t === "thunderball" || (f?.t === "maneuver" && f.mode === "sword");
+    }
     RemoveOnDeath() {
         const f = this.fx();
         if (f === undefined) return true;

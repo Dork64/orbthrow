@@ -40,7 +40,7 @@ describe("сферы 20.11: новые пулы и баланс", () => {
             }
         }
         const campaign = fxOfOrb("lc_l_campaign")[0];
-        expect(campaign.t === "kill" && campaign.stack?.max).toBe(6);
+        expect(campaign).toMatchObject({ t: "mark", by: "ab", consume: ["attack"], max: 4 });
     });
 });
 
@@ -96,10 +96,21 @@ describe("штатные заряды от сфер", () => {
         f.engine.syncCharges();
         expect(f.count()).toBe(5);
     });
-    it("Earthshock получает два заряда всего, а не три", () => {
+    it("легендарный разлом не даёт Earthshock дополнительных зарядов", () => {
         const f = fixture(2, 0, 0, "ursa_l_shock", "ursa_earthshock");
         f.engine.syncCharges();
-        expect(f.count()).toBe(2);
+        expect(f.count()).toBe(0);
         expect(nativeChargeCount(0, 1)).toBe(2);
     });
+});
+
+it("итоговый KV содержит штатные настройки зарядов Bolt и Nova прямо в файле overrides", () => {
+    const { DOTAAbilities: kv } = require("../tools/kv.js").loadHeroFile("build/game/scripts/npc/npc_abilities_override.txt");
+    expect(kv.zuus_lightning_bolt.AbilityValues).toEqual({
+        AbilityCharges: { value: "0" },
+        AbilityChargeRestoreTime: { value: "6.0 6.0 6.0 6.0" },
+    });
+    expect(kv.crystal_maiden_crystal_nova.AbilityValues.AbilityChargeRestoreTime.special_bonus_unique_crystal_maiden_5).toBe("-4.5");
+    expect(kv.sniper_shrapnel).toBeUndefined();
+    expect(kv.item_black_king_bar.AbilityCooldown).toBe("50");
 });

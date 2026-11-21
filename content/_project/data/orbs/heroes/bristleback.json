@@ -264,14 +264,29 @@
    "r": "legend",
    "branch": "R",
    "ab": "bristleback_warpath",
-   "mods": "max_stacks:+6;stack_duration:+6",
-   "awmods": "damage_per_stack:+6",
+   "mods": "max_stacks:+3;stack_duration:+3",
+   "awmods": "damage_per_stack:+3",
    "ru": "Бесконечная тропа",
    "en": "Endless Warpath",
-   "ru_d": "Warpath копит на 6 стаков больше, стаки держатся на 6 с дольше",
-   "en_d": "Warpath holds 6 more stacks, and they last 6 s longer",
-   "ru_aw": "Пробуждение: +6 урона за стак",
-   "en_aw": "Awakening: +6 damage per stack"
+   "ru_d": "Warpath держит на 3 стака больше и на 3 с дольше. При 5 стаках и выше Бристл получает 26% сопротивления замедлениям.",
+   "en_d": "Warpath gains 3 max stacks and 3 s duration. With at least 5 stacks, gain 26% slow resistance.",
+   "ru_aw": "Пробуждение: 36% сопротивления замедлениям, +3 урона за стак.",
+   "en_aw": "Awakening: 36% slow resistance and 3 additional damage per stack.",
+   "fx": [
+    {
+     "t": "stacks",
+     "mod": "bristleback_warpath",
+     "min": 5,
+     "props": {
+      "slowres": 26
+     },
+     "aw": {
+      "props": {
+       "slowres": 36
+      }
+     }
+    }
+   ]
   },
   {
    "id": "bb_m_doublespray",

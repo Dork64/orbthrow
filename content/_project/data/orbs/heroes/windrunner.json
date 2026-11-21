@@ -254,66 +254,61 @@
    "r": "legend",
    "branch": "Q",
    "ab": "windrunner_shackleshot",
-   "mods": "shackle_count:+1;shackle_angle:+10",
-   "awmods": "stun_duration:+0.5",
-   "ru": "Двойные путы",
-   "en": "Double Shackles",
-   "ru_d": "Shackleshot связывает две цели, угол поиска +10",
-   "en_d": "Shackleshot binds two targets, search angle +10",
-   "ru_aw": "Пробуждение: оглушение +0.5 с",
-   "en_aw": "Awakening: stun +0.5 s"
+   "ru": "Лук-лебёдка",
+   "en": "Wind Winch",
+   "ru_d": "Успешный Shackleshot цепляет верёвку. Следующая атака по связанной цели с дистанции от 285 подтягивает саму Лучницу к врагу. Можно сблизиться для следующего действия или отложить удар, чтобы остаться на дистанции.",
+   "en_d": "A successful Shackleshot attaches a line. Your next attack on that hero from at least 285 pulls Windranger toward them. Close the gap or hold your attack to stay out.",
+   "ru_aw": "Пробуждение: дальше рывок и больше времени на решение.",
+   "en_aw": "Awakening: a longer pull and more time to choose.",
+   "fx": [
+    {
+     "t": "maneuver",
+     "mode": "reel"
+    }
+   ]
   },
   {
    "id": "wr_l_powershot",
    "r": "legend",
    "branch": "W",
    "ab": "windrunner_powershot",
-   "mods": "arrow_width:+75",
+   "ru": "Парусная стрела",
+   "en": "Tailwind Arrow",
+   "ru_d": "Powershot оставляет попутный ветер вдоль выстрела. Первый настоящий герой, который бежит по коридору в сторону стрелы, получает рывок и гасит ветер. Преследователь тоже может им воспользоваться.",
+   "en_d": "Powershot leaves a tailwind along the shot. The first real hero running down the lane gets a boost and consumes it. A pursuer can take it too.",
+   "ru_aw": "Пробуждение: длиннее коридор и сильнее рывок.",
+   "en_aw": "Awakening: a longer lane and stronger boost.",
    "fx": [
     {
-     "t": "charges",
-     "n": 1,
-     "aw": {
-      "n": 2
-     }
+     "t": "maneuver",
+     "mode": "windlane"
     }
-   ],
-   "ru": "Залп",
-   "en": "Volley",
-   "ru_d": "У Powershot есть запасной заряд, ширина стрелы +75",
-   "en_d": "Powershot gets a spare charge, arrow width +75",
-   "ru_aw": "Пробуждение: 2 запасных заряда",
-   "en_aw": "Awakening: 2 spare charges"
+   ]
   },
   {
    "id": "wr_l_windrun",
    "r": "legend",
    "branch": "E",
    "ab": "windrunner_windrun",
-   "awmods": "AbilityDuration:+2",
+   "ru": "Через стену",
+   "en": "Over the Barrier",
+   "ru_d": "Во время Windrun бегите прямо на героя, короткую стену или плотную линию деревьев. Лучница один раз перепрыгнет на свободную землю с другой стороны.",
+   "en_d": "During Windrun, run straight at a hero, a short wall or a line of trees. Windranger can vault once onto open ground on the other side.",
+   "ru_aw": "Пробуждение: можно перепрыгнуть более толстое препятствие.",
+   "en_aw": "Awakening: vault across thicker obstacles.",
    "fx": [
     {
-     "t": "buff",
-     "dur": "AbilityDuration",
-     "props": {
-      "invis": 1,
-      "ms": 15
-     }
+     "t": "maneuver",
+     "mode": "vault"
     }
-   ],
-   "ru": "Ветер-призрак",
-   "en": "Ghost Wind",
-   "ru_d": "Windrun делает Лучницу невидимой (атака снимает) и дает +15% скорости",
-   "en_d": "Windrun makes Windranger invisible (attacking breaks it) and grants +15% movement speed",
-   "ru_aw": "Пробуждение: длительность +2 с",
-   "en_aw": "Awakening: duration +2 s"
+   ]
   },
   {
    "id": "wr_l_focus",
    "r": "legend",
    "branch": "R",
    "ab": "windrunner_focusfire",
-   "mods": "focusfire_damage_reduction:+25",
+   "mods": "focusfire_damage_reduction:=0",
    "awmods": "bonus_range:+200",
    "ru": "Меткий шквал",
    "en": "True Squall",

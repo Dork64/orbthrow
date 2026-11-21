@@ -413,15 +413,61 @@ export interface FxGuard extends FxBase {
     props: FxProps;
 }
 
-export type FxDef = FxCombo | FxZone | FxTether | FxMark | FxGuard | FxBuff | FxPassive | FxLowHp | FxStacks | FxStill | FxCharges | FxRefund | FxKill | FxHit | FxEcho |
+/** Два каста с разных точек замыкают линию. Контакт и отход тратят её запас. */
+export interface FxWire extends FxBase {
+    t: "wire";
+    within: number;
+    dur: number;
+    arm: number;
+    icd: number;
+    minDist: number;
+    maxDist: number;
+    radius: number;
+    dist: number;
+    max: number;
+    debuff: FxDebuff;
+}
+
+/** Площадка отрыва для одного героя. */
+export interface FxSpring extends FxBase {
+    t: "spring";
+    radius: number;
+    dur: number;
+    arm: number;
+    delay: number;
+    dist: number;
+    range: number;
+    ownerReturn?: boolean;
+}
+
+/** Один передаваемый удар Wrath с общим таймером. */
+export interface FxThunderball extends FxBase {
+    t: "thunderball";
+    range: number;
+    dur: number;
+    delay: number;
+    dist: number;
+    pct: number;
+    bolt?: boolean;
+}
+
+export interface FxManeuver extends FxBase {
+    t: "maneuver";
+    mode: "ward" | "parry" | "omni" | "rift" | "ram" | "sword" | "dagger" | "blindside" | "blade" |
+        "burrow" | "sidestep" | "trailhunt" | "reel" | "windlane" | "vault";
+    seconds?: number;
+    debuff?: FxDebuff;
+}
+
+export type FxDef = FxManeuver | FxSpring | FxThunderball | FxWire | FxCombo | FxZone | FxTether | FxMark | FxGuard | FxBuff | FxPassive | FxLowHp | FxStacks | FxStill | FxCharges | FxRefund | FxKill | FxHit | FxEcho |
     FxBlast | FxTaken | FxAura | FxCrit | FxVs | FxAuto | FxMulti | FxDash | FxPull | FxIllusion | FxTrail | FxTrap |
     FxSummon | FxSwap | FxStorm | FxRewind;
 
 /** Эффекты, у которых есть свой модификатор со свойствами (бафф или дебафф). */
 export function fxHasModifier(f: FxDef): boolean {
     if (f.t === "mark" || f.t === "guard") return true;
-    if (f.t === "combo") return true;
-    if (f.t === "zone") return f.debuff !== undefined;
+    if (f.t === "combo" || f.t === "wire" || f.t === "thunderball") return true;
+    if (f.t === "zone" || f.t === "maneuver") return f.debuff !== undefined;
     if (f.t === "buff" || f.t === "passive" || f.t === "lowhp" || f.t === "stacks" || f.t === "still" || f.t === "aura") return true;
     if (f.t === "kill") return f.stack !== undefined;
     if (f.t === "hit") return f.debuff !== undefined;

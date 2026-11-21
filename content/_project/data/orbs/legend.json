@@ -63,8 +63,8 @@
       1,
       "Кровавая охота",
       "Blood Hunt",
-      "Голод ложится на всех врагов в 450 вокруг цели; каждый враг под Голодом дает Аксу +4 брони и +5% скорости бега",
-      "Battle Hunger also hits all enemies within 450 of the target; each hungering enemy grants Axe +4 armor and +5% movement speed",
+      "Голод наносит на 20% больше урона и ложится на врагов в 450 вокруг цели. Каждый герой под Голодом даёт Аксу +4 брони и +5% скорости.",
+      "Battle Hunger deals 20% more damage and also hits enemies in 450 around the target. Each hungering hero gives Axe 4 armor and 5% movement speed.",
       "Пробуждение: урон Голода ×1.5, замедление +10%",
       "Awakening: Hunger damage ×1.5, slow +10%"
     ],
@@ -89,10 +89,10 @@
       1,
       "Палач",
       "Executioner",
-      "После убийства Culling Blade 3 с его можно применить снова бесплатно, с дальностью +400",
-      "After a Culling Blade kill you can cast it again for free within 3 s, with +400 cast range",
-      "Пробуждение: порог казни +100, окно 5 с",
-      "Awakening: kill threshold +100, window 5 s"
+      "Порог казни Culling Blade +45. После убийства следующая казнь в течение 2 с бесплатна и имеет +200 дальности.",
+      "Culling Blade gains 45 execution threshold. For 2 s after a kill, the next cast is free and gains 200 range.",
+      "Пробуждение: порог казни +75, окно 2,5 с",
+      "Awakening: execution threshold +75, window 2.5 s"
     ]
   ],
   "npc_dota_hero_juggernaut": [
@@ -108,45 +108,6 @@
       "Blade Fury radius +120, it pulls enemies towards Juggernaut",
       "Пробуждение: длительность Вихря +2 с",
       "Awakening: Blade Fury lasts 2 s longer"
-    ],
-    [
-      "jugg_l_sanctuary",
-      "W",
-      "juggernaut_healing_ward",
-      "code",
-      1,
-      "Святилище",
-      "Sanctuary",
-      "Тотем неуязвим 5 с после установки; в его радиусе Джаггернаут получает на 20% меньше урона",
-      "The Healing Ward is invulnerable for 5 s after placement; inside its radius Juggernaut takes 20% less damage",
-      "Пробуждение: −30% урона и +1% здоровья в секунду в радиусе",
-      "Awakening: −30% damage taken and +1% max health per second inside"
-    ],
-    [
-      "jugg_l_cuts",
-      "E",
-      "juggernaut_blade_dance",
-      "code",
-      1,
-      "Тысяча порезов",
-      "Thousand Cuts",
-      "Криты по героям вызывают кровотечение: 25% урона крита за 3 с, складывается",
-      "Critical strikes on heroes cause bleeding: 25% of the crit damage over 3 s, stacking",
-      "Пробуждение: 40% урона крита",
-      "Awakening: 40% of the crit damage"
-    ],
-    [
-      "jugg_l_endless",
-      "R",
-      "juggernaut_omni_slash",
-      "code",
-      1,
-      "Бесконечный омнислэш",
-      "Endless Omnislash",
-      "Каждое убийство героя во время Омнислэша продлевает его на 1 с и обновляет Вихрь",
-      "Each hero kill during Omnislash extends it by 1 s and refreshes Blade Fury",
-      "Пробуждение: +1.5 с за убийство, +15 урона ударов Омнислэша",
-      "Awakening: +1.5 s per kill, +15 damage on Omnislash strikes"
     ]
   ]
 }

@@ -199,18 +199,34 @@
    "fx": [
     {
      "t": "charges",
-     "n": 1,
+     "n": 1
+    },
+    {
+     "t": "buff",
+     "dur": 2.5,
+     "props": {
+      "ms": 17
+     },
+     "shield": {
+      "base": 120,
+      "dur": 2.5
+     },
      "aw": {
-      "n": 2
+      "props": {
+       "ms": 23
+      },
+      "shield": {
+       "base": 190
+      }
      }
     }
    ],
    "ru": "Неуловимая",
    "en": "Elusive",
-   "ru_d": "У Blink есть запасной заряд",
-   "en_d": "Blink gets a spare charge",
-   "ru_aw": "Пробуждение: 2 запасных заряда",
-   "en_aw": "Awakening: 2 spare charges"
+   "ru_d": "У Blink есть запасной заряд. После Blink Королева на 2,5 с получает щит на 120 и +17% скорости.",
+   "en_d": "Blink gains a spare charge. After Blink, Queen of Pain gains a 120 barrier and 17% movement speed for 2.5 s.",
+   "ru_aw": "Пробуждение: щит 190 и скорость +23%.",
+   "en_aw": "Awakening: 190 barrier and 23% movement speed."
   },
   {
    "id": "qop_l_scream",

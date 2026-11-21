@@ -238,25 +238,30 @@
    "r": "legend",
    "branch": "R",
    "ab": "earthshaker_echo_slam",
-   "mods": "echo_slam_echo_damage:+40",
+   "mods": "echo_slam_echo_damage:+20",
    "fx": [
     {
-     "t": "echo",
-     "delays": [
-      1.0
-     ],
-     "pct": 40,
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "icd": 5,
+     "extra": {
+      "flat": 115,
+      "type": "magic"
+     },
      "aw": {
-      "pct": 70
+      "extra": {
+       "flat": 175
+      }
      }
     }
    ],
    "ru": "Апокалипсис",
    "en": "Apocalypse",
-   "ru_d": "Урон эха Echo Slam +40; через 1 с Echo Slam повторяет 40% урона по тем же целям",
-   "en_d": "Echo Slam echo damage +40; 1 s later Echo Slam repeats 40% of its damage to the same targets",
-   "ru_aw": "Пробуждение: повтор 70% урона",
-   "en_aw": "Awakening: repeat deals 70%"
+   "ru_d": "Урон каждого эха Echo Slam +20. Первый урон Echo Slam по герою добавляет 115 магического раз в 5 с по цели.",
+   "en_d": "Each Echo Slam echo deals 20 more damage. The first Echo Slam hit on a hero adds 115 magic damage, once per target per 5 s.",
+   "ru_aw": "Пробуждение: 175 дополнительного урона по герою.",
+   "en_aw": "Awakening: 175 bonus damage against a hero."
   },
   {
    "id": "es_m_stoneecho",

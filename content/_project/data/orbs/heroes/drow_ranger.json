@@ -224,14 +224,29 @@
    "r": "legend",
    "branch": "E",
    "ab": "drow_ranger_multishot",
-   "mods": "arrow_count_per_wave:+2;arrow_damage_pct:+20",
-   "awmods": "wave_count:+1",
+   "mods": "arrow_count_per_wave:+1;arrow_damage_pct:+15",
    "ru": "Град стрел",
    "en": "Arrow Hail",
-   "ru_d": "+2 стрелы в каждом залпе Multishot, урон стрел +20%",
-   "en_d": "+2 arrows per Multishot wave, arrow damage +20%",
-   "ru_aw": "Пробуждение: +1 залп",
-   "en_aw": "Awakening: +1 wave"
+   "ru_d": "Multishot получает +1 стрелу на залп и +15 п. п. урона стрел. На 5 с с начала применения Дровка получает +45 скорости атаки и +75 дальности атаки.",
+   "en_d": "Multishot gains one arrow per wave and 15 points of arrow damage. Drow gains 45 attack speed and 75 attack range for 5 s from the start of the cast.",
+   "ru_aw": "Пробуждение: +65 скорости атаки и +115 дальности.",
+   "en_aw": "Awakening: 65 attack speed and 115 attack range.",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 5,
+     "props": {
+      "as": 45,
+      "range": 75
+     },
+     "aw": {
+      "props": {
+       "as": 65,
+       "range": 115
+      }
+     }
+    }
+   ]
   },
   {
    "id": "drow_l_eagle",

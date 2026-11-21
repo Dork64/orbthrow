@@ -4330,39 +4330,6 @@ ____exports.UPGRADE_DEFS = {
         code = true
     },
     {
-        id = "jugg_l_sanctuary",
-        rarity = "legend",
-        hero = "npc_dota_hero_juggernaut",
-        branch = "W",
-        ability = "juggernaut_healing_ward",
-        mods = {},
-        cd = 0,
-        max = 1,
-        code = true
-    },
-    {
-        id = "jugg_l_cuts",
-        rarity = "legend",
-        hero = "npc_dota_hero_juggernaut",
-        branch = "E",
-        ability = "juggernaut_blade_dance",
-        mods = {},
-        cd = 0,
-        max = 1,
-        code = true
-    },
-    {
-        id = "jugg_l_endless",
-        rarity = "legend",
-        hero = "npc_dota_hero_juggernaut",
-        branch = "R",
-        ability = "juggernaut_omni_slash",
-        mods = {},
-        cd = 0,
-        max = 1,
-        code = true
-    },
-    {
         id = "axe_m_vortex",
         rarity = "purple",
         hero = "npc_dota_hero_axe",
@@ -4586,11 +4553,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_bloodseeker",
         branch = "R",
         ability = "bloodseeker_rupture",
-        mods = {{key = "duration", add = 4, unit = "", base = 11}, {key = "movement_damage_pct", add = 20, unit = "", base = 55}},
+        mods = {{key = "duration", add = 1.5, unit = "", base = 11}, {key = "movement_damage_pct", add = 10, unit = "", base = 55}},
         cd = 0,
         max = 1,
-        code = false,
-        awmods = {{key = "movement_damage_pct", add = 15, unit = "", base = 55}}
+        code = false
     },
     {
         id = "bb_p_splash",
@@ -4719,11 +4685,11 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_bristleback",
         branch = "R",
         ability = "bristleback_warpath",
-        mods = {{key = "max_stacks", add = 6, unit = "", base = 12}, {key = "stack_duration", add = 6, unit = "", base = 20}},
+        mods = {{key = "max_stacks", add = 3, unit = "", base = 12}, {key = "stack_duration", add = 3, unit = "", base = 20}},
         cd = 0,
         max = 1,
         code = false,
-        awmods = {{key = "damage_per_stack", add = 6, unit = "", base = 20}}
+        awmods = {{key = "damage_per_stack", add = 3, unit = "", base = 20}}
     },
     {
         id = "bb_m_doublespray",
@@ -4903,7 +4869,7 @@ ____exports.UPGRADE_DEFS = {
         ability = "crystal_maiden_freezing_field",
         mods = {{
             key = "damage",
-            add = 1.3,
+            add = 1.2,
             unit = "",
             base = 250,
             op = "mul"
@@ -5095,10 +5061,11 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_dragon_knight",
         branch = "R",
         ability = "dragon_knight_elder_dragon_form",
-        mods = {{key = "duration", add = 20, unit = "", base = 60}},
+        mods = {{key = "duration", add = 8, unit = "", base = 60}},
         cd = 0,
         max = 1,
-        code = false
+        code = false,
+        awmods = {{key = "duration", add = 4, unit = "", base = 60}}
     },
     {
         id = "dk_m_doublefire",
@@ -5264,11 +5231,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_drow_ranger",
         branch = "E",
         ability = "drow_ranger_multishot",
-        mods = {{key = "arrow_count_per_wave", add = 2, unit = "", base = 4}, {key = "arrow_damage_pct", add = 20, unit = "", base = 140}},
+        mods = {{key = "arrow_count_per_wave", add = 1, unit = "", base = 4}, {key = "arrow_damage_pct", add = 15, unit = "", base = 140}},
         cd = 0,
         max = 1,
-        code = false,
-        awmods = {{key = "wave_count", add = 1, unit = "", base = 3}}
+        code = false
     },
     {
         id = "drow_l_eagle",
@@ -5459,7 +5425,7 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_earthshaker",
         branch = "R",
         ability = "earthshaker_echo_slam",
-        mods = {{key = "echo_slam_echo_damage", add = 40, unit = "", base = 100}},
+        mods = {{key = "echo_slam_echo_damage", add = 20, unit = "", base = 100}},
         cd = 0,
         max = 1,
         code = false
@@ -5665,11 +5631,11 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_faceless_void",
         branch = "W",
         ability = "faceless_void_time_dilation",
-        mods = {{key = "radius", add = 200, unit = "", base = 700}, {key = "duration", add = 3, unit = "", base = 9}},
+        mods = {{key = "radius", add = 150, unit = "", base = 700}, {key = "duration", add = 1, unit = "", base = 9}},
         cd = 0,
         max = 1,
         code = false,
-        awmods = {{key = "damage_per_stack", add = 6, unit = "", base = 12}}
+        mech = true
     },
     {
         id = "void_l_lock",
@@ -5733,6 +5699,42 @@ ____exports.UPGRADE_DEFS = {
     {
         id = "jugg_m_omniclones",
         rarity = "purple",
+        hero = "npc_dota_hero_juggernaut",
+        branch = "R",
+        ability = "juggernaut_omni_slash",
+        mods = {},
+        cd = 0,
+        max = 1,
+        code = true,
+        mech = true
+    },
+    {
+        id = "jugg_l_sanctuary",
+        rarity = "legend",
+        hero = "npc_dota_hero_juggernaut",
+        branch = "W",
+        ability = "juggernaut_healing_ward",
+        mods = {},
+        cd = 0,
+        max = 1,
+        code = true,
+        mech = true
+    },
+    {
+        id = "jugg_l_cuts",
+        rarity = "legend",
+        hero = "npc_dota_hero_juggernaut",
+        branch = "E",
+        ability = "juggernaut_blade_dance",
+        mods = {},
+        cd = 0,
+        max = 1,
+        code = true,
+        mech = true
+    },
+    {
+        id = "jugg_l_endless",
+        rarity = "legend",
         hero = "npc_dota_hero_juggernaut",
         branch = "R",
         ability = "juggernaut_omni_slash",
@@ -5870,7 +5872,7 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_legion_commander",
         branch = "R",
         ability = "legion_commander_duel",
-        mods = {{key = "reward_damage", add = 15, unit = "", base = 30}, {key = "duration", add = 1, unit = "", base = 5}},
+        mods = {{key = "reward_damage", add = 8, unit = "", base = 30}, {key = "duration", add = 0.4, unit = "", base = 5}},
         cd = 0,
         max = 1,
         code = false
@@ -6052,11 +6054,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_lich",
         branch = "R",
         ability = "lich_chain_frost",
-        mods = {{key = "jumps", add = 5, unit = "", base = 10}, {key = "bonus_jump_damage", add = 10, unit = "", base = 20}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false,
-        awmods = {{key = "damage", add = 150, unit = "", base = 500}}
+        code = true
     },
     {
         id = "lich_m_autonova",
@@ -6393,11 +6394,11 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_luna",
         branch = "E",
         ability = "luna_moon_glaive",
-        mods = {{key = "bounces", add = 3, unit = "", base = 6}, {key = "damage_reduction_percent", add = -15, unit = "", base = 35}},
+        mods = {{key = "bounces", add = 1, unit = "", base = 6}},
         cd = 0,
         max = 1,
         code = false,
-        awmods = {{key = "range", add = 200, unit = "", base = 500}}
+        awmods = {{key = "range", add = 100, unit = "", base = 500}}
     },
     {
         id = "luna_l_moonhunt",
@@ -6586,7 +6587,7 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_mirana",
         branch = "R",
         ability = "mirana_invis",
-        mods = {{key = "duration", add = 6, unit = "", base = 18}},
+        mods = {{key = "duration", add = 3, unit = "", base = 18}},
         cd = 0,
         max = 1,
         code = false
@@ -7134,11 +7135,11 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_ogre_magi",
         branch = "R",
         ability = "ogre_magi_multicast",
-        mods = {{key = "multicast_2_times", add = 15, unit = "", base = 75}, {key = "multicast_3_times", add = 15, unit = "", base = 30}, {key = "multicast_4_times", add = 10, unit = "", base = 15}},
+        mods = {{key = "multicast_2_times", add = 10, unit = "", base = 75}, {key = "multicast_3_times", add = 7, unit = "", base = 30}, {key = "multicast_4_times", add = 4, unit = "", base = 15}},
         cd = 0,
         max = 1,
         code = false,
-        awmods = {{key = "multicast_4_times", add = 15, unit = "", base = 15}}
+        awmods = {{key = "multicast_4_times", add = 6, unit = "", base = 15}}
     },
     {
         id = "pa_p_bloodknife",
@@ -7234,10 +7235,11 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_phantom_assassin",
         branch = "Q",
         ability = "phantom_assassin_stifling_dagger",
-        mods = {{key = "base_damage", add = 60, unit = "", base = 80}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false
+        code = true,
+        mech = true
     },
     {
         id = "pa_l_shadow",
@@ -7256,12 +7258,24 @@ ____exports.UPGRADE_DEFS = {
         rarity = "legend",
         hero = "npc_dota_hero_phantom_assassin",
         branch = "E",
-        ability = "phantom_assassin_immaterial",
-        mods = {{key = "evasion", add = 10, unit = "", base = 50}},
+        ability = "phantom_assassin_blur",
+        mods = {{
+            key = "radius",
+            add = 1,
+            unit = "",
+            base = 600,
+            op = "set"
+        }, {
+            key = "duration",
+            add = 7,
+            unit = "",
+            base = 20,
+            op = "set"
+        }},
         cd = 0,
         max = 1,
         code = false,
-        awmods = {{key = "evasion", add = 10, unit = "", base = 50}}
+        mech = true
     },
     {
         id = "pa_l_coup",
@@ -7269,11 +7283,11 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_phantom_assassin",
         branch = "R",
         ability = "phantom_assassin_coup_de_grace",
-        mods = {{key = "crit_chance", add = 8, unit = "", base = 17}, {key = "crit_bonus", add = 75, unit = "", base = 450}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false,
-        awmods = {{key = "crit_bonus", add = 75, unit = "", base = 450}}
+        code = true,
+        mech = true
     },
     {
         id = "pa_m_daggerfan",
@@ -7653,7 +7667,8 @@ ____exports.UPGRADE_DEFS = {
         mods = {},
         cd = 0,
         max = 1,
-        code = true
+        code = true,
+        mech = true
     },
     {
         id = "pudge_p_snack",
@@ -7772,7 +7787,7 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_pudge",
         branch = "E",
         ability = "pudge_flesh_heap",
-        mods = {{key = "damage_block", add = 15, unit = "", base = 26}},
+        mods = {{key = "damage_block", add = 8, unit = "", base = 26}},
         cd = 0,
         max = 1,
         code = false
@@ -8332,10 +8347,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_razor",
         branch = "E",
         ability = "razor_storm_surge",
-        mods = {},
+        mods = {{key = "strike_pct_chance", add = 8, unit = "", base = 20}},
         cd = 0,
         max = 1,
-        code = true
+        code = false
     },
     {
         id = "razor_l_capacitor",
@@ -8982,10 +8997,11 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_slark",
         branch = "E",
         ability = "slark_saltwater_shiv",
-        mods = {},
+        mods = {{key = "health_rest_steal", add = 8, unit = "", base = 16}},
         cd = 0,
         max = 1,
-        code = true
+        code = false,
+        awmods = {{key = "health_rest_steal", add = 4, unit = "", base = 16}}
     },
     {
         id = "slark_l_blackfin",
@@ -9151,11 +9167,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_snapfire",
         branch = "W",
         ability = "snapfire_firesnap_cookie",
-        mods = {{key = "jump_horizontal_distance", add = 250, unit = "", base = 425}, {key = "impact_radius", add = 100, unit = "", base = 300}},
+        mods = {{key = "jump_horizontal_distance", add = 85, unit = "", base = 425}, {key = "impact_radius", add = 70, unit = "", base = 300}},
         cd = 0,
         max = 1,
-        code = false,
-        awmods = {{key = "impact_stun_duration", add = 0.6, unit = "", base = 2.2}}
+        code = false
     },
     {
         id = "snap_l_shredder",
@@ -9315,7 +9330,7 @@ ____exports.UPGRADE_DEFS = {
         cd = 0,
         max = 1,
         code = false,
-        awmods = {{key = "duration", add = 3, unit = "", base = 3}}
+        awmods = {{key = "duration", add = 1, unit = "", base = 3}}
     },
     {
         id = "sniper_l_volley",
@@ -9326,8 +9341,7 @@ ____exports.UPGRADE_DEFS = {
         mods = {},
         cd = 0,
         max = 1,
-        code = true,
-        awmods = {{key = "damage", add = 150, unit = "", base = 500}}
+        code = true
     },
     {
         id = "sniper_m_shrapmulti",
@@ -9483,23 +9497,11 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_sven",
         branch = "W",
         ability = "sven_great_cleave",
-        mods = {{
-            key = "great_cleave_damage",
-            add = 120,
-            unit = "",
-            base = 90,
-            op = "set"
-        }},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false,
-        awmods = {{
-            key = "great_cleave_damage",
-            add = 150,
-            unit = "",
-            base = 90,
-            op = "set"
-        }}
+        code = true,
+        mech = true
     },
     {
         id = "sven_l_steeltempo",
@@ -9510,7 +9512,8 @@ ____exports.UPGRADE_DEFS = {
         mods = {},
         cd = 0,
         max = 1,
-        code = true
+        code = true,
+        mech = true
     },
     {
         id = "sven_l_avatar",
@@ -9521,7 +9524,8 @@ ____exports.UPGRADE_DEFS = {
         mods = {},
         cd = 0,
         max = 1,
-        code = true
+        code = true,
+        mech = true
     },
     {
         id = "sven_m_thunderseal",
@@ -9688,11 +9692,11 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_tidehunter",
         branch = "E",
         ability = "tidehunter_anchor_smash",
-        mods = {{key = "additional_range", add = 150, unit = "", base = 225}, {key = "attack_damage", add = 75, unit = "", base = 200}},
+        mods = {{key = "additional_range", add = 100, unit = "", base = 225}, {key = "attack_damage", add = 45, unit = "", base = 200}},
         cd = 0,
         max = 1,
         code = false,
-        awmods = {{key = "reduction_duration", add = 3, unit = "", base = 6}}
+        awmods = {{key = "reduction_duration", add = 1.5, unit = "", base = 6}}
     },
     {
         id = "tide_l_ravage",
@@ -9859,11 +9863,11 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_ursa",
         branch = "Q",
         ability = "ursa_earthshock",
-        mods = {{key = "AbilityCharges", add = 1, unit = "", base = 0}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false,
-        awmods = {{key = "AbilityDamage", add = 100, unit = "", base = 260}}
+        code = true,
+        mech = true
     },
     {
         id = "ursa_l_overpower",
@@ -9871,10 +9875,11 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_ursa",
         branch = "W",
         ability = "ursa_overpower",
-        mods = {{key = "max_attacks", add = 3, unit = "", base = 6}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false
+        code = true,
+        mech = true
     },
     {
         id = "ursa_l_swipes",
@@ -9882,11 +9887,11 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_ursa",
         branch = "E",
         ability = "ursa_fury_swipes",
-        mods = {{key = "damage_per_stack", add = 12, unit = "", base = 36}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false,
-        awmods = {{key = "damage_per_stack", add = 12, unit = "", base = 36}}
+        code = true,
+        mech = true
     },
     {
         id = "ursa_l_enrage",
@@ -10075,7 +10080,7 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_viper",
         branch = "R",
         ability = "viper_viper_strike",
-        mods = {{key = "damage", add = 60, unit = "", base = 150}, {key = "duration", add = 2, unit = "", base = 6}},
+        mods = {{key = "damage", add = 45, unit = "", base = 150}, {key = "duration", add = 1, unit = "", base = 6}},
         cd = 0,
         max = 1,
         code = false
@@ -10270,11 +10275,11 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_windrunner",
         branch = "Q",
         ability = "windrunner_shackleshot",
-        mods = {{key = "shackle_count", add = 1, unit = "", base = 1}, {key = "shackle_angle", add = 10, unit = "", base = 23}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false,
-        awmods = {{key = "stun_duration", add = 0.5, unit = "", base = 3.25}}
+        code = true,
+        mech = true
     },
     {
         id = "wr_l_powershot",
@@ -10282,10 +10287,11 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_windrunner",
         branch = "W",
         ability = "windrunner_powershot",
-        mods = {{key = "arrow_width", add = 75, unit = "", base = 125}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false
+        code = true,
+        mech = true
     },
     {
         id = "wr_l_windrun",
@@ -10297,7 +10303,7 @@ ____exports.UPGRADE_DEFS = {
         cd = 0,
         max = 1,
         code = true,
-        awmods = {{key = "AbilityDuration", add = 2, unit = "", base = 6}}
+        mech = true
     },
     {
         id = "wr_l_focus",
@@ -10305,7 +10311,13 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_windrunner",
         branch = "R",
         ability = "windrunner_focusfire",
-        mods = {{key = "focusfire_damage_reduction", add = 25, unit = "", base = -18}},
+        mods = {{
+            key = "focusfire_damage_reduction",
+            add = 0,
+            unit = "",
+            base = -18,
+            op = "set"
+        }},
         cd = 0,
         max = 1,
         code = false,
@@ -10453,17 +10465,11 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_zuus",
         branch = "Q",
         ability = "zuus_arc_lightning",
-        mods = {{key = "jump_count", add = 6, unit = "", base = 11}, {key = "radius", add = 150, unit = "", base = 450}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false,
-        awmods = {{
-            key = "has_unlimited_jumps",
-            add = 1,
-            unit = "",
-            base = 0,
-            op = "set"
-        }}
+        code = true,
+        mech = true
     },
     {
         id = "zeus_l_bolt",
@@ -10482,10 +10488,11 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_zuus",
         branch = "E",
         ability = "zuus_heavenly_jump",
-        mods = {{key = "targets", add = 2, unit = "", base = 1}, {key = "range", add = 300, unit = "", base = 1000}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false
+        code = true,
+        mech = true
     },
     {
         id = "zeus_l_wrath",
@@ -10493,16 +10500,11 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_zuus",
         branch = "R",
         ability = "zuus_thundergods_wrath",
-        mods = {{
-            key = "damage",
-            add = 25,
-            unit = "",
-            base = 575,
-            op = "pct"
-        }},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false
+        code = true,
+        mech = true
     }
 }
 return ____exports

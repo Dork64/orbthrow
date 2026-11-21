@@ -283,14 +283,34 @@
    "r": "legend",
    "branch": "W",
    "ab": "snapfire_firesnap_cookie",
-   "mods": "jump_horizontal_distance:+250;impact_radius:+100",
-   "awmods": "impact_stun_duration:+0.6",
+   "mods": "jump_horizontal_distance:+85;impact_radius:+70",
    "ru": "Печенье-катапульта",
    "en": "Catapult Cookie",
-   "ru_d": "Прыжок печенья +250, радиус удара +100",
-   "en_d": "Cookie hop +250, impact radius +100",
-   "ru_aw": "Пробуждение: оглушение +0.6 с",
-   "en_aw": "Awakening: stun +0.6 s"
+   "ru_d": "Cookie: прыжок дальше на 85, радиус удара +70. При применении Снэпфайр получает щит на 160 и 20% сопротивления замедлениям на 4 с.",
+   "en_d": "Cookie gains 85 jump distance and 70 impact radius. On cast, Snapfire gains a 160 barrier and 20% slow resistance for 4 s.",
+   "ru_aw": "Пробуждение: щит 235 и 30% сопротивления замедлениям.",
+   "en_aw": "Awakening: 235 barrier and 30% slow resistance.",
+   "fx": [
+    {
+     "t": "buff",
+     "dur": 4,
+     "props": {
+      "slowres": 20
+     },
+     "shield": {
+      "base": 160,
+      "dur": 4
+     },
+     "aw": {
+      "props": {
+       "slowres": 30
+      },
+      "shield": {
+       "base": 235
+      }
+     }
+    }
+   ]
   },
   {
    "id": "snap_l_shredder",

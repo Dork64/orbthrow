@@ -283,14 +283,33 @@
    "r": "legend",
    "branch": "W",
    "ab": "faceless_void_time_dilation",
-   "mods": "radius:+200;duration:+3",
-   "awmods": "damage_per_stack:+6",
+   "mods": "radius:+150;duration:+1",
    "ru": "Остановка мира",
    "en": "World Stop",
-   "ru_d": "Time Dilation: радиус +200, длительность +3 с",
-   "en_d": "Time Dilation: radius +200, duration +3 s",
-   "ru_aw": "Пробуждение: урон за заряд +6",
-   "en_aw": "Awakening: damage per charge +6"
+   "ru_d": "Time Dilation: радиус +150, длительность +1 с. На месте применения остаётся зона в 425 на 3 с: первый тик наносит 115 магического урона, зона замедляет на 20%, даже если у цели нет КД.",
+   "en_d": "Time Dilation gains 150 radius and 1 s duration. The cast leaves a 425-radius zone for 3 s: first contact deals 115 magic damage and the zone slows by 20% even if the target has no cooldowns.",
+   "ru_aw": "Пробуждение: первый тик наносит 175 урона.",
+   "en_aw": "Awakening: 175 first-tick damage.",
+   "fx": [
+    {
+     "t": "zone",
+     "at": "self",
+     "radius": 425,
+     "dur": 3,
+     "every": 1,
+     "dmg": 0,
+     "entryDmg": 115,
+     "debuff": {
+      "dur": 1.2,
+      "props": {
+       "ms": -20
+      }
+     },
+     "aw": {
+      "entryDmg": 175
+     }
+    }
+   ]
   },
   {
    "id": "void_l_lock",
@@ -316,23 +335,23 @@
      "t": "buff",
      "dur": "duration",
      "props": {
-      "as": 120,
-      "dmg": 20
+      "as": 75,
+      "dmg": 14
      },
      "aw": {
       "props": {
-       "as": 160,
-       "dmg": 35
+       "as": 105,
+       "dmg": 22
       }
      }
     }
    ],
    "ru": "Хозяин времени",
    "en": "Master of Time",
-   "ru_d": "Во время Chronosphere +120 скорости атаки и +20% урона",
-   "en_d": "During Chronosphere: +120 attack speed and +20% damage",
-   "ru_aw": "Пробуждение: +160 скорости атаки и +35% урона",
-   "en_aw": "Awakening: +160 attack speed and +35% damage"
+   "ru_d": "Во время Chronosphere +75 скорости атаки и +14% урона.",
+   "en_d": "During Chronosphere, gain 75 attack speed and 14% damage.",
+   "ru_aw": "Пробуждение: +105 скорости атаки и +22% урона.",
+   "en_aw": "Awakening: 105 attack speed and 22% damage."
   }
  ]
 }

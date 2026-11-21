@@ -206,54 +206,81 @@
    "ab": "dragon_knight_wyrms_wrath",
    "fx": [
     {
+     "t": "passive",
+     "props": {
+      "cleave": 24
+     },
+     "aw": {
+      "props": {
+       "cleave": 32
+      }
+     }
+    },
+    {
      "t": "hit",
      "by": "attack",
      "heroOnly": 1,
-     "splash": {
-      "radius": 250,
-      "pct": 40
+     "icd": 1.4,
+     "every": 3,
+     "extra": {
+      "atk": 45,
+      "type": "phys"
      },
      "aw": {
-      "splash": {
-       "pct": 70
+      "extra": {
+       "atk": 65
       }
      }
     }
    ],
    "ru": "Ярость змея",
    "en": "Wyrm's Fury",
-   "ru_d": "Атаки по героям задевают врагов в 250 вокруг цели (40% урона)",
-   "en_d": "Attacks on heroes also hit enemies within 250 of the target (40% damage)",
-   "ru_aw": "Пробуждение: 70% урона",
-   "en_aw": "Awakening: 70% damage"
+   "ru_d": "Атаки в ближнем бою получают 24% раскола. Каждая третья атака по одному герою наносит ещё 45% силы атаки физическим уроном, не чаще раза в 1,4 с по цели.",
+   "en_d": "Melee attacks gain 24% cleave. Every third attack against the same hero deals 45% extra attack damage as physical damage, once per target per 1.4 s.",
+   "ru_aw": "Пробуждение: 32% раскола, 65% урона третьего удара.",
+   "en_aw": "Awakening: 32% cleave and 65% third-hit damage."
   },
   {
    "id": "dk_l_ancient",
    "r": "legend",
    "branch": "R",
    "ab": "dragon_knight_elder_dragon_form",
-   "mods": "duration:+20",
+   "mods": "duration:+8",
    "fx": [
     {
      "t": "buff",
      "dur": "duration",
      "props": {
-      "hp": 600,
-      "regenpct": 1
+      "hp": 300
      },
      "aw": {
       "props": {
-       "hp": 1000
+       "hp": 425
+      }
+     }
+    },
+    {
+     "t": "buff",
+     "dur": 5,
+     "props": {
+      "as": 45,
+      "armor": 5
+     },
+     "aw": {
+      "props": {
+       "as": 60,
+       "armor": 7
       }
      }
     }
    ],
    "ru": "Древний дракон",
    "en": "Ancient Dragon",
-   "ru_d": "Облик дракона длится на 20 с дольше и дает +600 здоровья и +1% восстановления здоровья в секунду",
-   "en_d": "Dragon form lasts 20 s longer and grants +600 health and +1% health regeneration per second",
-   "ru_aw": "Пробуждение: +1000 здоровья",
-   "en_aw": "Awakening: +1000 health"
+   "ru_d": "Облик дракона длится на 8 с дольше и даёт +300 здоровья. Первые 5 с: +45 скорости атаки и +5 брони.",
+   "en_d": "Dragon Form lasts 8 s longer and grants 300 health. For the first 5 s, gain 45 attack speed and 5 armor.",
+   "ru_aw": "Пробуждение: +12 с, +425 здоровья, открытие даёт 60 скорости атаки и 7 брони.",
+   "en_aw": "Awakening: 12 s longer, 425 health, 60 opening attack speed and 7 armor.",
+   "awmods": "duration:+4"
   },
   {
    "id": "dk_m_doublefire",

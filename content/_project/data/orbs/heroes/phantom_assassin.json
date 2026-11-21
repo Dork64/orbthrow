@@ -155,22 +155,18 @@
    "r": "legend",
    "branch": "Q",
    "ab": "phantom_assassin_stifling_dagger",
-   "mods": "base_damage:+60",
+   "ru": "Шаг к кинжалу",
+   "en": "Daggerstep",
+   "ru_d": "Попадание Stifling Dagger оставляет клинок в месте удара. Если жертва отошла, Phantom Strike по ней переносит Фантомку к клинку, пока тот не дальше 650 от жертвы. Враг может вернуться и затоптать клинок.",
+   "en_d": "A Dagger hit leaves a blade at the impact point. If the target moves away, Phantom Strike on that hero takes you to the blade while it is within 650 of them. Enemies can return and trample it.",
+   "ru_aw": "Пробуждение: клинок остаётся на 2 с дольше.",
+   "en_aw": "Awakening: the blade stays 2 s longer.",
    "fx": [
     {
-     "t": "charges",
-     "n": 1,
-     "aw": {
-      "n": 2
-     }
+     "t": "maneuver",
+     "mode": "dagger"
     }
-   ],
-   "ru": "Веер кинжалов",
-   "en": "Dagger Fan",
-   "ru_d": "У Stifling Dagger есть запасной заряд, урон +60",
-   "en_d": "Stifling Dagger gets a spare charge, damage +60",
-   "ru_aw": "Пробуждение: 2 запасных заряда",
-   "en_aw": "Awakening: 2 spare charges"
+   ]
   },
   {
    "id": "pa_l_shadow",
@@ -190,37 +186,39 @@
    "id": "pa_l_ghost",
    "r": "legend",
    "branch": "E",
-   "ab": "phantom_assassin_immaterial",
-   "mods": "evasion:+10",
-   "awmods": "evasion:+10",
+   "ab": "phantom_assassin_blur",
+   "ru": "Слепой угол",
+   "en": "Blindside",
+   "ru_d": "Blur скрывает Фантомку на 7 с даже рядом с врагом, если она вне его передней дуги. Враг может повернуться к ней и сразу раскрыть. Атака и обнаружение по-прежнему выдают Фантомку.",
+   "en_d": "For 7 s, Blur conceals you even near enemies outside their forward arc. An enemy can turn to reveal you. Attacking and detection still give you away.",
+   "ru_aw": "Пробуждение: враг может раскрыть поворотом только с меньшей дистанции.",
+   "en_aw": "Awakening: enemies have to be closer to reveal you by turning.",
    "fx": [
     {
-     "t": "passive",
-     "props": {
-      "ms": 10
-     }
+     "t": "maneuver",
+     "mode": "blindside",
+     "seconds": 7
     }
    ],
-   "ru": "Призрак",
-   "en": "Phantom",
-   "ru_d": "Уклонение Immaterial +10%, +10% скорости бега",
-   "en_d": "Immaterial evasion +10%, +10% movement speed",
-   "ru_aw": "Пробуждение: еще +10% уклонения",
-   "en_aw": "Awakening: another +10% evasion"
+   "mods": "radius:=1;duration:=7"
   },
   {
    "id": "pa_l_coup",
    "r": "legend",
    "branch": "R",
    "ab": "phantom_assassin_coup_de_grace",
-   "mods": "crit_chance:+8;crit_bonus:+75",
-   "awmods": "crit_bonus:+75",
-   "ru": "Последний удар",
-   "en": "Final Blow",
-   "ru_d": "Шанс Coup de Grace +8%, сила крита +75%",
-   "en_d": "Coup de Grace chance +8%, crit damage +75%",
-   "ru_aw": "Пробуждение: сила крита еще +75%",
-   "en_aw": "Awakening: crit damage another +75%"
+   "ru": "Лезвие с двух сторон",
+   "en": "Twin Angles",
+   "ru_d": "Успешный Phantom Strike оставляет теневой клинок у места приземления. Обойдите ту же цель и атакуйте с другого угла: следом ударит клинок. Враг может менять позицию, чтобы сохранить угол закрытым.",
+   "en_d": "A successful Phantom Strike leaves a shadow blade where you land. Flank that same hero and attack from another angle to make the blade strike too. The target can move to keep the angle closed.",
+   "ru_aw": "Пробуждение: на обход даётся ещё 1 с.",
+   "en_aw": "Awakening: one more second to flank.",
+   "fx": [
+    {
+     "t": "maneuver",
+     "mode": "blade"
+    }
+   ]
   },
   {
    "id": "pa_m_daggerfan",

@@ -39,8 +39,6 @@ export const MODIFIER_LINKS: [string, string][] = [
     ["modifier_orb_axe_arena_buff", BUFFS],
     ["modifier_orb_axe_free_cull", BUFFS],
     ["modifier_orb_jugg_ward_armor", BUFFS],
-    ["modifier_orb_jugg_sanctuary", BUFFS],
-    ["modifier_orb_jugg_bleed", BUFFS],
     ["modifier_orb_jugg_immune", BUFFS],
 ];
 

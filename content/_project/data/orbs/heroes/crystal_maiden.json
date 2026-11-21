@@ -225,52 +225,72 @@
    "ab": "crystal_maiden_brilliance_aura",
    "fx": [
     {
+     "t": "buff",
+     "dur": 4.5,
+     "props": {
+      "sa": 17,
+      "castrange": 200
+     },
+     "ab": "crystal_maiden_crystal_nova",
+     "aw": {
+      "props": {
+       "sa": 24,
+       "castrange": 275
+      }
+     }
+    },
+    {
      "t": "passive",
      "props": {
-      "sa": 12,
-      "castrange": 150
+      "sls": 7
      },
      "aw": {
       "props": {
-       "sa": 20,
-       "castrange": 250
+       "sls": 10
       }
      }
     }
    ],
    "ru": "Магическая аура",
    "en": "Arcane Aura",
-   "ru_d": "+12% усиления способностей и +150 дальности способностей",
-   "en_d": "+12% spell amplification and +150 cast range",
-   "ru_aw": "Пробуждение: +20% усиления, +250 дальности",
-   "en_aw": "Awakening: +20% amplification, +250 range"
+   "ru_d": "После Nova Кристал получает +17% усиления и +200 дальности заклинаний на 4,5 с. Arcane Aura даёт ей 7% вампиризма заклинаний.",
+   "en_d": "After Nova, gain 17% spell amplification and 200 cast range for 4.5 s. Arcane Aura grants Crystal Maiden 7% spell lifesteal.",
+   "ru_aw": "Пробуждение: +24% усиления, +275 дальности и 10% вампиризма.",
+   "en_aw": "Awakening: 24% amplification, 275 cast range and 10% spell lifesteal."
   },
   {
    "id": "cm_l_blizzard",
    "r": "legend",
    "branch": "R",
    "ab": "crystal_maiden_freezing_field",
-   "mods": "damage:*1.3",
+   "mods": "damage:*1.2",
    "fx": [
     {
      "t": "buff",
-     "dur": "AbilityChannelTime",
+     "dur": 3,
      "props": {
-      "inc": -30
+      "inc": -20
+     },
+     "shield": {
+      "base": 150,
+      "dur": 3
      },
      "aw": {
       "props": {
-       "immune": 1
+       "inc": -28
+      },
+      "shield": {
+       "base": 230
       }
      }
     }
    ],
    "ru": "Вьюга",
    "en": "Blizzard",
-   "ru_d": "Урон Freezing Field ×1.3; во время него Кристал получает на 30% меньше урона",
-   "en_d": "Freezing Field damage ×1.3; during it Crystal Maiden takes 30% less damage",
-   "ru_aw": "Пробуждение: невосприимчивость к магии во время Freezing Field",
-   "en_aw": "Awakening: spell immunity during Freezing Field"
+   "ru_d": "Freezing Field наносит на 20% больше урона. Первые 3 с после применения Кристал получает на 20% меньше урона и щит на 150.",
+   "en_d": "Freezing Field deals 20% more damage. For the first 3 s after casting, Crystal Maiden takes 20% less damage and gains a 150 barrier.",
+   "ru_aw": "Пробуждение: −28% входящего урона и щит 230.",
+   "en_aw": "Awakening: 28% damage reduction and a 230 barrier."
   },
   {
    "id": "cm_m_autonova",

@@ -175,14 +175,35 @@
    "r": "legend",
    "branch": "E",
    "ab": "tidehunter_anchor_smash",
-   "mods": "additional_range:+150;attack_damage:+75",
-   "awmods": "reduction_duration:+3",
+   "mods": "additional_range:+100;attack_damage:+45",
+   "awmods": "reduction_duration:+1.5",
    "ru": "Якорь бездны",
    "en": "Abyssal Anchor",
-   "ru_d": "Радиус Anchor Smash +150, урон +75",
-   "en_d": "Anchor Smash radius +150, damage +75",
-   "ru_aw": "Пробуждение: снижение урона длится на 3 с дольше",
-   "en_aw": "Awakening: the damage reduction lasts 3 s longer"
+   "ru_d": "Anchor Smash: радиус +100, урон атаки +45. Задетый герой теряет 3 брони на 3,5 с. Раз в 4 с по цели.",
+   "en_d": "Anchor Smash gains 100 radius and 45 attack damage. A hero it hits loses 3 armor for 3.5 s, once per target per 4 s.",
+   "ru_aw": "Пробуждение: −5 брони, штатное снижение урона длится ещё 1,5 с.",
+   "en_aw": "Awakening: 5 armor reduction and 1.5 s longer native damage reduction.",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "icd": 4,
+     "debuff": {
+      "dur": 3.5,
+      "props": {
+       "armor": -3
+      }
+     },
+     "aw": {
+      "debuff": {
+       "props": {
+        "armor": -5
+       }
+      }
+     }
+    }
+   ]
   },
   {
    "id": "tide_l_ravage",

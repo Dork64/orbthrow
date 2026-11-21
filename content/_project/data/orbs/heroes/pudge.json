@@ -229,26 +229,35 @@
    "r": "legend",
    "branch": "E",
    "ab": "pudge_flesh_heap",
-   "mods": "damage_block:+15",
+   "mods": "damage_block:+8",
    "fx": [
     {
-     "t": "passive",
+     "t": "guard",
+     "win": 5,
+     "thr": 12,
+     "icd": 14,
+     "radius": 345,
+     "dmg": 135,
+     "heal": 5,
+     "dur": 3,
      "props": {
-      "hp": 300
+      "slowres": 35
      },
      "aw": {
+      "dmg": 190,
+      "heal": 7,
       "props": {
-       "hp": 600
+       "slowres": 45
       }
      }
     }
    ],
    "ru": "Гора мяса",
    "en": "Meat Mountain",
-   "ru_d": "Flesh Heap блокирует еще 15 урона; +300 здоровья",
-   "en_d": "Flesh Heap blocks 15 more damage; +300 health",
-   "ru_aw": "Пробуждение: +600 здоровья",
-   "en_aw": "Awakening: +600 health"
+   "ru_d": "Flesh Heap блокирует ещё 8 урона. Если за первые 5 с Пудж получит от героев 12% макс. здоровья уроном, он ударит в радиусе 345 на 135 магического, вылечит 5% и получит 35% сопротивления замедлению на 3 с.",
+   "en_d": "Flesh Heap blocks 8 more damage. Taking 12% max health in hero damage in the first 5 s retaliates for 135 magic damage in 345, heals 5% max health and grants 35% slow resistance for 3 s.",
+   "ru_aw": "Пробуждение: 190 урона, 7% здоровья, 45% сопротивления замедлению.",
+   "en_aw": "Awakening: 190 damage, 7% healing and 45% slow resistance."
   },
   {
    "id": "pudge_l_dismember",

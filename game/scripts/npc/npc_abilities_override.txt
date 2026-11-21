@@ -1,33 +1,24 @@
-#base "orb_ability_charges.txt"
-// Правки стандартных способностей и предметов для режима (DESIGN 3.6 и 10.4).
+// Сгенерировано tools/native-charges.js из игровых данных и сфер.
 "DOTAAbilities"
 {
 	"Version"	"1"
-
-	// Rapier выключен: в гонке убийств его выпадение слишком случайно.
 	"item_rapier"
 	{
 		"ItemPurchasable"	"0"
 	}
-
-	// Aghanim's Shard продается с начала партии (в обычной Доте — с 15:00).
 	"item_aghanims_shard"
 	{
-		"ItemInitialStockTime"		"0.0"
+		"ItemInitialStockTime"	"0.0"
 		"ItemInitialStockTimeTurbo"	"0.0"
-		"ItemStockInitial"			"1"
-		"ItemStockMax"				"1"
-		"ItemStockTime"				"1"
+		"ItemStockInitial"	"1"
+		"ItemStockMax"	"1"
+		"ItemStockTime"	"1"
 	}
-
-	// Sniper: дальность Assassinate 2000, перезарядка 30/25/20 — иначе ворует добивания через всю карту.
 	"sniper_assassinate"
 	{
 		"AbilityCastRange"	"2000"
 		"AbilityCooldown"	"30 25 20"
 	}
-
-	// Mirana: стрела не дальше 2000.
 	"mirana_arrow"
 	{
 		"AbilityCastRange"	"2000"
@@ -36,11 +27,254 @@
 			"arrow_range"	"2000"
 		}
 	}
-
-	// BKB: 95 -> 50 секунд; длительность и цена стандартные.
 	"item_black_king_bar"
 	{
-		"AbilityCooldown" "50"
+		"AbilityCooldown"	"50"
 	}
-
+	"bloodseeker_blood_bath"
+	{
+		"AbilityValues"
+		{
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"15 14 13 12"
+			}
+		}
+	}
+	"crystal_maiden_crystal_nova"
+	{
+		"AbilityValues"
+		{
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"11 10 9 8"
+				"special_bonus_unique_crystal_maiden_5"	"-4.5"
+			}
+		}
+	}
+	"dragon_knight_dragon_tail"
+	{
+		"AbilityValues"
+		{
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"16 14 12 10"
+			}
+		}
+	}
+	"earthshaker_fissure"
+	{
+		"AbilityValues"
+		{
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"18 17 16 15"
+				"special_bonus_shard"	"-2"
+			}
+		}
+	}
+	"faceless_void_time_walk"
+	{
+		"AbilityValues"
+		{
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"21 16 11 6"
+				"special_bonus_unique_faceless_void_5"	"-1.0"
+			}
+		}
+	}
+	"lina_light_strike_array"
+	{
+		"AbilityValues"
+		{
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"13 11 9 7"
+			}
+		}
+	}
+	"luna_lucent_beam"
+	{
+		"AbilityValues"
+		{
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"9.0 8.0 7.0 6.0"
+				"special_bonus_unique_luna_2"	"-2"
+			}
+		}
+	}
+	"ogre_magi_fireblast"
+	{
+		"AbilityValues"
+		{
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"14 12 10 8"
+				"special_bonus_scepter"	"-1"
+			}
+		}
+	}
+	"puck_illusory_orb"
+	{
+		"AbilityValues"
+		{
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"12 11 10 9"
+			}
+		}
+	}
+	"pudge_meat_hook"
+	{
+		"AbilityValues"
+		{
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"18 16 14 12"
+				"special_bonus_unique_pudge_5"	"-4"
+			}
+		}
+	}
+	"queenofpain_blink"
+	{
+		"AbilityValues"
+		{
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"12.0 10.0 8.0 6.0"
+				"special_bonus_unique_queen_of_pain_6"	"-2"
+			}
+		}
+	}
+	"sandking_scorpion_strike"
+	{
+		"AbilityValues"
+		{
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"15.0 12.0 9.0 6.0"
+			}
+		}
+	}
+	"snapfire_scatterblast"
+	{
+		"AbilityValues"
+		{
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"17 14 11 8"
+			}
+		}
+	}
+	"sven_storm_bolt"
+	{
+		"AbilityValues"
+		{
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"21 18 15 12"
+				"special_bonus_unique_sven_stormhammer_cooldown"	"-25%"
+			}
+		}
+	}
+	"tidehunter_gush"
+	{
+		"AbilityValues"
+		{
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"12"
+			}
+		}
+	}
+	"viper_nethertoxin"
+	{
+		"AbilityValues"
+		{
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"14.0"
+			}
+		}
+	}
+	"zuus_lightning_bolt"
+	{
+		"AbilityValues"
+		{
+			"AbilityCharges"
+			{
+				"value"	"0"
+			}
+			"AbilityChargeRestoreTime"
+			{
+				"value"	"6.0 6.0 6.0 6.0"
+			}
+		}
+	}
 }

@@ -78,6 +78,10 @@ export class ModifierOrbHero extends ModBase {
 
     OnDestroy() { if (IsServer() && this.engine !== undefined) this.engine.clear(); }
 
+    ManeuverOrder(kind: UnitOrder, target: CDOTA_BaseNPC | undefined, point: Vector): boolean {
+        return this.engine?.maneuverOrder(kind, target, point) ?? false;
+    }
+
     /** Движок эффектов с актуальным списком взятых сфер. */
     private fx(b?: OrbBonuses): FxEngine | undefined {
         const e = this.engine;
@@ -88,12 +92,12 @@ export class ModifierOrbHero extends ModBase {
 
     DeclareFunctions() {
         return [
+            ModifierFunction.ON_ABILITY_START,
             ModifierFunction.ON_ABILITY_FULLY_CAST,
             ModifierFunction.ON_TAKEDAMAGE,
             ModifierFunction.ON_DEATH,
             ModifierFunction.ON_ATTACK_LANDED,
             ModifierFunction.PREATTACK_CRITICALSTRIKE,
-            ModifierFunction.PREATTACK_BONUS_DAMAGE,
             ModifierFunction.STATS_STRENGTH_BONUS,
             ModifierFunction.TOTALDAMAGEOUTGOING_PERCENTAGE,
         ];
@@ -103,14 +107,6 @@ export class ModifierOrbHero extends ModBase {
 
     /** Один в поле воин: удвоенный бонус One Man Army (значение считает OnIntervalThink). */
     GetModifierBonusStats_Strength() { return this.GetStackCount(); }
-
-    /** Бесконечный омнислэш, Пробуждение: +15 урона ударам Омнислэша. */
-    GetModifierPreAttack_BonusDamage(): number {
-        if (!IsServer()) return 0;
-        const b = this.b();
-        if (!this.has("jugg_l_endless", b) || !b.awake) return 0;
-        return GameRules.GetGameTime() < this.omniUntil ? H.endlessDamageAwake : 0;
-    }
 
     /** Криты эффектов сфер и Добивание Джаггернаута (наибольший множитель). */
     GetModifierPreAttack_CriticalStrike(e: ModifierAttackEvent): number {
@@ -140,6 +136,11 @@ export class ModifierOrbHero extends ModBase {
     }
 
     // ---------- События ----------
+
+    OnAbilityStart(e: ModifierAbilityEvent) {
+        if (!IsServer() || e.unit !== this.GetParent() || e.ability === undefined) return;
+        this.engine?.maneuverStart(e.ability);
+    }
 
     OnAbilityFullyCast(e: ModifierAbilityEvent) {
         if (!IsServer() || this.spreading) return;
@@ -266,6 +267,7 @@ export class ModifierOrbHero extends ModBase {
 
     OnAttackLanded(e: ModifierAttackEvent) {
         if (!IsServer()) return;
+        this.engine?.onObservedAttack(e);
         const parent = this.GetParent();
         if (e.attacker !== parent) return;
         const b = this.b();
@@ -274,8 +276,7 @@ export class ModifierOrbHero extends ModBase {
         const t = e.target;
         if (!isEnemyHero(parent, t)) return;
         const dance = this.has("jugg_p_death_dance", b);
-        const cuts = this.has("jugg_l_cuts", b);
-        if (!dance && !cuts) return;
+        if (!dance) return;
         // Крит узнаем по урону: заметно больше среднего урона атаки
         const avg = parent.GetAverageTrueAttackDamage(t);
         if (avg <= 0 || e.damage < avg * H.critRatio) return;
@@ -288,11 +289,6 @@ export class ModifierOrbHero extends ModBase {
                 a.EndCooldown();
                 if (left > H.deathDanceCdr) a.StartCooldown(left - H.deathDanceCdr);
             }
-        }
-        if (cuts && t.IsAlive()) {
-            const pct = b.awake ? H.cutsPctAwake : H.cutsPct;
-            t.AddNewModifier(parent, parent.FindAbilityByName("juggernaut_blade_dance"), "modifier_orb_jugg_bleed",
-                { duration: H.cutsDuration + 0.1, total: e.damage * pct });
         }
     }
 
@@ -316,17 +312,6 @@ export class ModifierOrbHero extends ModBase {
         const inflictor = e.inflictor;
         const iname = inflictor !== undefined ? inflictor.GetAbilityName() : "";
         if (iname === "axe_culling_blade" && inflictor !== undefined) this.onCullKill(inflictor, b);
-        // Бесконечный омнислэш: убийство героя продлевает Омнислэш и обновляет Вихрь
-        if (now < this.omniUntil && this.has("jugg_l_endless", b)) {
-            const ext = b.awake ? H.endlessExtendAwake : H.endlessExtend;
-            for (const m of parent.FindAllModifiers()) {
-                const n = m.GetName();
-                if (n.indexOf("omni") >= 0 || n.indexOf("swift_slash") >= 0) m.SetDuration(m.GetRemainingTime() + ext, true);
-            }
-            this.omniUntil += ext;
-            const fury = parent.FindAbilityByName("juggernaut_blade_fury");
-            if (fury !== undefined) fury.EndCooldown();
-        }
     }
 
     private jumpHunger(dead: CDOTA_BaseNPC) {
@@ -428,8 +413,8 @@ export class ModifierOrbHero extends ModBase {
     private thinkWard(parent: CDOTA_BaseNPC, b: OrbBonuses, now: number) {
         const roaming = this.has("jugg_p_roaming_ward", b);
         const fury = this.has("jugg_p_healing_fury", b);
-        const sanct = this.has("jugg_l_sanctuary", b);
-        if (!roaming && !fury && !sanct) return;
+        const relay = this.has("jugg_l_sanctuary", b);
+        if (!roaming && !fury && !relay) return;
         // Найти свой новый тотем рядом с точкой применения
         if (this.ward === undefined && now < this.wardSearchUntil && this.wardSearchPos !== undefined) {
             const units = FindUnitsInRadius(parent.GetTeamNumber(), this.wardSearchPos, undefined, 500,
@@ -437,7 +422,7 @@ export class ModifierOrbHero extends ModBase {
             for (const u of units) {
                 if (u.GetUnitName() !== WARD_UNIT || u.GetPlayerOwnerID() !== parent.GetPlayerOwnerID()) continue;
                 this.ward = u;
-                if (sanct) u.AddNewModifier(parent, undefined, "modifier_invulnerable", { duration: H.sanctuaryInvuln });
+                if (relay) this.engine?.rememberWard(u);
                 break;
             }
         }
@@ -457,11 +442,6 @@ export class ModifierOrbHero extends ModBase {
             w.MoveToNPC(parent);
         }
         if (roaming && dist <= radius) parent.AddNewModifier(parent, healAbility, "modifier_orb_jugg_ward_armor", { duration: 0.25 });
-        if (sanct && dist <= radius) {
-            const m = parent.AddNewModifier(parent, healAbility, "modifier_orb_jugg_sanctuary", { duration: 0.25 });
-            if (m !== undefined) m.SetStackCount(b.awake ? H.sanctuaryReduceAwake : H.sanctuaryReduce);
-            if (b.awake) parent.Heal(parent.GetMaxHealth() * H.sanctuaryHealAwake / 100 * THINK, healAbility);
-        }
         if (fury && now < this.furyUntil && dist <= H.healingFuryRange && healAbility !== undefined) {
             const pct = healAbility.GetSpecialValueFor("healing_ward_heal_amount");
             // В радиусе тотем уже лечит сам — добавляем столько же; дальше — двойное лечение целиком

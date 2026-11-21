@@ -4,16 +4,27 @@ import { bonusAbilityCharges } from "../core/orbstore";
 // смерть, тик. Работает только на сервере. Свойства баффов — modifiers/modifier_orb_fx.ts.
 
 import { advanceCombo, insideRing, tetherBand, ComboState } from "../core/combatpatterns";
-import type { FxCombo, FxZone, FxTether, FxMark, FxGuard } from "../core/fxtypes";
+import type { FxCombo, FxZone, FxTether, FxMark, FxGuard, FxWire } from "../core/fxtypes";
 import type { FxActions, FxDebuff, FxDef, FxNum, FxTrap, FxTrail } from "../core/fxtypes";
 import { fxModifierName } from "../core/fxtypes";
 import { fxNum, fxOfOrb, fxView } from "../core/fxutil";
 import type { OrbBonuses } from "../core/orbstore";
+import { ZeusLegends } from "./zeuslegends";
+import { HeroManeuvers } from "./heromaneuvers";
+import type { FxManeuver } from "../core/fxtypes";
 
 const CHAIN_PFX = "particles/items_fx/chain_lightning.vpcf";
 const STORM_PFX = "particles/units/heroes/hero_zuus/zuus_lightning_bolt.vpcf";
 const RING_PFX = "particles/ui_mouseactions/range_display.vpcf";
+const WIRE_END_RADIUS = 90;
+const WIRE_PFX = "particles/units/heroes/hero_razor/razor_static_link.vpcf";
 const REWIND_PFX = "particles/units/heroes/hero_weaver/weaver_timelapse.vpcf";
+
+function length2D(x: number, y: number): number { return Math.sqrt(x * x + y * y); }
+
+function nearWireEnd(pos: Vector, end: Vector): boolean {
+    return Math.abs(pos.z - end.z) < 135 && length2D(pos.x - end.x, pos.y - end.y) <= WIRE_END_RADIUS;
+}
 
 interface Trap {
     f: FxTrap;
@@ -85,10 +96,23 @@ export class FxEngine {
     private tethers = new Map<string, { f: FxTether; target: CDOTA_BaseNPC; until: number; next: number; streak: number; finished: boolean }>();
     private marks = new Map<string, Map<EntityIndex, OrbMark>>();
     private guards = new Map<string, { until: number; readyAt: number; damage: number }>();
+    private wireAnchor?: { pos: Vector; until: number; marker: ParticleID };
+    private wire?: { start: Vector; end: Vector; f: FxWire; armAt: number; until: number; charges: number; particles: ParticleID[]; hit: Set<EntityIndex>; leftEnds: boolean };
+    private wireReadyAt = 0;
+    private zeus?: ZeusLegends;
+    private maneuvers?: HeroManeuvers;
     private combatEpoch = 0;
 
     constructor(parent: CDOTA_BaseNPC) {
         this.parent = parent;
+    }
+
+    maneuverStart(ability: CDOTABaseAbility) { this.maneuvers?.start(ability, GameRules.GetGameTime()); }
+
+    rememberWard(ward: CDOTA_BaseNPC) { this.maneuvers?.rememberWard(ward); }
+
+    maneuverOrder(kind: UnitOrder, target: CDOTA_BaseNPC | undefined, point: Vector): boolean {
+        return this.maneuvers?.order(kind, target, point, GameRules.GetGameTime()) ?? false;
     }
 
     // ---------- Активные эффекты ----------
@@ -103,6 +127,21 @@ export class FxEngine {
             for (const f of fxOfOrb(id)) out.push(fxView(f, b.awake));
         }
         this.list = out;
+        const plans = out.filter((f): f is FxManeuver => f.t === "maneuver");
+        if (plans.length > 0) {
+            this.maneuvers ??= new HeroManeuvers(this.parent,
+                (victim, amount, effect, magical) => this.damage(victim, amount, magical ? DamageTypes.MAGICAL : DamageTypes.PHYSICAL, effect),
+                (target, dir, dist, dur) => this.shove(target, dir, dist, dur));
+            this.maneuvers.configure(plans, b.awake);
+        } else if (this.maneuvers !== undefined) {
+            this.maneuvers.clear();
+            this.maneuvers = undefined;
+        }
+        if (!out.some(f => f.t === "wire")) this.clearWire();
+        if (this.zeus !== undefined && !out.some(f => f.t === "spring" || f.t === "thunderball")) {
+            this.zeus.clear();
+            this.zeus = undefined;
+        }
 
     }
 
@@ -134,7 +173,7 @@ export class FxEngine {
     private damage(victim: CDOTA_BaseNPC, amount: number, type: DamageTypes, f: FxDef, flags = 0) {
         if (amount <= 0 || !victim.IsAlive()) return 0;
         // Эти эффекты наносят собственный урон, поэтому получают усиление заклинаний один раз.
-        const spell = f.t === "mark" || f.t === "guard" || f.t === "zone" || f.t === "tether";
+        const spell = f.t === "spring" || f.t === "thunderball" || f.t === "mark" || f.t === "guard" || f.t === "zone" || f.t === "tether";
         this.applying = true;
         try { return ApplyDamage({
             victim, attacker: this.parent, damage: amount, damage_type: type,
@@ -258,6 +297,9 @@ export class FxEngine {
 
     private condOk(cond: string | undefined, lowhp: number | undefined, t: CDOTA_BaseNPC): boolean {
         if (lowhp !== undefined && t.GetHealthPercent() >= lowhp) return false;
+        if (cond !== undefined && cond.indexOf("own:") === 0) {
+            return this.hasOwnCombatModifier(t, cond.slice(4));
+        }
         if (cond !== undefined && cond.indexOf("has:") === 0) {
             // Цель под действием модификатора (часть имени после «has:»)
             const part = cond.substring(4);
@@ -296,9 +338,18 @@ export class FxEngine {
         if (target !== undefined) this.lastTarget.set(name, target);
         else this.lastTarget.delete(name);
         this.lastPoint.set(name, ability.GetCursorPosition());
+        this.maneuvers?.cast(ability, target, now);
         for (const f of this.list) {
             if (f.t === "combo") { this.comboCast(f, name, now); continue; }
             if (f.ab !== name) continue;
+            if (f.t === "spring" || f.t === "thunderball") {
+                const zeus = this.zeus ??= new ZeusLegends(parent, (victim, amount, effect, flags) =>
+                    this.damage(victim, amount, DamageTypes.MAGICAL, effect, flags));
+                if (f.t === "spring") zeus.castSpring(f, now);
+                else if (this.listFor !== undefined) zeus.castBall(f, ability, this.listFor, now);
+                continue;
+            }
+            if (f.t === "wire") { this.castWire(f, now); continue; }
             if (f.t === "zone") { this.startZone(f, ability, target); continue; }
             if (f.t === "tether") { this.startTether(f, target); continue; }
             if (f.t === "mark" && f.by === "cast" && target !== undefined) {
@@ -566,6 +617,8 @@ export class FxEngine {
         if (inflictor === undefined || inflictor.IsItem()) return;
         const name = inflictor.GetAbilityName();
         const now = GameRules.GetGameTime();
+        if (name === "zuus_lightning_bolt") this.zeus?.bolt(victim, now);
+        this.maneuvers?.spellHit(victim, inflictor, now);
         for (const f of this.list) {
             if (f.t === "mark") { this.markHit(f, victim, name, now); continue; }
             if (f.ab !== name) continue;
@@ -584,12 +637,17 @@ export class FxEngine {
         }
     }
 
+    onObservedAttack(e: ModifierAttackEvent) {
+        if (this.zeus !== undefined) this.zeus.attack(e, GameRules.GetGameTime());
+    }
+
     /** Атака героя попала. */
     onAttack(e: ModifierAttackEvent) {
         const parent = this.parent;
         const t = e.target;
         if (!isEnemy(parent, t)) return;
         const now = GameRules.GetGameTime();
+        this.maneuvers?.attack(e, now);
         for (const f of this.list) {
             if (f.t === "mark") { this.markHit(f, t, "attack", now); continue; }
             if (f.t !== "hit" || f.by !== "attack") continue;
@@ -619,6 +677,7 @@ export class FxEngine {
         if (!isEnemy(parent, a) || !a.IsRealHero() || e.damage <= 0) return;
         if ((e.damage_flags & DamageFlag.REFLECTION) !== 0) return;
         const now = GameRules.GetGameTime();
+        this.maneuvers?.taken(e, now);
         for (const f of this.list) {
             if (f.t === "guard") { this.guardHit(f, e.damage, now); continue; }
             if (f.t !== "taken" || !this.inWindow(f, f.win, now)) continue;
@@ -1019,9 +1078,93 @@ export class FxEngine {
         for (const u of units) if (u.IsAlive() && u.IsRealHero()) this.damage(u, amount, DamageTypes.MAGICAL, f);
     }
 
+    private wireMarker(pos: Vector): ParticleID {
+        const fx = ParticleManager.CreateParticle(RING_PFX, ParticleAttachment.WORLDORIGIN, undefined);
+        ParticleManager.SetParticleControl(fx, 0, pos);
+        ParticleManager.SetParticleControl(fx, 1, Vector(WIRE_END_RADIUS, 0, 0));
+        ParticleManager.SetParticleControl(fx, 2, Vector(110, 185, 255));
+        return fx;
+    }
+
+    private clearWire() {
+        const particles = this.wire?.particles ?? (this.wireAnchor === undefined ? [] : [this.wireAnchor.marker]);
+        for (const fx of particles) {
+            ParticleManager.DestroyParticle(fx, true);
+            ParticleManager.ReleaseParticleIndex(fx);
+        }
+        this.wireAnchor = undefined;
+        this.wire = undefined;
+    }
+
+    private castWire(f: FxWire, now: number) {
+        const parent = this.parent;
+        const pos = parent.GetAbsOrigin();
+        if (now >= (this.wire?.until ?? this.wireAnchor?.until ?? Infinity)) this.clearWire();
+        const wire = this.wire;
+        if (wire !== undefined) {
+            // Третий каст у одного конца: отступить к другому, пожертвовав ловушкой.
+            if (now < wire.armAt || !wire.leftEnds || parent.IsRooted() ||
+                parent.HasModifier("modifier_slark_pounce_leash") || parent.HasModifier("modifier_puck_dream_coil")) return;
+            const destination = nearWireEnd(pos, wire.start) ? wire.end : nearWireEnd(pos, wire.end) ? wire.start : undefined;
+            if (destination === undefined) return;
+            this.clearWire();
+            FindClearSpaceForUnit(parent, destination, true);
+            return;
+        }
+        if (now < this.wireReadyAt) return;
+        const anchor = this.wireAnchor;
+        if (anchor === undefined) {
+            this.wireAnchor = { pos, until: now + f.within, marker: this.wireMarker(pos) };
+            return;
+        }
+        const span = length2D(pos.x - anchor.pos.x, pos.y - anchor.pos.y);
+        if (span < f.minDist || span > f.maxDist || Math.abs(pos.z - anchor.pos.z) >= 220) return;
+
+        const beam = ParticleManager.CreateParticle(WIRE_PFX, ParticleAttachment.WORLDORIGIN, undefined);
+        ParticleManager.SetParticleControl(beam, 0, Vector(anchor.pos.x, anchor.pos.y, anchor.pos.z + 70));
+        ParticleManager.SetParticleControl(beam, 1, Vector(pos.x, pos.y, pos.z + 70));
+        this.wire = { start: anchor.pos, end: pos, f, armAt: now + f.arm, until: now + f.dur, charges: f.max,
+            particles: [anchor.marker, beam, this.wireMarker(pos)], hit: new Set(), leftEnds: false };
+        this.wireAnchor = undefined;
+        this.wireReadyAt = now + f.icd;
+    }
+
+    private tickWire(now: number) {
+        if (now >= (this.wire?.until ?? this.wireAnchor?.until ?? Infinity)) this.clearWire();
+        const wire = this.wire;
+        if (wire === undefined) return;
+        const { start, end, f } = wire;
+        const pos = this.parent.GetAbsOrigin();
+        if (!nearWireEnd(pos, start) && !nearWireEnd(pos, end)) wire.leftEnds = true;
+        if (now < wire.armAt) return;
+        const dx = end.x - start.x, dy = end.y - start.y;
+        const length = length2D(dx, dy);
+        const center = Vector((start.x + end.x) / 2, (start.y + end.y) / 2, (start.z + end.z) / 2);
+        const targets = FindUnitsInRadius(this.parent.GetTeamNumber(), center, undefined, length / 2 + f.radius,
+            UnitTargetTeam.ENEMY, UnitTargetType.HERO, UnitTargetFlags.FOW_VISIBLE + UnitTargetFlags.NO_INVIS, FindOrder.CLOSEST, false);
+        for (const target of targets) {
+            if (!target.IsRealHero() || !target.IsAlive() || target.IsInvulnerable() || target.IsDebuffImmune() || wire.hit.has(target.entindex())) continue;
+            const p = target.GetAbsOrigin();
+            const along = Math.max(0, Math.min(1, ((p.x - start.x) * dx + (p.y - start.y) * dy) / (length * length)));
+            const nx = p.x - (start.x + along * dx), ny = p.y - (start.y + along * dy);
+            const d = length2D(nx, ny);
+            if (d > f.radius || Math.abs(p.z - (start.z + along * (end.z - start.z))) > 135) continue;
+            const direction = d > 0.01 ? Vector(nx / d, ny / d, 0) : Vector(-dy / length, dx / length, 0);
+            wire.hit.add(target.entindex());
+            wire.charges--;
+            this.shove(target, direction, f.dist, 0.25);
+            this.applyDebuff(f, f.debuff, target);
+            EmitSoundOn("Hero_Zuus.LightningBolt", target);
+            if (wire.charges <= 0) { this.clearWire(); return; }
+        }
+    }
+
     private combatTick(now: number) {
         const parent = this.parent;
         if (!parent.IsAlive()) { this.clearCombat(); return; }
+        this.tickWire(now);
+        this.zeus?.tick(now);
+        this.maneuvers?.tick(now);
         for (const zone of this.zones.slice()) {
             if (now >= zone.until) { this.removeZone(zone); continue; }
             if (now < zone.next) continue;
@@ -1071,6 +1214,9 @@ export class FxEngine {
     /** Умирая, герой теряет незавершённые сочетания, свои зоны и связи. */
     clearCombat() {
         this.combatEpoch++;
+        this.clearWire();
+        this.zeus?.clear();
+        this.maneuvers?.clear();
         for (const zone of this.zones.slice()) this.removeZone(zone);
         this.tethers.clear();
         for (const set of this.marks.values()) for (const mark of set.values()) if (!mark.spent && !mark.mod.IsNull()) mark.mod.Destroy();

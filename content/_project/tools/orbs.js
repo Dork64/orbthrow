@@ -12,6 +12,10 @@ function fmtNum(x) {
 
 // ---------- Проверка эффектов сфер-кода ----------
 const FX_TYPES = {
+    maneuver: ["mode"],
+    spring: ["radius", "dur", "arm", "delay", "dist", "range"],
+    thunderball: ["range", "dur", "delay", "dist", "pct"],
+    wire: ["within", "dur", "arm", "icd", "minDist", "maxDist", "radius", "dist", "max", "debuff"],
     mark: ["by", "consume", "dur", "icd", "max", "dmg"],
     guard: ["win", "thr", "icd", "radius", "dmg", "dur", "props"],
     combo: ["abs", "need", "within", "icd", "radius", "dmg", "dur", "props"],
@@ -25,14 +29,14 @@ const FX_TYPES = {
     trail: ["dps", "radius", "life", "type"], trap: ["at", "radius", "arm", "life", "max", "dmg", "type"], summon: ["unit", "n", "dur"],
     swap: [], storm: ["win", "every", "radius", "dmg", "type"], rewind: ["delay", "heal"],
 };
-const MECH_TYPES = ["combo", "zone", "tether", "auto", "multi", "dash", "pull", "illusion", "trail", "trap", "summon", "swap", "storm", "rewind"];
+const MECH_TYPES = ["maneuver", "spring", "thunderball", "wire", "combo", "zone", "tether", "auto", "multi", "dash", "pull", "illusion", "trail", "trap", "summon", "swap", "storm", "rewind"];
 const FX_PROPS = ["armor", "ms", "msc", "as", "dmg", "dmgc", "inc", "status", "slowres", "sa", "mr", "regen", "regenpct", "evasion",
     "range", "castrange", "str", "agi", "int", "hp", "ls", "sls", "cleave", "immune", "silence", "root", "stun", "disarm", "brk", "reveal", "nocol", "healred",
     "invis", "fly", "scale"];
 const FX_FIELDS = new Set(["t", "ab", "icon", "aw", "key", "orb", "hero", "dur", "props", "dispel", "shield", "perlvl", "thr", "mod", "min", "perstack",
     "delay", "n", "chance", "cdpct", "mana", "by", "win", "refresh", "heal", "manapct", "ext", "stack", "heroOnly", "every", "cond", "lowhp", "icd",
     "debuff", "extra", "chain", "splash", "pierce", "cdr", "addstack", "delays", "pct", "at", "radius", "dmg", "type", "pfx", "reflect", "mult", "attackOnly",
-    "range", "times", "dist", "to", "out", "inc", "life", "arm", "max", "unit", "dps", "abs", "need", "within", "inner", "minDist", "maxDist", "breakRange", "isolated", "targetMod", "ownerMod", "consume", "group", "entryDmg", "finishTicks", "finishDmg", "nextCast", "nativeMark"]);
+    "range", "times", "dist", "to", "out", "inc", "life", "arm", "max", "unit", "dps", "abs", "need", "within", "inner", "minDist", "maxDist", "breakRange", "isolated", "targetMod", "ownerMod", "consume", "group", "entryDmg", "finishTicks", "finishDmg", "nextCast", "nativeMark", "ownerReturn", "bolt", "mode", "seconds"]);
 const PFX_OK = new Set([
     "particles/units/heroes/hero_lina/lina_spell_light_strike_array.vpcf",
     "particles/units/heroes/hero_earthshaker/earthshaker_echoslam_start.vpcf",
@@ -115,6 +119,14 @@ function validateFx(f, summary) {
     checkAll(f, "");
     if (f.aw) checkAll(f.aw, "aw.");
     for (const spec of [f, { ...f, ...(f.aw || {}) }]) {
+        if (f.t === "spring" && (!(spec.dur > spec.arm && spec.arm >= 0.5) || !(spec.radius > 0 && spec.dist > 0 &&
+            spec.range > 0 && spec.delay > 0))) errs.push("spring: неверное окно или геометрия");
+        if (f.t === "thunderball" && (!(spec.dur > spec.delay && spec.delay >= 0.5) ||
+            !(spec.range > spec.dist && spec.dist > 0 && spec.pct > 0))) errs.push("thunderball: неверное окно или радиус передачи");
+        if (f.t === "wire" && (!(spec.within > 0) || !(spec.dur > spec.arm && spec.arm > 0) ||
+            !(spec.icd >= spec.dur) || !(spec.maxDist > spec.minDist && spec.minDist > spec.radius && spec.radius > 0) ||
+            !(spec.dist > 0) || ![1, 2].includes(spec.max)))
+            errs.push("wire: неверные дистанции, сроки или расход");
         if (f.t === "mark") {
             if (!["ab", "cast"].includes(spec.by) || !Array.isArray(spec.consume) || !spec.consume.length ||
                 spec.consume.some(a => a !== "attack" && !abOk(a)) || !(spec.max >= 1 && spec.max <= 6) ||
@@ -131,6 +143,8 @@ function validateFx(f, summary) {
         if (!Array.isArray(f.abs) || new Set(f.abs).size !== f.abs.length || f.need < 2 || f.need > f.abs.length || !(f.within > 0) || !(f.icd >= f.within)) errs.push("combo: неверные ограничения");
         for (const name of f.abs || []) if (!abOk(name)) errs.push("combo: нет способности " + name);
     }
+    if (f.t === "maneuver" && !["ward", "parry", "omni", "rift", "ram", "sword", "dagger", "blindside", "blade",
+        "burrow", "sidestep", "trailhunt", "reel", "windlane", "vault"].includes(f.mode)) errs.push("maneuver: неизвестный режим");
     if (f.t === "zone" && (!(f.radius > (f.inner || 0)) || f.inner < 0 || !(f.every >= 0.5) || !["self", "point", "target"].includes(f.at))) errs.push("zone: неверная геометрия/период");
     if (f.t === "tether" && (!(f.every >= 0.5) || !(f.maxDist > (f.minDist || 0)) || f.breakRange < f.maxDist || !(f.range > 0))) errs.push("tether: неверные дистанции/период");
     if (f.t === "charges" && ab && ab.values.AbilityCharges !== undefined) errs.push("у способности свои заряды — используйте данные AbilityCharges");
@@ -138,7 +152,7 @@ function validateFx(f, summary) {
     if (f.t === "kill" && !["ab", "win", "any"].includes(f.by)) errs.push("by должно быть ab, win или any");
     if (f.t === "kill" && f.by === "win" && f.win === undefined) errs.push("для by=win нужно win");
     if (f.t === "blast" && !["self", "target", "point"].includes(f.at)) errs.push("at: self, target или point");
-    if (f.cond !== undefined && !["stunned", "slowed", "silenced", "rooted"].includes(f.cond) && !/^has:\w+$/.test(f.cond)) errs.push("cond: " + f.cond);
+    if (f.cond !== undefined && !["stunned", "slowed", "silenced", "rooted"].includes(f.cond) && !/^(has|own):\w+$/.test(f.cond)) errs.push("cond: " + f.cond);
     if ((f.t === "buff" || f.t === "echo" || f.t === "blast" || f.t === "charges" || f.t === "refund") && !f.ab) errs.push("нужна способность ab");
     if (MECH_TYPES.includes(f.t) && f.t !== "trail" && !f.ab) errs.push("нужна способность ab");
     // Повтор и самоприменение вызывают OnSpellStart: поддерживающие (канал) и переключаемые способности нельзя
@@ -322,7 +336,7 @@ function build(root) {
         "export const UPGRADE_DEFS: UpgradeDef[] = " + JSON.stringify(ups) + ";\n";
     fs.writeFileSync(path.join(root, "src/vscripts/core/orbdata.ts"), ts);
     // Файл модификаторов эффектов: каждое имя — явной глобальной переменной (так их находит движок)
-    const HAS_MOD = f => ["mark", "guard", "combo", "buff", "passive", "lowhp", "stacks", "still", "aura"].includes(f.t) || (f.t === "kill" && f.stack) || (["zone", "hit", "blast", "trail", "trap", "storm"].includes(f.t) && f.debuff);
+    const HAS_MOD = f => ["thunderball", "mark", "guard", "combo", "buff", "passive", "lowhp", "stacks", "still", "aura"].includes(f.t) || (f.t === "kill" && f.stack) || (["maneuver", "wire", "zone", "hit", "blast", "trail", "trap", "storm"].includes(f.t) && f.debuff);
     const withMod = fxList.filter(HAS_MOD);
     fs.writeFileSync(path.join(root, "src/vscripts/modifiers/modifier_orb_fx.ts"),
         "// Сгенерировано tools/orbs.js — не править руками. Модификаторы эффектов сфер-кода (класс — lib/fxmodifier.ts).\n" +

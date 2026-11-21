@@ -422,8 +422,8 @@
    "max": 1,
    "ru": "Пакт хищника",
    "en": "Predator’s Pact",
-   "ru_d": "Dark Pact метит до 3 героев на 4 с. Атака по метке наносит 140 магического урона и лечит Сларка на 6% максимального здоровья. Метка на цель — раз в 6 с.",
-   "en_d": "Dark Pact marks up to 3 heroes for 4 s. Attacking the mark deals 140 magic damage and heals Slark for 6% of his max health. Marks have a 6 s cooldown per hero.",
+   "ru_d": "Dark Pact даёт Сларку +30% сопротивления замедлению на 3,5 с и метит героев на 4 с. Атака по метке наносит 125 магического урона и лечит на 5% макс. здоровья. Метка на героя — раз в 6 с.",
+   "en_d": "Dark Pact grants 30% slow resistance for 3.5 s and marks heroes for 4 s. An attack detonates a mark for 125 magic damage and heals 5% max health. Once per hero per 6 s.",
    "fx": [
     {
      "t": "mark",
@@ -434,16 +434,28 @@
      "dur": 4,
      "icd": 6,
      "max": 3,
-     "dmg": 140,
-     "heal": 6,
+     "dmg": 125,
      "aw": {
-      "dmg": 205,
-      "heal": 8
+      "dmg": 185,
+      "heal": 7
+     },
+     "heal": 5
+    },
+    {
+     "t": "buff",
+     "dur": 3.5,
+     "props": {
+      "slowres": 30
+     },
+     "aw": {
+      "props": {
+       "slowres": 40
+      }
      }
     }
    ],
-   "ru_aw": "Пробуждение: 205 урона, лечение 8%.",
-   "en_aw": "Awakening: 205 damage, 8% healing."
+   "ru_aw": "Пробуждение: 185 урона, лечение 7%, сопротивление замедлению 40%.",
+   "en_aw": "Awakening: 185 damage, 7% max health healed and 40% slow resistance."
   },
   {
    "id": "slark_l_silentduel",
@@ -488,31 +500,36 @@
    "max": 1,
    "ru": "Ритм хищника",
    "en": "Predator Rhythm",
-   "ru_d": "Saltwater Shiv метит цель на 5 с. Dark Pact или атака взрывает метку на 160 магического урона и лечит на 8% макс. здоровья. Метка на цель — раз в 7 с.",
-   "en_d": "Saltwater Shiv marks its target for 5 s. Dark Pact or an attack consumes it for 160 magic damage and heals 8% max health. Marks have a 7 s cooldown per target.",
+   "ru_d": "Saltwater Shiv крадёт ещё 8 восстановления здоровья. Атака по замедленному им герою лечит Сларка на 30% нанесённого урона и снижает скорость атаки врага на 35 на 1,25 с. Раз в 2,4 с по цели.",
+   "en_d": "Saltwater Shiv steals 8 extra health restoration. Attacking a hero slowed by Shiv heals Slark for 30% of the damage dealt and reduces the enemy’s attack speed by 35 for 1.25 s. Once per target per 2.4 s.",
    "fx": [
     {
-     "t": "mark",
-     "by": "cast",
-     "consume": [
-      "slark_dark_pact",
-      "attack"
-     ],
-     "dur": 5,
-     "icd": 7,
-     "max": 1,
-     "dmg": 160,
-     "arm": 0.15,
-     "heal": 8,
-     "aw": {
-      "dmg": 225,
-      "heal": 10
+     "t": "hit",
+     "by": "attack",
+     "heroOnly": 1,
+     "icd": 2.4,
+     "cond": "own:modifier_slark_saltwater_shiv_impact_slow",
+     "heal": 30,
+     "debuff": {
+      "dur": 1.25,
+      "props": {
+       "as": -35
+      }
      },
-     "nativeMark": "modifier_slark_saltwater_shiv_impact_slow"
+     "aw": {
+      "heal": 45,
+      "debuff": {
+       "props": {
+        "as": -50
+       }
+      }
+     }
     }
    ],
-   "ru_aw": "Пробуждение: 225 урона и 10% лечения.",
-   "en_aw": "Awakening: 225 damage and 10% healing."
+   "ru_aw": "Пробуждение: ещё 12 восстановления, лечение 45%, замедление атаки на 50.",
+   "en_aw": "Awakening: 12 extra health restoration, 45% healing and 50 attack speed slow.",
+   "mods": "health_rest_steal:+8",
+   "awmods": "health_rest_steal:+4"
   },
   {
    "id": "slark_l_blackfin",
@@ -522,19 +539,19 @@
    "max": 1,
    "ru": "Чёрный плавник",
    "en": "Blackfin",
-   "ru_d": "Во время Shadow Dance +55 скорости атаки и +125 дальности. Атаки по героям ниже 40% здоровья наносят ещё 60% урона атаки, раз в 1,4 с по цели.",
-   "en_d": "During Shadow Dance: 55 attack speed and 125 attack range. Attacks against heroes below 40% health deal 60% extra attack damage, once per 1.4 s per target.",
+   "ru_d": "Shadow Dance даёт +40 скорости и +125 дальности атаки. Атака по герою под Dance добавляет 40% силы атаки физическим уроном и на 0,85 с замедляет на 22%. Раз в 1,4 с по цели.",
+   "en_d": "During Shadow Dance Slark gains 40 attack speed and 125 attack range. Attacking a hero adds 40% of attack damage as physical damage and slows by 22% for 0.85 s. Once per target per 1.4 s.",
    "fx": [
     {
      "t": "buff",
      "dur": "duration",
      "props": {
-      "as": 55,
+      "as": 40,
       "range": 125
      },
      "aw": {
       "props": {
-       "as": 75,
+       "as": 60,
        "range": 175
       }
      }
@@ -543,22 +560,27 @@
      "t": "hit",
      "by": "attack",
      "heroOnly": 1,
+     "icd": 1.4,
+     "win": "duration",
      "extra": {
-      "atk": 60,
+      "atk": 40,
       "type": "phys"
      },
-     "lowhp": 40,
-     "win": "duration",
-     "icd": 1.4,
+     "debuff": {
+      "dur": 0.85,
+      "props": {
+       "ms": -22
+      }
+     },
      "aw": {
       "extra": {
-       "atk": 85
+       "atk": 60
       }
      }
     }
    ],
-   "ru_aw": "Пробуждение: скорость атаки +75, дальность +175, дополнительный урон 85%.",
-   "en_aw": "Awakening: 75 attack speed, 175 range, 85% extra damage."
+   "ru_aw": "Пробуждение: скорость атаки +60, дальность +175, доп. урон 60%.",
+   "en_aw": "Awakening: 60 attack speed, 175 attack range and 60% bonus attack damage."
   }
  ]
 }

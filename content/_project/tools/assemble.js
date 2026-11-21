@@ -14,7 +14,9 @@ function copyDir(src, dst, filter = () => true) {
     else { fs.mkdirSync(path.dirname(d), { recursive: true }); fs.copyFileSync(s, d); }
   }
 }
-copyDir(path.join(root, "game"), path.join(build, "game"));
+// The generator already wrote the authored overrides and the charge fields into one KV file.
+const authoredOverrides = path.join(root, "game/scripts/npc/npc_abilities_override.txt");
+copyDir(path.join(root, "game"), path.join(build, "game"), file => file !== authoredOverrides);
 copyDir(path.join(root, "content"), path.join(build, "content"));
 
 // Защита lualib от урезанной библиотеки debug вне редактора.

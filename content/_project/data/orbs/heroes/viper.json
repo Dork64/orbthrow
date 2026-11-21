@@ -216,29 +216,30 @@
    "r": "legend",
    "branch": "R",
    "ab": "viper_viper_strike",
-   "mods": "damage:+60;duration:+2",
+   "mods": "damage:+45;duration:+1",
    "fx": [
     {
-     "t": "hit",
+     "t": "mark",
      "by": "ab",
-     "heroOnly": 1,
-     "splash": {
-      "radius": 400,
-      "pct": 0
-     },
+     "consume": [
+      "attack"
+     ],
+     "dur": 4,
+     "icd": 7,
+     "max": 1,
+     "dmg": 135,
      "aw": {
-      "splash": {
-       "pct": 50
-      }
+      "dmg": 190,
+      "heal": 4
      }
     }
    ],
    "ru": "Королевская кобра",
    "en": "King Cobra",
-   "ru_d": "Урон Viper Strike +60, длительность +2 с",
-   "en_d": "Viper Strike damage +60, duration +2 s",
-   "ru_aw": "Пробуждение: урон Viper Strike задевает врагов в 400 вокруг цели (50%)",
-   "en_aw": "Awakening: Viper Strike damage also hits enemies within 400 of the target (50%)"
+   "ru_d": "Viper Strike наносит на 45 больше урона за тик и длится на 1 с дольше. Урон Strike метит героя на 4 с, атака по метке наносит ещё 135 магического урона.",
+   "en_d": "Viper Strike deals 45 more damage per tick and lasts 1 s longer. Strike damage marks a hero for 4 s; an attack detonates it for 135 magic damage.",
+   "ru_aw": "Пробуждение: 190 урона метки и лечение на 4% макс. здоровья.",
+   "en_aw": "Awakening: 190 detonation damage and a heal for 4% max health."
   },
   {
    "id": "viper_m_venompath",

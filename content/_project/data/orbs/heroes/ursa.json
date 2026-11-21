@@ -149,55 +149,54 @@
    "r": "legend",
    "branch": "Q",
    "ab": "ursa_earthshock",
-   "mods": "AbilityCharges:+1",
-   "awmods": "AbilityDamage:+100",
-   "ru": "Сейсмический рев",
-   "en": "Seismic Roar",
-   "ru_d": "Earthshock получает 2 заряда",
-   "en_d": "Earthshock gets 2 charges",
-   "ru_aw": "Пробуждение: урон +100",
-   "en_aw": "Awakening: damage +100"
+   "ru": "Земля за спиной",
+   "en": "Fault Behind",
+   "ru_d": "После Earthshock в месте приземления расходится заметный разлом. Через паузу он отбрасывает ближайшего героя перед Урсой обратно к началу прыжка. Можно шагнуть из круга или пройти под BKB.",
+   "en_d": "Earthshock leaves a visible fault on landing. After a delay it sends the closest hero ahead of Ursa backward toward the start of the hop. Step outside or cross with debuff immunity.",
+   "ru_aw": "Пробуждение: разлом может отбросить двоих.",
+   "en_aw": "Awakening: the fault can send back two heroes.",
+   "fx": [
+    {
+     "t": "maneuver",
+     "mode": "burrow"
+    }
+   ]
   },
   {
    "id": "ursa_l_overpower",
    "r": "legend",
    "branch": "W",
    "ab": "ursa_overpower",
-   "mods": "max_attacks:+3",
+   "ru": "Косой бег",
+   "en": "Side Swipe",
+   "ru_d": "Под Overpower пробегите сбоку от героя, не отдавая приказ атаковать. Урса один раз за применение ударит его на бегу и потратит одну штатную быструю атаку. Обычные атаки расходуются как обычно.",
+   "en_d": "With Overpower active, run alongside a hero without issuing an attack. Ursa can strike once on the move and spends one native rapid attack. Standing attacks still spend charges normally.",
+   "ru_aw": "Пробуждение: удар на бегу достаёт дальше вбок.",
+   "en_aw": "Awakening: the running swipe reaches farther sideways.",
    "fx": [
     {
-     "t": "buff",
-     "dur": 6,
-     "props": {
-      "dmg": 15
-     },
-     "aw": {
-      "props": {
-       "dmg": 30
-      }
-     }
+     "t": "maneuver",
+     "mode": "sidestep"
     }
-   ],
-   "ru": "Шквал когтей",
-   "en": "Claw Flurry",
-   "ru_d": "Overpower дает на 3 быстрые атаки больше и +15% урона на 6 с",
-   "en_d": "Overpower grants 3 more fast attacks and +15% damage for 6 s",
-   "ru_aw": "Пробуждение: +30% урона",
-   "en_aw": "Awakening: +30% damage"
+   ]
   },
   {
    "id": "ursa_l_swipes",
    "r": "legend",
    "branch": "E",
    "ab": "ursa_fury_swipes",
-   "mods": "damage_per_stack:+12",
-   "awmods": "damage_per_stack:+12",
-   "ru": "Тысяча царапин",
-   "en": "Thousand Scratches",
-   "ru_d": "Урон за стак Fury Swipes +12",
-   "en_d": "Fury Swipes damage per stack +12",
-   "ru_aw": "Пробуждение: еще +12 за стак",
-   "en_aw": "Awakening: another +12 per stack"
+   "ru": "По живому следу",
+   "en": "Hot Trail",
+   "ru_d": "Три обычные атаки по одному герою оставляют первый след. Если видимый враг отбежит, появится второй. Бегите через первый по направлению ко второму, чтобы рвануть по его старому пути. Враг может свернуть после второго следа.",
+   "en_d": "Three normal hits on one hero leave a first footprint. If the visible enemy runs, they leave a second. Run through the first toward the second to dash along the recorded route. The enemy can turn away afterward.",
+   "ru_aw": "Пробуждение: след остаётся на 1,5 с дольше.",
+   "en_aw": "Awakening: the trail lasts 1.5 s longer.",
+   "fx": [
+    {
+     "t": "maneuver",
+     "mode": "trailhunt"
+    }
+   ]
   },
   {
    "id": "ursa_l_enrage",

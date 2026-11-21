@@ -41,10 +41,11 @@ describe("новая пятёрка", () => {
 function harness(...orbs: string[]) {
     let now = 0;
     let hasLink = true;
+    let shivCaster: unknown;
     let parent: Record<string, unknown>;
     const activeMarks: { IsNull: () => boolean; Destroy: () => void }[] = [];
     const target = {
-        position: 400, valid: true, real: true,
+        position: 400, valid: true, real: true, GetMaxHealth: () => 1000, GetHealth: () => 1000,
         entindex: () => 21,
         IsAlive: () => true, IsRealHero() { return this.real; }, IsBuilding: () => false,
         GetTeamNumber: () => 3, GetAbsOrigin() { return this.position; },
@@ -55,12 +56,16 @@ function harness(...orbs: string[]) {
             activeMarks.push(mod);
             return mod;
         }),
-        FindAllModifiers: () => [{ GetName: () => "modifier_slark_pounce_leash", GetCaster: () => parent }],
+        FindAllModifiers: () => [
+            { GetName: () => "modifier_slark_pounce_leash", GetCaster: () => parent },
+            { GetName: () => "modifier_slark_saltwater_shiv_impact_slow", GetCaster: () => shivCaster },
+        ],
     };
     const ability = { GetAbilityName: () => "", GetCursorPosition: () => 0, GetLevel: () => 4, IsItem: () => false,
         IsPassive: () => false, GetLevelSpecialValueNoOverride: () => 0, GetMaxAbilityCharges: () => 0, GetCooldown: () => 0 };
     const owner = {
         GetTeamNumber: () => 2, GetAbsOrigin: () => 0, IsAlive: () => true,
+        IsHero: () => true, GetStrength: () => 35, GetAverageTrueAttackDamage: () => 100,
         FindAbilityByName: () => ability, AddNewModifier: vi.fn(), Heal: vi.fn(), GetMaxHealth: () => 1000,
         FindAllModifiers: () => hasLink ? [{ GetName: () => "modifier_razor_static_link", GetCaster: () => parent }] : [],
     };
@@ -80,6 +85,8 @@ function harness(...orbs: string[]) {
     return { engine, raw: engine as any, parent: owner, target, damage, particles, activeMarks,
         cast: (name: string, withTarget = false) => engine.onCast({ ...ability, GetAbilityName: () => name } as never, withTarget ? target as never : undefined),
         dealt: (name: string) => engine.onDealt({ unit: target, inflictor: { ...ability, GetAbilityName: () => name }, damage: 45, damage_flags: 0 } as never),
+        attack: () => engine.onAttack({ target, damage: 100 } as never),
+        shiv: (own: boolean) => { shivCaster = own ? owner : {}; },
         taken: (amount: number) => engine.onTaken({ attacker: target, damage: amount, damage_flags: 0 } as never),
         time: (value: number) => { now = value; }, link: (value: boolean) => { hasLink = value; } };
 }
@@ -185,9 +192,103 @@ describe("исполнение новых механик", () => {
     it("смерть сбрасывает незавершённое комбо, но не его внутренний КД", () => {
         const f = harness("puck_l_parallax");
         f.cast("puck_phase_shift"); f.time(1); f.cast("puck_ethereal_jaunt");
-        expect(f.parent.AddNewModifier).toHaveBeenCalledTimes(1);
+        expect(f.parent.AddNewModifier).toHaveBeenCalledTimes(3);
         f.engine.clearCombat();
         f.time(2); f.cast("puck_phase_shift"); f.cast("puck_ethereal_jaunt");
-        expect(f.parent.AddNewModifier).toHaveBeenCalledTimes(1);
+        expect(f.parent.AddNewModifier).toHaveBeenCalledTimes(5);
+    });
+});
+
+describe("дуэльные легендарки", () => {
+    it("легендарная атака Сларка требует свой Shiv, повтор не проходит внутренний КД", () => {
+        const f = harness("slark_l_rhythm");
+        f.shiv(false); f.attack();
+        expect(f.parent.Heal).not.toHaveBeenCalled();
+        f.shiv(true); f.attack(); f.attack();
+        expect(f.parent.Heal).toHaveBeenCalledExactlyOnceWith(30, expect.anything());
+    });
+
+    it("Razor получает часть бонуса Q даже без обратной волны", () => {
+        const f = harness("razor_l_horizon");
+        f.cast("razor_plasma_field"); f.dealt("razor_plasma_field");
+        expect(f.damage.mock.calls.map(call => call[0].damage)).toEqual([65]);
+        f.time(0.6); f.dealt("razor_plasma_field");
+        expect(f.damage.mock.calls.map(call => call[0].damage)).toEqual([65, 160]);
+    });
+});
+
+function wireHarness(awake = false) {
+    const f = harness(...(awake ? ["zeus_l_chain", "awake"] : ["zeus_l_chain"]));
+    const vector = (x: number, y: number, z = 0) => ({ x, y, z });
+    let owner = vector(0, 0);
+    let enemy = vector(200, 50);
+    let immune = false;
+    let rooted = false;
+    const shove = vi.fn();
+    const move = vi.fn();
+    Object.assign(f.parent, { GetAbsOrigin: () => owner, IsRooted: () => rooted, HasModifier: () => false });
+    Object.assign(f.target, { GetAbsOrigin: () => enemy, IsDebuffImmune: () => immune });
+    f.raw.shove = shove;
+    vi.stubGlobal("Vector", vector);
+    vi.stubGlobal("FindClearSpaceForUnit", move);
+    vi.stubGlobal("EmitSoundOn", vi.fn());
+    return {
+        ...f, shove, move,
+        position: (x: number, y: number) => { owner = vector(x, y); },
+        enemy: (x: number, y: number, z = 0) => { enemy = vector(x, y, z); },
+        immune: (yes: boolean) => { immune = yes; },
+        rooted: (yes: boolean) => { rooted = yes; },
+        q: (now: number) => { f.time(now); f.cast("zuus_arc_lightning"); },
+        tick: (now: number) => { f.time(now); f.raw.tickWire(now); },
+    };
+}
+
+describe("Грозовая рамка", () => {
+    it("нужны два разных места; до замыкания, во время подготовки, вне линии и под BKB толчка нет", () => {
+        const f = wireHarness();
+        f.q(0); f.q(1);
+        expect(f.raw.wire).toBeUndefined();
+        f.position(400, 0); f.q(2);
+        f.tick(2.4);
+        f.enemy(200, 190); f.tick(2.6);
+        f.enemy(200, 50, 200); f.tick(2.7);
+        f.immune(true); f.enemy(200, 50); f.tick(2.8);
+        expect(f.shove).not.toHaveBeenCalled();
+        f.immune(false); f.tick(3);
+        expect(f.shove).toHaveBeenCalledExactlyOnceWith(f.target, { x: 0, y: 1, z: 0 }, 225, 0.25);
+        expect(f.raw.wire).toBeUndefined();
+        f.q(4);
+        expect(f.raw.wireAnchor).toBeUndefined(); // Отдельный КД не сбрасывается кастом Q.
+    });
+
+    it("выход и возвращение в кольцо дают намеренный отход; корень блокирует его", () => {
+        const f = wireHarness();
+        f.enemy(200, 500);
+        f.q(0); f.position(400, 0); f.q(2);
+        f.q(3);
+        expect(f.move).not.toHaveBeenCalled();
+        f.position(400, 150); f.tick(3.1);
+        f.position(400, 0); f.rooted(true); f.q(4);
+        expect(f.move).not.toHaveBeenCalled();
+        f.rooted(false); f.q(5);
+        expect(f.move).toHaveBeenCalledExactlyOnceWith(f.parent, { x: 0, y: 0, z: 0 }, true);
+        expect(f.raw.wire).toBeUndefined();
+    });
+
+    it("пробуждённая линия держит два контакта; одна цель не расходует оба, смерть очищает частицы", () => {
+        const f = wireHarness(true);
+        f.q(0); f.position(225, 0); f.q(1);
+        f.tick(2); f.tick(2.1);
+        expect(f.shove).toHaveBeenCalledTimes(1);
+        expect(f.raw.wire.charges).toBe(1);
+        const second = { ...f.target, entindex: () => 23 };
+        vi.stubGlobal("FindUnitsInRadius", () => [f.target, second]);
+        f.tick(2.2);
+        expect(f.shove).toHaveBeenCalledTimes(2);
+        expect(f.particles.DestroyParticle).toHaveBeenCalledTimes(3);
+
+        f.q(12); f.engine.clearCombat(); f.q(13);
+        expect(f.raw.wire).toBeUndefined();
+        expect(f.particles.DestroyParticle).toHaveBeenCalledTimes(4);
     });
 });

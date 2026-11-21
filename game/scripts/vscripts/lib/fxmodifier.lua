@@ -62,7 +62,7 @@ function ____exports.fxPropsOf(f)
         if ____cond3 then
             return f.stack ~= nil and f.stack.props or nil
         end
-        ____cond3 = ____cond3 or (____switch3 == "zone" or ____switch3 == "hit" or ____switch3 == "blast" or ____switch3 == "trail" or ____switch3 == "trap" or ____switch3 == "storm")
+        ____cond3 = ____cond3 or (____switch3 == "maneuver" or ____switch3 == "wire" or ____switch3 == "zone" or ____switch3 == "hit" or ____switch3 == "blast" or ____switch3 == "trail" or ____switch3 == "trap" or ____switch3 == "storm")
         if ____cond3 then
             return f.debuff ~= nil and f.debuff.props or nil
         end
@@ -89,7 +89,7 @@ local function allProps(f)
     return out
 end
 function ____exports.fxIsDebuff(f)
-    return f.t == "mark" or f.t == "zone" or f.t == "hit" or f.t == "blast" or f.t == "aura" or f.t == "trail" or f.t == "trap" or f.t == "storm"
+    return f.t == "maneuver" or f.t == "thunderball" or f.t == "wire" or f.t == "mark" or f.t == "zone" or f.t == "hit" or f.t == "blast" or f.t == "aura" or f.t == "trail" or f.t == "trap" or f.t == "storm"
 end
 --- Свойства умножаются на число стаков.
 function ____exports.fxStacking(f)
@@ -172,7 +172,11 @@ function ModifierOrbFx.prototype.IsDebuff(self)
     return f ~= nil and ____exports.fxIsDebuff(f)
 end
 function ModifierOrbFx.prototype.IsPurgable(self)
-    return self:IsDebuff()
+    return not self:IgnoreTenacity() and self:IsDebuff()
+end
+function ModifierOrbFx.prototype.IgnoreTenacity(self)
+    local f = self:fx()
+    return (f and f.t) == "thunderball" or (f and f.t) == "maneuver" and f.mode == "sword"
 end
 function ModifierOrbFx.prototype.RemoveOnDeath(self)
     local f = self:fx()

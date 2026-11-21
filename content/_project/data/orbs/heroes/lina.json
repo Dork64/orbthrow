@@ -51,7 +51,7 @@
     {
      "t": "blast",
      "at": "point",
-     "delay": 2.0,
+     "delay": 2,
      "radius": "light_strike_array_aoe",
      "dmg": "light_strike_array_damage*0.5",
      "type": "magic",
@@ -232,27 +232,44 @@
    "ab": "lina_laguna_blade",
    "fx": [
     {
+     "t": "mark",
+     "by": "ab",
+     "consume": [
+      "lina_dragon_slave",
+      "lina_light_strike_array"
+     ],
+     "dur": 4,
+     "icd": 8,
+     "max": 1,
+     "dmg": 165,
+     "aw": {
+      "dmg": 235,
+      "dur": 5
+     }
+    },
+    {
      "t": "hit",
      "by": "ab",
      "heroOnly": 1,
+     "icd": 2,
      "chain": {
-      "jumps": 2,
+      "jumps": 1,
       "radius": 500,
-      "pct": 50
+      "pct": 35
      },
      "aw": {
       "chain": {
-       "pct": 75
+       "pct": 45
       }
      }
     }
    ],
    "ru": "Цепная лагуна",
    "en": "Chain Laguna",
-   "ru_d": "Laguna Blade перескакивает еще на 2 героев в 500 с 50% урона",
-   "en_d": "Laguna Blade jumps to 2 more heroes within 500 for 50% damage",
-   "ru_aw": "Пробуждение: 75% урона",
-   "en_aw": "Awakening: 75% damage"
+   "ru_d": "Laguna Blade метит основную цель на 4 с. Dragon Slave или Light Strike Array добавляют по метке 165 магического урона. Laguna также перескакивает на одного героя в 500 с 35% урона.",
+   "en_d": "Laguna Blade marks its primary target for 4 s. Dragon Slave or Light Strike Array detonates it for 165 magic damage. Laguna also jumps once within 500 for 35% damage.",
+   "ru_aw": "Пробуждение: 235 урона метки, 5 с на попадание, отскок 45%.",
+   "en_aw": "Awakening: 235 detonation damage, a 5 s mark and a 45% bounce."
   },
   {
    "id": "lina_m_dragonflock",

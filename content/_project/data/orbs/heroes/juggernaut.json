@@ -79,6 +79,66 @@
    "ru_d": "Omnislash вызывает 2 иллюзии на 6 с (50% урона)",
    "en_d": "Omnislash summons 2 illusions for 6 s (50% damage)",
    "mech": 1
+  },
+  {
+   "id": "jugg_l_sanctuary",
+   "r": "legend",
+   "branch": "W",
+   "ab": "juggernaut_healing_ward",
+   "ru": "Подмена тотема",
+   "en": "Ward Switch",
+   "ru_d": "ПКМ по своему живому Healing Ward с 240–850 меняет Джаггера и тотем местами. Один раз за тотем. Тотем продолжает лечить, но враг может убить его до подмены.",
+   "en_d": "Right-click your living Healing Ward from 240–850 to swap places, once per ward. The ward keeps healing, but enemies can destroy it before you swap.",
+   "ru_aw": "Пробуждение: подмена доступна с 1100.",
+   "en_aw": "Awakening: swap range extends to 1100.",
+   "fx": [
+    {
+     "t": "maneuver",
+     "mode": "ward"
+    }
+   ]
+  },
+  {
+   "id": "jugg_l_cuts",
+   "r": "legend",
+   "branch": "E",
+   "ab": "juggernaut_blade_dance",
+   "ru": "Ответная стойка",
+   "en": "Riposte Stance",
+   "ru_d": "Остановитесь на полсекунды рядом с врагом: на земле появится короткая стойка. Если герой атакует в лицо с близкой дистанции, после попадания Джаггер уйдёт ему за бок, ответит ударом и ненадолго обезоружит. Движение отменяет стойку.",
+   "en_d": "Stop briefly near an enemy hero to take a visible stance. A close attack from the front makes Juggernaut sidestep around its attacker, strike back and briefly disarm them. Moving cancels the stance.",
+   "ru_aw": "Пробуждение: ответ обезоруживает дольше.",
+   "en_aw": "Awakening: the riposte disarms for longer.",
+   "fx": [
+    {
+     "t": "maneuver",
+     "mode": "parry",
+     "debuff": {
+      "dur": 0.9,
+      "props": {
+       "disarm": 1
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "jugg_l_endless",
+   "r": "legend",
+   "branch": "R",
+   "ab": "juggernaut_omni_slash",
+   "ru": "Выход из танца",
+   "en": "Cut the Dance",
+   "ru_d": "Omnislash оставляет кольцо на старте. ПКМ по кольцу обрывает серию и возвращает Джаггера туда: остаток ударов и неуязвимость пропадают. Соперник может ждать у кольца.",
+   "en_d": "Omnislash leaves a ring at its starting point. Right-click the ring to end the slashes and return there, giving up the remaining hits and invulnerability. Enemies can wait at the ring.",
+   "ru_aw": "Пробуждение: можно вернуться и в течение 0,85 с после естественного конца серии.",
+   "en_aw": "Awakening: you can also return for 0.85 s after the slashes end naturally.",
+   "fx": [
+    {
+     "t": "maneuver",
+     "mode": "omni"
+    }
+   ]
   }
  ]
 }

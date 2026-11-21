@@ -152,6 +152,11 @@ export function computeBonuses(stacks: Record<string, number>, primaryAttr: numb
     return b;
 }
 
+/** Подмена штатного удара Wrath срабатывает до действия движка. Урон шара считается отдельно. */
+export function replacesWrathDamage(b: OrbBonuses, ability: string, key: string): boolean {
+    return ability === "zuus_thundergods_wrath" && key === "damage" && (b.code["zeus_l_wrath"] ?? 0) > 0;
+}
+
 /** Итоговое значение ключа способности с учетом сфер; undefined — сферы его не меняют. */
 export function overrideValue(b: OrbBonuses, ability: string, key: string, base: number): number | undefined {
     const add = b.specials[ability]?.[key];

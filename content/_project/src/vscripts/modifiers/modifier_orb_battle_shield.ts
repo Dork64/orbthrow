@@ -20,6 +20,10 @@ export class ModifierOrbBattleShield extends ModBase {
         if (IsServer()) this.SetStackCount(Math.max(1, Math.floor(params.amount ?? 1)));
     }
 
+    OnRefresh(params: { amount?: number }) {
+        if (IsServer()) this.SetStackCount(Math.max(this.GetStackCount(), Math.floor(params.amount ?? 0)));
+    }
+
     DeclareFunctions() {
         return [ModifierFunction.INCOMING_DAMAGE_CONSTANT];
     }

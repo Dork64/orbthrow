@@ -518,6 +518,7 @@ function NPC:Purge(buffs, debuffs, frame, stuns, exc) assert(type(buffs) == "boo
 function NPC:GetStrength() return 20 + (self.level or 1) * 3 end
 function NPC:GetAgility() return 20 + (self.level or 1) * 2 end
 function NPC:IsSilenced() return modStates(self)[MODIFIER_STATE_SILENCED] == true end
+function NPC:IsCurrentlyHorizontalMotionControlled() return false end
 function NPC:IsRooted() return modStates(self)[MODIFIER_STATE_ROOTED] == true end
 function NPC:GiveMana(m) assert(type(m) == "number", "GiveMana: число") self.mana = math.min(self.maxmana or 0, (self.mana or 0) + m) end
 function NPC:SetCursorCastTarget(t) if t ~= nil then assert(IsValidEntity(t), "SetCursorCastTarget: цель") end self.cursorTarget = t end
@@ -748,6 +749,9 @@ end
 function NPC:CastAbilityOnPosition(p, a, pid) assert(isVec(p), "CastAbilityOnPosition: Vector") self.cursorPos = p self:CastAbilityNoTarget(a, pid) end
 function NPC:GetAttackRange() return self.ranged and 600 or 150 end
 function NPC:IsAttacking() return false end
+function NPC:IsMoving()
+  return self.order ~= nil and (self.order.kind == "move" or self.order.kind == "attack")
+end
 function NPC:GetIdealSpeed() return self.speed end
 function NPC:Interrupt() end
 function NPC:IsFakeClient() return false end
@@ -1423,12 +1427,19 @@ local function humanThink()
       end
     end
   end
-  -- Повторяем настоящий клиентский запрос слота и проверяем списание сервером.
+  -- Варды идут через point-cast; дым и пыль через клиентское событие.
   if now >= (_G.__nextSlotUse or 0) and hornAt and not h:IsStunned() and not h:IsMuted() and not h:IsHexed() and not h:IsOutOfGame() then
     _G.__nextSlotUse = now + 50
     local key = ({ "ob", "se", "sm", "du" })[(_G.__slotUses or 0) % 4 + 1]
     local before = CustomNetTables:GetTableValue("orb_items", "0")
-    clientSend(0, "orb_slot_use", { kind = key, x = h.pos.x, y = h.pos.y })
+    if key == "ob" or key == "se" then
+      local name = key == "ob" and "orb_slot_observer" or "orb_slot_sentry"
+      local ward = h:FindAbilityByName(name)
+      if ward then h:CastAbilityOnPosition(h:GetAbsOrigin(), ward, 0)
+      else fail("слот " .. key .. ": нет штатной способности") end
+    else
+      clientSend(0, "orb_slot_use", { kind = key })
+    end
     _G.__slotUses = (_G.__slotUses or 0) + 1
     local after = CustomNetTables:GetTableValue("orb_items", "0")
     if before and after and after[key] ~= math.max(0, before[key] - 1) then fail("слот " .. key .. ": неверное списание") end
@@ -1634,7 +1645,9 @@ if spheres and spheres.st then
         local OS = require("core.orbstore")
         local bon = OS.computeBonuses(spheres.st, h0:GetPrimaryAttribute())
         local want = OS.overrideValue(bon, d.ability, m.key, base) or base
-        if m.key == "AbilityCharges" then
+        if OS.replacesWrathDamage(bon, d.ability, m.key) then
+          want = 0 -- Родной глобальный удар заменён шаром; синие работают на урон шара.
+        elseif m.key == "AbilityCharges" then
           want = OS.nativeChargeCount(base, bon.specials[d.ability].AbilityCharges)
         end
         if math.abs(cur - want) > 0.001 then

@@ -21,6 +21,14 @@ ____exports.CODE_SPECIALS = {
         ability = "axe_battle_hunger",
         key = "damage_per_second",
         op = "mul",
+        value = 1.2,
+        when = "notAwake"
+    },
+    {
+        id = "axe_l_hunt",
+        ability = "axe_battle_hunger",
+        key = "damage_per_second",
+        op = "mul",
         value = 1.5,
         when = "awake"
     },
@@ -37,7 +45,14 @@ ____exports.CODE_SPECIALS = {
         ability = "axe_culling_blade",
         key = "damage",
         op = "add",
-        value = 100,
+        value = 45
+    },
+    {
+        id = "axe_l_executioner",
+        ability = "axe_culling_blade",
+        key = "damage",
+        op = "add",
+        value = 30,
         when = "awake"
     },
     {
@@ -78,9 +93,9 @@ ____exports.HERO_CODE = {
     huntRadius = 450,
     huntArmor = 4,
     huntMs = 5,
-    executionerWindow = 3,
-    executionerWindowAwake = 5,
-    executionerRange = 400,
+    executionerWindow = 2,
+    executionerWindowAwake = 2.5,
+    executionerRange = 200,
     wardArmor = 5,
     healingFuryRange = 1200,
     deathDanceCdr = 1,
@@ -89,16 +104,6 @@ ____exports.HERO_CODE = {
     bloodyOmniHeal = 0.25,
     dispelImmunity = 1.5,
     stormPullPerSecond = 60,
-    sanctuaryInvuln = 5,
-    sanctuaryReduce = 20,
-    sanctuaryReduceAwake = 30,
-    sanctuaryHealAwake = 1,
-    cutsPct = 0.25,
-    cutsPctAwake = 0.4,
-    cutsDuration = 3,
-    endlessExtend = 1,
-    endlessExtendAwake = 1.5,
-    endlessDamageAwake = 15,
     critRatio = 1.3
 }
 return ____exports

@@ -95,6 +95,14 @@ function ModifierOrbHero.prototype.OnDestroy(self)
         self.engine:clear()
     end
 end
+function ModifierOrbHero.prototype.ManeuverOrder(self, kind, target, point)
+    local ____opt_0 = self.engine
+    local ____temp_2 = ____opt_0 and ____opt_0:maneuverOrder(kind, target, point)
+    if ____temp_2 == nil then
+        ____temp_2 = false
+    end
+    return ____temp_2
+end
 function ModifierOrbHero.prototype.fx(self, b)
     local e = self.engine
     if e == nil then
@@ -105,28 +113,18 @@ function ModifierOrbHero.prototype.fx(self, b)
 end
 function ModifierOrbHero.prototype.DeclareFunctions(self)
     return {
+        MODIFIER_EVENT_ON_ABILITY_START,
         MODIFIER_EVENT_ON_ABILITY_FULLY_CAST,
         MODIFIER_EVENT_ON_TAKEDAMAGE,
         MODIFIER_EVENT_ON_DEATH,
         MODIFIER_EVENT_ON_ATTACK_LANDED,
         MODIFIER_PROPERTY_PREATTACK_CRITICALSTRIKE,
-        MODIFIER_PROPERTY_PREATTACK_BONUS_DAMAGE,
         MODIFIER_PROPERTY_STATS_STRENGTH_BONUS,
         MODIFIER_PROPERTY_TOTALDAMAGEOUTGOING_PERCENTAGE
     }
 end
 function ModifierOrbHero.prototype.GetModifierBonusStats_Strength(self)
     return self:GetStackCount()
-end
-function ModifierOrbHero.prototype.GetModifierPreAttack_BonusDamage(self)
-    if not IsServer() then
-        return 0
-    end
-    local b = self:b()
-    if not self:has("jugg_l_endless", b) or not b.awake then
-        return 0
-    end
-    return GameRules:GetGameTime() < self.omniUntil and H.endlessDamageAwake or 0
 end
 function ModifierOrbHero.prototype.GetModifierPreAttack_CriticalStrike(self, e)
     if not IsServer() then
@@ -163,6 +161,15 @@ function ModifierOrbHero.prototype.finisherCrit(self, e)
         return 0
     end
     return dance:GetSpecialValueFor("blade_dance_crit_mult")
+end
+function ModifierOrbHero.prototype.OnAbilityStart(self, e)
+    if not IsServer() or e.unit ~= self:GetParent() or e.ability == nil then
+        return
+    end
+    local ____opt_3 = self.engine
+    if ____opt_3 ~= nil then
+        ____opt_3:maneuverStart(e.ability)
+    end
 end
 function ModifierOrbHero.prototype.OnAbilityFullyCast(self, e)
     if not IsServer() or self.spreading then
@@ -346,6 +353,10 @@ function ModifierOrbHero.prototype.OnAttackLanded(self, e)
     if not IsServer() then
         return
     end
+    local ____opt_5 = self.engine
+    if ____opt_5 ~= nil then
+        ____opt_5:onObservedAttack(e)
+    end
     local parent = self:GetParent()
     if e.attacker ~= parent then
         return
@@ -360,8 +371,7 @@ function ModifierOrbHero.prototype.OnAttackLanded(self, e)
         return
     end
     local dance = self:has("jugg_p_death_dance", b)
-    local cuts = self:has("jugg_l_cuts", b)
-    if not dance and not cuts then
+    if not dance then
         return
     end
     local avg = parent:GetAverageTrueAttackDamage(t)
@@ -386,15 +396,6 @@ function ModifierOrbHero.prototype.OnAttackLanded(self, e)
             end
             ::__continue86::
         end
-    end
-    if cuts and t:IsAlive() then
-        local pct = b.awake and H.cutsPctAwake or H.cutsPct
-        t:AddNewModifier(
-            parent,
-            parent:FindAbilityByName("juggernaut_blade_dance"),
-            "modifier_orb_jugg_bleed",
-            {duration = H.cutsDuration + 0.1, total = e.damage * pct}
-        )
     end
 end
 function ModifierOrbHero.prototype.OnDeath(self, e)
@@ -433,23 +434,6 @@ function ModifierOrbHero.prototype.OnDeath(self, e)
     if iname == "axe_culling_blade" and inflictor ~= nil then
         self:onCullKill(inflictor, b)
     end
-    if now < self.omniUntil and self:has("jugg_l_endless", b) then
-        local ext = b.awake and H.endlessExtendAwake or H.endlessExtend
-        for ____, m in ipairs(parent:FindAllModifiers()) do
-            local n = m:GetName()
-            if (string.find(n, "omni", nil, true) or 0) - 1 >= 0 or (string.find(n, "swift_slash", nil, true) or 0) - 1 >= 0 then
-                m:SetDuration(
-                    m:GetRemainingTime() + ext,
-                    true
-                )
-            end
-        end
-        self.omniUntil = self.omniUntil + ext
-        local fury = parent:FindAbilityByName("juggernaut_blade_fury")
-        if fury ~= nil then
-            fury:EndCooldown()
-        end
-    end
 end
 function ModifierOrbHero.prototype.jumpHunger(self, dead)
     local parent = self:GetParent()
@@ -471,7 +455,7 @@ function ModifierOrbHero.prototype.jumpHunger(self, dead)
     for ____, u in ipairs(near) do
         do
             if u == dead or not u:IsAlive() or not u:IsRealHero() then
-                goto __continue109
+                goto __continue103
             end
             self.spreading = true
             parent:SetCursorCastTarget(u)
@@ -483,7 +467,7 @@ function ModifierOrbHero.prototype.jumpHunger(self, dead)
             )
             return
         end
-        ::__continue109::
+        ::__continue103::
     end
 end
 function ModifierOrbHero.prototype.onCullKill(self, ability, b)
@@ -563,11 +547,11 @@ function ModifierOrbHero.prototype.thinkHunt(self, parent, b, now)
                 if u == nil or not IsValidEntity(u) or u:IsAlive() or ____until <= now then
                     self.hunger:delete(id)
                 end
-                goto __continue126
+                goto __continue120
             end
             n = n + 1
         end
-        ::__continue126::
+        ::__continue120::
     end
     if not self:has("axe_l_hunt", b) then
         return
@@ -594,8 +578,8 @@ end
 function ModifierOrbHero.prototype.thinkWard(self, parent, b, now)
     local roaming = self:has("jugg_p_roaming_ward", b)
     local fury = self:has("jugg_p_healing_fury", b)
-    local sanct = self:has("jugg_l_sanctuary", b)
-    if not roaming and not fury and not sanct then
+    local relay = self:has("jugg_l_sanctuary", b)
+    if not roaming and not fury and not relay then
         return
     end
     if self.ward == nil and now < self.wardSearchUntil and self.wardSearchPos ~= nil then
@@ -613,15 +597,18 @@ function ModifierOrbHero.prototype.thinkWard(self, parent, b, now)
         for ____, u in ipairs(units) do
             do
                 if u:GetUnitName() ~= WARD_UNIT or u:GetPlayerOwnerID() ~= parent:GetPlayerOwnerID() then
-                    goto __continue139
+                    goto __continue133
                 end
                 self.ward = u
-                if sanct then
-                    u:AddNewModifier(parent, nil, "modifier_invulnerable", {duration = H.sanctuaryInvuln})
+                if relay then
+                    local ____opt_7 = self.engine
+                    if ____opt_7 ~= nil then
+                        ____opt_7:rememberWard(u)
+                    end
                 end
                 break
             end
-            ::__continue139::
+            ::__continue133::
         end
     end
     local w = self.ward
@@ -643,18 +630,6 @@ function ModifierOrbHero.prototype.thinkWard(self, parent, b, now)
     end
     if roaming and dist <= radius then
         parent:AddNewModifier(parent, healAbility, "modifier_orb_jugg_ward_armor", {duration = 0.25})
-    end
-    if sanct and dist <= radius then
-        local m = parent:AddNewModifier(parent, healAbility, "modifier_orb_jugg_sanctuary", {duration = 0.25})
-        if m ~= nil then
-            m:SetStackCount(b.awake and H.sanctuaryReduceAwake or H.sanctuaryReduce)
-        end
-        if b.awake then
-            parent:Heal(
-                parent:GetMaxHealth() * H.sanctuaryHealAwake / 100 * THINK,
-                healAbility
-            )
-        end
     end
     if fury and now < self.furyUntil and dist <= H.healingFuryRange and healAbility ~= nil then
         local pct = healAbility:GetSpecialValueFor("healing_ward_heal_amount")
@@ -687,17 +662,17 @@ function ModifierOrbHero.prototype.thinkStorm(self, parent, b, now)
     for ____, u in ipairs(units) do
         do
             if not u:IsAlive() then
-                goto __continue153
+                goto __continue144
             end
             local o = u:GetAbsOrigin()
             local d = (o - c):Length2D()
             if d <= 120 then
-                goto __continue153
+                goto __continue144
             end
             local dir = (c - o):Normalized()
             FindClearSpaceForUnit(u, o + dir * step, false)
         end
-        ::__continue153::
+        ::__continue144::
     end
 end
 function ModifierOrbHero.prototype.thinkOmniEnd(self, parent, b, now)

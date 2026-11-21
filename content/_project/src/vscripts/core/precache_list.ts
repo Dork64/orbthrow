@@ -19,7 +19,6 @@ export const PRECACHE_PARTICLES = [
     "particles/status_fx/status_effect_dark_willow_shadow_realm.vpcf",
     "particles/ui_mouseactions/range_display.vpcf",
     "particles/units/heroes/hero_batrider/batrider_firefly_path.vpcf",
-    "particles/units/heroes/hero_bloodseeker/bloodseeker_rupture.vpcf",
     "particles/units/heroes/hero_crystalmaiden/maiden_crystal_nova.vpcf",
     "particles/units/heroes/hero_crystalmaiden/maiden_freezing_field_explosion.vpcf",
     "particles/units/heroes/hero_dark_seer/dark_seer_vacuum.vpcf",
@@ -27,10 +26,12 @@ export const PRECACHE_PARTICLES = [
     "particles/units/heroes/hero_earthshaker/earthshaker_echoslam_start.vpcf",
     "particles/units/heroes/hero_lina/lina_spell_light_strike_array.vpcf",
     "particles/units/heroes/hero_queenofpain/queen_scream_of_pain_owner.vpcf",
+    "particles/units/heroes/hero_razor/razor_static_link.vpcf",
     "particles/units/heroes/hero_techies/techies_land_mine_explode.vpcf",
     "particles/units/heroes/hero_ursa/ursa_earthshock.vpcf",
     "particles/units/heroes/hero_viper/viper_nethertoxin.vpcf",
     "particles/units/heroes/hero_weaver/weaver_timelapse.vpcf",
+    "particles/units/heroes/hero_windrunner/windrunner_spell_powershot.vpcf",
     "particles/units/heroes/hero_zuus/zuus_lightning_bolt.vpcf",
 ];
 export const PRECACHE_MODELS = [

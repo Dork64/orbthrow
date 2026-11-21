@@ -16,8 +16,6 @@ declare global {
     var modifier_orb_axe_arena_buff: unknown;
     var modifier_orb_axe_free_cull: unknown;
     var modifier_orb_jugg_ward_armor: unknown;
-    var modifier_orb_jugg_sanctuary: unknown;
-    var modifier_orb_jugg_bleed: unknown;
     var modifier_orb_jugg_immune: unknown;
     /* eslint-enable no-var */
 }
@@ -166,45 +164,6 @@ export class ModifierOrbJuggWardArmor extends ModBase {
     GetModifierPhysicalArmorBonus() { return HERO_CODE.wardArmor; }
 }
 
-/** Святилище: меньше получаемого урона рядом с тотемом (стаки — процент). */
-export class ModifierOrbJuggSanctuary extends ModBase {
-    IsHidden() { return false; }
-    IsPurgable() { return false; }
-    GetTexture() { return "juggernaut_healing_ward"; }
-    DeclareFunctions() { return [ModifierFunction.INCOMING_DAMAGE_PERCENTAGE]; }
-    GetModifierIncomingDamage_Percentage() { return -this.GetStackCount(); }
-}
-
-/** Тысяча порезов: кровотечение, каждое наложение — отдельный экземпляр. */
-export class ModifierOrbJuggBleed extends ModBase {
-    perTick = 0;
-
-    IsHidden() { return false; }
-    IsDebuff() { return true; }
-    IsPurgable() { return true; }
-    GetTexture() { return "juggernaut_blade_dance"; }
-    GetAttributes() { return ModifierAttribute.MULTIPLE; }
-    GetEffectName() { return "particles/units/heroes/hero_bloodseeker/bloodseeker_rupture.vpcf"; }
-    GetEffectAttachType() { return ParticleAttachment.ABSORIGIN_FOLLOW; }
-
-    OnCreated(params: { total?: number }) {
-        if (!IsServer()) return;
-        const ticks = Math.max(1, Math.floor(HERO_CODE.cutsDuration / 0.5));
-        this.perTick = (params.total ?? 0) / ticks;
-        this.StartIntervalThink(0.5);
-    }
-
-    OnIntervalThink() {
-        const victim = this.GetParent();
-        const caster = this.GetCaster();
-        if (!victim.IsAlive() || caster === undefined || !IsValidEntity(caster) || this.perTick <= 0) return;
-        ApplyDamage({
-            victim, attacker: caster, damage: this.perTick, damage_type: DamageTypes.PHYSICAL,
-            damage_flags: DamageFlag.NO_SPELL_AMPLIFICATION, ability: this.GetAbility(),
-        });
-    }
-}
-
 /** Неуловимый: невосприимчивость к магии после Омнислэша. */
 export class ModifierOrbJuggImmune extends ModBase {
     IsHidden() { return false; }
@@ -225,6 +184,4 @@ modifier_orb_axe_arena = registerModifier("modifier_orb_axe_arena", ModifierOrbA
 modifier_orb_axe_arena_buff = registerModifier("modifier_orb_axe_arena_buff", ModifierOrbAxeArenaBuff);
 modifier_orb_axe_free_cull = registerModifier("modifier_orb_axe_free_cull", ModifierOrbAxeFreeCull);
 modifier_orb_jugg_ward_armor = registerModifier("modifier_orb_jugg_ward_armor", ModifierOrbJuggWardArmor);
-modifier_orb_jugg_sanctuary = registerModifier("modifier_orb_jugg_sanctuary", ModifierOrbJuggSanctuary);
-modifier_orb_jugg_bleed = registerModifier("modifier_orb_jugg_bleed", ModifierOrbJuggBleed);
 modifier_orb_jugg_immune = registerModifier("modifier_orb_jugg_immune", ModifierOrbJuggImmune);

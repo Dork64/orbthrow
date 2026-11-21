@@ -36,6 +36,14 @@ function ModifierOrbBattleShield.prototype.OnCreated(self, params)
         ))
     end
 end
+function ModifierOrbBattleShield.prototype.OnRefresh(self, params)
+    if IsServer() then
+        self:SetStackCount(math.max(
+            self:GetStackCount(),
+            math.floor(params.amount or 0)
+        ))
+    end
+end
 function ModifierOrbBattleShield.prototype.DeclareFunctions(self)
     return {MODIFIER_PROPERTY_INCOMING_DAMAGE_CONSTANT}
 end

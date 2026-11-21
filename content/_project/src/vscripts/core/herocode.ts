@@ -17,11 +17,13 @@ export const CODE_SPECIALS: CodeSpecial[] = [
     // Вечный вихрь: Спираль каждые 2 атаки, 70% урона (после Пробуждения — 100%)
     { id: "axe_l_eternal", ability: "axe_counter_helix", key: "trigger_attacks", op: "set", value: 2 },
     { id: "axe_l_eternal", ability: "axe_counter_helix", key: "damage", op: "mul", value: 0.7, when: "notAwake" },
-    // Кровавая охота, Пробуждение: урон Голода ×1.5, замедление +10%
+    // Кровавая охота: урон основной и побочных целей растёт сразу.
+    { id: "axe_l_hunt", ability: "axe_battle_hunger", key: "damage_per_second", op: "mul", value: 1.2, when: "notAwake" },
     { id: "axe_l_hunt", ability: "axe_battle_hunger", key: "damage_per_second", op: "mul", value: 1.5, when: "awake" },
     { id: "axe_l_hunt", ability: "axe_battle_hunger", key: "slow", op: "add", value: 10, when: "awake" },
-    // Палач, Пробуждение: порог казни +100
-    { id: "axe_l_executioner", ability: "axe_culling_blade", key: "damage", op: "add", value: 100, when: "awake" },
+    // Порог казни повышается сразу; после Пробуждения бонус выше.
+    { id: "axe_l_executioner", ability: "axe_culling_blade", key: "damage", op: "add", value: 45 },
+    { id: "axe_l_executioner", ability: "axe_culling_blade", key: "damage", op: "add", value: 30, when: "awake" },
     // Буря клинков: радиус +120, Пробуждение: длительность +2 с
     { id: "jugg_l_storm", ability: "juggernaut_blade_fury", key: "blade_fury_radius", op: "add", value: 120 },
     { id: "jugg_l_storm", ability: "juggernaut_blade_fury", key: "duration", op: "add", value: 2, when: "awake" },
@@ -49,9 +51,9 @@ export const HERO_CODE = {
     huntRadius: 450,
     huntArmor: 4,
     huntMs: 5,
-    executionerWindow: 3,
-    executionerWindowAwake: 5,
-    executionerRange: 400,
+    executionerWindow: 2,
+    executionerWindowAwake: 2.5,
+    executionerRange: 200,
     wardArmor: 5,
     healingFuryRange: 1200,
     deathDanceCdr: 1,
@@ -60,16 +62,6 @@ export const HERO_CODE = {
     bloodyOmniHeal: 0.25,
     dispelImmunity: 1.5,
     stormPullPerSecond: 60,
-    sanctuaryInvuln: 5,
-    sanctuaryReduce: 20,
-    sanctuaryReduceAwake: 30,
-    sanctuaryHealAwake: 1,
-    cutsPct: 0.25,
-    cutsPctAwake: 0.4,
-    cutsDuration: 3,
-    endlessExtend: 1,
-    endlessExtendAwake: 1.5,
-    endlessDamageAwake: 15,
     /** Атака считается критом, если урон больше среднего хотя бы в 1.3 раза */
     critRatio: 1.3,
 } as const;

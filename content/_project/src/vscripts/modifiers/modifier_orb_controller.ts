@@ -8,7 +8,7 @@
 import { boundedOrbCooldown } from "../core/combatpatterns";
 import { ModBase } from "../lib/modbase";
 import { registerModifier } from "../lib/registry";
-import { bonusAbilityCharges, bonusesOf, OrbBonuses, overrideValue, nativeChargeCount } from "../core/orbstore";
+import { bonusAbilityCharges, bonusesOf, OrbBonuses, overrideValue, nativeChargeCount, replacesWrathDamage } from "../core/orbstore";
 import { diminishing, orbStatusResistance } from "../core/orbs";
 
 declare global {
@@ -146,6 +146,7 @@ export class ModifierOrbController extends ModBase {
         const b = this.b();
         const name = ability.GetAbilityName();
         const k = e.ability_special_value;
+        if (replacesWrathDamage(b, name, k)) return 1;
         if (k === "AbilityCharges" || k === "AbilityCooldown" || k === "AbilityChargeRestoreTime") {
             const extra = ability.IsPassive() ? 0 : bonusAbilityCharges(b, name, ability.GetAbilityType() === ULTIMATE);
             if (extra > 0) {
@@ -163,6 +164,7 @@ export class ModifierOrbController extends ModBase {
         const base = ability.GetLevelSpecialValueNoOverride(e.ability_special_value, e.ability_special_level);
         const b = this.b();
         const key = e.ability_special_value;
+        if (IsServer() && replacesWrathDamage(b, ability.GetAbilityName(), key)) return 0;
         if (key === "AbilityCharges" || key === "AbilityCooldown" || key === "AbilityChargeRestoreTime") {
             const extra = ability.IsPassive() ? 0 : bonusAbilityCharges(b, ability.GetAbilityName(), ability.GetAbilityType() === ULTIMATE);
             if (extra > 0) {

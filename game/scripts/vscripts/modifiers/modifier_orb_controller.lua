@@ -14,6 +14,7 @@ local bonusAbilityCharges = ____orbstore.bonusAbilityCharges
 local bonusesOf = ____orbstore.bonusesOf
 local overrideValue = ____orbstore.overrideValue
 local nativeChargeCount = ____orbstore.nativeChargeCount
+local replacesWrathDamage = ____orbstore.replacesWrathDamage
 local ____orbs = require("core.orbs")
 local diminishing = ____orbs.diminishing
 local orbStatusResistance = ____orbs.orbStatusResistance
@@ -206,6 +207,9 @@ function ModifierOrbController.prototype.GetModifierOverrideAbilitySpecial(self,
     local b = self:b()
     local name = ability:GetAbilityName()
     local k = e.ability_special_value
+    if replacesWrathDamage(b, name, k) then
+        return 1
+    end
     if k == "AbilityCharges" or k == "AbilityCooldown" or k == "AbilityChargeRestoreTime" then
         local extra = ability:IsPassive() and 0 or bonusAbilityCharges(
             b,
@@ -242,6 +246,13 @@ function ModifierOrbController.prototype.GetModifierOverrideAbilitySpecialValue(
     local base = ability:GetLevelSpecialValueNoOverride(e.ability_special_value, e.ability_special_level)
     local b = self:b()
     local key = e.ability_special_value
+    if IsServer() and replacesWrathDamage(
+        b,
+        ability:GetAbilityName(),
+        key
+    ) then
+        return 0
+    end
     if key == "AbilityCharges" or key == "AbilityCooldown" or key == "AbilityChargeRestoreTime" then
         local extra = ability:IsPassive() and 0 or bonusAbilityCharges(
             b,
@@ -335,7 +346,7 @@ function ModifierOrbController.prototype.OnAttackLanded(self, e)
                 break
             end
             if u == target or not u:IsAlive() then
-                goto __continue64
+                goto __continue66
             end
             ApplyDamage({
                 victim = u,
@@ -346,7 +357,7 @@ function ModifierOrbController.prototype.OnAttackLanded(self, e)
             })
             hits = hits + 1
         end
-        ::__continue64::
+        ::__continue66::
     end
 end
 function ModifierOrbController.prototype.GetModifierTotalDamageOutgoing_Percentage(self, e)
@@ -433,12 +444,12 @@ function ModifierOrbController.prototype.meteor(self, ability, n)
             for ____, u in ipairs(enemies) do
                 do
                     if not u:IsAlive() then
-                        goto __continue81
+                        goto __continue83
                     end
                     ApplyDamage({victim = u, attacker = parent, damage = dmg, damage_type = DAMAGE_TYPE_MAGICAL})
                     u:AddNewModifier(parent, nil, "modifier_stunned", {duration = 0.4})
                 end
-                ::__continue81::
+                ::__continue83::
             end
             return nil
         end,
@@ -588,11 +599,11 @@ function ModifierOrbController.prototype.OnIntervalThink(self)
     for ____, u in ipairs(enemies) do
         do
             if not u:IsAlive() then
-                goto __continue110
+                goto __continue112
             end
             ApplyDamage({victim = u, attacker = parent, damage = dps * BURN_INTERVAL, damage_type = DAMAGE_TYPE_MAGICAL})
         end
-        ::__continue110::
+        ::__continue112::
     end
 end
 modifier_orb_controller = registerModifier("modifier_orb_controller", ____exports.ModifierOrbController)

@@ -193,14 +193,34 @@
    "r": "legend",
    "branch": "E",
    "ab": "luna_moon_glaive",
-   "mods": "bounces:+3;damage_reduction_percent:-15",
-   "awmods": "range:+200",
+   "mods": "bounces:+1",
+   "awmods": "range:+100",
    "ru": "Лунный клинок",
    "en": "Moon Blade",
-   "ru_d": "Moon Glaive отскакивает на 3 раза больше, отскоки теряют на 15% меньше урона",
-   "en_d": "Moon Glaive bounces 3 more times, bounces lose 15% less damage",
-   "ru_aw": "Пробуждение: дальность отскока +200",
-   "en_aw": "Awakening: bounce range +200"
+   "ru_d": "У глеф один дополнительный отскок. Каждый третий удар по одному герою наносит 42% силы атаки дополнительным физическим уроном и лечит на 25% нанесённого основной атакой урона.",
+   "en_d": "Glaives gain one bounce. Every third attack against the same hero adds 42% of attack damage as physical damage and heals for 25% of the primary hit.",
+   "ru_aw": "Пробуждение: 62% доп. урона, 35% лечения, +100 дальности отскока.",
+   "en_aw": "Awakening: 62% bonus damage, 35% healing and 100 bounce range.",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "attack",
+     "heroOnly": 1,
+     "icd": 1.25,
+     "every": 3,
+     "extra": {
+      "atk": 42,
+      "type": "phys"
+     },
+     "heal": 25,
+     "aw": {
+      "extra": {
+       "atk": 62
+      },
+      "heal": 35
+     }
+    }
+   ]
   },
   {
    "id": "luna_l_moonhunt",

@@ -330,14 +330,43 @@
    "r": "legend",
    "branch": "R",
    "ab": "bloodseeker_rupture",
-   "mods": "duration:+4;movement_damage_pct:+20",
-   "awmods": "movement_damage_pct:+15",
+   "mods": "duration:+1.5;movement_damage_pct:+10",
    "ru": "Разрыв артерий",
    "en": "Severed Arteries",
-   "ru_d": "Rupture: длительность +4 с, урон от бега +20%",
-   "en_d": "Rupture: duration +4 s, movement damage +20%",
-   "ru_aw": "Пробуждение: урон от движения дополнительно +15%",
-   "en_aw": "Awakening: movement damage +15% more"
+   "ru_d": "Rupture длится на 1,5 с дольше и сильнее наказывает за бег (+10 п. п.). Blood Rite по цели под вашим Rupture добавляет 150 магического урона и режет лечение на 20% на 2,5 с.",
+   "en_d": "Rupture lasts 1.5 s longer and gains 10 points of movement damage. Blood Rite hitting a target under your Rupture adds 150 magic damage and reduces healing by 20% for 2.5 s.",
+   "ru_aw": "Пробуждение: 220 урона Blood Rite и −30% лечения.",
+   "en_aw": "Awakening: 220 bonus Blood Rite damage and 30% healing reduction.",
+   "fx": [
+    {
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "icd": 4,
+     "ab": "bloodseeker_blood_bath",
+     "cond": "own:modifier_bloodseeker_rupture",
+     "extra": {
+      "flat": 150,
+      "type": "magic"
+     },
+     "debuff": {
+      "dur": 2.5,
+      "props": {
+       "healred": 20
+      }
+     },
+     "aw": {
+      "extra": {
+       "flat": 220
+      },
+      "debuff": {
+       "props": {
+        "healred": 30
+       }
+      }
+     }
+    }
+   ]
   }
  ]
 }

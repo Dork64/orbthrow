@@ -236,28 +236,51 @@
    "r": "legend",
    "branch": "R",
    "ab": "mirana_invis",
-   "mods": "duration:+6",
+   "mods": "duration:+3",
    "fx": [
     {
      "t": "buff",
-     "dur": "duration",
+     "dur": 7,
      "props": {
-      "as": 60,
-      "dmg": 10
+      "as": 45,
+      "ms": 12
      },
      "aw": {
       "props": {
-       "dmg": 20
+       "as": 65,
+       "ms": 17
+      }
+     }
+    },
+    {
+     "t": "hit",
+     "by": "attack",
+     "heroOnly": 1,
+     "icd": 7,
+     "win": 7,
+     "extra": {
+      "atk": 55,
+      "type": "phys"
+     },
+     "debuff": {
+      "dur": 1.6,
+      "props": {
+       "ms": -25
+      }
+     },
+     "aw": {
+      "extra": {
+       "atk": 75
       }
      }
     }
    ],
    "ru": "Полнолуние",
    "en": "Full Moon",
-   "ru_d": "Moonlight Shadow длится на 6 с дольше и дает +60 скорости атаки и +10% урона",
-   "en_d": "Moonlight Shadow lasts 6 s longer and grants +60 attack speed and +10% damage",
-   "ru_aw": "Пробуждение: +20% урона",
-   "en_aw": "Awakening: +20% damage"
+   "ru_d": "Moonlight Shadow длится на 3 с дольше. Первые 7 с дают Миране +45 скорости атаки и +12% бега. Первый удар по каждому герою в это окно добавляет 55% силы атаки и замедляет на 25% на 1,6 с.",
+   "en_d": "Moonlight Shadow lasts 3 s longer. For the first 7 s Mirana gains 45 attack speed and 12% movement speed. Her first hit against each hero adds 55% attack damage and slows by 25% for 1.6 s.",
+   "ru_aw": "Пробуждение: +65 скорости атаки, +17% бега, 75% доп. урона.",
+   "en_aw": "Awakening: 65 attack speed, 17% movement speed and 75% bonus hit damage."
   },
   {
    "id": "mirana_m_autostar",

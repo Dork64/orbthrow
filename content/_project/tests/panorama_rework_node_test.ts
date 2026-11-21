@@ -92,3 +92,67 @@ describe("слоты расходников", () => {
         expect(send).toHaveBeenLastCalledWith("orb_slot_use", { kind: "sm" });
     });
 });
+
+describe("счётчик зарядов на кнопке способности", () => {
+    it("читает остаток из движка при 2 → 1 → 0 → 1 → 2, уступает штатному HUD и скрывается при смене цели", () => {
+        let current = 0;
+        let max = 0;
+        let remaining = 0;
+        let portrait = 42;
+        let nativeBadge = false;
+        const queue: (() => void)[] = [];
+        const created: (ReturnType<typeof panel> & { visible: boolean })[] = [];
+        const button = {
+            actuallayoutwidth: 50, actuallayoutheight: 50,
+            FindChildTraverse: () => null, GetPositionWithinWindow: () => ({ x: 100, y: 200 }),
+        };
+        const slots = [0, 2].map(i => ({
+            id: "Ability" + i, actuallayoutwidth: 50,
+            BHasClass: (c: string) => c === "show_ability_charges" && i === 2 && nativeBadge,
+            FindChildTraverse: (id: string) => id === "AbilityButton" ? button : null,
+        }));
+        const $ = Object.assign(() => panel(), {
+            CreatePanel: () => {
+                const child = { ...panel(), visible: false };
+                created.push(child);
+                return child;
+            },
+            Schedule: (_delay: number, callback: () => void) => { queue.push(callback); },
+        });
+        runInNewContext(script("ability_charges"), {
+            $,
+            dotaHudElement: () => ({ FindChildTraverse: () => ({ Children: () => slots }) }),
+            Players: { GetLocalPlayer: () => 0, GetPlayerHeroEntityIndex: () => 42, GetLocalPlayerPortraitUnit: () => portrait },
+            Entities: { IsValidEntity: () => true, GetAbilityCount: () => 3, GetAbility: (_: number, i: number) => i + 10 },
+            Abilities: {
+                GetAbilityName: (id: number) => id === 12 ? "zuus_lightning_bolt" : "other",
+                IsHidden: () => false, IsDisplayedAbility: (id: number) => id !== 11, GetLevel: () => 4,
+                GetMaxAbilityCharges: (id: number) => id === 12 ? max : 0,
+                GetCurrentAbilityCharges: (id: number) => id === 12 ? current : 0,
+                GetAbilityChargeRestoreTimeRemaining: (id: number) => id === 12 ? remaining : 0,
+                GetSpecialValueFor: () => 6,
+            },
+        });
+        const tick = () => queue.shift()!();
+        expect(created).toHaveLength(0);
+        max = 2;
+        for (const [count, time, angle] of [[2, 0, 360], [1, 6, 0], [0, 3, 180], [1, 6, 0], [2, 0, 360]]) {
+            current = count;
+            remaining = time;
+            tick();
+            const [badge, ring, label] = created;
+            expect(badge.visible).toBe(true);
+            expect(label.text).toBe(String(count));
+            expect(ring.style.clip).toContain(angle.toFixed(1) + "deg");
+        }
+        nativeBadge = true;
+        tick();
+        expect(created[0].visible).toBe(false);
+        nativeBadge = false;
+        tick();
+        expect(created[0].visible).toBe(true);
+        portrait = 43;
+        tick();
+        expect(created[0].visible).toBe(false);
+    });
+});
