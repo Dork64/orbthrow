@@ -273,4 +273,7 @@ function ____exports.neutralTokensCheat(pid, n)
     markItemsDirty(pid)
     tryOpen(pid)
 end
+function ____exports.resetNeutralProgress(pid)
+    players:delete(pid)
+end
 return ____exports

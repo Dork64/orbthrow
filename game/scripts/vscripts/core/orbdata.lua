@@ -9859,7 +9859,7 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_ursa",
         branch = "Q",
         ability = "ursa_earthshock",
-        mods = {{key = "AbilityCharges", add = 2, unit = "", base = 0}},
+        mods = {{key = "AbilityCharges", add = 1, unit = "", base = 0}},
         cd = 0,
         max = 1,
         code = false,

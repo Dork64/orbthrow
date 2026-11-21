@@ -16,7 +16,7 @@ import { catchupTick, initCatchup, revengeDamage } from "./catchup";
 import { initEndscreen, publishFinal } from "./endscreen";
 import { modifierSelfTest } from "./selftest";
 import { beginSetup, finishSetup, initLobby } from "./lobby";
-import { onPlayerChat } from "./cheats";
+import { initTestPanel, onPlayerChat } from "./cheats";
 import { coinTick, onItemPickedUp } from "./coins";
 import { economyTick, goldFilter, resetExperience, xpFilter } from "./economy";
 import { Hooks } from "./hooks";
@@ -253,6 +253,7 @@ export const Arena = {
         initCatchup();
         initEndscreen();
         initLobby();
+        initTestPanel();
         initFountain();
         resetItemsNet();
         initSlots();

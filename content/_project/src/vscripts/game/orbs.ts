@@ -2,7 +2,7 @@
 // Состояние хранится по номеру игрока. Интерфейс строится только из сетевой таблицы orb_spheres.
 
 import {
-    ORB, addBarPoints, assistPurplePoints, blueDef, blueNeed, heroUpgrades, Card, diminishing, greyDef, greyRate, upDef,
+    ORB, addBarPoints, assistPurplePoints, blueDef, blueNeed, candidates, heroUpgrades, Card, diminishing, greyDef, greyRate, upDef,
     killPurplePoints, makeOffer, maxStacks, purpleNeed, rerollCost,
 } from "../core/orbs";
 import type { Bar } from "../core/orbs";
@@ -22,6 +22,7 @@ interface OrbOffer {
     rarity: Rarity;
     cards: Card[];
     openedAt: number;
+    test?: boolean;
 }
 
 export interface OrbPlayer {
@@ -111,6 +112,38 @@ export function enqueue(pid: number, rarity: Rarity, count = 1) {
     }
     openNext(op);
     op.dirty = true;
+}
+
+/** В редакторе следующая легендарка доступна сразу и не заменяется сферой другой редкости. */
+export function offerTestLegend(pid: PlayerID): boolean {
+    const op = orbPlayer(pid);
+    const cards = candidates("legend", heroNameOf(pid), op.stacks, op.disabled, Infinity);
+    if (cards.length === 0) return false;
+
+    const queued = op.queue.indexOf("legend");
+    if (queued >= 0) {
+        op.queue.splice(queued, 1);
+        op.queueAt.splice(queued, 1);
+    }
+    const now = gameNow();
+    op.queue.unshift("legend");
+    op.queueAt.unshift(now);
+    op.offer = { seq: ++op.seq, asked: "legend", rarity: "legend", cards: cards.slice(0, ORB.legendCards), openedAt: now, test: true };
+    const picked = op.order.filter(id => upDef(id)?.rarity === "legend").length;
+    op.legendsQueued = Math.max(op.legendsQueued, picked + 1);
+    op.legendQueued = true;
+    pushPlayer(op, true);
+    return true;
+}
+
+export function resetTestOrbs(pid: PlayerID) {
+    const previous = orbPlayer(pid);
+    players.delete(pid);
+    const op = orbPlayer(pid);
+    op.seq = previous.seq;
+    op.version = previous.version + 1;
+    setBonuses(pid, op.stacks, op.primaryAttr, op.version);
+    pushPlayer(op, true);
 }
 
 function openNext(op: OrbPlayer) {
@@ -479,6 +512,7 @@ function pushPlayer(op: OrbPlayer, force: boolean) {
             a: op.offer.asked,
             c: cards,
             t: Math.max(0, Math.ceil(ORB.autoPickSeconds - (now - op.offer.openedAt))),
+            test: op.offer.test ? 1 : undefined,
         };
     }
     const net: OrbSphereNet = {

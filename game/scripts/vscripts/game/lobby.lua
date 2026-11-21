@@ -142,6 +142,9 @@ function ____exports.finishSetup()
     if State.setupDone then
         return
     end
+    if IsInToolsMode() then
+        State.botsWanted = CONFIG.toolsDefaultBots
+    end
     State.setupDone = true
     if autoTimer >= 0 then
         Timers:cancel(autoTimer)
@@ -183,15 +186,15 @@ local function allVoted()
     return true
 end
 function ____exports.beginSetup()
-    State.botsWanted = IsInToolsMode() and CONFIG.toolsDefaultBots or math.max(
-        0,
-        4 - humanCount()
-    )
-    applyVotes()
     if IsInToolsMode() then
         ____exports.finishSetup()
         return
     end
+    State.botsWanted = math.max(
+        0,
+        4 - humanCount()
+    )
+    applyVotes()
     assignTeams(State.botsWanted)
     startAt = GameRules:GetGameTime() + AUTO_START
     pushSettings(AUTO_START)

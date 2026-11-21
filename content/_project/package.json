@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "gen": "node tools/gen.js",
+    "wiki": "node tools/wiki/build.js",
     "build:vscripts": "tstl --project src/vscripts/tsconfig.json",
     "build:panorama": "tsc --project src/panorama/tsconfig.json",
     "build": "node tools/clean.js && npm run gen && npm run build:vscripts && npm run build:panorama && node tools/checklua.js && node tools/assemble.js",

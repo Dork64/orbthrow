@@ -8,7 +8,7 @@
 import { boundedOrbCooldown } from "../core/combatpatterns";
 import { ModBase } from "../lib/modbase";
 import { registerModifier } from "../lib/registry";
-import { bonusesOf, OrbBonuses, overrideValue, nativeChargeCount } from "../core/orbstore";
+import { bonusAbilityCharges, bonusesOf, OrbBonuses, overrideValue, nativeChargeCount } from "../core/orbstore";
 import { diminishing, orbStatusResistance } from "../core/orbs";
 
 declare global {
@@ -146,10 +146,13 @@ export class ModifierOrbController extends ModBase {
         const b = this.b();
         const name = ability.GetAbilityName();
         const k = e.ability_special_value;
-        if (k === "AbilityCharges") {
-            // Только истинные заряды Доты. Для обычных способностей запас ведёт сервер.
-            if (ability.GetLevelSpecialValueNoOverride(k, e.ability_special_level) <= 0) return 0;
-            if (ability.GetAbilityType() === ULTIMATE && (b.code["l_double_ult"] ?? 0) > 0) return 1;
+        if (k === "AbilityCharges" || k === "AbilityCooldown" || k === "AbilityChargeRestoreTime") {
+            const extra = ability.IsPassive() ? 0 : bonusAbilityCharges(b, name, ability.GetAbilityType() === ULTIMATE);
+            if (extra > 0) {
+                if (k === "AbilityCharges") return 1;
+                if (ability.GetLevelSpecialValueNoOverride("AbilityCharges", e.ability_special_level) <= 0 &&
+                    (k === "AbilityCooldown" || ability.GetCooldownTimeRemaining() > 0)) return 1;
+            }
         }
         if (b.specials[name]?.[k] !== undefined || b.specialsSet[name]?.[k] !== undefined || b.specialsMul[name]?.[k] !== undefined) return 1;
         return 0;
@@ -159,10 +162,17 @@ export class ModifierOrbController extends ModBase {
         const ability = e.ability;
         const base = ability.GetLevelSpecialValueNoOverride(e.ability_special_value, e.ability_special_level);
         const b = this.b();
-        if (e.ability_special_value === "AbilityCharges") {
-            const extra = b.specials[ability.GetAbilityName()]?.AbilityCharges ?? 0;
-            const ult = ability.GetAbilityType() === ULTIMATE && (b.code["l_double_ult"] ?? 0) > 0 ? 1 : 0;
-            if (extra + ult > 0) return nativeChargeCount(base, extra + ult, b.spareChargeAbilities[ability.GetAbilityName()] === true || ult > 0);
+        const key = e.ability_special_value;
+        if (key === "AbilityCharges" || key === "AbilityCooldown" || key === "AbilityChargeRestoreTime") {
+            const extra = ability.IsPassive() ? 0 : bonusAbilityCharges(b, ability.GetAbilityName(), ability.GetAbilityType() === ULTIMATE);
+            if (extra > 0) {
+                if (key === "AbilityCharges") return nativeChargeCount(base, extra);
+                if (ability.GetLevelSpecialValueNoOverride("AbilityCharges", e.ability_special_level) <= 0) {
+                    if (key === "AbilityCooldown") return 0;
+                    const remaining = ability.GetCooldownTimeRemaining();
+                    if (remaining > 0) return remaining;
+                }
+            }
         }
         const v = overrideValue(b, ability.GetAbilityName(), e.ability_special_value, base);
         return v !== undefined ? v : base;
@@ -229,7 +239,9 @@ export class ModifierOrbController extends ModBase {
         const parent = this.parent();
         const now = GameRules.GetGameTime();
         if (now < this.meteorReadyAt) return;
-        if (ability.GetCooldown(Math.max(0, ability.GetLevel() - 1)) < 3) return;
+        const level = Math.max(0, ability.GetLevel() - 1);
+        const cooldown = ability.GetMaxAbilityCharges(level) > 0 ? ability.GetAbilityChargeRestoreTime(level) : ability.GetCooldown(level);
+        if (cooldown < 3) return;
         this.meteorReadyAt = now + 3;
         const t = ability.GetCursorTarget();
         const pos = t !== undefined && IsValidEntity(t) && t !== parent ? t.GetAbsOrigin() : ability.GetCursorPosition();

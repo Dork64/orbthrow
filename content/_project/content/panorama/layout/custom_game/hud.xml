@@ -2,6 +2,7 @@
 	<styles>
 		<include src="s2r://panorama/styles/dotastyles.vcss_c" />
 		<include src="file://{resources}/styles/custom_game/hud.css" />
+		<include src="file://{resources}/styles/custom_game/test_panel.css" />
 	</styles>
 	<scripts>
 		<include src="file://{resources}/scripts/custom_game/version.js" />
@@ -12,11 +13,10 @@
 		<include src="file://{resources}/scripts/custom_game/help.js" />
 		<include src="file://{resources}/scripts/custom_game/slots.js" />
 		<include src="file://{resources}/scripts/custom_game/neutrals.js" />
+		<include src="file://{resources}/scripts/custom_game/test_panel.js" />
 	</scripts>
 	<Panel class="OrbHud" hittest="false">
 		<Panel id="WorldMarks" hittest="false" />
-		<Label id="OrbWardTarget" class="Hidden" text="#orb_slot_pick_point" hittest="false" />
-		<Label id="OrbChargeDisplay" class="Hidden" hittest="false" />
 		<Panel id="ChestArrow" class="Hidden" hittest="false">
 			<Panel id="ChestArrowIcon" hittest="false" />
 			<Label id="ChestArrowText" text="" hittest="false" />
@@ -37,6 +37,46 @@
 		</Panel>
 		<Panel id="Toasts" hittest="false" />
 		<Panel id="Errors" hittest="false" />
+		<Panel id="OrbTestDock" class="Hidden" hittest="false">
+			<Button id="OrbTestToggle" onactivate="OrbToggleTestPanel()">
+				<Label text="#orb_test_title" />
+			</Button>
+			<Panel id="OrbTestPanel" class="Hidden">
+				<Panel class="OrbTestRow" hittest="false">
+					<Button onactivate="OrbTestAction('level_up')"><Label text="#orb_test_level_up" /></Button>
+					<Button onactivate="OrbTestAction('level_20')"><Label text="#orb_test_level_20" /></Button>
+				</Panel>
+				<Panel class="OrbTestRow" hittest="false">
+					<Button onactivate="OrbTestAction('level_30')"><Label text="#orb_test_level_30" /></Button>
+					<Button onactivate="OrbTestAction('gold')"><Label text="#orb_test_gold" /></Button>
+				</Panel>
+				<Panel class="OrbTestRow" hittest="false">
+					<Button onactivate="OrbTestAction('refresh')"><Label text="#orb_test_refresh" /></Button>
+					<Button onactivate="OrbTestAction('bot')"><Label text="#orb_test_bot" /></Button>
+				</Panel>
+				<Panel class="OrbTestRow" hittest="false">
+					<Button onactivate="OrbTestAction('grey')"><Label text="#orb_test_grey" /></Button>
+					<Button onactivate="OrbTestAction('blue')"><Label text="#orb_test_blue" /></Button>
+				</Panel>
+				<Panel class="OrbTestRow" hittest="false">
+					<Button onactivate="OrbTestAction('purple')"><Label text="#orb_test_purple" /></Button>
+					<Button onactivate="OrbTestAction('legend')"><Label text="#orb_test_legend" /></Button>
+				</Panel>
+				<Panel class="OrbTestRow" hittest="false">
+					<Button onactivate="OrbTestAction('wards')"><Label text="#orb_test_wards" /></Button>
+					<Button onactivate="OrbTestAction('tokens')"><Label text="#orb_test_tokens" /></Button>
+				</Panel>
+				<Panel class="OrbTestRow" hittest="false">
+					<Button onactivate="OrbTestAction('mech')"><Label text="#orb_test_mech" /></Button>
+					<Button onactivate="OrbTestAction('camps')"><Label text="#orb_test_camps" /></Button>
+				</Panel>
+				<Panel class="OrbTestRow" hittest="false">
+					<Button onactivate="OrbTestAction('courier')"><Label text="#orb_test_courier" /></Button>
+					<Button onactivate="OrbTestAction('goblin')"><Label text="#orb_test_goblin" /></Button>
+				</Panel>
+				<Button id="OrbTestChangeHero" class="OrbTestButton" onactivate="OrbShowTestHeroPicker()"><Label text="#orb_test_hero_change" /></Button>
+			</Panel>
+		</Panel>
 		<!-- Справа над магазином: подмога, выбор сфер, шкалы (место считает orbs.ts). Не по центру,
 		     чтобы не закрывать бой; при открытом магазине скрыты -->
 		<Panel id="OrbBarsDock" class="Hidden" hittest="false">
@@ -90,5 +130,20 @@
 		<Panel id="SlotsTop" class="SlotGroup Hidden" hittest="false" />
 		<Panel id="SlotsRight" class="SlotGroup Hidden" hittest="false" />
 		<Label id="VersionLabel" text="" hittest="false" />
+		<Panel id="OrbTestHeroOverlay" class="Hidden" hittest="true">
+			<Panel id="OrbTestHeroPicker" hittest="true">
+				<Panel id="OrbTestHeroHeader" hittest="false">
+					<Label id="OrbTestHeroTitle" text="#orb_test_hero_title" />
+					<Button id="OrbTestHeroClose" class="OrbTestButton" onactivate="OrbCloseTestHeroPicker()"><Label text="#orb_test_hero_close" /></Button>
+				</Panel>
+				<TextEntry id="OrbTestHeroSearch" placeholdertext="#orb_test_hero_search" />
+				<Panel id="OrbTestHeroGrid" hittest="false" />
+				<Label id="OrbTestHeroEmpty" class="Hidden" text="#orb_test_hero_empty" />
+				<Panel id="OrbTestHeroFooter" hittest="false">
+					<Label id="OrbTestHeroStatus" text="#orb_test_hero_reset" />
+					<Button id="OrbTestHeroConfirm" class="OrbTestButton" onactivate="OrbConfirmTestHero()"><Label text="#orb_test_hero_confirm" /></Button>
+				</Panel>
+			</Panel>
+		</Panel>
 	</Panel>
 </root>

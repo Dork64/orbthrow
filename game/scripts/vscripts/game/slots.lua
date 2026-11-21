@@ -7,6 +7,8 @@ local ____mapinfo = require("core.mapinfo")
 local MAP = ____mapinfo.MAP
 local ____config = require("core.config")
 local CONFIG = ____config.CONFIG
+local ____hooks = require("game.hooks")
+local Hooks = ____hooks.Hooks
 local ____itemsnet = require("game.itemsnet")
 local addItemsNetPart = ____itemsnet.addItemsNetPart
 local markItemsDirty = ____itemsnet.markItemsDirty
@@ -71,7 +73,6 @@ local function netPart(pid)
         tm = CONFIG.travelEatMax
     }
 end
-local wardRange = 500
 local slotCooldown = __TS__New(Map)
 local function slotError(pid, text)
     local player = PlayerResource:GetPlayer(pid)
@@ -79,18 +80,27 @@ local function slotError(pid, text)
         CustomGameEventManager:Send_ServerToPlayer(player, "orb_error", {text = text})
     end
 end
-local function placeWard(hero, kind, x, y)
-    if x == nil or y == nil or not (math.abs(x) <= MAP.bounds and math.abs(y) <= MAP.bounds) then
-        return false
+function ____exports.slotWardError(hero, kind, point)
+    local pid = hero:GetPlayerOwnerID()
+    local player = State.players:get(pid)
+    if player == nil or player.left or State.phase == "setup" or State.phase == "ended" or PlayerResource:GetSelectedHeroEntity(pid) ~= hero or not hero:IsAlive() or hero:IsMuted() or hero:IsOutOfGame() then
+        return "#orb_slot_cannot_cast"
     end
-    local pos = GetGroundPosition(
-        Vector(x, y, 0),
-        hero
-    )
-    local from = hero:GetAbsOrigin()
-    if (from.x - pos.x) ^ 2 + (from.y - pos.y) ^ 2 > wardRange ^ 2 then
-        return false
+    if slotsOf(pid)[kind] <= 0 then
+        return "#orb_slot_empty"
     end
+    if not (math.abs(point.x) <= MAP.bounds and math.abs(point.y) <= MAP.bounds) then
+        return "#orb_slot_bad_point"
+    end
+    return nil
+end
+--- Вызывается после штатного point-cast. Дальность и подход к точке проверяет движок.
+function ____exports.castSlotWard(hero, kind, point, ability)
+    local pid = hero:GetPlayerOwnerID()
+    if ____exports.slotWardError(hero, kind, point) ~= nil then
+        return
+    end
+    local pos = GetGroundPosition(point, hero)
     local sentry = kind == "se"
     local unit = sentry and "npc_dota_sentry_wards" or "npc_dota_observer_wards"
     local ward = CreateUnitByName(
@@ -102,12 +112,26 @@ local function placeWard(hero, kind, x, y)
         hero:GetTeamNumber()
     )
     if not isValid(ward) then
-        return false
+        slotError(pid, "#orb_slot_bad_point")
+        return
     end
-    ward:AddNewModifier(hero, nil, "modifier_orb_ward", {sentry = sentry and 1 or 0})
-    ward:AddNewModifier(hero, nil, "modifier_kill", {duration = sentry and 420 or 360})
+    local range = ability:GetSpecialValueFor("ward_radius")
+    ward:AddNewModifier(hero, ability, "modifier_orb_ward", {sentry = sentry and 1 or 0, radius = range})
+    ward:AddNewModifier(hero, ability, "modifier_kill", {duration = sentry and 420 or 360})
+    if sentry then
+        AddFOWViewer(
+            hero:GetTeamNumber(),
+            pos,
+            150,
+            12,
+            false
+        )
+    end
     EmitSoundOnLocationWithCaster(pos, sentry and "DOTA_Item.SentryWard.Activate" or "DOTA_Item.ObserverWard.Activate", hero)
-    return true
+    local ____slotsOf_result_0, ____kind_1 = slotsOf(pid), kind
+    ____slotsOf_result_0[____kind_1] = ____slotsOf_result_0[____kind_1] - 1
+    markItemsDirty(pid)
+    pushItemsNet(pid)
 end
 local function applyConsumable(hero, kind)
     if kind == "sm" then
@@ -151,8 +175,8 @@ local function applyConsumable(hero, kind)
         u:AddNewModifier(hero, nil, "modifier_orb_dust", {duration = 12})
     end
 end
-local function useSlot(pid, kind, x, y)
-    if kind ~= "ob" and kind ~= "se" and kind ~= "sm" and kind ~= "du" then
+local function useSlot(pid, kind)
+    if kind ~= "sm" and kind ~= "du" then
         return
     end
     local player = State.players:get(pid)
@@ -173,15 +197,8 @@ local function useSlot(pid, kind, x, y)
     if (ready[kind] or 0) > now then
         return
     end
-    if kind == "ob" or kind == "se" then
-        if not placeWard(hero, kind, x, y) then
-            slotError(pid, "#orb_slot_bad_point")
-            return
-        end
-    else
-        applyConsumable(hero, kind)
-    end
-    ready[kind] = now + ((kind == "ob" or kind == "se") and 0.5 or 2)
+    applyConsumable(hero, kind)
+    ready[kind] = now + 2
     slotCooldown:set(pid, ready)
     stock[kind] = stock[kind] - 1
     markItemsDirty(pid)
@@ -311,11 +328,23 @@ function ____exports.initSlots()
     addItemsNetPart(netPart)
     slots:clear()
     slotCooldown:clear()
+    local ____Hooks_onHeroSpawned_2 = Hooks.onHeroSpawned
+    ____Hooks_onHeroSpawned_2[#____Hooks_onHeroSpawned_2 + 1] = function(p, hero)
+        if p.isBot then
+            return
+        end
+        for ____, name in ipairs({"orb_slot_observer", "orb_slot_sentry"}) do
+            local ability = hero:FindAbilityByName(name) or hero:AddAbility(name)
+            if isValid(ability) and ability:GetLevel() == 0 then
+                ability:SetLevel(1)
+            end
+        end
+    end
     CustomGameEventManager:RegisterListener(
         "orb_slot_use",
         function(_, e) return safe(
             "расходник",
-            function() return useSlot(e.PlayerID, e.kind, e.x, e.y) end
+            function() return useSlot(e.PlayerID, e.kind) end
         ) end
     )
     CustomGameEventManager:RegisterListener(
@@ -335,5 +364,9 @@ function ____exports.slotsCheat(pid, n)
     s.du = s.du + n
     markItemsDirty(pid)
     pushItemsNet(pid)
+end
+function ____exports.resetConsumables(pid)
+    slots:delete(pid)
+    slotCooldown:delete(pid)
 end
 return ____exports

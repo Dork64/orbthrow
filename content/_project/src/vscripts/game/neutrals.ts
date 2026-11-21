@@ -187,3 +187,7 @@ export function neutralTokensCheat(pid: number, n: number) {
     markItemsDirty(pid);
     tryOpen(pid);
 }
+
+export function resetNeutralProgress(pid: number) {
+    players.delete(pid);
+}

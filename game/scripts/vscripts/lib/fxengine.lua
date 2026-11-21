@@ -8,19 +8,14 @@ local __TS__Number = ____lualib.__TS__Number
 local __TS__ArrayFilter = ____lualib.__TS__ArrayFilter
 local __TS__ArrayIndexOf = ____lualib.__TS__ArrayIndexOf
 local __TS__ArraySplice = ____lualib.__TS__ArraySplice
-local __TS__Iterator = ____lualib.__TS__Iterator
 local __TS__ArraySome = ____lualib.__TS__ArraySome
 local __TS__ArraySlice = ____lualib.__TS__ArraySlice
 local __TS__ArrayFind = ____lualib.__TS__ArrayFind
 local __TS__ArrayIncludes = ____lualib.__TS__ArrayIncludes
+local __TS__Iterator = ____lualib.__TS__Iterator
 local ____exports = {}
-local ____chargepool = require("core.chargepool")
-local createChargePool = ____chargepool.createChargePool
-local resizeCharges = ____chargepool.resizeCharges
-local restoreCharges = ____chargepool.restoreCharges
-local spendCharge = ____chargepool.spendCharge
 local ____orbstore = require("core.orbstore")
-local nativeChargeCount = ____orbstore.nativeChargeCount
+local bonusAbilityCharges = ____orbstore.bonusAbilityCharges
 local ____combatpatterns = require("core.combatpatterns")
 local advanceCombo = ____combatpatterns.advanceCombo
 local insideRing = ____combatpatterns.insideRing
@@ -56,9 +51,7 @@ function FxEngine.prototype.____constructor(self, parent)
     self.lastCast = __TS__New(Map)
     self.lastTarget = __TS__New(Map)
     self.lastPoint = __TS__New(Map)
-    self.chargeMax = __TS__New(Map)
-    self.orbCharges = __TS__New(Map)
-    self.chargeSignature = ""
+    self.grantedCharges = __TS__New(Map)
     self.hits = __TS__New(Map)
     self.icd = __TS__New(Map)
     self.pending = {}
@@ -451,7 +444,6 @@ function FxEngine.prototype.onCast(self, ability, target)
     local parent = self.parent
     local name = ability:GetAbilityName()
     local now = GameRules:GetGameTime()
-    self:spendOrbCharge(ability, now)
     self.lastCast:set(name, now)
     if target ~= nil then
         self.lastTarget:set(name, target)
@@ -1244,150 +1236,49 @@ function FxEngine.prototype.outgoing(self, t, inflictor)
     end
     return pct
 end
-function FxEngine.prototype.chargeDuration(self, ability)
-    return math.max(
-        0.1,
-        ability:GetEffectiveCooldown(math.max(
-            0,
-            ability:GetLevel() - 1
-        ))
-    )
-end
-function FxEngine.prototype.updateChargePool(self, ability, max, now, justCast)
-    local id = ability:GetEntityIndex()
-    local pool = self.orbCharges:get(id)
-    local remaining = ability:GetCooldownTimeRemaining()
-    if pool == nil then
-        pool = createChargePool(max, now, justCast and 0 or remaining)
-        self.orbCharges:set(id, pool)
-    elseif not justCast and pool.count == 0 and pool.next - now > 0.15 then
-        if remaining <= 0.03 then
-            pool.count = pool.max
-            pool.next = 0
-        elseif now + remaining + 0.15 < pool.next then
-            pool.next = now + remaining
-        end
-    end
-    restoreCharges(
-        pool,
-        now,
-        self:chargeDuration(ability)
-    )
-    if max ~= pool.max then
-        resizeCharges(pool, max)
-    end
-    return pool
-end
-function FxEngine.prototype.applyChargeCooldown(self, ability, pool, now)
-    local wanted = pool.count > 0 and 0 or math.max(0, pool.next - now)
-    if math.abs(ability:GetCooldownTimeRemaining() - wanted) < 0.04 then
-        return
-    end
-    ability:EndCooldown()
-    if wanted > 0 then
-        ability:StartCooldown(wanted)
-    end
-end
-function FxEngine.prototype.chargeInfo(self, ability)
-    local b = self.listFor
-    if b == nil or ability:GetLevel() <= 0 then
-        return nil
-    end
-    local name = ability:GetAbilityName()
-    local ____opt_3 = b.specials[name]
-    local extra = ____opt_3 and ____opt_3.AbilityCharges or 0
-    local ult = (b.code.l_double_ult or 0) > 0 and ability:GetAbilityType() == 1 and 1 or 0
-    if extra + ult <= 0 or ability:IsPassive() then
-        return nil
-    end
-    local level = math.max(
-        0,
-        ability:GetLevel() - 1
-    )
-    local base = ability:GetLevelSpecialValueNoOverride("AbilityCharges", level)
-    local native = ability:GetMaxAbilityCharges(level)
-    if native <= 0 and ability:GetCooldown(level) <= 0 then
-        return nil
-    end
-    return {
-        base = base,
-        native = native,
-        max = nativeChargeCount(base, extra + ult, b.spareChargeAbilities[name] == true or ult > 0)
-    }
-end
-function FxEngine.prototype.spendOrbCharge(self, ability, now)
-    local info = self:chargeInfo(ability)
-    if info == nil or info.native > 0 then
-        return
-    end
-    local pool = self:updateChargePool(ability, info.max, now, true)
-    spendCharge(
-        pool,
-        now,
-        self:chargeDuration(ability)
-    )
-    self:applyChargeCooldown(ability, pool, now)
-end
-function FxEngine.prototype.refillOrbCharges(self)
-    for ____, pool in __TS__Iterator(self.orbCharges:values()) do
-        pool.count = pool.max
-        pool.next = 0
-    end
-    self:syncCharges()
-end
 function FxEngine.prototype.syncCharges(self)
     local b = self.listFor
     if b == nil then
         return
     end
-    local data = {}
-    local now = GameRules:GetGameTime()
-    local sig = ""
     do
         local i = 0
         while i < self.parent:GetAbilityCount() do
             do
                 local ability = self.parent:GetAbilityByIndex(i)
-                if ability == nil then
-                    goto __continue276
+                if ability == nil or ability:IsPassive() or ability:GetLevel() <= 0 then
+                    goto __continue257
                 end
-                local info = self:chargeInfo(ability)
-                if info == nil then
-                    goto __continue276
+                local extra = bonusAbilityCharges(
+                    b,
+                    ability:GetAbilityName(),
+                    ability:GetAbilityType() == 1
+                )
+                local granted = self.grantedCharges:get(ability) or 0
+                if extra <= granted then
+                    goto __continue257
                 end
-                local id = ability:GetEntityIndex()
-                if info.native > 0 then
-                    self.orbCharges:delete(id)
-                    local previous = self.chargeMax:get(id) or info.base
-                    if previous > 0 and info.native > previous then
-                        ability:SetCurrentAbilityCharges(math.min(
-                            info.native,
-                            ability:GetCurrentAbilityCharges() + info.native - previous
-                        ))
-                    end
-                    self.chargeMax:set(id, info.native)
-                    goto __continue276
+                local level = ability:GetLevel() - 1
+                local nativeMax = ability:GetMaxAbilityCharges(level)
+                if nativeMax <= 0 then
+                    goto __continue257
                 end
-                local pool = self:updateChargePool(ability, info.max, now, false)
-                self:applyChargeCooldown(ability, pool, now)
-                local name = ability:GetAbilityName()
-                data[name] = {count = pool.count, max = pool.max, next = pool.next}
-                sig = sig .. ((((((name .. ":") .. tostring(pool.count)) .. ":") .. tostring(pool.max)) .. ":") .. tostring(pool.next)) .. "|"
+                local converting = granted == 0 and ability:GetLevelSpecialValueNoOverride("AbilityCharges", level) <= 0
+                local oldCooldown = converting and ability:GetCooldownTimeRemaining() or 0
+                local readyCast = converting and oldCooldown <= 0 and 1 or 0
+                ability:SetCurrentAbilityCharges(math.min(
+                    nativeMax,
+                    ability:GetCurrentAbilityCharges() + extra - granted + readyCast
+                ))
+                if oldCooldown > 0 then
+                    ability:EndCooldown()
+                end
+                ability:MarkAbilityButtonDirty()
+                self.grantedCharges:set(ability, extra)
             end
-            ::__continue276::
+            ::__continue257::
             i = i + 1
         end
-    end
-    if sig ~= self.chargeSignature then
-        CustomNetTables:SetTableValue(
-            "orb_charges",
-            tostring(self.parent:GetPlayerOwnerID()),
-            {
-                hero = self.parent:GetEntityIndex(),
-                abilities = data
-            }
-        )
-        self.chargeSignature = sig
     end
 end
 function FxEngine.prototype.think(self)
@@ -1460,12 +1351,12 @@ function FxEngine.prototype.think(self)
         elseif f.t == "storm" and alive and self:inWindow(f, f.win, now) then
             self:stormTick(f, now)
         else
-            local ____temp_7 = f.t == "trail" and alive and self:inWindow(f, f.win, now)
-            if ____temp_7 then
-                local ____opt_5 = self:ab(f.ab)
-                ____temp_7 = (____opt_5 and ____opt_5:GetLevel() or 1) > 0
+            local ____temp_5 = f.t == "trail" and alive and self:inWindow(f, f.win, now)
+            if ____temp_5 then
+                local ____opt_3 = self:ab(f.ab)
+                ____temp_5 = (____opt_3 and ____opt_3:GetLevel() or 1) > 0
             end
-            if ____temp_7 then
+            if ____temp_5 then
                 if now - self.lastTrailAt >= 0.3 and self.lastPos ~= nil and now - self.stillSince < 0.15 then
                     self.lastTrailAt = now
                     local fx
@@ -1478,27 +1369,27 @@ function FxEngine.prototype.think(self)
                             Vector(f.radius, f.radius, f.radius)
                         )
                     end
-                    local ____self_trail_8 = self.trail
-                    ____self_trail_8[#____self_trail_8 + 1] = {f = f, pos = pos, ["until"] = now + f.life, fx = fx}
+                    local ____self_trail_6 = self.trail
+                    ____self_trail_6[#____self_trail_6 + 1] = {f = f, pos = pos, ["until"] = now + f.life, fx = fx}
                 end
             elseif f.t == "aura" and auraTick and alive and self:inWindow(f, f.win, now) then
                 local r = self:num(f.radius, f)
-                local ____FindUnitsInRadius_12 = FindUnitsInRadius
-                local ____temp_10 = parent:GetTeamNumber()
-                local ____DOTA_UNIT_TARGET_TEAM_ENEMY_11 = DOTA_UNIT_TARGET_TEAM_ENEMY
-                local ____temp_9
+                local ____FindUnitsInRadius_10 = FindUnitsInRadius
+                local ____temp_8 = parent:GetTeamNumber()
+                local ____DOTA_UNIT_TARGET_TEAM_ENEMY_9 = DOTA_UNIT_TARGET_TEAM_ENEMY
+                local ____temp_7
                 if (f.heroOnly or 0) > 0 then
-                    ____temp_9 = DOTA_UNIT_TARGET_HERO
+                    ____temp_7 = DOTA_UNIT_TARGET_HERO
                 else
-                    ____temp_9 = DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC
+                    ____temp_7 = DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC
                 end
-                local units = ____FindUnitsInRadius_12(
-                    ____temp_10,
+                local units = ____FindUnitsInRadius_10(
+                    ____temp_8,
                     pos,
                     nil,
                     r,
-                    ____DOTA_UNIT_TARGET_TEAM_ENEMY_11,
-                    ____temp_9,
+                    ____DOTA_UNIT_TARGET_TEAM_ENEMY_9,
+                    ____temp_7,
                     DOTA_UNIT_TARGET_FLAG_NONE,
                     FIND_ANY_ORDER,
                     false
@@ -1533,13 +1424,13 @@ function FxEngine.prototype.autoTick(self, f, now)
         return
     end
     local range = self:num(f.range, f)
-    local ____temp_13
+    local ____temp_11
     if (f.heroOnly or 0) > 0 then
-        ____temp_13 = DOTA_UNIT_TARGET_HERO
+        ____temp_11 = DOTA_UNIT_TARGET_HERO
     else
-        ____temp_13 = DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC
+        ____temp_11 = DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC
     end
-    local ____type = ____temp_13
+    local ____type = ____temp_11
     local foes = FindUnitsInRadius(
         parent:GetTeamNumber(),
         parent:GetAbsOrigin(),
@@ -1657,7 +1548,7 @@ function FxEngine.prototype.trailTick(self, now)
         for ____, u in ipairs(units) do
             do
                 if hit:has(u) or not u:IsAlive() then
-                    goto __continue331
+                    goto __continue311
                 end
                 hit:add(u)
                 self:damage(
@@ -1670,7 +1561,7 @@ function FxEngine.prototype.trailTick(self, now)
                     self:applyDebuff(tp.f, tp.f.debuff, u)
                 end
             end
-            ::__continue331::
+            ::__continue311::
         end
     end
 end
@@ -1683,10 +1574,10 @@ function FxEngine.prototype.trapTick(self, now)
         do
             if now >= t["until"] then
                 self:removeTrap(t)
-                goto __continue338
+                goto __continue318
             end
             if now < t.armAt then
-                goto __continue338
+                goto __continue318
             end
             local foes = FindUnitsInRadius(
                 parent:GetTeamNumber(),
@@ -1703,7 +1594,7 @@ function FxEngine.prototype.trapTick(self, now)
                 foes,
                 function(____, u) return u:IsAlive() and u:IsRealHero() end
             ) then
-                goto __continue338
+                goto __continue318
             end
             self:removeTrap(t)
             if t.f.pfx ~= nil then
@@ -1731,7 +1622,7 @@ function FxEngine.prototype.trapTick(self, now)
             for ____, u in ipairs(all) do
                 do
                     if not u:IsAlive() then
-                        goto __continue344
+                        goto __continue324
                     end
                     self:damage(
                         u,
@@ -1743,10 +1634,10 @@ function FxEngine.prototype.trapTick(self, now)
                         self:applyDebuff(t.f, t.f.debuff, u)
                     end
                 end
-                ::__continue344::
+                ::__continue324::
             end
         end
-        ::__continue338::
+        ::__continue318::
     end
 end
 function FxEngine.prototype.comboCast(self, f, name, now)
@@ -1840,7 +1731,7 @@ function FxEngine.prototype.startZone(self, f, ability, target)
     for ____, radius in ipairs({f.radius, f.inner or 0}) do
         do
             if radius <= 0 then
-                goto __continue368
+                goto __continue348
             end
             local fx = ParticleManager:CreateParticle(RING_PFX, PATTACH_WORLDORIGIN, nil)
             ParticleManager:SetParticleControl(fx, 0, pos)
@@ -1856,11 +1747,11 @@ function FxEngine.prototype.startZone(self, f, ability, target)
             )
             rings[#rings + 1] = fx
         end
-        ::__continue368::
+        ::__continue348::
     end
     local now = GameRules:GetGameTime()
-    local ____self_zones_14 = self.zones
-    ____self_zones_14[#____self_zones_14 + 1] = {
+    local ____self_zones_12 = self.zones
+    ____self_zones_12[#____self_zones_12 + 1] = {
         f = f,
         pos = pos,
         ["until"] = now + self:num(f.dur, f),
@@ -1936,17 +1827,17 @@ function FxEngine.prototype.markHit(self, f, target, source, now, cast)
         return
     end
     local consume = not cast and __TS__ArrayIncludes(f.consume, source)
-    local ____temp_16 = f.ab == source
-    if ____temp_16 then
-        local ____cast_15
+    local ____temp_14 = f.ab == source
+    if ____temp_14 then
+        local ____cast_13
         if cast then
-            ____cast_15 = f.by == "cast"
+            ____cast_13 = f.by == "cast"
         else
-            ____cast_15 = f.by == "ab"
+            ____cast_13 = f.by == "ab"
         end
-        ____temp_16 = ____cast_15
+        ____temp_14 = ____cast_13
     end
-    local place = ____temp_16 or source == "attack" and f.nativeMark ~= nil and self:hasOwnCombatModifier(target, f.nativeMark)
+    local place = ____temp_14 or source == "attack" and f.nativeMark ~= nil and self:hasOwnCombatModifier(target, f.nativeMark)
     if not consume and not place then
         return
     end
@@ -2060,10 +1951,10 @@ function FxEngine.prototype.combatTick(self, now)
         do
             if now >= zone["until"] then
                 self:removeZone(zone)
-                goto __continue404
+                goto __continue384
             end
             if now < zone.next then
-                goto __continue404
+                goto __continue384
             end
             zone.next = now + zone.f.every
             local f = zone.f
@@ -2085,7 +1976,7 @@ function FxEngine.prototype.combatTick(self, now)
                         f.inner or 0,
                         f.radius
                     ) then
-                        goto __continue407
+                        goto __continue387
                     end
                     local id = u:entindex()
                     local entry = not zone.entered:has(id) and self:num(f.entryDmg, f) or 0
@@ -2100,10 +1991,10 @@ function FxEngine.prototype.combatTick(self, now)
                         self:applyDebuff(f, f.debuff, u)
                     end
                 end
-                ::__continue407::
+                ::__continue387::
             end
         end
-        ::__continue404::
+        ::__continue384::
     end
     for ____, ____value in __TS__Iterator(self.tethers) do
         local key = ____value[1]
@@ -2113,7 +2004,7 @@ function FxEngine.prototype.combatTick(self, now)
             local target = link.target
             if now >= link["until"] or not IsValidEntity(target) or not target:IsAlive() or f.ownerMod ~= nil and not self:hasOwnCombatModifier(parent, f.ownerMod) and not self:hasOwnCombatModifier(target, f.ownerMod) or not self:hasOwnCombatModifier(target, f.targetMod) then
                 self.tethers:delete(key)
-                goto __continue412
+                goto __continue392
             end
             local band = tetherBand(
                 (target:GetAbsOrigin() - parent:GetAbsOrigin()):Length2D(),
@@ -2123,14 +2014,14 @@ function FxEngine.prototype.combatTick(self, now)
             )
             if band == "broken" then
                 self.tethers:delete(key)
-                goto __continue412
+                goto __continue392
             end
             if band ~= "active" or target:IsInvulnerable() or target:IsDebuffImmune() then
                 link.streak = 0
-                goto __continue412
+                goto __continue392
             end
             if now < link.next then
-                goto __continue412
+                goto __continue392
             end
             link.next = now + f.every
             if f.isolated ~= nil then
@@ -2150,7 +2041,7 @@ function FxEngine.prototype.combatTick(self, now)
                     function(____, u) return u ~= target and u:IsAlive() and u:IsRealHero() end
                 ) then
                     link.streak = 0
-                    goto __continue412
+                    goto __continue392
                 end
             end
             link.streak = link.streak + 1
@@ -2179,7 +2070,7 @@ function FxEngine.prototype.combatTick(self, now)
             )
             ParticleManager:ReleaseParticleIndex(fx)
         end
-        ::__continue412::
+        ::__continue392::
     end
 end
 function FxEngine.prototype.clearCombat(self)

@@ -69,26 +69,26 @@ describe("индикаторы захвата", () => {
 });
 
 describe("слоты расходников", () => {
-    it("клавиша 5 выбирает точку, сервер получает клик даже без клиентской способности", () => {
+    it("варды включают штатный прицел от героя, а дым использует своё событие", () => {
         let hero = 42;
         const send = vi.fn();
+        const execute = vi.fn();
         const source = script("slots");
         const context = {
             $: () => panel(),
             GameUI: { CustomUIConfig: () => ({}), GetScreenWorldPosition: () => [120, 240, 0], GetCursorPosition: () => [0, 0] },
             Players: { GetLocalPlayer: () => 0, GetPlayerHeroEntityIndex: () => hero },
-            Entities: { IsAlive: () => true },
+            Entities: { GetAbilityByName: (_: number, name: string) => name === "orb_slot_observer" ? 80 : 81 },
+            Abilities: { ExecuteAbility: execute },
             GameEvents: { SendCustomGameEventToServer: send },
         };
         runInNewContext(source.slice(0, source.indexOf("(function initSlots()")), context);
-        runInNewContext('slotKeyPressed("5"); slotMouse("pressed", 0);', context);
-        expect(send).toHaveBeenLastCalledWith("orb_slot_use", { kind: "ob", x: 120, y: 240 });
-        runInNewContext('slotKeyPressed("6");', context);
+        runInNewContext('slotKeyPressed("5");', context);
+        expect(execute).toHaveBeenLastCalledWith(80, 42, false);
         hero = 43;
-        runInNewContext('slotMouse("pressed", 0);', context);
+        runInNewContext('slotKeyPressed("6"); slotKeyPressed("7");', context);
+        expect(execute).toHaveBeenLastCalledWith(81, 43, false);
         expect(send).toHaveBeenCalledTimes(1);
-        runInNewContext('slotKeyPressed("6"); slotMouse("pressed", 0); slotKeyPressed("7");', context);
-        expect(send).toHaveBeenNthCalledWith(2, "orb_slot_use", { kind: "se", x: 120, y: 240 });
         expect(send).toHaveBeenLastCalledWith("orb_slot_use", { kind: "sm" });
     });
 });

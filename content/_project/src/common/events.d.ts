@@ -20,14 +20,17 @@ interface CustomGameEventDeclarations {
     orb_pick: { seq: number; id: string };
     orb_reroll: { seq: number };
     orb_help: { choice: string };
+    orb_test_action: { action: string };
+    orb_test_pick_hero: { hero: string };
+    orb_test_hero_result: { error?: string };
     orb_settings: { bots?: number };
     orb_start: {};
     /** Голос в лобби: лимит убийств (kills) или время партии в минутах (minutes). */
     orb_vote: { kills?: number; minutes?: number };
     /** Съесть Boots of Travel из инвентаря. */
     orb_eat_travel: {};
-    /** Расходник из слота; для варда обязательна точка на земле. */
-    orb_slot_use: { kind: string; x?: number; y?: number };
+    /** Дым или пыль из слота. Варды ставятся штатным приказом на способность. */
+    orb_slot_use: { kind: string };
     /** Выбор нейтрального предмета: kind — trinket или enh, name — предмет. */
     orb_neutral_pick: { seq: number; kind: string; name: string };
 }
@@ -51,6 +54,7 @@ interface OrbOfferNet {
     a: string;       // какая сфера получена (если пул пуст — карточки редкостью ниже)
     c: { [i: string]: OrbCardNet };
     t: number;       // секунд до автовыбора
+    test?: number;   // выбор явно открыт через тестовую панель
 }
 
 /** Сфера Повелителя на земле. */
@@ -189,10 +193,7 @@ interface ArenaEventNet {
     next: number;
 }
 
-interface OrbChargeNet { count: number; max: number; next: number }
-
 interface CustomNetTableDeclarations {
-    orb_charges: { [pid: string]: { hero: EntityIndex; abilities: Record<string, OrbChargeNet> } };
     orb_game: {
         state: OrbGameState;
         scores: { [id: string]: OrbScoreRow };
@@ -203,6 +204,7 @@ interface CustomNetTableDeclarations {
         settings: SettingsNet;
         chest: { list: { [i: string]: ChestNet } };
         event: ArenaEventNet;
+        test_heroes: Record<string, string>;
     };
     orb_spheres: { [pid: string]: OrbSphereNet };
     orb_items: { [pid: string]: OrbItemsNet };

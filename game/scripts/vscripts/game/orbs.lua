@@ -1,17 +1,19 @@
 local ____lualib = require("lualib_bundle")
 local Map = ____lualib.Map
 local __TS__New = ____lualib.__TS__New
+local __TS__ArrayIndexOf = ____lualib.__TS__ArrayIndexOf
 local __TS__ArraySplice = ____lualib.__TS__ArraySplice
+local __TS__ArrayUnshift = ____lualib.__TS__ArrayUnshift
+local __TS__ArraySlice = ____lualib.__TS__ArraySlice
+local __TS__ArrayFilter = ____lualib.__TS__ArrayFilter
 local __TS__StringStartsWith = ____lualib.__TS__StringStartsWith
 local __TS__ArraySome = ____lualib.__TS__ArraySome
 local __TS__ArrayMap = ____lualib.__TS__ArrayMap
-local __TS__ArrayIndexOf = ____lualib.__TS__ArrayIndexOf
 local __TS__Number = ____lualib.__TS__Number
 local __TS__Iterator = ____lualib.__TS__Iterator
 local __TS__ObjectAssign = ____lualib.__TS__ObjectAssign
 local __TS__ArrayForEach = ____lualib.__TS__ArrayForEach
 local __TS__ArrayFind = ____lualib.__TS__ArrayFind
-local __TS__ArraySlice = ____lualib.__TS__ArraySlice
 local ____exports = {}
 local rng, heroNameOf, heroOf, openNext, legendSlotsOf, fmt, unitText, cardValues, pushPlayer, players
 local ____orbs = require("core.orbs")
@@ -20,6 +22,7 @@ local addBarPoints = ____orbs.addBarPoints
 local assistPurplePoints = ____orbs.assistPurplePoints
 local blueDef = ____orbs.blueDef
 local blueNeed = ____orbs.blueNeed
+local candidates = ____orbs.candidates
 local heroUpgrades = ____orbs.heroUpgrades
 local diminishing = ____orbs.diminishing
 local greyDef = ____orbs.greyDef
@@ -113,13 +116,13 @@ end
 function openNext(op)
     local guard = 0
     while true do
-        local ____temp_3 = op.offer == nil and #op.queue > 0
-        if ____temp_3 then
-            local ____guard_2 = guard
-            guard = ____guard_2 + 1
-            ____temp_3 = ____guard_2 < 20
+        local ____temp_8 = op.offer == nil and #op.queue > 0
+        if ____temp_8 then
+            local ____guard_7 = guard
+            guard = ____guard_7 + 1
+            ____temp_8 = ____guard_7 < 20
         end
-        if not ____temp_3 then
+        if not ____temp_8 then
             break
         end
         do
@@ -148,7 +151,7 @@ function openNext(op)
                         nil
                     )
                 end
-                goto __continue10
+                goto __continue15
             end
             op.seq = op.seq + 1
             local queuedAt = op.queueAt[1] or gameNow()
@@ -163,7 +166,7 @@ function openNext(op)
                 )
             }
         end
-        ::__continue10::
+        ::__continue15::
     end
     op.dirty = true
 end
@@ -287,7 +290,8 @@ function pushPlayer(op, force)
             t = math.max(
                 0,
                 math.ceil(ORB.autoPickSeconds - (now - op.offer.openedAt))
-            )
+            ),
+            test = op.offer.test and 1 or nil
         }
     end
     local net = {
@@ -319,6 +323,59 @@ end
 local CONTROLLER = "modifier_orb_controller"
 players = __TS__New(Map)
 local lastTick = -1
+--- В редакторе следующая легендарка доступна сразу и не заменяется сферой другой редкости.
+function ____exports.offerTestLegend(pid)
+    local op = ____exports.orbPlayer(pid)
+    local cards = candidates(
+        "legend",
+        heroNameOf(pid),
+        op.stacks,
+        op.disabled,
+        math.huge
+    )
+    if #cards == 0 then
+        return false
+    end
+    local queued = __TS__ArrayIndexOf(op.queue, "legend")
+    if queued >= 0 then
+        __TS__ArraySplice(op.queue, queued, 1)
+        __TS__ArraySplice(op.queueAt, queued, 1)
+    end
+    local now = gameNow()
+    __TS__ArrayUnshift(op.queue, "legend")
+    __TS__ArrayUnshift(op.queueAt, now)
+    local ____op_2, ____seq_3 = op, "seq"
+    local ____op_seq_4 = ____op_2[____seq_3] + 1
+    ____op_2[____seq_3] = ____op_seq_4
+    op.offer = {
+        seq = ____op_seq_4,
+        asked = "legend",
+        rarity = "legend",
+        cards = __TS__ArraySlice(cards, 0, ORB.legendCards),
+        openedAt = now,
+        test = true
+    }
+    local picked = #__TS__ArrayFilter(
+        op.order,
+        function(____, id)
+            local ____opt_5 = upDef(id)
+            return (____opt_5 and ____opt_5.rarity) == "legend"
+        end
+    )
+    op.legendsQueued = math.max(op.legendsQueued, picked + 1)
+    op.legendQueued = true
+    pushPlayer(op, true)
+    return true
+end
+function ____exports.resetTestOrbs(pid)
+    local previous = ____exports.orbPlayer(pid)
+    players:delete(pid)
+    local op = ____exports.orbPlayer(pid)
+    op.seq = previous.seq
+    op.version = previous.version + 1
+    setBonuses(pid, op.stacks, op.primaryAttr, op.version)
+    pushPlayer(op, true)
+end
 --- Постоянный исполнитель геройских эффектов сфер.
 local function ensureExtras(op, h)
     if not h:HasModifier("modifier_orb_hero") then
@@ -327,8 +384,8 @@ local function ensureExtras(op, h)
 end
 local function applyCard(op, id)
     op.stacks[id] = (op.stacks[id] or 0) + 1
-    local ____op_order_4 = op.order
-    ____op_order_4[#____op_order_4 + 1] = id
+    local ____op_order_9 = op.order
+    ____op_order_9[#____op_order_9 + 1] = id
     op.version = op.version + 1
     local d = upDef(id)
     if d ~= nil and d.rarity == "legend" and d.branch ~= "H" then
@@ -428,16 +485,16 @@ local function bloodFeast(pid)
                     a:GetAbilityName(),
                     "orb_slot_"
                 ) then
-                    goto __continue31
+                    goto __continue36
                 end
                 local left = a:GetCooldownTimeRemaining()
                 if left <= 0 then
-                    goto __continue31
+                    goto __continue36
                 end
                 a:EndCooldown()
                 a:StartCooldown(left * math.max(0.1, 1 - share - 0.2))
             end
-            ::__continue31::
+            ::__continue36::
             i = i + 1
         end
     end
@@ -454,12 +511,12 @@ function ____exports.grantMechanics(pid)
     for ____, u in ipairs(heroUpgrades(h:GetUnitName())) do
         do
             if u.rarity ~= "purple" or u.mech ~= true or (op.stacks[u.id] or 0) > 0 then
-                goto __continue36
+                goto __continue41
             end
             applyCard(op, u.id)
             n = n + 1
         end
-        ::__continue36::
+        ::__continue41::
     end
     for ____, id in ipairs({
         "p_grave",
@@ -471,12 +528,12 @@ function ____exports.grantMechanics(pid)
     }) do
         do
             if (op.stacks[id] or 0) > 0 then
-                goto __continue39
+                goto __continue44
             end
             applyCard(op, id)
             n = n + 1
         end
-        ::__continue39::
+        ::__continue44::
     end
     pushPlayer(op, true)
     return n
@@ -522,8 +579,8 @@ local function lastSalvo(pid)
 end
 --- Множитель скорости захвата сфер и сундуков (Охотник за сокровищами).
 function ____exports.captureSpeed(pid)
-    local ____opt_5 = players:get(pid)
-    local n = ____opt_5 and ____opt_5.stacks.p_hunter or 0
+    local ____opt_10 = players:get(pid)
+    local n = ____opt_10 and ____opt_10.stacks.p_hunter or 0
     return n > 0 and 1 + 0.75 * n or 1
 end
 --- Выбор карточки. Сервер проверяет номер предложения и карточку: двойной клик не дает две сферы.
@@ -664,7 +721,7 @@ local function onHeroSpawned(p, hero)
     for ____, d in ipairs(heroUpgrades(hero:GetUnitName())) do
         do
             if d.code or d.ability == "" then
-                goto __continue84
+                goto __continue89
             end
             if op.disabled[d.id] == nil then
                 local ab = hero:FindAbilityByName(d.ability)
@@ -674,7 +731,7 @@ local function onHeroSpawned(p, hero)
                 end
             end
         end
-        ::__continue84::
+        ::__continue89::
     end
     setBonuses(op.pid, op.stacks, op.primaryAttr, op.version)
     if not hero:HasModifier(CONTROLLER) then
@@ -724,27 +781,27 @@ function ____exports.orbsTick()
                 local timeout = now - op.offer.openedAt >= ORB.autoPickSeconds
                 if timeout or p ~= nil and (p.left or p.isBot) then
                     ____exports.pick(op.pid, op.offer.seq, op.offer.cards[1].id)
-                    goto __continue96
+                    goto __continue101
                 end
             end
             if op.dirty or now - op.lastPush >= 1 then
                 pushPlayer(op, false)
             end
         end
-        ::__continue96::
+        ::__continue101::
     end
 end
 function ____exports.initOrbs()
-    local ____Hooks_onHeroSpawned_9 = Hooks.onHeroSpawned
-    ____Hooks_onHeroSpawned_9[#____Hooks_onHeroSpawned_9 + 1] = function(p, hero, respawn)
+    local ____Hooks_onHeroSpawned_14 = Hooks.onHeroSpawned
+    ____Hooks_onHeroSpawned_14[#____Hooks_onHeroSpawned_14 + 1] = function(p, hero, respawn)
         if not respawn or not hero:HasModifier(CONTROLLER) then
             onHeroSpawned(p, hero)
         end
     end
-    local ____Hooks_onHeroDeath_10 = Hooks.onHeroDeath
-    ____Hooks_onHeroDeath_10[#____Hooks_onHeroDeath_10 + 1] = function(vp) return lastSalvo(vp.id) end
-    local ____Hooks_onHeroKill_11 = Hooks.onHeroKill
-    ____Hooks_onHeroKill_11[#____Hooks_onHeroKill_11 + 1] = function(k)
+    local ____Hooks_onHeroDeath_15 = Hooks.onHeroDeath
+    ____Hooks_onHeroDeath_15[#____Hooks_onHeroDeath_15 + 1] = function(vp) return lastSalvo(vp.id) end
+    local ____Hooks_onHeroKill_16 = Hooks.onHeroKill
+    ____Hooks_onHeroKill_16[#____Hooks_onHeroKill_16 + 1] = function(k)
         addFightPoints(
             k.killer.id,
             killPurplePoints(k.victimKillsBefore, k.killerKillsBefore, k.victimWasHunted)
@@ -764,8 +821,8 @@ function ____exports.initOrbs()
             bloodFeast(a.id)
         end
     end
-    local ____Hooks_onWealthRune_12 = Hooks.onWealthRune
-    ____Hooks_onWealthRune_12[#____Hooks_onWealthRune_12 + 1] = function(p) return ____exports.addBlue(p.id, ORB.runePoints) end
+    local ____Hooks_onWealthRune_17 = Hooks.onWealthRune
+    ____Hooks_onWealthRune_17[#____Hooks_onWealthRune_17 + 1] = function(p) return ____exports.addBlue(p.id, ORB.runePoints) end
     ListenToGameEvent(
         "entity_killed",
         function(e) return safe(
@@ -817,8 +874,8 @@ function ____exports.orbSummary(pid)
     local legend = __TS__ArrayFind(
         op.order,
         function(____, id)
-            local ____opt_13 = upDef(id)
-            return (____opt_13 and ____opt_13.rarity) == "legend"
+            local ____opt_18 = upDef(id)
+            return (____opt_18 and ____opt_18.rarity) == "legend"
         end
     ) or ""
     return {

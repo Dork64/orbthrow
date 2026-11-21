@@ -9,7 +9,7 @@ import { landedBossOrbs } from "./bossorbs";
 import { chestOnGroundNow } from "./courier";
 import { currentGoblin } from "./goblin";
 import { State, allPlayers, newPlayer, gameNow } from "./state";
-import { BASE_COLORS, baseIndexOfTeam, fountainOf } from "./teams";
+import { BASE_COLORS, baseIndexOfTeam, baseTeams, fountainOf } from "./teams";
 import { Timers } from "./timers";
 import { isValid, log, randomPointInCircle, safe } from "./util";
 
@@ -34,6 +34,7 @@ const HERO_BUILDS: Record<string, string[]> = {
 };
 
 const brains = new Map<number, BotBrain>();
+const pendingBotTeams = new Set<DotaTeam>();
 let botCounter = 0;
 /** Герои, уже обещанные ботам (загрузка героя асинхронная, без этого боты берут одинаковых). */
 const reservedHeroes: string[] = [];
@@ -58,31 +59,43 @@ function takenHeroes(): string[] {
     return list;
 }
 
-/** Добавить бота в свободную зарезервированную команду. */
-export function spawnBot(team: DotaTeam) {
+/** Занять команду до конца асинхронной загрузки героя. */
+function spawnBot(team: DotaTeam) {
+    if (State.teamToPlayer.has(team) || pendingBotTeams.has(team)) return;
+    pendingBotTeams.add(team);
     const taken = takenHeroes().concat(reservedHeroes);
     const free = HERO_POOL.filter(h => !taken.includes(h));
     const heroName = free.length > 0 ? free[RandomInt(0, free.length - 1)] : HERO_POOL[RandomInt(0, HERO_POOL.length - 1)];
     reservedHeroes.push(heroName);
     botCounter++;
     const botName = "Бот " + botCounter;
-    PrecacheUnitByNameAsync(heroName, () => {
-        safe("создание бота", () => {
-            const hero = GameRules.AddBotPlayerWithEntityScript(heroName, botName, team, "", false);
-            if (hero === undefined) {
-                log("не удалось создать бота", heroName, "в команде", team);
-                return;
-            }
-            const id = hero.GetPlayerOwnerID();
-            const baseIndex = baseIndexOfTeam(team);
-            newPlayer(id, team, baseIndex, true);
-            const c = BASE_COLORS[baseIndex];
-            PlayerResource.SetCustomPlayerColor(id, c[0], c[1], c[2]);
-            brains.set(id, { id, mode: "ring", until: 0, lastKey: "", lastAt: -100, buyIndex: 0, nextShop: 0 });
-            log("бот", botName, heroName, "команда", team);
-            for (const f of Hooks.onHeroSpawned) safe("появление героя", () => f(State.players.get(id)!, hero, false));
+    const scheduled = safe("загрузка героя бота", () => {
+        PrecacheUnitByNameAsync(heroName, () => {
+            pendingBotTeams.delete(team);
+            safe("создание бота", () => {
+                const hero = GameRules.AddBotPlayerWithEntityScript(heroName, botName, team, "", false);
+                if (hero === undefined) {
+                    log("не удалось создать бота", heroName, "в команде", team);
+                    return;
+                }
+                const id = hero.GetPlayerOwnerID();
+                const baseIndex = baseIndexOfTeam(team);
+                const player = newPlayer(id, team, baseIndex, true);
+                const c = BASE_COLORS[baseIndex];
+                PlayerResource.SetCustomPlayerColor(id, c[0], c[1], c[2]);
+                brains.set(id, { id, mode: "ring", until: 0, lastKey: "", lastAt: -100, buyIndex: 0, nextShop: 0 });
+                log("бот", botName, heroName, "команда", team);
+                for (const f of Hooks.onHeroSpawned) safe("появление героя", () => f(player, hero, false));
+            });
         });
+        return true;
     });
+    if (scheduled !== true) pendingBotTeams.delete(team);
+}
+
+export function spawnExtraBots(count: number) {
+    const free = baseTeams.filter(team => !State.teamToPlayer.has(team) && !pendingBotTeams.has(team));
+    for (let i = 0; i < Math.min(count, free.length); i++) spawnBot(free[i]);
 }
 
 export function spawnReservedBots() {

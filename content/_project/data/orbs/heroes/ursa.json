@@ -149,7 +149,7 @@
    "r": "legend",
    "branch": "Q",
    "ab": "ursa_earthshock",
-   "mods": "AbilityCharges:+2",
+   "mods": "AbilityCharges:+1",
    "awmods": "AbilityDamage:+100",
    "ru": "Сейсмический рев",
    "en": "Seismic Roar",

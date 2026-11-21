@@ -2,6 +2,32 @@
 {
 	"Version"	"1"
 
+	"orb_slot_observer"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_slot_wards"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | DOTA_ABILITY_BEHAVIOR_IGNORE_SILENCE"
+		"IsOnCastBar" "0"
+		"MaxLevel" "1"
+		"AbilityTextureName" "item_ward_observer"
+		"AbilityCastRange" "500"
+		"AbilityCooldown" "0.5"
+		"AbilityValues" { "ward_radius" "1600" }
+	}
+
+	"orb_slot_sentry"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_slot_wards"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | DOTA_ABILITY_BEHAVIOR_IGNORE_SILENCE"
+		"IsOnCastBar" "0"
+		"MaxLevel" "1"
+		"AbilityTextureName" "item_ward_sentry"
+		"AbilityCastRange" "500"
+		"AbilityCooldown" "0.5"
+		"AbilityValues" { "ward_radius" "1050" }
+	}
+
 	// Скрытая пассивка для служебных юнитов карты: неуязвим, невыбираем, без полоски здоровья.
 	"orb_dummy_passive"
 	{

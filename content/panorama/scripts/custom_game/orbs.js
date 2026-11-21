@@ -101,6 +101,11 @@ function orbRender() {
     if (offer !== undefined && offer.seq !== orbLastSeq) {
         orbLastSeq = offer.seq;
         orbPendingOpen = !orbUserCollapsed;
+        if (offer.test === 1) {
+            orbUserCollapsed = false;
+            orbPendingOpen = false;
+            orbPanelOpen = true;
+        }
         Game.EmitSound("Item.PickUpGemShop");
     }
     if (offer === undefined)
@@ -216,22 +221,6 @@ function orbPlaceBars() {
     }
     $.Schedule(0.25, orbPlaceBars);
 }
-function renderOrbCharges() {
-    const display = $("#OrbChargeDisplay");
-    const pid = Players.GetLocalPlayer();
-    const data = pid < 0 ? undefined : CustomNetTables.GetTableValue("orb_charges", String(pid));
-    const hero = pid < 0 ? -1 : Players.GetPlayerHeroEntityIndex(pid);
-    const entries = data && data.hero === hero ? data.abilities : {};
-    const parts = [];
-    for (const name in entries) {
-        const charge = entries[name];
-        const left = Math.ceil(charge.next - Game.GetGameTime());
-        parts.push($.Localize("#DOTA_Tooltip_Ability_" + name) + " " + charge.count + "/" + charge.max +
-            (left > 0 ? " (" + L("orb_charge_returns", String(left)) + ")" : ""));
-    }
-    display.SetHasClass("Hidden", parts.length === 0);
-    display.text = parts.join("    ·    ");
-}
 (function initOrbs() {
     orbPlaceBars();
     CustomNetTables.SubscribeNetTableListener("orb_spheres", (_t, key) => {
@@ -241,7 +230,6 @@ function renderOrbCharges() {
     // Таймер автовыбора тикает и без новых данных
     const loop = () => {
         orbRender();
-        renderOrbCharges();
         $.Schedule(0.5, loop);
     };
     loop();

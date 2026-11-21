@@ -44,67 +44,62 @@ describe("сферы 20.11: новые пулы и баланс", () => {
     });
 });
 
-describe("заряды в движке с GetMaxAbilityCharges = 0", () => {
-    function fixture(native = 0, base = 0, initialCooldown = 0, sphere = "cm_l_avalanche", name = "crystal_maiden_crystal_nova") {
-        let now = 100;
-        let deadline = now + initialCooldown;
+describe("штатные заряды от сфер", () => {
+    function fixture(native = 2, base = 0, initialCooldown = 0, sphere = "cm_l_avalanche", name = "crystal_maiden_crystal_nova") {
+        let remaining = initialCooldown;
         let count = base;
-        let published: any;
-        vi.stubGlobal("GameRules", { GetGameTime: () => now });
-        vi.stubGlobal("tostring", String);
-        vi.stubGlobal("CustomNetTables", { SetTableValue: (_table: string, _key: string, data: unknown) => { published = data; } });
         const ability = {
             GetAbilityName: () => name, GetAbilityType: () => 0, GetLevel: () => 4, IsPassive: () => false,
-            GetMaxAbilityCharges: () => native, GetEntityIndex: () => 5, GetLevelSpecialValueNoOverride: () => base,
+            GetMaxAbilityCharges: () => native, GetLevelSpecialValueNoOverride: () => base,
             GetCurrentAbilityCharges: () => count, SetCurrentAbilityCharges: vi.fn((n: number) => { count = n; }),
-            GetCooldown: () => 8, GetEffectiveCooldown: () => 8, GetCooldownTimeRemaining: () => Math.max(0, deadline - now),
-            EndCooldown: vi.fn(() => { deadline = now; }), StartCooldown: vi.fn((time: number) => { deadline = now + time; }),
-            GetCursorPosition: () => [0, 0, 0],
+            GetCooldownTimeRemaining: () => remaining,
+            EndCooldown: vi.fn(() => { remaining = 0; }), MarkAbilityButtonDirty: vi.fn(),
         };
-        const hero = { GetAbilityCount: () => 1, GetAbilityByIndex: () => ability, GetPlayerOwnerID: () => 0, GetEntityIndex: () => 12 };
+        const hero = { GetAbilityCount: () => 1, GetAbilityByIndex: () => ability };
         const engine = new FxEngine(hero as never);
         engine.refresh(computeBonuses({ [sphere]: 1 }, 2));
-        return { engine, ability, state: () => published?.abilities[name], count: () => count,
-            time: (t: number) => { now = t; engine.syncCharges(); },
-            cast: () => { deadline = now + 8; engine.onCast(ability as never, undefined); engine.syncCharges(); } };
+        return { engine, ability, count: () => count, spend: () => { count--; }, setMax: (n: number) => { native = n; } };
     }
 
-    it("после двух кастов блокируется, первый и второй заряды возвращаются последовательно", () => {
+    it("выдаёт два заряда из готового к применению умения и не возвращает потраченные", () => {
         const f = fixture();
         f.engine.syncCharges();
-        expect(f.state()).toEqual({ count: 2, max: 2, next: 0 });
-        f.cast();
-        expect(f.ability.GetCooldownTimeRemaining()).toBe(0);
-        f.time(102); f.cast();
-        expect(f.state()).toEqual({ count: 0, max: 2, next: 108 });
-        expect(f.ability.GetCooldownTimeRemaining()).toBe(6);
-        f.time(108);
-        expect(f.state()).toEqual({ count: 1, max: 2, next: 116 });
-        f.time(116);
-        expect(f.state()).toEqual({ count: 2, max: 2, next: 0 });
-    });
-    it("выбор сферы посреди КД сохраняет таймер предыдущего каста", () => {
-        const f = fixture(0, 0, 7);
+        expect(f.count()).toBe(2);
+        f.spend();
+        f.spend();
         f.engine.syncCharges();
-        expect(f.state()).toEqual({ count: 1, max: 2, next: 107 });
+        expect(f.count()).toBe(0);
+        expect(f.ability.SetCurrentAbilityCharges).toHaveBeenCalledTimes(1);
+        expect(f.ability.MarkAbilityButtonDirty).toHaveBeenCalledTimes(1);
     });
-    it("Refresher возвращает весь запас", () => {
-        const f = fixture();
-        f.cast();
-        f.engine.refillOrbCharges();
-        expect(f.state()).toEqual({ count: 2, max: 2, next: 0 });
+    it("при получении на КД выдаётся только новый заряд", () => {
+        const f = fixture(2, 0, 7);
+        f.engine.syncCharges();
+        expect(f.count()).toBe(1);
+        expect(f.ability.EndCooldown).toHaveBeenCalledTimes(1);
+    });
+    it("пробуждение выдаёт только дополнительный заряд, даже если запас пуст", () => {
+        const f = fixture(2, 0, 0, "lina_l_rain", "lina_light_strike_array");
+        f.engine.syncCharges();
+        f.spend(); f.spend();
+        f.setMax(3);
+        f.engine.refresh(computeBonuses({ lina_l_rain: 1, awake: 1 }, 2));
+        f.engine.syncCharges();
+        expect(f.count()).toBe(1);
     });
     it("Shrapnel сохраняет штатный счётчик, сама Дота тратит заряды", () => {
         const f = fixture(5, 3, 0, "sniper_l_barrage", "sniper_shrapnel");
         f.engine.syncCharges();
         expect(f.count()).toBe(5);
         expect(f.ability.EndCooldown).not.toHaveBeenCalled();
-        expect(f.state()).toBeUndefined();
+        f.setMax(6);
+        f.engine.syncCharges();
+        expect(f.count()).toBe(5);
     });
     it("Earthshock получает два заряда всего, а не три", () => {
-        const f = fixture(0, 0, 0, "ursa_l_shock", "ursa_earthshock");
+        const f = fixture(2, 0, 0, "ursa_l_shock", "ursa_earthshock");
         f.engine.syncCharges();
-        expect(f.state()).toEqual({ count: 2, max: 2, next: 0 });
+        expect(f.count()).toBe(2);
         expect(nativeChargeCount(0, 1)).toBe(2);
     });
 });

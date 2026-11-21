@@ -1,0 +1,79 @@
+#OrbTestDock {
+    x: 12px;
+    y: 78px;
+    flow-children: down;
+}
+
+#OrbTestToggle, .OrbTestRow Button, .OrbTestButton {
+    height: 29px;
+    background-color: #1d232e;
+    border: 1px solid #505865;
+    border-radius: 4px;
+}
+
+#OrbTestToggle {
+    min-width: 74px;
+    border-color: #e8c26a88;
+}
+
+#OrbTestToggle Label, .OrbTestRow Label, .OrbTestButton Label {
+    horizontal-align: center;
+    vertical-align: center;
+    color: #eef2f6;
+    font-size: 14px;
+}
+
+#OrbTestToggle Label { color: #f3d27c; font-weight: bold; }
+
+#OrbTestPanel {
+    flow-children: down;
+    margin-top: 4px;
+    padding: 6px;
+    background-color: #10141bf5;
+    border: 1px solid #e8c26a66;
+    border-radius: 4px;
+}
+
+.OrbTestRow { flow-children: right; }
+.OrbTestRow Button { width: 150px; margin: 2px; }
+.OrbTestRow Button:hover, #OrbTestToggle:hover { background-color: #303949; }
+.OrbTestRow Button:focus, #OrbTestToggle:focus, #OrbTestToggle.Open { border-color: #e8c26a; }
+.OrbTestRow Button:active, #OrbTestToggle:active { background-color: #3a3122; }
+
+.OrbTestButton { padding: 0px 12px; }
+.OrbTestButton:hover { background-color: #303949; }
+.OrbTestButton:focus { border-color: #e8c26a; }
+.OrbTestButton:disabled { opacity: 0.45; }
+#OrbTestChangeHero { width: 100%; margin: 4px 2px 2px 2px; border-color: #9b7d49; }
+
+#OrbTestHeroOverlay { width: 100%; height: 100%; background-color: #080c12ad; }
+#OrbTestHeroPicker {
+    width: 760px;
+    max-width: 93%;
+    horizontal-align: center;
+    vertical-align: center;
+    flow-children: down;
+    background-color: #151c27;
+    border: 1px solid #b8945f;
+    border-radius: 7px;
+    padding: 16px;
+    box-shadow: 0px 6px 22px #000000b0;
+}
+
+#OrbTestHeroHeader, #OrbTestHeroFooter { width: 100%; }
+#OrbTestHeroTitle { font-size: 24px; color: #eef2f6; font-weight: bold; }
+#OrbTestHeroClose, #OrbTestHeroConfirm { horizontal-align: right; }
+#OrbTestHeroSearch { width: 100%; height: 34px; margin: 9px 0px; padding: 5px 8px; background-color: #10141b; border: 1px solid #505865; color: #eef2f6; font-size: 16px; }
+#OrbTestHeroSearch:focus { border-color: #e8c26a; }
+#OrbTestHeroGrid { width: 100%; max-height: 430px; overflow: squish scroll; flow-children: right-wrap; }
+.OrbTestHeroCard { width: 111px; margin: 3px; flow-children: down; background-color: #202938; border: 1px solid #505865; border-radius: 3px; }
+.OrbTestHeroCard:hover, .OrbTestHeroCard:focus { border-color: #f1d49d; }
+.OrbTestHeroCard.Selected { border-color: #e8c26a; background-color: #3a3122; }
+.OrbTestHeroCard DOTAHeroImage { width: 100%; height: 56px; }
+.OrbTestHeroCard Label { width: 100%; height: 24px; text-align: center; color: #eef2f6; font-size: 13px; padding-top: 3px; text-overflow: shrink; }
+#OrbTestHeroEmpty, #OrbTestHeroStatus { color: #c4ceda; font-size: 14px; vertical-align: center; }
+#OrbTestHeroEmpty { margin: 8px 0px; }
+#OrbTestHeroFooter { margin-top: 10px; height: 31px; }
+#OrbTestHeroStatus { width: 72%; }
+#OrbTestHeroConfirm { border-color: #e8c26a; background-color: #413523; }
+#OrbTestHeroConfirm:hover { background-color: #58452b; }

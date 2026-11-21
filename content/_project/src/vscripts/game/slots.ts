@@ -4,12 +4,14 @@
 
 import { MAP } from "../core/mapinfo";
 import { CONFIG } from "../core/config";
+import { Hooks } from "./hooks";
 import { addItemsNetPart, markItemsDirty, pushItemsNet } from "./itemsnet";
 import { State, allPlayers, toast } from "./state";
 import { Timers } from "./timers";
 import { isValid, log, safe } from "./util";
 
 type Kind = "ob" | "se" | "sm" | "du";
+type WardKind = "ob" | "se";
 interface Slots { ob: number; se: number; sm: number; du: number; tb: number }
 
 const TRAVEL_MOD = "modifier_orb_travel";
@@ -49,7 +51,6 @@ function netPart(pid: number): Record<string, unknown> {
     return { ob: s.ob, se: s.se, sm: s.sm, du: s.du, tb: s.tb, te: canEat, tm: CONFIG.travelEatMax };
 }
 
-const wardRange = 500;
 const slotCooldown = new Map<number, Partial<Record<Kind, number>>>();
 
 function slotError(pid: PlayerID, text: string) {
@@ -57,19 +58,33 @@ function slotError(pid: PlayerID, text: string) {
     if (player !== undefined) CustomGameEventManager.Send_ServerToPlayer(player, "orb_error", { text });
 }
 
-function placeWard(hero: CDOTA_BaseNPC_Hero, kind: "ob" | "se", x?: number, y?: number): boolean {
-    if (x === undefined || y === undefined || !(Math.abs(x) <= MAP.bounds && Math.abs(y) <= MAP.bounds)) return false;
-    const pos = GetGroundPosition(Vector(x, y, 0), hero);
-    const from = hero.GetAbsOrigin();
-    if ((from.x - pos.x) ** 2 + (from.y - pos.y) ** 2 > wardRange ** 2) return false;
+export function slotWardError(hero: CDOTA_BaseNPC_Hero, kind: WardKind, point: Vector): string | undefined {
+    const pid = hero.GetPlayerOwnerID();
+    const player = State.players.get(pid);
+    if (player === undefined || player.left || State.phase === "setup" || State.phase === "ended" ||
+        PlayerResource.GetSelectedHeroEntity(pid) !== hero || !hero.IsAlive() || hero.IsMuted() || hero.IsOutOfGame()) return "#orb_slot_cannot_cast";
+    if (slotsOf(pid)[kind] <= 0) return "#orb_slot_empty";
+    if (!(Math.abs(point.x) <= MAP.bounds && Math.abs(point.y) <= MAP.bounds)) return "#orb_slot_bad_point";
+    return undefined;
+}
+
+/** Вызывается после штатного point-cast. Дальность и подход к точке проверяет движок. */
+export function castSlotWard(hero: CDOTA_BaseNPC_Hero, kind: WardKind, point: Vector, ability: CDOTABaseAbility) {
+    const pid = hero.GetPlayerOwnerID();
+    if (slotWardError(hero, kind, point) !== undefined) return;
+    const pos = GetGroundPosition(point, hero);
     const sentry = kind === "se";
     const unit = sentry ? "npc_dota_sentry_wards" : "npc_dota_observer_wards";
     const ward = CreateUnitByName(unit, pos, true, hero, hero, hero.GetTeamNumber());
-    if (!isValid(ward)) return false;
-    ward.AddNewModifier(hero, undefined, "modifier_orb_ward", { sentry: sentry ? 1 : 0 });
-    ward.AddNewModifier(hero, undefined, "modifier_kill", { duration: sentry ? 420 : 360 });
+    if (!isValid(ward)) { slotError(pid, "#orb_slot_bad_point"); return; }
+    const range = ability.GetSpecialValueFor("ward_radius");
+    ward.AddNewModifier(hero, ability, "modifier_orb_ward", { sentry: sentry ? 1 : 0, radius: range });
+    ward.AddNewModifier(hero, ability, "modifier_kill", { duration: sentry ? 420 : 360 });
+    if (sentry) AddFOWViewer(hero.GetTeamNumber(), pos, 150, 12, false);
     EmitSoundOnLocationWithCaster(pos, sentry ? "DOTA_Item.SentryWard.Activate" : "DOTA_Item.ObserverWard.Activate", hero);
-    return true;
+    slotsOf(pid)[kind]--;
+    markItemsDirty(pid);
+    pushItemsNet(pid);
 }
 
 function applyConsumable(hero: CDOTA_BaseNPC_Hero, kind: "sm" | "du") {
@@ -92,8 +107,8 @@ function applyConsumable(hero: CDOTA_BaseNPC_Hero, kind: "sm" | "du") {
     for (const u of enemies) u.AddNewModifier(hero, undefined, "modifier_orb_dust", { duration: 12 });
 }
 
-function useSlot(pid: PlayerID, kind: string, x?: number, y?: number) {
-    if (kind !== "ob" && kind !== "se" && kind !== "sm" && kind !== "du") return;
+function useSlot(pid: PlayerID, kind: string) {
+    if (kind !== "sm" && kind !== "du") return;
     const player = State.players.get(pid);
     if (player === undefined || player.left || State.phase === "setup" || State.phase === "ended") return;
     const hero = PlayerResource.GetSelectedHeroEntity(pid);
@@ -103,12 +118,8 @@ function useSlot(pid: PlayerID, kind: string, x?: number, y?: number) {
     const now = GameRules.GetGameTime();
     const ready = slotCooldown.get(pid) ?? {};
     if ((ready[kind] ?? 0) > now) return;
-    if (kind === "ob" || kind === "se") {
-        if (!placeWard(hero, kind, x, y)) { slotError(pid, "#orb_slot_bad_point"); return; }
-    } else {
-        applyConsumable(hero, kind);
-    }
-    ready[kind] = now + (kind === "ob" || kind === "se" ? 0.5 : 2);
+    applyConsumable(hero, kind);
+    ready[kind] = now + 2;
     slotCooldown.set(pid, ready);
     stock[kind] -= 1;
     markItemsDirty(pid);
@@ -191,8 +202,15 @@ export function initSlots() {
     addItemsNetPart(netPart);
     slots.clear();
     slotCooldown.clear();
+    Hooks.onHeroSpawned.push((p, hero) => {
+        if (p.isBot) return;
+        for (const name of ["orb_slot_observer", "orb_slot_sentry"]) {
+            const ability = hero.FindAbilityByName(name) ?? hero.AddAbility(name);
+            if (isValid(ability) && ability.GetLevel() === 0) ability.SetLevel(1);
+        }
+    });
     CustomGameEventManager.RegisterListener("orb_slot_use", (_, e) =>
-        safe("расходник", () => useSlot(e.PlayerID, e.kind, e.x, e.y)));
+        safe("расходник", () => useSlot(e.PlayerID, e.kind)));
     CustomGameEventManager.RegisterListener("orb_eat_travel", (_, e) => safe("съесть тревела", () => eatTravel(e.PlayerID)));
 }
 
@@ -205,4 +223,9 @@ export function slotsCheat(pid: number, n: number) {
     s.du += n;
     markItemsDirty(pid);
     pushItemsNet(pid);
+}
+
+export function resetConsumables(pid: number) {
+    slots.delete(pid);
+    slotCooldown.delete(pid);
 }

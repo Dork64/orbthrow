@@ -98,13 +98,13 @@ function pushSettings(left: number) {
 }
 
 export function beginSetup() {
-    State.botsWanted = IsInToolsMode() ? CONFIG.toolsDefaultBots : Math.max(0, 4 - humanCount());
-    applyVotes();
     if (IsInToolsMode()) {
         // В редакторе не ждем: сразу в партию (просьба автора). Синхронно — до автозапуска Доты.
         finishSetup();
         return;
     }
+    State.botsWanted = Math.max(0, 4 - humanCount());
+    applyVotes();
     assignTeams(State.botsWanted);
     startAt = GameRules.GetGameTime() + AUTO_START;
     pushSettings(AUTO_START);
@@ -118,6 +118,7 @@ export function beginSetup() {
 
 export function finishSetup() {
     if (State.setupDone) return;
+    if (IsInToolsMode()) State.botsWanted = CONFIG.toolsDefaultBots;
     State.setupDone = true;
     if (autoTimer >= 0) Timers.cancel(autoTimer);
     applyVotes();

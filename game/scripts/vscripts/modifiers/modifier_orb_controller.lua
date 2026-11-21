@@ -10,6 +10,7 @@ local ModBase = ____modbase.ModBase
 local ____registry = require("lib.registry")
 local registerModifier = ____registry.registerModifier
 local ____orbstore = require("core.orbstore")
+local bonusAbilityCharges = ____orbstore.bonusAbilityCharges
 local bonusesOf = ____orbstore.bonusesOf
 local overrideValue = ____orbstore.overrideValue
 local nativeChargeCount = ____orbstore.nativeChargeCount
@@ -205,12 +206,19 @@ function ModifierOrbController.prototype.GetModifierOverrideAbilitySpecial(self,
     local b = self:b()
     local name = ability:GetAbilityName()
     local k = e.ability_special_value
-    if k == "AbilityCharges" then
-        if ability:GetLevelSpecialValueNoOverride(k, e.ability_special_level) <= 0 then
-            return 0
-        end
-        if ability:GetAbilityType() == ULTIMATE and (b.code.l_double_ult or 0) > 0 then
-            return 1
+    if k == "AbilityCharges" or k == "AbilityCooldown" or k == "AbilityChargeRestoreTime" then
+        local extra = ability:IsPassive() and 0 or bonusAbilityCharges(
+            b,
+            name,
+            ability:GetAbilityType() == ULTIMATE
+        )
+        if extra > 0 then
+            if k == "AbilityCharges" then
+                return 1
+            end
+            if ability:GetLevelSpecialValueNoOverride("AbilityCharges", e.ability_special_level) <= 0 and (k == "AbilityCooldown" or ability:GetCooldownTimeRemaining() > 0) then
+                return 1
+            end
         end
     end
     local ____opt_2 = b.specials[name]
@@ -233,16 +241,26 @@ function ModifierOrbController.prototype.GetModifierOverrideAbilitySpecialValue(
     local ability = e.ability
     local base = ability:GetLevelSpecialValueNoOverride(e.ability_special_value, e.ability_special_level)
     local b = self:b()
-    if e.ability_special_value == "AbilityCharges" then
-        local ____opt_10 = b.specials[ability:GetAbilityName()]
-        local extra = ____opt_10 and ____opt_10.AbilityCharges or 0
-        local ult = ability:GetAbilityType() == ULTIMATE and (b.code.l_double_ult or 0) > 0 and 1 or 0
-        if extra + ult > 0 then
-            return nativeChargeCount(
-                base,
-                extra + ult,
-                b.spareChargeAbilities[ability:GetAbilityName()] == true or ult > 0
-            )
+    local key = e.ability_special_value
+    if key == "AbilityCharges" or key == "AbilityCooldown" or key == "AbilityChargeRestoreTime" then
+        local extra = ability:IsPassive() and 0 or bonusAbilityCharges(
+            b,
+            ability:GetAbilityName(),
+            ability:GetAbilityType() == ULTIMATE
+        )
+        if extra > 0 then
+            if key == "AbilityCharges" then
+                return nativeChargeCount(base, extra)
+            end
+            if ability:GetLevelSpecialValueNoOverride("AbilityCharges", e.ability_special_level) <= 0 then
+                if key == "AbilityCooldown" then
+                    return 0
+                end
+                local remaining = ability:GetCooldownTimeRemaining()
+                if remaining > 0 then
+                    return remaining
+                end
+            end
         end
     end
     local v = overrideValue(
@@ -317,7 +335,7 @@ function ModifierOrbController.prototype.OnAttackLanded(self, e)
                 break
             end
             if u == target or not u:IsAlive() then
-                goto __continue59
+                goto __continue64
             end
             ApplyDamage({
                 victim = u,
@@ -328,7 +346,7 @@ function ModifierOrbController.prototype.OnAttackLanded(self, e)
             })
             hits = hits + 1
         end
-        ::__continue59::
+        ::__continue64::
     end
 end
 function ModifierOrbController.prototype.GetModifierTotalDamageOutgoing_Percentage(self, e)
@@ -364,10 +382,12 @@ function ModifierOrbController.prototype.meteor(self, ability, n)
     if now < self.meteorReadyAt then
         return
     end
-    if ability:GetCooldown(math.max(
+    local level = math.max(
         0,
         ability:GetLevel() - 1
-    )) < 3 then
+    )
+    local cooldown = ability:GetMaxAbilityCharges(level) > 0 and ability:GetAbilityChargeRestoreTime(level) or ability:GetCooldown(level)
+    if cooldown < 3 then
         return
     end
     self.meteorReadyAt = now + 3
@@ -413,12 +433,12 @@ function ModifierOrbController.prototype.meteor(self, ability, n)
             for ____, u in ipairs(enemies) do
                 do
                     if not u:IsAlive() then
-                        goto __continue76
+                        goto __continue81
                     end
                     ApplyDamage({victim = u, attacker = parent, damage = dmg, damage_type = DAMAGE_TYPE_MAGICAL})
                     u:AddNewModifier(parent, nil, "modifier_stunned", {duration = 0.4})
                 end
-                ::__continue76::
+                ::__continue81::
             end
             return nil
         end,
@@ -568,11 +588,11 @@ function ModifierOrbController.prototype.OnIntervalThink(self)
     for ____, u in ipairs(enemies) do
         do
             if not u:IsAlive() then
-                goto __continue105
+                goto __continue110
             end
             ApplyDamage({victim = u, attacker = parent, damage = dps * BURN_INTERVAL, damage_type = DAMAGE_TYPE_MAGICAL})
         end
-        ::__continue105::
+        ::__continue110::
     end
 end
 modifier_orb_controller = registerModifier("modifier_orb_controller", ____exports.ModifierOrbController)

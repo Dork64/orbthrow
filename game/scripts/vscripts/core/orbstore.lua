@@ -38,8 +38,7 @@ local function empty()
         specialsMul = {},
         abilityCdr = {},
         code = {},
-        awake = false,
-        spareChargeAbilities = {}
+        awake = false
     }
 end
 --- Значение серой сферы: с убыванием до предела или линейно с половинной прибавкой после порога.
@@ -173,7 +172,6 @@ function ____exports.computeBonuses(stacks, primaryAttr)
                     if f.t ~= "charges" then
                         goto __continue23
                     end
-                    b.spareChargeAbilities[d.ability] = true
                     local t = b.specials[d.ability] or ({})
                     t.AbilityCharges = (t.AbilityCharges or 0) + f.n
                     b.specials[d.ability] = t
@@ -314,10 +312,11 @@ function ____exports.bonusesOf(pid, isServer, now)
     end
     return store().bonuses:get(pid) or EMPTY
 end
-function ____exports.nativeChargeCount(base, extra, spare)
-    if spare == nil then
-        spare = true
-    end
-    return (spare and math.max(1, base) or math.max(0, base)) + math.max(0, extra)
+function ____exports.bonusAbilityCharges(b, name, ultimate)
+    local ____opt_16 = b.specials[name]
+    return (____opt_16 and ____opt_16.AbilityCharges or 0) + (ultimate and (b.code.l_double_ult or 0) > 0 and 1 or 0)
+end
+function ____exports.nativeChargeCount(base, extra)
+    return extra > 0 and math.max(1, base) + extra or base
 end
 return ____exports

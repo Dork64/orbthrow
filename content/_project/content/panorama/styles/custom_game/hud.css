@@ -735,16 +735,3 @@
 	color: #d9e0e8;
 	font-size: 13px;
 }
-
-#OrbWardTarget, #OrbChargeDisplay {
-    horizontal-align: center;
-    vertical-align: bottom;
-    color: #ffffff;
-    font-size: 17px;
-    background-color: #131a22ee;
-    border: 1px solid #859bb7;
-    padding: 4px 11px;
-    text-shadow: 1px 1px 2px #000000;
-}
-#OrbChargeDisplay { margin-bottom: 168px; }
-#OrbWardTarget { margin-bottom: 202px; }

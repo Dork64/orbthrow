@@ -49,6 +49,7 @@ local beginSetup = ____lobby.beginSetup
 local finishSetup = ____lobby.finishSetup
 local initLobby = ____lobby.initLobby
 local ____cheats = require("game.cheats")
+local initTestPanel = ____cheats.initTestPanel
 local onPlayerChat = ____cheats.onPlayerChat
 local ____coins = require("game.coins")
 local coinTick = ____coins.coinTick
@@ -476,6 +477,7 @@ ____exports.Arena = {
         initCatchup()
         initEndscreen()
         initLobby()
+        initTestPanel()
         initFountain()
         resetItemsNet()
         initSlots()

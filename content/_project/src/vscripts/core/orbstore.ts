@@ -39,14 +39,13 @@ export interface OrbBonuses {
     /** Пробуждение легендарки (20 уровень) */
     awake: boolean;
     /** Эффекты «запасной заряд» добавляются к одному обычному применению. */
-    spareChargeAbilities: Record<string, boolean>;
 }
 
 function empty(): OrbBonuses {
     return {
         health: 0, damage: 0, armor: 0, attackSpeed: 0, spellAmp: 0, magicResist: 0, moveSpeed: 0,
         hpRegen: 0, mana: 0, manaRegen: 0, str: 0, agi: 0, int: 0, cdr: 0, status: 0, lifesteal: 0,
-        specials: {}, specialsSet: {}, specialsMul: {}, abilityCdr: {}, code: {}, awake: false, spareChargeAbilities: {},
+        specials: {}, specialsSet: {}, specialsMul: {}, abilityCdr: {}, code: {}, awake: false,
     };
 }
 
@@ -119,7 +118,6 @@ export function computeBonuses(stacks: Record<string, number>, primaryAttr: numb
         for (const effect of fxOfOrb(id)) {
             const f = fxView(effect, b.awake);
             if (f.t !== "charges") continue;
-            b.spareChargeAbilities[d.ability] = true;
             const t = b.specials[d.ability] ?? {};
             t.AbilityCharges = (t.AbilityCharges ?? 0) + f.n;
             b.specials[d.ability] = t;
@@ -224,6 +222,10 @@ export function bonusesOf(pid: number, isServer: boolean, now: number): OrbBonus
     return store().bonuses.get(pid) ?? EMPTY;
 }
 
-export function nativeChargeCount(base: number, extra: number, spare = true): number {
-    return (spare ? Math.max(1, base) : Math.max(0, base)) + Math.max(0, extra);
+export function bonusAbilityCharges(b: OrbBonuses, name: string, ultimate: boolean): number {
+    return (b.specials[name]?.AbilityCharges ?? 0) + (ultimate && (b.code["l_double_ult"] ?? 0) > 0 ? 1 : 0);
+}
+
+export function nativeChargeCount(base: number, extra: number): number {
+    return extra > 0 ? Math.max(1, base) + extra : base;
 }

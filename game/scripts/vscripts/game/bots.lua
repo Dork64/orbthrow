@@ -1,6 +1,7 @@
 local ____lualib = require("lualib_bundle")
 local Map = ____lualib.Map
 local __TS__New = ____lualib.__TS__New
+local Set = ____lualib.Set
 local __TS__ArrayConcat = ____lualib.__TS__ArrayConcat
 local __TS__ArrayIncludes = ____lualib.__TS__ArrayIncludes
 local __TS__ArrayFilter = ____lualib.__TS__ArrayFilter
@@ -32,6 +33,7 @@ local gameNow = ____state.gameNow
 local ____teams = require("game.teams")
 local BASE_COLORS = ____teams.BASE_COLORS
 local baseIndexOfTeam = ____teams.baseIndexOfTeam
+local baseTeams = ____teams.baseTeams
 local fountainOf = ____teams.fountainOf
 local ____timers = require("game.timers")
 local Timers = ____timers.Timers
@@ -88,6 +90,7 @@ local HERO_BUILDS = {
     }
 }
 local brains = __TS__New(Map)
+local pendingBotTeams = __TS__New(Set)
 local botCounter = 0
 --- Герои, уже обещанные ботам (загрузка героя асинхронная, без этого боты берут одинаковых).
 local reservedHeroes = {}
@@ -142,8 +145,12 @@ local function takenHeroes()
     end
     return list
 end
---- Добавить бота в свободную зарезервированную команду.
-function ____exports.spawnBot(team)
+--- Занять команду до конца асинхронной загрузки героя.
+local function spawnBot(team)
+    if State.teamToPlayer:has(team) or pendingBotTeams:has(team) then
+        return
+    end
+    pendingBotTeams:add(team)
     local taken = __TS__ArrayConcat(
         takenHeroes(),
         reservedHeroes
@@ -156,58 +163,77 @@ function ____exports.spawnBot(team)
     reservedHeroes[#reservedHeroes + 1] = heroName
     botCounter = botCounter + 1
     local botName = "Бот " .. tostring(botCounter)
-    PrecacheUnitByNameAsync(
-        heroName,
+    local scheduled = safe(
+        "загрузка героя бота",
         function()
-            safe(
-                "создание бота",
+            PrecacheUnitByNameAsync(
+                heroName,
                 function()
-                    local hero = GameRules:AddBotPlayerWithEntityScript(
-                        heroName,
-                        botName,
-                        team,
-                        "",
-                        false
-                    )
-                    if hero == nil then
-                        log("не удалось создать бота", heroName, "в команде", team)
-                        return
-                    end
-                    local id = hero:GetPlayerOwnerID()
-                    local baseIndex = baseIndexOfTeam(team)
-                    newPlayer(id, team, baseIndex, true)
-                    local c = BASE_COLORS[baseIndex + 1]
-                    PlayerResource:SetCustomPlayerColor(id, c[1], c[2], c[3])
-                    brains:set(id, {
-                        id = id,
-                        mode = "ring",
-                        ["until"] = 0,
-                        lastKey = "",
-                        lastAt = -100,
-                        buyIndex = 0,
-                        nextShop = 0
-                    })
-                    log(
-                        "бот",
-                        botName,
-                        heroName,
-                        "команда",
-                        team
-                    )
-                    for ____, f in ipairs(Hooks.onHeroSpawned) do
-                        safe(
-                            "появление героя",
-                            function() return f(
-                                State.players:get(id),
-                                hero,
+                    pendingBotTeams:delete(team)
+                    safe(
+                        "создание бота",
+                        function()
+                            local hero = GameRules:AddBotPlayerWithEntityScript(
+                                heroName,
+                                botName,
+                                team,
+                                "",
                                 false
-                            ) end
-                        )
-                    end
+                            )
+                            if hero == nil then
+                                log("не удалось создать бота", heroName, "в команде", team)
+                                return
+                            end
+                            local id = hero:GetPlayerOwnerID()
+                            local baseIndex = baseIndexOfTeam(team)
+                            local player = newPlayer(id, team, baseIndex, true)
+                            local c = BASE_COLORS[baseIndex + 1]
+                            PlayerResource:SetCustomPlayerColor(id, c[1], c[2], c[3])
+                            brains:set(id, {
+                                id = id,
+                                mode = "ring",
+                                ["until"] = 0,
+                                lastKey = "",
+                                lastAt = -100,
+                                buyIndex = 0,
+                                nextShop = 0
+                            })
+                            log(
+                                "бот",
+                                botName,
+                                heroName,
+                                "команда",
+                                team
+                            )
+                            for ____, f in ipairs(Hooks.onHeroSpawned) do
+                                safe(
+                                    "появление героя",
+                                    function() return f(player, hero, false) end
+                                )
+                            end
+                        end
+                    )
                 end
             )
+            return true
         end
     )
+    if scheduled ~= true then
+        pendingBotTeams:delete(team)
+    end
+end
+function ____exports.spawnExtraBots(count)
+    local free = __TS__ArrayFilter(
+        baseTeams,
+        function(____, team) return not State.teamToPlayer:has(team) and not pendingBotTeams:has(team) end
+    )
+    do
+        local i = 0
+        while i < math.min(count, #free) do
+            spawnBot(free[i + 1])
+            i = i + 1
+        end
+    end
 end
 function ____exports.spawnReservedBots()
     local teams = __TS__ArraySlice(State.reservedBotTeams)
@@ -217,7 +243,7 @@ function ____exports.spawnReservedBots()
         function(____, t, i) return Timers:after(
             0.3 * i,
             "бот",
-            function() return ____exports.spawnBot(t) end
+            function() return spawnBot(t) end
         ) end
     )
 end
@@ -320,30 +346,30 @@ local function tryCast(h, enemy)
             do
                 local a = h:GetAbilityByIndex(i)
                 if a == nil or a:GetLevel() <= 0 or a:IsHidden() or a:IsPassive() then
-                    goto __continue36
+                    goto __continue42
                 end
                 local name = a:GetAbilityName()
                 if name == "puck_ethereal_jaunt" then
-                    goto __continue36
+                    goto __continue42
                 end
                 if name == "puck_phase_shift" and h:GetHealthPercent() > 50 then
-                    goto __continue36
+                    goto __continue42
                 end
                 if name == "necrolyte_ghost_shroud" and h:GetHealthPercent() > 70 then
-                    goto __continue36
+                    goto __continue42
                 end
                 if __TS__StringStartsWith(
                     a:GetAbilityName(),
                     "orb_slot_"
                 ) then
-                    goto __continue36
+                    goto __continue42
                 end
                 if not a:IsFullyCastable() or not a:IsCooldownReady() or a:IsInAbilityPhase() then
-                    goto __continue36
+                    goto __continue42
                 end
                 local b = __TS__Number(a:GetBehavior())
                 if bit.band(b, BEHAVIOR_PASSIVE) ~= 0 or bit.band(b, BEHAVIOR_TOGGLE) ~= 0 or bit.band(b, BEHAVIOR_AUTOCAST) ~= 0 and name ~= "slark_saltwater_shiv" then
-                    goto __continue36
+                    goto __continue42
                 end
                 local range = math.max(
                     250,
@@ -384,7 +410,7 @@ local function tryCast(h, enemy)
                     end
                 end
             end
-            ::__continue36::
+            ::__continue42::
             i = i + 1
         end
     end
@@ -412,10 +438,10 @@ local function levelUp(h)
                 do
                     local a = h:GetAbilityByIndex(i)
                     if a == nil or a:IsHidden() or a:GetLevel() >= a:GetMaxLevel() then
-                        goto __continue52
+                        goto __continue58
                     end
                     if a:GetHeroLevelRequiredToUpgrade() > h:GetLevel() then
-                        goto __continue52
+                        goto __continue58
                     end
                     if a:GetAbilityType() == ABILITY_TYPE_ULTIMATE then
                         pick = a
@@ -425,7 +451,7 @@ local function levelUp(h)
                         pick = a
                     end
                 end
-                ::__continue52::
+                ::__continue58::
                 i = i + 1
             end
         end

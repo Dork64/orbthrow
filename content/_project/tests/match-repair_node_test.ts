@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { CONFIG } from "../src/vscripts/core/config";
 import { economyTick, grantArenaExperience, resetExperience, xpFilter } from "../src/vscripts/game/economy";
 import { resetItemsNet } from "../src/vscripts/game/itemsnet";
-import { initSlots } from "../src/vscripts/game/slots";
+import { castSlotWard, initSlots, slotWardError } from "../src/vscripts/game/slots";
 import { newPlayer, State } from "../src/vscripts/game/state";
 
 afterEach(() => {
@@ -49,17 +49,21 @@ function game() {
     return { hero, events, create, send, advance: () => { time++; } };
 }
 
-describe("варды без клиентского объекта способности", () => {
-    it("после исчерпания в первой партии те же PID и клавиатурный запрос работают в следующей", () => {
+describe("варды через применение способности", () => {
+    it("списывает запас только после создания варда и обновляет запас в следующей партии", () => {
         const f = game();
-        const place = (x: number) => f.events.orb_slot_use(0, { PlayerID: 0, kind: "ob", x, y: 0 });
+        const ability = { GetSpecialValueFor: () => 1600 };
+        const place = (x: number) => castSlotWard(f.hero as never, "ob", { x, y: 0, z: 0 } as never, ability as never);
         initSlots();
+        f.events.orb_slot_use(0, { PlayerID: 0, kind: "ob", x: 200, y: 0 });
+        expect(f.create).not.toHaveBeenCalled();
         for (let i = 0; i < CONFIG.startObservers; i++) { place(200); f.advance(); }
         place(200);
         expect(f.create).toHaveBeenCalledTimes(CONFIG.startObservers);
         resetItemsNet();
         initSlots();
-        place(900);
+        expect(slotWardError(f.hero as never, "ob", { x: 900, y: 0, z: 0 } as never)).toBeUndefined();
+        place(100000);
         f.create.mockReturnValueOnce(undefined);
         place(200);
         place(200);

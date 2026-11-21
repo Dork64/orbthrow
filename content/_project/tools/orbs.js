@@ -150,7 +150,7 @@ function validateFx(f, summary) {
     return errs;
 }
 
-function build(root) {
+function readCatalog(root) {
     const errors = [];
     const read = f => JSON.parse(fs.readFileSync(path.join(root, "data/orbs", f), "utf8"));
     const grey = read("grey.json").list;
@@ -309,6 +309,12 @@ function build(root) {
         for (const e of errors) console.error("ДАННЫЕ СФЕР: " + e);
         process.exit(1);
     }
+    return { grey, ups, tokens, counts, fxList, pool, statLabels, specialCaps };
+}
+
+function build(root) {
+    const catalog = readCatalog(root);
+    const { grey, ups, tokens, counts, fxList, specialCaps } = catalog;
     const ts = "// Сгенерировано tools/orbs.js из data/orbs/*.json — не править руками.\n" +
         "import type { UpgradeDef, GreyDef } from \"./orbtypes\";\n\n" +
         "export const GREY_DEFS: GreyDef[] = " + JSON.stringify(grey.map(g => ({ id: g.id, per: g.per, cap: g.cap, max: g.max, unit: g.unit }))) + ";\n\n" +
@@ -329,7 +335,7 @@ function build(root) {
         "import type { FxDef } from \"./fxtypes\";\n\n" +
         "export const FX_LIST: FxDef[] = " + JSON.stringify(fxList, null, 0) + " as unknown as FxDef[];\n");
     console.log("сферы: серых " + grey.length + ", синих " + (counts.blue || 0) + ", фиолетовых " + (counts.purple || 0) + ", легендарных " + (counts.legend || 0) + ", эффектов " + fxList.length);
-    return { tokens };
+    return catalog;
 }
 
-module.exports = { build, SUMMON_OK };
+module.exports = { build, readCatalog, SUMMON_OK };

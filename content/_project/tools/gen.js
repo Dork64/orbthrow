@@ -7,6 +7,7 @@ fs.mkdirSync(out, { recursive: true });
 const langs = { russian: "Russian", english: "English" };
 const ru = JSON.parse(fs.readFileSync(path.join(root, "data/locale/russian.json"), "utf8"));
 const orbs = require("./orbs.js").build(root); // данные сфер: проверка по файлам Доты, модуль для Lua, тексты
+require("./native-charges.js").buildNativeCharges(root, orbs);
 require("./heroesdoc.js").build(root); // docs/HERO_ORBS.md
 Object.assign(ru, orbs.tokens.russian);
 for (const [file, name] of Object.entries(langs)) {

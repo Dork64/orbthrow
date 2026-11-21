@@ -1,19 +1,24 @@
-// Читы для тестов — только в редакторе (IsInToolsMode). Команды пишутся в чат.
+// Действия для проверки в Workshop Tools, из панели или чата.
 
 import { Hooks } from "./hooks";
+import { HERO_POOL } from "../core/heroes";
 import { State, allPlayers, gameNow, pushNet, toast } from "./state";
-import { ALL_TEAMS, baseTeams } from "./teams";
-import { spawnBot } from "./bots";
+import type { PlayerState } from "./state";
+import { ALL_TEAMS } from "./teams";
+import { spawnExtraBots } from "./bots";
 import { campUnitsAlive, forceRespawnCamps } from "./camps";
-import { addBlue, addPurple, enqueue, grantMechanics, orbsDump } from "./orbs";
+import { addBlue, addPurple, enqueue, grantMechanics, offerTestLegend, orbsDump, resetTestOrbs } from "./orbs";
 import { bossOrbCheat } from "./bossorbs";
 import { courierCheat } from "./courier";
 import { goblinCheat } from "./goblin";
 import { helpCheat, huntCheat } from "./catchup";
-import { neutralTokensCheat } from "./neutrals";
-import { slotsCheat } from "./slots";
+import { neutralTokensCheat, resetNeutralProgress } from "./neutrals";
+import { resetConsumables, slotsCheat } from "./slots";
 import { arenaEventCheat } from "./arenaevents";
-import { isValid, log } from "./util";
+import { spawnPointOf } from "./fountain";
+import { pushItemsNet } from "./itemsnet";
+import { Timers } from "./timers";
+import { isValid, log, safe } from "./util";
 
 export const cheatHandlers = new Map<string, (id: PlayerID, args: string[]) => void>();
 
@@ -39,12 +44,7 @@ cheatHandlers.set("time", (_id, a) => {
     State.timeOffset += (tonumber(a[0]) ?? 5) * 60;
     toast("info", "#orb_toast_cheat", "time " + Math.floor(gameNow() / 60));
 });
-cheatHandlers.set("bot", (_id, a) => {
-    const n = tonumber(a[0]) ?? 1;
-    const used = allPlayers().map(p => p.team);
-    const free = baseTeams.filter(t => !used.includes(t));
-    for (let i = 0; i < Math.min(n, free.length); i++) spawnBot(free[i]);
-});
+cheatHandlers.set("bot", (_id, a) => spawnExtraBots(tonumber(a[0]) ?? 1));
 cheatHandlers.set("tokens", (id, a) => neutralTokensCheat(id, tonumber(a[0]) ?? 10));
 cheatHandlers.set("wards", (id, a) => slotsCheat(id, tonumber(a[0]) ?? 5));
 cheatHandlers.set("travel", id => {
@@ -64,7 +64,12 @@ cheatHandlers.set("refresh", id => {
     if (h === undefined) return;
     h.SetHealth(h.GetMaxHealth());
     h.SetMana(h.GetMaxMana());
-    for (let i = 0; i < h.GetAbilityCount(); i++) h.GetAbilityByIndex(i)?.EndCooldown();
+    for (let i = 0; i < h.GetAbilityCount(); i++) {
+        const ability = h.GetAbilityByIndex(i);
+        if (ability === undefined) continue;
+        ability.EndCooldown();
+        if (ability.GetLevel() > 0 && ability.GetMaxAbilityCharges(ability.GetLevel() - 1) > 0) ability.RefreshCharges();
+    }
 });
 cheatHandlers.set("win", id => {
     const p = State.players.get(id);
@@ -108,6 +113,119 @@ cheatHandlers.set("dump", () => {
     }
     log("лимит", State.goal, "фаза", State.phase, "время", gameNow(), "нейтралов", campUnitsAlive());
 });
+
+const testActions = new Map<string, [command: string, ...args: string[]]>([
+    ["level_20", ["lvl", "20"]],
+    ["level_30", ["lvl", "30"]],
+    ["gold", ["gold", "5000"]],
+    ["refresh", ["refresh"]],
+    ["bot", ["bot", "1"]],
+    ["grey", ["orb", "grey"]],
+    ["blue", ["orb", "blue"]],
+    ["purple", ["orb", "purple"]],
+    ["wards", ["wards", "5"]],
+    ["tokens", ["tokens", "10"]],
+    ["courier", ["courier"]],
+    ["goblin", ["goblin"]],
+    ["camps", ["camps"]],
+    ["mech", ["mech"]],
+]);
+
+const changingHero = new Map<PlayerID, { name: string }>();
+
+function testPlayer(id: PlayerID): PlayerState | undefined {
+    if (State.phase !== "game" && State.phase !== "overtime") return undefined;
+    const p = State.players.get(id);
+    return p !== undefined && !p.isBot && !p.left ? p : undefined;
+}
+
+function changeTestHero(p: PlayerState, player: CDOTAPlayerController, name: string) {
+    const id = p.id;
+    const reply = (error?: string) => {
+        if (isValid(player)) CustomGameEventManager.Send_ServerToPlayer(player, "orb_test_hero_result", { error });
+    };
+    if (!HERO_POOL.includes(name)) { reply("#orb_test_hero_failed"); return; }
+    if (changingHero.has(id)) return;
+
+    const request = { name };
+    changingHero.set(id, request);
+    const scheduled = safe("загрузка героя для теста", () => {
+        PrecacheUnitByNameAsync(name, () => {
+            if (changingHero.get(id) !== request) return;
+            const changed = safe("смена героя для теста", () => {
+                if (testPlayer(id) !== p || !isValid(player)) return false;
+                const before = hero(id);
+                PlayerResource.ReplaceHeroWithNoTransfer(id, name, -1, 0);
+                const after = hero(id);
+                if (after === undefined || after === before || after.GetUnitName() !== name) return false;
+
+                p.damageTaken = [];
+                p.fightAt = -100;
+                p.inRing = false;
+                resetTestOrbs(id);
+                resetNeutralProgress(id);
+                resetConsumables(id);
+                pushItemsNet(id, true);
+                FindClearSpaceForUnit(after, spawnPointOf(p), true);
+                PlayerResource.SetCameraTarget(id, after);
+                Timers.after(0.2, "камера после смены героя", () => {
+                    if (hero(id) === after) PlayerResource.SetCameraTarget(id, undefined);
+                });
+                pushNet();
+                log("тест: герой заменён", id, name);
+                return true;
+            });
+            changingHero.delete(id);
+            reply(changed === true ? undefined : "#orb_test_hero_failed");
+        }, id);
+        return true;
+    });
+    if (scheduled !== true) {
+        changingHero.delete(id);
+        reply("#orb_test_hero_failed");
+        return;
+    }
+    Timers.after(15, "ожидание героя для теста", () => {
+        if (changingHero.get(id) !== request) return;
+        changingHero.delete(id);
+        reply("#orb_test_hero_failed");
+    });
+}
+
+export function initTestPanel() {
+    if (!IsInToolsMode()) return;
+    const heroNames: Record<string, string> = {};
+    HERO_POOL.forEach((name, i) => { heroNames[tostring(i + 1)] = name; });
+    CustomNetTables.SetTableValue("orb_game", "test_heroes", heroNames);
+    CustomGameEventManager.RegisterListener("orb_test_pick_hero", (_, e) => safe("выбор героя для теста", () => {
+        const p = testPlayer(e.PlayerID);
+        if (p === undefined) return;
+        const player = PlayerResource.GetPlayer(p.id);
+        if (isValid(player)) changeTestHero(p, player, e.hero);
+    }));
+    CustomGameEventManager.RegisterListener("orb_test_action", (_, e) => safe("тестовая панель", () => {
+        const p = testPlayer(e.PlayerID);
+        if (p === undefined || changingHero.has(p.id)) return;
+        const player = PlayerResource.GetPlayer(p.id);
+        if (!isValid(player)) return;
+
+        if (e.action === "level_up") {
+            const h = hero(p.id);
+            if (h !== undefined) cheatHandlers.get("lvl")?.(p.id, [tostring(h.GetLevel() + 1)]);
+            return;
+        }
+        if (e.action === "legend") {
+            if (offerTestLegend(p.id)) log("тест: открыт выбор легендарки", p.id);
+            else CustomGameEventManager.Send_ServerToPlayer(player, "orb_toast", { kind: "info", text: "#orb_test_no_legends" });
+            return;
+        }
+        const action = testActions.get(e.action);
+        if (action === undefined) return;
+        const [command, ...args] = action;
+        cheatHandlers.get(command)?.(p.id, args);
+        log("тест:", e.action, p.id);
+    }));
+}
 
 export function onPlayerChat(e: PlayerChatEvent) {
     if (!IsInToolsMode()) return;

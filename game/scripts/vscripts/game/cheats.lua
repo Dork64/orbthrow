@@ -1,16 +1,19 @@
 local ____lualib = require("lualib_bundle")
 local Map = ____lualib.Map
 local __TS__New = ____lualib.__TS__New
-local __TS__ArrayMap = ____lualib.__TS__ArrayMap
 local __TS__ArrayIncludes = ____lualib.__TS__ArrayIncludes
-local __TS__ArrayFilter = ____lualib.__TS__ArrayFilter
+local __TS__ArrayForEach = ____lualib.__TS__ArrayForEach
+local __TS__ArraySlice = ____lualib.__TS__ArraySlice
 local __TS__StringTrim = ____lualib.__TS__StringTrim
 local __TS__StringStartsWith = ____lualib.__TS__StringStartsWith
 local __TS__StringSubstring = ____lualib.__TS__StringSubstring
 local __TS__StringSplit = ____lualib.__TS__StringSplit
+local __TS__ArrayFilter = ____lualib.__TS__ArrayFilter
 local ____exports = {}
 local ____hooks = require("game.hooks")
 local Hooks = ____hooks.Hooks
+local ____heroes = require("core.heroes")
+local HERO_POOL = ____heroes.HERO_POOL
 local ____state = require("game.state")
 local State = ____state.State
 local allPlayers = ____state.allPlayers
@@ -19,9 +22,8 @@ local pushNet = ____state.pushNet
 local toast = ____state.toast
 local ____teams = require("game.teams")
 local ALL_TEAMS = ____teams.ALL_TEAMS
-local baseTeams = ____teams.baseTeams
 local ____bots = require("game.bots")
-local spawnBot = ____bots.spawnBot
+local spawnExtraBots = ____bots.spawnExtraBots
 local ____camps = require("game.camps")
 local campUnitsAlive = ____camps.campUnitsAlive
 local forceRespawnCamps = ____camps.forceRespawnCamps
@@ -30,7 +32,9 @@ local addBlue = ____orbs.addBlue
 local addPurple = ____orbs.addPurple
 local enqueue = ____orbs.enqueue
 local grantMechanics = ____orbs.grantMechanics
+local offerTestLegend = ____orbs.offerTestLegend
 local orbsDump = ____orbs.orbsDump
+local resetTestOrbs = ____orbs.resetTestOrbs
 local ____bossorbs = require("game.bossorbs")
 local bossOrbCheat = ____bossorbs.bossOrbCheat
 local ____courier = require("game.courier")
@@ -42,13 +46,22 @@ local helpCheat = ____catchup.helpCheat
 local huntCheat = ____catchup.huntCheat
 local ____neutrals = require("game.neutrals")
 local neutralTokensCheat = ____neutrals.neutralTokensCheat
+local resetNeutralProgress = ____neutrals.resetNeutralProgress
 local ____slots = require("game.slots")
+local resetConsumables = ____slots.resetConsumables
 local slotsCheat = ____slots.slotsCheat
 local ____arenaevents = require("game.arenaevents")
 local arenaEventCheat = ____arenaevents.arenaEventCheat
+local ____fountain = require("game.fountain")
+local spawnPointOf = ____fountain.spawnPointOf
+local ____itemsnet = require("game.itemsnet")
+local pushItemsNet = ____itemsnet.pushItemsNet
+local ____timers = require("game.timers")
+local Timers = ____timers.Timers
 local ____util = require("game.util")
 local isValid = ____util.isValid
 local log = ____util.log
+local safe = ____util.safe
 ____exports.cheatHandlers = __TS__New(Map)
 local function hero(id)
     local h = PlayerResource:GetSelectedHeroEntity(id)
@@ -112,24 +125,7 @@ ____exports.cheatHandlers:set(
 )
 ____exports.cheatHandlers:set(
     "bot",
-    function(_id, a)
-        local n = tonumber(a[1]) or 1
-        local used = __TS__ArrayMap(
-            allPlayers(),
-            function(____, p) return p.team end
-        )
-        local free = __TS__ArrayFilter(
-            baseTeams,
-            function(____, t) return not __TS__ArrayIncludes(used, t) end
-        )
-        do
-            local i = 0
-            while i < math.min(n, #free) do
-                spawnBot(free[i + 1])
-                i = i + 1
-            end
-        end
-    end
+    function(_id, a) return spawnExtraBots(tonumber(a[1]) or 1) end
 )
 ____exports.cheatHandlers:set(
     "tokens",
@@ -179,10 +175,17 @@ ____exports.cheatHandlers:set(
         do
             local i = 0
             while i < h:GetAbilityCount() do
-                local ____opt_2 = h:GetAbilityByIndex(i)
-                if ____opt_2 ~= nil then
-                    ____opt_2:EndCooldown()
+                do
+                    local ability = h:GetAbilityByIndex(i)
+                    if ability == nil then
+                        goto __continue19
+                    end
+                    ability:EndCooldown()
+                    if ability:GetLevel() > 0 and ability:GetMaxAbilityCharges(ability:GetLevel() - 1) > 0 then
+                        ability:RefreshCharges()
+                    end
                 end
+                ::__continue19::
                 i = i + 1
             end
         end
@@ -323,6 +326,202 @@ ____exports.cheatHandlers:set(
         )
     end
 )
+local testActions = __TS__New(Map, {
+    {"level_20", {"lvl", "20"}},
+    {"level_30", {"lvl", "30"}},
+    {"gold", {"gold", "5000"}},
+    {"refresh", {"refresh"}},
+    {"bot", {"bot", "1"}},
+    {"grey", {"orb", "grey"}},
+    {"blue", {"orb", "blue"}},
+    {"purple", {"orb", "purple"}},
+    {"wards", {"wards", "5"}},
+    {"tokens", {"tokens", "10"}},
+    {"courier", {"courier"}},
+    {"goblin", {"goblin"}},
+    {"camps", {"camps"}},
+    {"mech", {"mech"}}
+})
+local changingHero = __TS__New(Map)
+local function testPlayer(id)
+    if State.phase ~= "game" and State.phase ~= "overtime" then
+        return nil
+    end
+    local p = State.players:get(id)
+    return p ~= nil and not p.isBot and not p.left and p or nil
+end
+local function changeTestHero(p, player, name)
+    local id = p.id
+    local function reply(____error)
+        if isValid(player) then
+            CustomGameEventManager:Send_ServerToPlayer(player, "orb_test_hero_result", {error = ____error})
+        end
+    end
+    if not __TS__ArrayIncludes(HERO_POOL, name) then
+        reply("#orb_test_hero_failed")
+        return
+    end
+    if changingHero:has(id) then
+        return
+    end
+    local request = {name = name}
+    changingHero:set(id, request)
+    local scheduled = safe(
+        "загрузка героя для теста",
+        function()
+            PrecacheUnitByNameAsync(
+                name,
+                function()
+                    if changingHero:get(id) ~= request then
+                        return
+                    end
+                    local changed = safe(
+                        "смена героя для теста",
+                        function()
+                            if testPlayer(id) ~= p or not isValid(player) then
+                                return false
+                            end
+                            local before = hero(id)
+                            PlayerResource:ReplaceHeroWithNoTransfer(id, name, -1, 0)
+                            local after = hero(id)
+                            if after == nil or after == before or after:GetUnitName() ~= name then
+                                return false
+                            end
+                            p.damageTaken = {}
+                            p.fightAt = -100
+                            p.inRing = false
+                            resetTestOrbs(id)
+                            resetNeutralProgress(id)
+                            resetConsumables(id)
+                            pushItemsNet(id, true)
+                            FindClearSpaceForUnit(
+                                after,
+                                spawnPointOf(p),
+                                true
+                            )
+                            PlayerResource:SetCameraTarget(id, after)
+                            Timers:after(
+                                0.2,
+                                "камера после смены героя",
+                                function()
+                                    if hero(id) == after then
+                                        PlayerResource:SetCameraTarget(id, nil)
+                                    end
+                                end
+                            )
+                            pushNet()
+                            log("тест: герой заменён", id, name)
+                            return true
+                        end
+                    )
+                    changingHero:delete(id)
+                    local ____temp_2
+                    if changed == true then
+                        ____temp_2 = nil
+                    else
+                        ____temp_2 = "#orb_test_hero_failed"
+                    end
+                    reply(____temp_2)
+                end,
+                id
+            )
+            return true
+        end
+    )
+    if scheduled ~= true then
+        changingHero:delete(id)
+        reply("#orb_test_hero_failed")
+        return
+    end
+    Timers:after(
+        15,
+        "ожидание героя для теста",
+        function()
+            if changingHero:get(id) ~= request then
+                return
+            end
+            changingHero:delete(id)
+            reply("#orb_test_hero_failed")
+        end
+    )
+end
+function ____exports.initTestPanel()
+    if not IsInToolsMode() then
+        return
+    end
+    local heroNames = {}
+    __TS__ArrayForEach(
+        HERO_POOL,
+        function(____, name, i)
+            heroNames[tostring(i + 1)] = name
+        end
+    )
+    CustomNetTables:SetTableValue("orb_game", "test_heroes", heroNames)
+    CustomGameEventManager:RegisterListener(
+        "orb_test_pick_hero",
+        function(_, e) return safe(
+            "выбор героя для теста",
+            function()
+                local p = testPlayer(e.PlayerID)
+                if p == nil then
+                    return
+                end
+                local player = PlayerResource:GetPlayer(p.id)
+                if isValid(player) then
+                    changeTestHero(p, player, e.hero)
+                end
+            end
+        ) end
+    )
+    CustomGameEventManager:RegisterListener(
+        "orb_test_action",
+        function(_, e) return safe(
+            "тестовая панель",
+            function()
+                local p = testPlayer(e.PlayerID)
+                if p == nil or changingHero:has(p.id) then
+                    return
+                end
+                local player = PlayerResource:GetPlayer(p.id)
+                if not isValid(player) then
+                    return
+                end
+                if e.action == "level_up" then
+                    local h = hero(p.id)
+                    if h ~= nil then
+                        local ____opt_3 = ____exports.cheatHandlers:get("lvl")
+                        if ____opt_3 ~= nil then
+                            ____opt_3(
+                                p.id,
+                                {tostring(h:GetLevel() + 1)}
+                            )
+                        end
+                    end
+                    return
+                end
+                if e.action == "legend" then
+                    if offerTestLegend(p.id) then
+                        log("тест: открыт выбор легендарки", p.id)
+                    else
+                        CustomGameEventManager:Send_ServerToPlayer(player, "orb_toast", {kind = "info", text = "#orb_test_no_legends"})
+                    end
+                    return
+                end
+                local action = testActions:get(e.action)
+                if action == nil then
+                    return
+                end
+                local command = action[1]
+                local args = __TS__ArraySlice(action, 1)
+                local ____opt_5 = ____exports.cheatHandlers:get(command)
+                if ____opt_5 ~= nil then
+                    ____opt_5(p.id, args)
+                end
+                log("тест:", e.action, p.id)
+            end
+        ) end
+    )
+end
 function ____exports.onPlayerChat(e)
     if not IsInToolsMode() then
         return

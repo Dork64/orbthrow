@@ -31,7 +31,6 @@ function slotKeyPressed(key) {
         slotUse(def);
 }
 function slotNextLayout() {
-    cancelWardTarget();
     for (const key of SLOT_LAYOUTS[slotLayout])
         Game.CreateCustomKeyBind(key, "");
     slotLayout = (slotLayout + 1) % SLOT_LAYOUTS.length;
@@ -56,52 +55,43 @@ function slotsData() {
 function slotsHero() {
     return Players.GetPlayerHeroEntityIndex(Players.GetLocalPlayer());
 }
-let wardTarget;
-let wardHero = -1;
-function cancelWardTarget() {
-    wardTarget = undefined;
-    wardHero = -1;
-    $("#OrbWardTarget").SetHasClass("Hidden", true);
-}
 function slotUse(def) {
     const hero = slotsHero();
     if (hero === -1)
         return;
     if (def.kind === "ob" || def.kind === "se") {
-        if (wardTarget === def.kind && wardHero === hero) {
-            cancelWardTarget();
-            return;
-        }
-        wardTarget = def.kind;
-        wardHero = hero;
-        $("#OrbWardTarget").SetHasClass("Hidden", false);
+        const ability = Entities.GetAbilityByName(hero, def.ability);
+        if (ability >= 0)
+            Abilities.ExecuteAbility(ability, hero, false);
         return;
     }
-    cancelWardTarget();
     GameEvents.SendCustomGameEventToServer("orb_slot_use", { kind: def.kind });
 }
-function slotMouse(event, button) {
-    if (wardTarget === undefined)
-        return false;
-    if (wardHero !== slotsHero() || !Entities.IsAlive(wardHero)) {
-        cancelWardTarget();
-        return false;
+let previewWardAbility = -1;
+let wardPreview;
+function updateWardPreview() {
+    const active = Abilities.GetLocalPlayerActiveAbility();
+    const hero = slotsHero();
+    const ward = hero >= 0 && active >= 0 && Entities.IsAlive(hero) ? SLOT_DEFS.find(def => (def.kind === "ob" || def.kind === "se") && Entities.GetAbilityByName(hero, def.ability) === active) : undefined;
+    const point = ward ? GameUI.GetScreenWorldPosition(GameUI.GetCursorPosition()) : null;
+    if (wardPreview !== undefined && (active !== previewWardAbility || point == null)) {
+        Particles.DestroyParticleEffect(wardPreview, true);
+        wardPreview = undefined;
     }
-    if (event !== "pressed")
-        return false;
-    if (button === 1) {
-        cancelWardTarget();
-        return true;
+    if (ward && point != null) {
+        if (wardPreview === undefined) {
+            wardPreview = Particles.CreateParticle("particles/ui_mouseactions/range_finder_ward_aoe.vpcf", ParticleAttachment_t.PATTACH_ABSORIGIN_FOLLOW, hero);
+            previewWardAbility = active;
+            const radius = Abilities.GetSpecialValueFor(active, "ward_radius");
+            Particles.SetParticleControl(wardPreview, 1, [255, 255, 255]);
+            Particles.SetParticleControl(wardPreview, 3, [radius, radius, radius]);
+            Particles.SetParticleControl(wardPreview, 6, [255, 255, 255]);
+            Particles.SetParticleControl(wardPreview, 11, [ward.kind === "se" ? 1 : 0, 0, 0]);
+        }
+        Particles.SetParticleControl(wardPreview, 0, Entities.GetAbsOrigin(hero));
+        Particles.SetParticleControl(wardPreview, 2, point);
     }
-    if (button !== 0)
-        return false;
-    const kind = wardTarget;
-    const point = GameUI.GetScreenWorldPosition(GameUI.GetCursorPosition());
-    if (point == null)
-        return false;
-    cancelWardTarget();
-    GameEvents.SendCustomGameEventToServer("orb_slot_use", { kind, x: point[0], y: point[1] });
-    return true;
+    $.Schedule(ward ? 0.03 : 0.12, updateWardPreview);
 }
 function slotTip(def) {
     const d = slotsData();
@@ -225,7 +215,6 @@ function slotBindLayout() {
 }
 (function initSlots() {
     slotConfig.orbSlotDispatch = slotKeyPressed;
-    GameUI.SetMouseCallback(slotMouse);
     const bound = [];
     for (const keys of SLOT_LAYOUTS) {
         for (const key of keys) {
@@ -252,7 +241,6 @@ function slotBindLayout() {
         if (matchHero !== hero || matchState !== state) {
             matchHero = hero;
             matchState = state;
-            cancelWardTarget();
             slotBindLayout();
         }
         slotsRender();
@@ -260,4 +248,5 @@ function slotBindLayout() {
     };
     loop();
     slotsPlace();
+    updateWardPreview();
 })();

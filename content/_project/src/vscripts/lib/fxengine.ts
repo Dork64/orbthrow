@@ -1,5 +1,4 @@
-import { ChargePool, createChargePool, resizeCharges, restoreCharges, spendCharge } from "../core/chargepool";
-import { nativeChargeCount } from "../core/orbstore";
+import { bonusAbilityCharges } from "../core/orbstore";
 // Исполнитель эффектов сфер-кода (core/fxdata.ts) на герое. Создается модификатором
 // modifier_orb_hero и получает от него события: применение способности, урон, атака,
 // смерть, тик. Работает только на сервере. Свойства баффов — modifiers/modifier_orb_fx.ts.
@@ -63,10 +62,8 @@ export class FxEngine {
     private lastCast = new Map<string, number>();
     private lastTarget = new Map<string, CDOTA_BaseNPC>();
     private lastPoint = new Map<string, Vector>();
-    /** Последний максимум штатных зарядов: отдельный учёт для каждого экземпляра способности. */
-    private chargeMax = new Map<EntityIndex, number>();
-    private orbCharges = new Map<EntityIndex, ChargePool>();
-    private chargeSignature = "";
+    /** Сколько дополнительных зарядов уже выдано этой способности. Расход и таймер ведёт Дота. */
+    private grantedCharges = new Map<CDOTABaseAbility, number>();
     /** Счетчики атак по цели (для every) и внутренние перезарядки по цели. */
     private hits = new Map<string, number>();
     private icd = new Map<string, number>();
@@ -295,7 +292,6 @@ export class FxEngine {
         const parent = this.parent;
         const name = ability.GetAbilityName();
         const now = GameRules.GetGameTime();
-        this.spendOrbCharge(ability, now);
         this.lastCast.set(name, now);
         if (target !== undefined) this.lastTarget.set(name, target);
         else this.lastTarget.delete(name);
@@ -712,100 +708,27 @@ export class FxEngine {
 
     // ---------- Каждые 0.1 с ----------
 
-    private chargeDuration(ability: CDOTABaseAbility): number {
-        return Math.max(0.1, ability.GetEffectiveCooldown(Math.max(0, ability.GetLevel() - 1)));
-    }
-
-    private updateChargePool(ability: CDOTABaseAbility, max: number, now: number, justCast: boolean): ChargePool {
-        const id = ability.GetEntityIndex();
-        let pool = this.orbCharges.get(id);
-        const remaining = ability.GetCooldownTimeRemaining();
-        if (pool === undefined) {
-            pool = createChargePool(max, now, justCast ? 0 : remaining);
-            this.orbCharges.set(id, pool);
-        } else if (!justCast && pool.count === 0 && pool.next - now > 0.15) {
-            // Refresher или эффект сокращения КД обновляет таймер пустого запаса.
-            if (remaining <= 0.03) {
-                pool.count = pool.max;
-                pool.next = 0;
-            } else if (now + remaining + 0.15 < pool.next) {
-                pool.next = now + remaining;
-            }
-        }
-        restoreCharges(pool, now, this.chargeDuration(ability));
-        if (max !== pool.max) resizeCharges(pool, max);
-        return pool;
-    }
-
-    private applyChargeCooldown(ability: CDOTABaseAbility, pool: ChargePool, now: number) {
-        const wanted = pool.count > 0 ? 0 : Math.max(0, pool.next - now);
-        if (Math.abs(ability.GetCooldownTimeRemaining() - wanted) < 0.04) return;
-        ability.EndCooldown();
-        if (wanted > 0) ability.StartCooldown(wanted);
-    }
-
-    private chargeInfo(ability: CDOTABaseAbility) {
-        const b = this.listFor;
-        if (b === undefined || ability.GetLevel() <= 0) return undefined;
-        const name = ability.GetAbilityName();
-        const extra = b.specials[name]?.AbilityCharges ?? 0;
-        const ult = (b.code["l_double_ult"] ?? 0) > 0 && ability.GetAbilityType() === 1 ? 1 : 0;
-        if (extra + ult <= 0 || ability.IsPassive()) return undefined;
-        const level = Math.max(0, ability.GetLevel() - 1);
-        const base = ability.GetLevelSpecialValueNoOverride("AbilityCharges", level);
-        const native = ability.GetMaxAbilityCharges(level);
-        if (native <= 0 && ability.GetCooldown(level) <= 0) return undefined;
-        return { base, native, max: nativeChargeCount(base, extra + ult, b.spareChargeAbilities[name] === true || ult > 0) };
-    }
-
-    private spendOrbCharge(ability: CDOTABaseAbility, now: number) {
-        const info = this.chargeInfo(ability);
-        if (info === undefined || info.native > 0) return;
-        const pool = this.updateChargePool(ability, info.max, now, true);
-        spendCharge(pool, now, this.chargeDuration(ability));
-        this.applyChargeCooldown(ability, pool, now);
-    }
-
-    refillOrbCharges() {
-        for (const pool of this.orbCharges.values()) {
-            pool.count = pool.max;
-            pool.next = 0;
-        }
-        this.syncCharges();
-    }
-
     syncCharges() {
         const b = this.listFor;
         if (b === undefined) return;
-        const data: Record<string, OrbChargeNet> = {};
-        const now = GameRules.GetGameTime();
-        let sig = "";
         for (let i = 0; i < this.parent.GetAbilityCount(); i++) {
             const ability = this.parent.GetAbilityByIndex(i);
-            if (ability === undefined) continue;
-            const info = this.chargeInfo(ability);
-            if (info === undefined) continue;
-            const id = ability.GetEntityIndex();
-            if (info.native > 0) {
-                this.orbCharges.delete(id);
-                const previous = this.chargeMax.get(id) ?? info.base;
-                if (previous > 0 && info.native > previous) {
-                    ability.SetCurrentAbilityCharges(Math.min(info.native, ability.GetCurrentAbilityCharges() + info.native - previous));
-                }
-                this.chargeMax.set(id, info.native);
-                continue;
-            }
-            // Некоторые патчи возвращают 0 из GetMaxAbilityCharges для обычной способности:
-            // обычный каст и мана остаются у Доты, следующий заряд ведём здесь.
-            const pool = this.updateChargePool(ability, info.max, now, false);
-            this.applyChargeCooldown(ability, pool, now);
-            const name = ability.GetAbilityName();
-            data[name] = { count: pool.count, max: pool.max, next: pool.next };
-            sig += name + ":" + pool.count + ":" + pool.max + ":" + pool.next + "|";
-        }
-        if (sig !== this.chargeSignature) {
-            CustomNetTables.SetTableValue("orb_charges", tostring(this.parent.GetPlayerOwnerID()), { hero: this.parent.GetEntityIndex(), abilities: data });
-            this.chargeSignature = sig;
+            if (ability === undefined || ability.IsPassive() || ability.GetLevel() <= 0) continue;
+            const extra = bonusAbilityCharges(b, ability.GetAbilityName(), ability.GetAbilityType() === 1);
+            const granted = this.grantedCharges.get(ability) ?? 0;
+            if (extra <= granted) continue;
+            const level = ability.GetLevel() - 1;
+            const nativeMax = ability.GetMaxAbilityCharges(level);
+            if (nativeMax <= 0) continue;
+
+            const converting = granted === 0 && ability.GetLevelSpecialValueNoOverride("AbilityCharges", level) <= 0;
+            const oldCooldown = converting ? ability.GetCooldownTimeRemaining() : 0;
+            const readyCast = converting && oldCooldown <= 0 ? 1 : 0;
+            ability.SetCurrentAbilityCharges(Math.min(nativeMax, ability.GetCurrentAbilityCharges() + extra - granted + readyCast));
+            // При постановке первого таймера движок ещё видит оставшийся обычный КД через модификатор.
+            if (oldCooldown > 0) ability.EndCooldown();
+            ability.MarkAbilityButtonDirty();
+            this.grantedCharges.set(ability, extra);
         }
     }
 

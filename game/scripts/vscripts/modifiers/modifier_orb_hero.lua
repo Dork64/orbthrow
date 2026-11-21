@@ -3,6 +3,7 @@ local __TS__Class = ____lualib.__TS__Class
 local __TS__ClassExtends = ____lualib.__TS__ClassExtends
 local Map = ____lualib.Map
 local __TS__New = ____lualib.__TS__New
+local __TS__StringStartsWith = ____lualib.__TS__StringStartsWith
 local __TS__Iterator = ____lualib.__TS__Iterator
 local ____exports = {}
 local ____modbase = require("lib.modbase")
@@ -176,16 +177,12 @@ function ModifierOrbHero.prototype.OnAbilityFullyCast(self, e)
         return
     end
     if ability:IsItem() then
-        local item = ability:GetAbilityName()
-        if item == "item_refresher" or item == "item_refresher_shard" then
-            local ____opt_0 = self.engine
-            if ____opt_0 ~= nil then
-                ____opt_0:refillOrbCharges()
-            end
-        end
         return
     end
     local name = ability:GetAbilityName()
+    if __TS__StringStartsWith(name, "orb_slot_") then
+        return
+    end
     local now = GameRules:GetGameTime()
     local b = self:b()
     local engine = self:fx(b)

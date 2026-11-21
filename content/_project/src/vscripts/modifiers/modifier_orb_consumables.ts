@@ -16,26 +16,27 @@ declare global {
 
 const WARD_HITS = 8;
 const HERO_HIT = 4;
-export const SENTRY_RADIUS = 900;
 export const SMOKE_BREAK_RADIUS = 1025;
 
 export class ModifierOrbWard extends ModBase {
     sentry = false;
+    radius = 1050;
     left = WARD_HITS;
 
     IsHidden() { return true; }
     IsPurgable() { return false; }
     // Сентри: аура истинного зрения на врагов вокруг
     IsAura() { return this.sentry; }
-    GetAuraRadius() { return SENTRY_RADIUS; }
+    GetAuraRadius() { return this.radius; }
     GetModifierAura() { return "modifier_truesight"; }
     GetAuraSearchTeam() { return UnitTargetTeam.ENEMY; }
     GetAuraSearchType() { return UnitTargetType.ALL; }
     GetAuraSearchFlags() { return UnitTargetFlags.INVULNERABLE + UnitTargetFlags.MAGIC_IMMUNE_ENEMIES; }
     GetAuraDuration() { return 0.1; }
 
-    OnCreated(p: { sentry?: number }) {
+    OnCreated(p: { sentry?: number; radius?: number }) {
         this.sentry = (p.sentry ?? 0) === 1;
+        this.radius = p.radius ?? 1050;
         this.left = WARD_HITS;
     }
 

@@ -331,8 +331,6 @@ function Ability:GetSpecialValueFor(key)
   return base
 end
 function Ability:GetMaxAbilityCharges(level)
-  -- Только штатным зарядам движок даёт ненулевой максимум.
-  if self:GetLevelSpecialValueNoOverride("AbilityCharges", level) <= 0 then return 0 end
   return self:GetSpecialValueFor("AbilityCharges")
 end
 function Ability:GetCurrentAbilityCharges()
@@ -340,6 +338,13 @@ function Ability:GetCurrentAbilityCharges()
   return self.charges
 end
 function Ability:SetCurrentAbilityCharges(charges) self.charges = charges end
+function Ability:MarkAbilityButtonDirty() end
+function Ability:RefreshCharges() self.charges = self:GetMaxAbilityCharges(self.level - 1) end
+function Ability:GetAbilityChargeRestoreTime(level)
+  local duration = self:GetSpecialValueFor("AbilityChargeRestoreTime")
+  if duration > 0 then return duration end
+  return self:GetLevelSpecialValueNoOverride("AbilityCooldown", level)
+end
 function Ability:GetCooldown(level) return levelValue(self.values, "AbilityCooldown", level) end
 function Ability:GetEffectiveCooldown(level)
   local cd = self:GetCooldown(level)
@@ -1630,12 +1635,7 @@ if spheres and spheres.st then
         local bon = OS.computeBonuses(spheres.st, h0:GetPrimaryAttribute())
         local want = OS.overrideValue(bon, d.ability, m.key, base) or base
         if m.key == "AbilityCharges" then
-          want = OS.nativeChargeCount(base, bon.specials[d.ability].AbilityCharges, bon.spareChargeAbilities[d.ability] == true)
-          if base == 0 then
-            local published = CustomNetTables:GetTableValue("orb_charges", "0")
-            local charges = published and published.abilities[d.ability]
-            cur = charges and charges.max or 0
-          end
+          want = OS.nativeChargeCount(base, bon.specials[d.ability].AbilityCharges)
         end
         if math.abs(cur - want) > 0.001 then
           fail("синяя " .. d.id .. ": " .. m.key .. " = " .. cur .. ", ожидалось " .. want)

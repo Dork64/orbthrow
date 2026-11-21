@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#10151d">
+    <title>Сферы Orbthrow</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --floor: #10151d;
+            --panel: #171e29;
+            --line: #303d50;
+            --ink: #f0ece2;
+            --dim: #adb9cb;
+            --gold: #f2c77d;
+            --grey: #c3ccd9;
+            --blue: #8cc4ff;
+            --purple: #d5abff;
+            --legend: #ffc77a;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-size: 16px;
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        body { margin: 0; background: var(--floor); color: var(--ink); line-height: 1.5; }
+        button, input, select { font: inherit; }
+        button, select, summary { cursor: pointer; }
+        button, input, select { color: inherit; }
+        :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+        [hidden] { display: none !important; }
+        a { color: var(--gold); text-underline-offset: 3px; }
+        h1, h2, h3, p { margin: 0; }
+        .wrap { width: min(100% - 3rem, 1360px); margin-inline: auto; }
+        .top { border-bottom: 1px solid var(--line); background: #121923; }
+        .top .wrap { display: flex; justify-content: space-between; align-items: center; gap: 1rem; min-height: 3.6rem; }
+        .brand { color: var(--ink); display: inline-flex; align-items: center; gap: .7rem; text-decoration: none; font-weight: 750; }
+        .orb-dot {
+            width: .73rem; height: .73rem; flex: 0 0 auto; border-radius: 50%;
+            background: radial-gradient(circle at 34% 30%, #fff9e0, var(--orb-color, var(--gold)) 36%, color-mix(in srgb, var(--orb-color, var(--gold)) 45%, #10151d));
+            box-shadow: 0 0 .65rem color-mix(in srgb, var(--orb-color, var(--gold)) 35%, transparent);
+        }
+        .top a:last-child { font-size: .875rem; }
+        .mast {
+            min-height: 229px; margin-block: 1.5rem 1.75rem; position: relative; overflow: hidden;
+            display: flex; align-items: center; padding: 2.2rem 2.45rem;
+            background: #161e2a; border: 1px solid var(--line); border-bottom-color: #695638;
+            border-radius: .85rem;
+        }
+        .mast::before {
+            content: ''; position: absolute; inset: 0 0 0 46%; pointer-events: none;
+            background: linear-gradient(90deg, #161e2a, transparent 55%), url('data:image/jpeg;base64,COVER_IMAGE_DATA') center 17% / cover no-repeat;
+        }
+        .mast-content { position: relative; max-width: 37rem; }
+        .mast h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); letter-spacing: -.045em; line-height: 1.04; font-weight: 760; }
+        .mast p { color: var(--dim); margin-top: .75rem; font-size: 1.02rem; }
+        .mast strong { color: var(--gold); }
+        .wiki { display: grid; grid-template-columns: 223px minmax(0, 1fr); align-items: start; gap: 1.65rem; }
+        .hero-sidebar { position: sticky; top: .85rem; background: #141c27; border: 1px solid var(--line); border-radius: .7rem; overflow: hidden; }
+        .hero-sidebar h2 { font-size: 1rem; padding: .8rem .95rem; border-bottom: 1px solid var(--line); }
+        .hero-list { display: grid; align-content: start; padding: .4rem; max-height: min(65vh, 610px); overflow: auto; scrollbar-color: #4c5c70 #141c27; }
+        .hero-list button { text-align: left; border: 1px solid transparent; background: none; padding: .42rem .57rem; border-radius: .3rem; }
+        .hero-list button:hover { background: #253145; }
+        .hero-list button[aria-pressed="true"] { color: var(--gold); background: #2b2830; border-color: #745a37; }
+        .hero-list button[data-hero="*"] { margin-bottom: .32rem; }
+        .filters { display: grid; gap: .7rem; }
+        .filter-row { display: grid; grid-template-columns: minmax(15rem, 1fr) minmax(12rem, .55fr); gap: .7rem; }
+        .field { display: grid; gap: .27rem; min-width: 0; }
+        .field span { color: var(--dim); font-size: .875rem; }
+        .field input, .field select { width: 100%; min-height: 2.76rem; border: 1px solid var(--line); background: var(--panel); border-radius: .4rem; padding: .55rem .75rem; }
+        .field input::placeholder { color: #98a6bc; }
+        .field select { appearance: none; padding-right: 2rem; }
+        .field:has(select) { position: relative; }
+        .field:has(select)::after { content: ''; position: absolute; width: .45rem; height: .45rem; border: solid var(--dim); border-width: 0 1.5px 1.5px 0; rotate: 45deg; right: .85rem; bottom: 1.2rem; pointer-events: none; }
+        .mobile-hero { display: none; }
+        .rarities { display: flex; flex-wrap: wrap; gap: .4rem; }
+        .rarities button, .action { display: inline-flex; align-items: center; gap: .42rem; min-height: 2.5rem; border: 1px solid var(--line); border-radius: .4rem; background: var(--panel); padding: .35rem .68rem; }
+        .rarities button:hover, .action:hover { border-color: #7d8da7; }
+        .rarities button[aria-pressed="true"] { border-color: var(--orb-color, var(--gold)); background: #262c38; }
+        .rarities .count { color: var(--dim); font-size: .875rem; }
+        [data-rarity="grey"] { --orb-color: var(--grey); }
+        [data-rarity="blue"] { --orb-color: var(--blue); }
+        [data-rarity="purple"], [data-rarity="mechanic"] { --orb-color: var(--purple); }
+        [data-rarity="legend"] { --orb-color: var(--legend); }
+        .include { width: fit-content; display: flex; align-items: center; gap: .45rem; min-height: 2rem; color: var(--dim); }
+        .include input { accent-color: var(--gold); width: 1rem; height: 1rem; margin: 0; }
+        .results-head { display: flex; justify-content: space-between; flex-wrap: wrap; align-items: baseline; gap: .4rem 1rem; margin-block: 1.35rem .7rem; }
+        .results-head h2 { font-size: 1.42rem; letter-spacing: -.02em; }
+        .result-count { color: var(--dim); font-variant-numeric: tabular-nums; }
+        .orb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 275px), 1fr)); gap: .75rem; align-items: start; }
+        .card { min-width: 0; background: var(--panel); border: 1px solid var(--line); border-top-color: color-mix(in srgb, var(--orb-color) 75%, var(--panel)); border-radius: .55rem; padding: .9rem .95rem; scroll-margin-top: 1rem; }
+        .card h3 { font-size: 1.04rem; line-height: 1.3; margin-top: .45rem; }
+        .card p { overflow-wrap: anywhere; }
+        .card .tags { display: flex; align-items: center; flex-wrap: wrap; gap: .4rem; }
+        .card .rarity-tag { color: var(--orb-color); font-size: .875rem; }
+        .card .mechanic-tag { background: #32263e; color: #e1c6ff; border-radius: .24rem; padding: 0 .35rem; font-size: .81rem; }
+        .card .context { color: var(--dim); font-size: .875rem; margin: .16rem 0 .5rem; }
+        .card .effect { white-space: pre-line; }
+        .awakening { margin-top: .65rem; padding: .45rem .6rem; background: #2c2727; border-left: 2px solid var(--legend); border-radius: .2rem; }
+        .awakening strong { display: block; color: var(--legend); font-size: .875rem; }
+        .orb-stats { color: var(--dim); border-top: 1px solid var(--line); margin-top: .65rem; padding-top: .48rem; font-size: .875rem; }
+        .orb-stats dl { margin: .35rem 0 .15rem; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .2rem .65rem; }
+        .orb-stats dt { overflow-wrap: anywhere; }
+        .orb-stats dd { margin: 0; color: var(--ink); text-align: right; }
+        .orb-stats small { display: block; margin-top: .35rem; color: var(--dim); }
+        .more { margin: 1rem auto; display: flex; }
+        .empty { padding: 2rem 0; }
+        .empty p { color: var(--dim); margin-bottom: .7rem; }
+        .rules { margin: 1.75rem 0 3rem; border-top: 1px solid var(--line); padding-top: .75rem; scroll-margin-top: .8rem; }
+        .rules summary { font-size: 1.05rem; font-weight: 650; color: var(--gold); padding-block: .4rem; }
+        .rules dl { display: grid; grid-template-columns: auto 1fr; gap: .55rem 1rem; }
+        .rules dt { font-weight: 650; }
+        .rules dd { color: var(--dim); margin: 0; }
+        @media (max-width: 860px) {
+            .wiki { grid-template-columns: minmax(0, 1fr); }
+            .hero-sidebar { display: none; }
+            .mobile-hero { display: grid; }
+            .mast::before { opacity: .66; inset-inline-start: 36%; }
+        }
+        @media (max-width: 550px) {
+            .wrap { width: calc(100% - 1.4rem); }
+            .mast { margin: .85rem 0 1rem; padding: 1.1rem; min-height: 155px; }
+            .mast::before { opacity: .48; background-size: auto, auto 240px; background-position: center, 60% 8%; }
+            .mast h1 { font-size: clamp(1.92rem, 8.5vw, 2.62rem); }
+            .mast p { font-size: .9rem; }
+            .filter-row { grid-template-columns: 1fr; gap: .55rem; }
+            .rules dl { grid-template-columns: 1fr; gap: .3rem; }
+            .rules dd { margin-bottom: .45rem; }
+        }
+    </style>
+</head>
+<body id="top">
+    <header class="top">
+        <div class="wrap">
+            <a class="brand" href="#top"><span class="orb-dot" aria-hidden="true"></span>Orbthrow Wiki</a>
+            <a id="rules-link" href="#rules">Как получать сферы</a>
+        </div>
+    </header>
+    <main class="wrap">
+        <section class="mast" aria-labelledby="title">
+            <div class="mast-content">
+                <h1 id="title">Сферы Orbthrow</h1>
+                <p id="catalog-size"></p>
+            </div>
+        </section>
+        <div class="wiki">
+            <aside class="hero-sidebar" aria-labelledby="hero-heading">
+                <h2 id="hero-heading">Герои</h2>
+                <div class="hero-list" id="hero-list"></div>
+            </aside>
+            <section aria-labelledby="results-title">
+                <div class="filters">
+                    <label class="field mobile-hero"><span>Герой</span><select id="hero-select"></select></label>
+                    <div class="filter-row">
+                        <label class="field"><span>Поиск</span><input id="search" type="search" placeholder="Сфера, герой или эффект" autocomplete="off"></label>
+                        <label class="field"><span>Способность</span><select id="ability"></select></label>
+                    </div>
+                    <div class="rarities" id="rarity-list" role="group" aria-label="Редкость сферы"></div>
+                    <label class="include" id="include-label" hidden><input id="include-common" type="checkbox"> Включить общие сферы</label>
+                </div>
+                <div class="results-head">
+                    <h2 id="results-title">Все сферы</h2>
+                    <p class="result-count" id="result-count" aria-live="polite"></p>
+                </div>
+                <div class="orb-grid" id="orb-grid"></div>
+                <div class="empty" id="empty" hidden>
+                    <p>По этим фильтрам сфер нет.</p>
+                    <button class="action" id="reset" type="button">Сбросить фильтры</button>
+                </div>
+                <button class="action more" id="more" type="button" hidden>Показать ещё</button>
+                <details class="rules" id="rules">
+                    <summary>Как получать сферы</summary>
+                    <dl id="rules-list"></dl>
+                </details>
+            </section>
+        </div>
+        <noscript>Включите JavaScript, чтобы использовать поиск и фильтры каталога.</noscript>
+    </main>
+    <script type="application/json" id="catalog"><!-- CATALOG_JSON --></script>
+    <script>
+        const read = id => document.getElementById(id);
+        const { orbs, heroes, abilities, rules } = JSON.parse(read('catalog').textContent);
+        const heroList = read('hero-list');
+        const heroSelect = read('hero-select');
+        const search = read('search');
+        const abilitySelect = read('ability');
+        const common = read('include-common');
+        const grid = read('orb-grid');
+        const more = read('more');
+        const pageSize = 24;
+        const number = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 3 });
+        const alphabetical = new Intl.Collator('ru', { sensitivity: 'base' });
+        const rarityNames = { grey: 'Серая', blue: 'Синяя', purple: 'Фиолетовая', legend: 'Легендарная' };
+        const tabs = { all: 'Все', grey: 'Серые', blue: 'Синие', purple: 'Фиолетовые', legend: 'Легендарные', mechanic: 'Механики' };
+        const heroName = id => id === '*' ? 'Общие сферы' : heroes[id][1];
+        const abilityName = id => abilities[id][0] || abilities[id][1];
+        const heroesWithLegends = new Set(orbs.filter(orb => orb.rarity === 'legend' && orb.hero !== '*').map(orb => orb.hero));
+        const state = { hero: '', rarity: 'all', shown: 0, results: [] };
+
+        function node(tag, text, className) {
+            const element = document.createElement(tag);
+            if (text !== undefined) element.textContent = text;
+            if (className) element.className = className;
+            return element;
+        }
+
+        function normalize(text) {
+            return text.toLocaleLowerCase('ru').replaceAll('ё', 'е').replace(/[^\p{L}\p{N}%]+/gu, ' ').trim();
+        }
+
+        function makeButton(text) {
+            const button = node('button', text);
+            button.type = 'button';
+            return button;
+        }
+
+        const searchIndex = new Map(orbs.map(orb => [orb.id, normalize([
+            orb.id, orb.title, orb.english, orb.description, orb.awakening, orb.branch,
+            ...(heroes[orb.hero] ?? ['Общие сферы']), ...(abilities[orb.ability] ?? []),
+        ].filter(Boolean).join(' '))]));
+
+        const heroOptions = [['', 'Все герои'], ['*', 'Общие сферы'], ...Object.keys(heroes)
+            .sort((a, b) => alphabetical.compare(heroName(a), heroName(b))).map(id => [id, heroName(id)])];
+        const heroButtons = new Map(heroOptions.map(([id, name]) => {
+            const button = makeButton(name);
+            button.dataset.hero = id;
+            button.addEventListener('click', () => selectHero(id));
+            heroSelect.add(new Option(name, id));
+            heroList.append(button);
+            return [id, button];
+        }));
+
+        const rarityButtons = new Map(Object.entries(tabs).map(([id, label]) => {
+            const button = makeButton();
+            button.dataset.rarity = id;
+            const count = node('span', '0', 'count');
+            if (id !== 'all') {
+                const dot = node('span', '', 'orb-dot');
+                dot.setAttribute('aria-hidden', 'true');
+                button.append(dot);
+            }
+            button.append(node('span', label), count);
+            button.addEventListener('click', () => { state.rarity = id; render(); });
+            read('rarity-list').append(button);
+            return [id, { button, count }];
+        }));
+
+        function heroMatches(orb) {
+            const shared = common.checked && orb.hero === '*' && (orb.rarity !== 'legend' || !heroesWithLegends.has(state.hero));
+            return state.hero === '' || orb.hero === state.hero || shared;
+        }
+
+        function updateAbilities() {
+            const ids = [...new Set(orbs.filter(heroMatches).map(orb => orb.ability).filter(Boolean))];
+            ids.sort((a, b) => alphabetical.compare(abilityName(a), abilityName(b)));
+            const previous = abilitySelect.value;
+            abilitySelect.replaceChildren(new Option('Все способности', ''), ...ids.map(id => new Option(abilityName(id), id)));
+            abilitySelect.value = ids.includes(previous) ? previous : '';
+            abilitySelect.disabled = ids.length === 0;
+        }
+
+        function selectHero(id) {
+            state.hero = id;
+            const personal = id !== '' && id !== '*';
+            if (!personal) common.checked = false;
+            read('include-label').hidden = !personal;
+            heroSelect.value = id;
+            for (const [hero, button] of heroButtons) button.setAttribute('aria-pressed', String(hero === id));
+            read('results-title').textContent = id === '' ? 'Все сферы' : heroName(id);
+            updateAbilities();
+            render();
+        }
+
+        function modifierText(mod) {
+            const amount = number.format(Math.abs(mod.value));
+            if (mod.operation === 'mul') return `×${amount}`;
+            if (mod.operation === 'pct') return `${mod.value < 0 ? '−' : '+'}${amount}% от значения`;
+            const unit = mod.unit === 's' ? ' с' : mod.unit;
+            const sign = mod.operation === 'set' ? '= ' : mod.value < 0 ? '−' : '+';
+            return `${sign}${amount}${unit}`;
+        }
+
+        function addStats(card, orb) {
+            const mods = orb.mods ?? [];
+            const awakeningMods = orb.awakeningMods ?? [];
+            if (!mods.length && !awakeningMods.length && orb.max === rules.stackLimit) return;
+            const details = node('details', undefined, 'orb-stats');
+            details.append(node('summary', 'Параметры'));
+            const list = node('dl');
+            for (const [prefix, values] of [['', mods], ['После пробуждения: ', awakeningMods]]) {
+                for (const mod of values) {
+                    const cap = mod.cap === undefined ? '' : ` · предел ${number.format(mod.cap)}${mod.unit === 's' ? ' с' : mod.unit}`;
+                    list.append(node('dt', prefix + mod.name), node('dd', modifierText(mod) + cap));
+                }
+            }
+            if (orb.max !== rules.stackLimit) list.append(node('dt', 'Можно взять'), node('dd', `${orb.max} ${orb.max === 1 ? 'раз' : 'раза'}`));
+            details.append(list);
+            card.append(details);
+        }
+
+        function buildCard(orb) {
+            const card = node('article', undefined, 'card');
+            card.dataset.rarity = orb.rarity;
+            card.dataset.orb = orb.id;
+            const tags = node('div', undefined, 'tags');
+            const dot = node('span', '', 'orb-dot');
+            dot.setAttribute('aria-hidden', 'true');
+            tags.append(dot, node('span', rarityNames[orb.rarity], 'rarity-tag'));
+            if (orb.mechanic) tags.append(node('span', 'Механика', 'mechanic-tag'));
+            const context = [orb.hero === '*' ? 'Общая' : heroName(orb.hero)];
+            if (orb.hero === '*' && orb.rarity === 'legend') context.push('Для героев без личных легендарок');
+            if (orb.branch) context.push(orb.branch === 'H' ? 'Герой' : orb.branch);
+            if (orb.ability) context.push(abilityName(orb.ability));
+            card.append(tags, node('h3', orb.title), node('p', context.join(' · '), 'context'), node('p', orb.description, 'effect'));
+            if (orb.awakening) {
+                const awakening = node('div', undefined, 'awakening');
+                awakening.append(node('strong', `Пробуждение на ${rules.awakeningLevel}-м уровне`), node('p', orb.awakening));
+                card.append(awakening);
+            }
+            addStats(card, orb);
+            return card;
+        }
+
+        function appendPage() {
+            const cards = state.results.slice(state.shown, state.shown + pageSize).map(buildCard);
+            grid.append(...cards);
+            state.shown += cards.length;
+            const total = number.format(state.results.length);
+            read('result-count').textContent = state.shown === state.results.length ? `Найдено: ${total}` : `Показано ${number.format(state.shown)} из ${total}`;
+            more.hidden = state.shown === state.results.length;
+            return cards[0];
+        }
+
+        function render() {
+            const words = normalize(search.value).split(' ').filter(Boolean);
+            const ability = abilitySelect.value;
+            const scope = orbs.filter(orb => heroMatches(orb) && (!ability || orb.ability === ability) &&
+                words.every(word => searchIndex.get(orb.id).includes(word)));
+            const matches = (orb, key) => key === 'all' || orb.rarity === key || (key === 'mechanic' && orb.mechanic);
+            for (const [key, { button, count }] of rarityButtons) {
+                count.textContent = number.format(scope.filter(orb => matches(orb, key)).length);
+                button.setAttribute('aria-pressed', String(state.rarity === key));
+            }
+            state.results = scope.filter(orb => matches(orb, state.rarity));
+            state.shown = 0;
+            grid.replaceChildren();
+            read('empty').hidden = state.results.length > 0;
+            appendPage();
+        }
+
+        const ruleTexts = [
+            ['Серая', `Выдаётся за ${number.format(rules.greyNeed)} очков пассивной шкалы. Игроки ниже в рейтинге копят её быстрее.`],
+            ['Синяя', `Очки дают нейтралы и руны. Первая сфера требует ${rules.blueFirst} очков, каждая следующая на ${rules.blueStep} больше. С шансом ${rules.mechInBluePct}% одна карточка в подходящем предложении будет механикой.`],
+            ['Фиолетовая', `Базово ${rules.killPoints} очка за убийство и ${rules.assistPoints} за помощь. Первая сфера требует ${rules.purpleFirst} очков, следующие дорожают на ${rules.purpleStep}.`],
+            ['Легендарная', `Первый выбор на ${rules.legendLevel}-м уровне. Пробуждение на ${rules.awakeningLevel}-м. После ${rules.secondLegendTime / 60}-й минуты открывается второй выбор.`],
+            ['Стаки', 'Большинство серых и синих сфер можно брать повторно. Если у эффекта есть убывание или предел, он указан в описании.'],
+        ];
+        for (const [title, text] of ruleTexts) read('rules-list').append(node('dt', title), node('dd', text));
+        read('rules-link').addEventListener('click', () => { read('rules').open = true; });
+
+        read('catalog-size').append(node('strong', number.format(orbs.length)), ` улучшений для ${Object.keys(heroes).length} героя. Выбери героя или найди нужную сферу.`);
+        heroSelect.addEventListener('change', () => selectHero(heroSelect.value));
+        search.addEventListener('input', render);
+        abilitySelect.addEventListener('change', render);
+        common.addEventListener('change', () => { updateAbilities(); render(); });
+        more.addEventListener('click', () => {
+            const first = appendPage();
+            if (first) {
+                first.tabIndex = -1;
+                first.focus({ preventScroll: true });
+                first.scrollIntoView({ block: 'start' });
+            }
+        });
+        read('reset').addEventListener('click', () => {
+            search.value = '';
+            abilitySelect.value = '';
+            state.rarity = 'all';
+            selectHero('');
+            search.focus();
+        });
+        selectHero('');
+    </script>
+</body>
+</html>

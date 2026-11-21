@@ -8,7 +8,6 @@ local ____registry = require("lib.registry")
 local registerModifier = ____registry.registerModifier
 local WARD_HITS = 8
 local HERO_HIT = 4
-____exports.SENTRY_RADIUS = 900
 ____exports.SMOKE_BREAK_RADIUS = 1025
 ____exports.ModifierOrbWard = __TS__Class()
 local ModifierOrbWard = ____exports.ModifierOrbWard
@@ -17,6 +16,7 @@ __TS__ClassExtends(ModifierOrbWard, ModBase)
 function ModifierOrbWard.prototype.____constructor(self, ...)
     ModBase.prototype.____constructor(self, ...)
     self.sentry = false
+    self.radius = 1050
     self.left = WARD_HITS
 end
 function ModifierOrbWard.prototype.IsHidden(self)
@@ -29,7 +29,7 @@ function ModifierOrbWard.prototype.IsAura(self)
     return self.sentry
 end
 function ModifierOrbWard.prototype.GetAuraRadius(self)
-    return ____exports.SENTRY_RADIUS
+    return self.radius
 end
 function ModifierOrbWard.prototype.GetModifierAura(self)
     return "modifier_truesight"
@@ -48,6 +48,7 @@ function ModifierOrbWard.prototype.GetAuraDuration(self)
 end
 function ModifierOrbWard.prototype.OnCreated(self, p)
     self.sentry = (p.sentry or 0) == 1
+    self.radius = p.radius or 1050
     self.left = WARD_HITS
 end
 function ModifierOrbWard.prototype.CheckState(self)

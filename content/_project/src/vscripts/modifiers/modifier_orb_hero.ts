@@ -147,12 +147,9 @@ export class ModifierOrbHero extends ModBase {
         if (e.unit !== parent) return;
         const ability = e.ability;
         if (ability === undefined) return;
-        if (ability.IsItem()) {
-            const item = ability.GetAbilityName();
-            if (item === "item_refresher" || item === "item_refresher_shard") this.engine?.refillOrbCharges();
-            return;
-        }
+        if (ability.IsItem()) return;
         const name = ability.GetAbilityName();
+        if (name.startsWith("orb_slot_")) return;
         const now = GameRules.GetGameTime();
         const b = this.b();
         const engine = this.fx(b);

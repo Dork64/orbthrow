@@ -2,7 +2,6 @@
 import "./arenaevents_test";
 import "./catchup_test";
 import "./center_test";
-import "./chargepool_test";
 import "./combatpatterns_test";
 import "./lobby_items_test";
 import "./orbs_test";
