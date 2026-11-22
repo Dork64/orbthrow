@@ -2,12 +2,14 @@
 	<styles>
 		<include src="s2r://panorama/styles/dotastyles.vcss_c" />
 		<include src="file://{resources}/styles/custom_game/hud.css" />
+		<include src="file://{resources}/styles/custom_game/orb_catalog.css" />
 		<include src="file://{resources}/styles/custom_game/test_panel.css" />
 	</styles>
 	<scripts>
 		<include src="file://{resources}/scripts/custom_game/version.js" />
 		<include src="file://{resources}/scripts/custom_game/util.js" />
 		<include src="file://{resources}/scripts/custom_game/hud.js" />
+		<include src="file://{resources}/scripts/custom_game/orb_catalog.js" />
 		<include src="file://{resources}/scripts/custom_game/orbs.js" />
 		<include src="file://{resources}/scripts/custom_game/boss.js" />
 		<include src="file://{resources}/scripts/custom_game/help.js" />
@@ -112,7 +114,35 @@
 					<Panel id="OrbQueueDots" hittest="false" />
 				</Button>
 				<Panel id="OrbBars" />
+				<Button id="OrbCatalogToggle" class="OrbCatalogButton Hidden" onactivate="OrbToggleCatalog()">
+					<Panel class="OrbGem purple" hittest="false" />
+					<Label text="#orb_catalog_open" hittest="false" />
+				</Button>
 			</Panel>
+		</Panel>
+		<Panel id="OrbCatalog" class="Hidden">
+			<Panel id="OrbCatalogHeader" hittest="false">
+				<DOTAHeroImage id="OrbCatalogHero" heroimagestyle="landscape" hittest="false" />
+				<Panel id="OrbCatalogHeading" hittest="false">
+					<Label id="OrbCatalogTitle" text="#orb_catalog_title" />
+					<Label id="OrbCatalogHeroName" />
+				</Panel>
+				<Button id="OrbCatalogClose" class="OrbCatalogButton" onactivate="OrbToggleCatalog()">
+					<Label text="X" hittest="false" />
+				</Button>
+			</Panel>
+			<Panel id="OrbCatalogTabs" hittest="false">
+				<Button id="OrbCatalogHeroTab" class="OrbCatalogButton" onactivate="OrbSetCatalogTab('Hero')">
+					<Label text="#orb_catalog_hero" hittest="false" />
+				</Button>
+				<Button id="OrbCatalogCommonTab" class="OrbCatalogButton" onactivate="OrbSetCatalogTab('Common')">
+					<Label text="#orb_catalog_common" hittest="false" />
+				</Button>
+				<Button id="OrbCatalogTakenTab" class="OrbCatalogButton" onactivate="OrbSetCatalogTab('Taken')">
+					<Label id="OrbCatalogTakenText" hittest="false" />
+				</Button>
+			</Panel>
+			<Panel id="OrbCatalogRows" hittest="false" />
 		</Panel>
 		<!-- Выбор нейтрального предмета — как в Доте: у инвентаря, открывается кнопкой у слотов -->
 		<Panel id="NeutralChoice" class="Hidden" hittest="true">

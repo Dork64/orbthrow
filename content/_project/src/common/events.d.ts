@@ -57,6 +57,20 @@ interface OrbOfferNet {
     test?: number;   // выбор явно открыт через тестовую панель
 }
 
+interface OrbCatalogCardNet {
+    id: string;
+    br: string;
+    rr: string;
+    ic: string;
+    m?: number;
+}
+
+/** Полный пул героя. Стаки приходят отдельно из orb_spheres. */
+interface OrbCatalogNet {
+    hero: string;
+    cards: Record<string, OrbCatalogCardNet>;
+}
+
 /** Сфера Повелителя на земле. */
 interface BossOrbNet {
     id: number;
@@ -207,5 +221,6 @@ interface CustomNetTableDeclarations {
         test_heroes: Record<string, string>;
     };
     orb_spheres: { [pid: string]: OrbSphereNet };
+    orb_catalog: { [pid: string]: OrbCatalogNet };
     orb_items: { [pid: string]: OrbItemsNet };
 }

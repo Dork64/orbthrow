@@ -6,5 +6,6 @@
 		"orb_players",
 		"orb_spheres",
 		"orb_items",
+		"orb_catalog",
 	]
 }

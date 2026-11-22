@@ -1,5 +1,5 @@
 // Сферы на сервере (DESIGN раздел 5): шкалы, очередь, предложения, выбор, перебросы, автовыбор.
-// Состояние хранится по номеру игрока. Интерфейс строится только из сетевой таблицы orb_spheres.
+// Состояние хранится по номеру игрока.
 
 import {
     ORB, addBarPoints, assistPurplePoints, blueDef, blueNeed, candidates, heroUpgrades, Card, diminishing, greyDef, greyRate, upDef,
@@ -413,6 +413,7 @@ function onHeroSpawned(p: PlayerState, hero: CDOTA_BaseNPC_Hero) {
             if (ab === undefined) log("сфера выключена: у героя нет способности", d.ability, d.id);
         }
     }
+    pushCatalog(op, hero.GetUnitName());
     setBonuses(op.pid, op.stacks, op.primaryAttr, op.version);
     if (!hero.HasModifier(CONTROLLER)) hero.AddNewModifier(hero, undefined, CONTROLLER, {});
     ensureExtras(op, hero);
@@ -455,6 +456,23 @@ export function orbsTick() {
 }
 
 // ---------- Сетевая таблица ----------
+
+function pushCatalog(op: OrbPlayer, hero: string) {
+    const cards: Record<string, OrbCatalogCardNet> = {};
+    const rarities: Rarity[] = ["legend", "purple", "blue", "grey"];
+    let index = 0;
+    for (const rarity of rarities) {
+        // Показываем весь пул, в том числе уже взятые и будущие легендарки.
+        for (const card of candidates(rarity, hero, {}, op.disabled, Infinity)) {
+            const common = card.branch === "G" || upDef(card.id)?.hero === "*";
+            cards[tostring(++index)] = {
+                id: card.id, br: common ? "G" : card.branch, rr: rarity, ic: orbIcon(card.id),
+                m: card.mech === true ? 1 : undefined,
+            };
+        }
+    }
+    CustomNetTables.SetTableValue("orb_catalog", tostring(op.pid), { hero, cards });
+}
 
 function fmt(x: number): string {
     const r = Math.floor(x * 10 + 0.5) / 10;

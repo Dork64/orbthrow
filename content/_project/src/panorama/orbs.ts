@@ -73,6 +73,7 @@ function orbRender() {
     orbEnsureBars();
     const d = orbData();
     $("#OrbBarsDock").SetHasClass("Hidden", d === undefined);
+    orbRenderCatalog(d);
     if (d === undefined) return;
     orbSetBar("grey", d.g, d.gn);
     orbSetBar("blue", d.b, d.bn);
@@ -212,8 +213,12 @@ function OrbReroll() {
 function orbPlaceBars() {
     const dock = $("#OrbBarsDock");
     const flipped = Game.IsHUDFlipped();
+    const shopOpen = Game.IsShopOpen();
     dock.SetHasClass("Flipped", flipped);
-    dock.SetHasClass("ShopOpen", Game.IsShopOpen());
+    dock.SetHasClass("ShopOpen", shopOpen);
+    const catalog = $("#OrbCatalog");
+    catalog.SetHasClass("Flipped", flipped);
+    catalog.SetHasClass("ShopOpen", shopOpen);
     const shop = dotaHudElement("shop_launcher_block");
     const root = $.GetContextPanel();
     const scale = root.actualuiscale_y || 1;

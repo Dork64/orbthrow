@@ -1,0 +1,104 @@
+#OrbCatalog {
+    horizontal-align: right;
+    vertical-align: bottom;
+    margin: 0px 360px 220px 0px;
+    width: 454px;
+    flow-children: down;
+    padding: 12px;
+    background-color: gradient( linear, 0% 0%, 0% 100%, from( #181e28fa ), to( #0b0e13fa ) );
+    border: 1px solid #b77cff55;
+    border-radius: 10px;
+    box-shadow: 0px 6px 22px #000000cc;
+}
+
+#OrbCatalog.Flipped { horizontal-align: left; margin: 0px 0px 220px 360px; }
+#OrbCatalog.ShopOpen { visibility: collapse; }
+
+.OrbCatalogButton {
+    background-color: #262c36;
+    border: 1px solid #ffffff22;
+    border-radius: 5px;
+}
+
+.OrbCatalogButton:hover, .OrbCatalogButton:focus { background-color: #343c48; }
+.OrbCatalogButton.Selected { background-color: #31253d; border-color: #b77cff88; }
+.OrbCatalogButton Label {
+    horizontal-align: center;
+    vertical-align: center;
+    color: #dfe5eb;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#OrbCatalogToggle {
+    margin-top: 6px;
+    width: 100%;
+    height: 26px;
+}
+
+#OrbCatalogToggle .OrbGem { vertical-align: center; margin: 0px 0px 0px 8px; width: 12px; height: 12px; }
+#OrbCatalogHeader { width: 100%; flow-children: right; margin-bottom: 10px; }
+#OrbCatalogHero { width: 60px; height: 34px; border: 1px solid #ffffff33; border-radius: 4px; }
+#OrbCatalogHeading { width: fill-parent-flow( 1.0 ); margin-left: 8px; flow-children: down; vertical-align: center; }
+#OrbCatalogTitle { color: #ffffff; font-size: 17px; font-weight: bold; }
+#OrbCatalogHeroName { color: #aab5c3; font-size: 13px; }
+#OrbCatalogClose { width: 26px; height: 26px; vertical-align: center; }
+#OrbCatalogTabs { width: 100%; flow-children: right; margin-bottom: 4px; }
+#OrbCatalogTabs Button { width: fill-parent-flow( 1.0 ); height: 28px; margin: 0px 2px; }
+
+#OrbCatalogRows {
+    flow-children: down;
+    width: 100%;
+    max-height: 460px;
+    overflow: squish scroll;
+}
+
+.OrbCatalogRow {
+    flow-children: right;
+    width: 100%;
+    padding: 6px 0px;
+    border-bottom: 1px solid #ffffff14;
+}
+
+.OrbCatalogRowTitle {
+    width: 66px;
+    color: #aab5c3;
+    font-size: 14px;
+    font-weight: bold;
+    vertical-align: center;
+    text-overflow: shrink;
+}
+
+.OrbCatalogTiles { width: fill-parent-flow( 1.0 ); flow-children: right-wrap; }
+
+.OrbCatalogTile {
+    width: 41px;
+    height: 37px;
+    margin: 2px;
+    border: 1px solid #89939f;
+    border-radius: 4px;
+    background-color: #10131a;
+}
+
+.OrbCatalogTile.blue { border-color: #4da3ff; }
+.OrbCatalogTile.purple { border-color: #b77cff; }
+.OrbCatalogTile.legend { border-color: #ffb13d; }
+.OrbCatalogTile.Awakened { box-shadow: inset 0px 0px 6px #ffb13d; }
+.OrbCatalogTile .Icon { width: 100%; height: 100%; brightness: 0.45; saturation: 0.65; }
+.OrbCatalogTile:hover .Icon, .OrbCatalogTile.Taken .Icon { brightness: 1.0; saturation: 1.0; }
+.OrbCatalogTile:hover { border-color: #ffffff; }
+.OrbCatalogTile.Awakened .OrbCatalogCount { color: #ffce78; }
+
+.OrbCatalogCount {
+    horizontal-align: right;
+    vertical-align: bottom;
+    padding: 0px 2px;
+    border-radius: 3px 0px 0px 0px;
+    background-color: #0b0e13ee;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: bold;
+    text-shadow: 0px 1px 2px #000000;
+}
+
+.OrbCatalogEmpty { color: #aab5c3; font-size: 14px; padding: 10px 2px 2px; }

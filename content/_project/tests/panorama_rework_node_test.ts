@@ -93,6 +93,58 @@ describe("слоты расходников", () => {
     });
 });
 
+describe("каталог сфер", () => {
+    it("показывает весь пул героя и обновляет взятые стаки и пробуждение", () => {
+        const roots: Record<string, ReturnType<typeof panel>> = {};
+        const rows: { kind: string; panel: ReturnType<typeof panel> }[] = [];
+        const $ = Object.assign((id: string) => roots[id] ?? (roots[id] = panel()), {
+            CreatePanel: (_type: string, _parent: unknown, _id: string, attrs: { class: string }) => {
+                const child = panel();
+                rows.push({ kind: attrs.class, panel: child });
+                return child;
+            },
+        });
+        Object.assign($("#OrbCatalogRows"), { RemoveAndDeleteChildren: () => { rows.length = 0; } });
+        let spheres = { v: 1, st: {} as Record<string, number> };
+        let catalog = {
+            hero: "zuus",
+            cards: {
+                1: { id: "bolt_legend", br: "W", rr: "legend" },
+                2: { id: "bolt_blue", br: "W", rr: "blue" },
+                3: { id: "g_armor", br: "G", rr: "grey" },
+            } as Record<string, { id: string; br: string; rr: string }>,
+        };
+        const context = {
+            $, Players: { GetLocalPlayer: () => 0 }, CustomNetTables: { GetTableValue: () => catalog },
+            L: (key: string, count?: string) => count === undefined ? key : key + ":" + count,
+            orbData: () => spheres, heroLabel: (name: string) => name,
+            orbIconPanel: vi.fn(), orbTooltip: vi.fn(),
+        };
+        const run = (code: string) => runInNewContext(code, context);
+        run(script("orb_catalog"));
+        run("OrbToggleCatalog()");
+        const tiles = () => rows.filter(row => row.kind.startsWith("OrbCatalogTile "));
+        expect(tiles().map(row => row.kind)).toEqual(["OrbCatalogTile legend", "OrbCatalogTile blue"]);
+        expect(tiles().every(row => !row.panel.classes.Taken)).toBe(true);
+        run("OrbSetCatalogTab('Common')");
+        expect(tiles().map(row => row.kind)).toEqual(["OrbCatalogTile grey"]);
+        run("OrbSetCatalogTab('Taken')");
+        expect(rows.some(row => row.kind === "OrbCatalogEmpty")).toBe(true);
+
+        spheres = { v: 2, st: { bolt_legend: 1, bolt_blue: 2, awake: 1 } };
+        run("orbRenderCatalog(orbData())");
+        expect(tiles().map(row => row.panel.classes.Awakened)).toEqual([true, false]);
+        expect(rows.filter(row => row.kind === "OrbCatalogCount").map(row => row.panel.text)).toEqual(["×1", "×2"]);
+        expect($("#OrbCatalogTakenText").text).toBe("orb_catalog_taken_tab:3");
+
+        catalog = { hero: "axe", cards: { 1: { id: "axe_blue", br: "Q", rr: "blue" } } };
+        spheres = { v: 3, st: {} };
+        run("orbRenderCatalog(orbData())");
+        expect($("#OrbCatalogHeroName").text).toBe("axe");
+        expect(tiles()).toHaveLength(0);
+    });
+});
+
 describe("счётчик зарядов на кнопке способности", () => {
     it("читает остаток из движка при 2 → 1 → 0 → 1 → 2, уступает штатному HUD и скрывается при смене цели", () => {
         let current = 0;

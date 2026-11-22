@@ -15,7 +15,7 @@ local __TS__ObjectAssign = ____lualib.__TS__ObjectAssign
 local __TS__ArrayForEach = ____lualib.__TS__ArrayForEach
 local __TS__ArrayFind = ____lualib.__TS__ArrayFind
 local ____exports = {}
-local rng, heroNameOf, heroOf, openNext, legendSlotsOf, fmt, unitText, cardValues, pushPlayer, players
+local rng, heroNameOf, heroOf, openNext, legendSlotsOf, pushCatalog, fmt, unitText, cardValues, pushPlayer, players
 local ____orbs = require("core.orbs")
 local ORB = ____orbs.ORB
 local addBarPoints = ____orbs.addBarPoints
@@ -183,6 +183,41 @@ function ____exports.addPurple(pid, pts)
         ____exports.enqueue(pid, "purple", n)
     end
     op.dirty = true
+end
+function pushCatalog(op, hero)
+    local cards = {}
+    local rarities = {"legend", "purple", "blue", "grey"}
+    local index = 0
+    for ____, rarity in ipairs(rarities) do
+        for ____, card in ipairs(candidates(
+            rarity,
+            hero,
+            {},
+            op.disabled,
+            math.huge
+        )) do
+            local ____temp_14 = card.branch == "G"
+            if not ____temp_14 then
+                local ____opt_12 = upDef(card.id)
+                ____temp_14 = (____opt_12 and ____opt_12.hero) == "*"
+            end
+            local common = ____temp_14
+            local ____tostring_15 = tostring
+            index = index + 1
+            cards[____tostring_15(index)] = {
+                id = card.id,
+                br = common and "G" or card.branch,
+                rr = rarity,
+                ic = orbIcon(card.id),
+                m = card.mech == true and 1 or nil
+            }
+        end
+    end
+    CustomNetTables:SetTableValue(
+        "orb_catalog",
+        tostring(op.pid),
+        {hero = hero, cards = cards}
+    )
 end
 function fmt(x)
     local r = math.floor(x * 10 + 0.5) / 10
@@ -738,6 +773,10 @@ local function onHeroSpawned(p, hero)
         end
         ::__continue93::
     end
+    pushCatalog(
+        op,
+        hero:GetUnitName()
+    )
     setBonuses(op.pid, op.stacks, op.primaryAttr, op.version)
     if not hero:HasModifier(CONTROLLER) then
         hero:AddNewModifier(hero, nil, CONTROLLER, {})
@@ -797,16 +836,16 @@ function ____exports.orbsTick()
     end
 end
 function ____exports.initOrbs()
-    local ____Hooks_onHeroSpawned_14 = Hooks.onHeroSpawned
-    ____Hooks_onHeroSpawned_14[#____Hooks_onHeroSpawned_14 + 1] = function(p, hero, respawn)
+    local ____Hooks_onHeroSpawned_18 = Hooks.onHeroSpawned
+    ____Hooks_onHeroSpawned_18[#____Hooks_onHeroSpawned_18 + 1] = function(p, hero, respawn)
         if not respawn or not hero:HasModifier(CONTROLLER) then
             onHeroSpawned(p, hero)
         end
     end
-    local ____Hooks_onHeroDeath_15 = Hooks.onHeroDeath
-    ____Hooks_onHeroDeath_15[#____Hooks_onHeroDeath_15 + 1] = function(vp) return lastSalvo(vp.id) end
-    local ____Hooks_onHeroKill_16 = Hooks.onHeroKill
-    ____Hooks_onHeroKill_16[#____Hooks_onHeroKill_16 + 1] = function(k)
+    local ____Hooks_onHeroDeath_19 = Hooks.onHeroDeath
+    ____Hooks_onHeroDeath_19[#____Hooks_onHeroDeath_19 + 1] = function(vp) return lastSalvo(vp.id) end
+    local ____Hooks_onHeroKill_20 = Hooks.onHeroKill
+    ____Hooks_onHeroKill_20[#____Hooks_onHeroKill_20 + 1] = function(k)
         addFightPoints(
             k.killer.id,
             killPurplePoints(k.victimKillsBefore, k.killerKillsBefore, k.victimWasHunted)
@@ -826,8 +865,8 @@ function ____exports.initOrbs()
             bloodFeast(a.id)
         end
     end
-    local ____Hooks_onWealthRune_17 = Hooks.onWealthRune
-    ____Hooks_onWealthRune_17[#____Hooks_onWealthRune_17 + 1] = function(p) return ____exports.addBlue(p.id, ORB.runePoints) end
+    local ____Hooks_onWealthRune_21 = Hooks.onWealthRune
+    ____Hooks_onWealthRune_21[#____Hooks_onWealthRune_21 + 1] = function(p) return ____exports.addBlue(p.id, ORB.runePoints) end
     ListenToGameEvent(
         "entity_killed",
         function(e) return safe(
@@ -879,8 +918,8 @@ function ____exports.orbSummary(pid)
     local legend = __TS__ArrayFind(
         op.order,
         function(____, id)
-            local ____opt_18 = upDef(id)
-            return (____opt_18 and ____opt_18.rarity) == "legend"
+            local ____opt_22 = upDef(id)
+            return (____opt_22 and ____opt_22.rarity) == "legend"
         end
     ) or ""
     return {
