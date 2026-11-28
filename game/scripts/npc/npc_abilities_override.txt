@@ -228,14 +228,6 @@
 			{
 				"value"	"12"
 			}
-			"AbilityCharges"
-			{
-				"value"	"0"
-			}
-			"AbilityChargeRestoreTime"
-			{
-				"value"	"12"
-			}
 		}
 	}
 	"tidehunter_anchor_smash"
@@ -557,14 +549,6 @@
 		"AbilityValues"
 		{
 			"AbilityCooldown"
-			{
-				"value"	"17 14 11 8"
-			}
-			"AbilityCharges"
-			{
-				"value"	"0"
-			}
-			"AbilityChargeRestoreTime"
 			{
 				"value"	"17 14 11 8"
 			}

@@ -1505,26 +1505,6 @@ ____exports.FX_LIST = {
         icon = "legion_commander_overwhelming_odds"
     },
     {
-        ab = "lich_frost_nova",
-        t = "hit",
-        by = "ab",
-        debuff = {props = {mr = -12}, dur = 4},
-        key = "lich_p_cold_1",
-        orb = "lich_p_cold",
-        hero = "npc_dota_hero_lich",
-        icon = "lich_frost_nova"
-    },
-    {
-        ab = "lich_frost_nova",
-        t = "refund",
-        chance = 35,
-        cdpct = 100,
-        key = "lich_p_blast_1",
-        orb = "lich_p_blast",
-        hero = "npc_dota_hero_lich",
-        icon = "lich_frost_nova"
-    },
-    {
         ab = "lich_frost_shield",
         t = "buff",
         dur = "duration",
@@ -1535,20 +1515,10 @@ ____exports.FX_LIST = {
         icon = "lich_frost_shield"
     },
     {
-        ab = "lich_frost_shield",
-        t = "taken",
-        win = "duration",
-        reflect = 20,
-        key = "lich_p_thorns_1",
-        orb = "lich_p_thorns",
-        hero = "npc_dota_hero_lich",
-        icon = "lich_frost_shield"
-    },
-    {
         ab = "lich_sinister_gaze",
         t = "buff",
         dur = 5,
-        props = {sa = 20},
+        props = {sa = 12},
         key = "lich_p_focus_1",
         orb = "lich_p_focus",
         hero = "npc_dota_hero_lich",
@@ -1573,32 +1543,6 @@ ____exports.FX_LIST = {
         heal = 20,
         key = "lich_p_soul_1",
         orb = "lich_p_soul",
-        hero = "npc_dota_hero_lich",
-        icon = "lich_chain_frost"
-    },
-    {
-        ab = "lich_sinister_gaze",
-        t = "buff",
-        dur = 5,
-        props = {sa = 25, mr = 20},
-        aw = {props = {sa = 40}},
-        key = "lich_l_trance_1",
-        orb = "lich_l_trance",
-        hero = "npc_dota_hero_lich",
-        icon = "lich_sinister_gaze"
-    },
-    {
-        ab = "lich_chain_frost",
-        t = "mark",
-        by = "ab",
-        consume = {"lich_frost_nova"},
-        dur = 5,
-        icd = 8,
-        max = 4,
-        dmg = 160,
-        aw = {dmg = 235, dur = 6},
-        key = "lich_l_chain_1",
-        orb = "lich_l_chain",
         hero = "npc_dota_hero_lich",
         icon = "lich_chain_frost"
     },
@@ -3848,96 +3792,6 @@ ____exports.FX_LIST = {
     },
     {
         ab = "snapfire_scatterblast",
-        t = "hit",
-        by = "ab",
-        heroOnly = 1,
-        debuff = {props = {armor = -4}, dur = 4},
-        key = "snap_p_buckshot_1",
-        orb = "snap_p_buckshot",
-        hero = "npc_dota_hero_snapfire",
-        icon = "snapfire_scatterblast"
-    },
-    {
-        ab = "snapfire_scatterblast",
-        t = "buff",
-        dur = 2,
-        props = {ms = 25},
-        key = "snap_p_grit_1",
-        orb = "snap_p_grit",
-        hero = "npc_dota_hero_snapfire",
-        icon = "snapfire_scatterblast"
-    },
-    {
-        ab = "snapfire_firesnap_cookie",
-        t = "buff",
-        dur = 4,
-        props = {inc = -20},
-        key = "snap_p_fullbelly_1",
-        orb = "snap_p_fullbelly",
-        hero = "npc_dota_hero_snapfire",
-        icon = "snapfire_firesnap_cookie"
-    },
-    {
-        ab = "snapfire_firesnap_cookie",
-        t = "blast",
-        at = "target",
-        delay = 0.6,
-        radius = 325,
-        dmg = 120,
-        type = "magic",
-        pfx = "particles/units/heroes/hero_earthshaker/earthshaker_echoslam_start.vpcf",
-        key = "snap_p_shockwave_1",
-        orb = "snap_p_shockwave",
-        hero = "npc_dota_hero_snapfire",
-        icon = "snapfire_firesnap_cookie"
-    },
-    {
-        ab = "snapfire_lil_shredder",
-        t = "hit",
-        by = "attack",
-        win = "AbilityDuration",
-        heroOnly = 1,
-        extra = {flat = 30, type = "magic"},
-        key = "snap_p_hotlead_1",
-        orb = "snap_p_hotlead",
-        hero = "npc_dota_hero_snapfire",
-        icon = "snapfire_lil_shredder"
-    },
-    {
-        ab = "snapfire_lil_shredder",
-        t = "hit",
-        by = "attack",
-        win = "AbilityDuration",
-        heroOnly = 1,
-        debuff = {props = {healred = 15}, dur = 4, max = 3},
-        key = "snap_p_shred_1",
-        orb = "snap_p_shred",
-        hero = "npc_dota_hero_snapfire",
-        icon = "snapfire_lil_shredder"
-    },
-    {
-        ab = "snapfire_mortimer_kisses",
-        t = "hit",
-        by = "ab",
-        heroOnly = 1,
-        debuff = {props = {mr = -10}, dur = 4, max = 3},
-        key = "snap_p_napalm_1",
-        orb = "snap_p_napalm",
-        hero = "npc_dota_hero_snapfire",
-        icon = "snapfire_mortimer_kisses"
-    },
-    {
-        ab = "snapfire_mortimer_kisses",
-        t = "buff",
-        dur = "AbilityDuration",
-        props = {inc = -25},
-        key = "snap_p_shelter_1",
-        orb = "snap_p_shelter",
-        hero = "npc_dota_hero_snapfire",
-        icon = "snapfire_mortimer_kisses"
-    },
-    {
-        ab = "snapfire_scatterblast",
         t = "dash",
         dist = 350,
         to = "back",
@@ -3981,28 +3835,6 @@ ____exports.FX_LIST = {
         orb = "snap_m_spitstorm",
         hero = "npc_dota_hero_snapfire",
         icon = "snapfire_mortimer_kisses"
-    },
-    {
-        ab = "snapfire_scatterblast",
-        t = "charges",
-        n = 1,
-        aw = {n = 2},
-        key = "snap_l_scatter_1",
-        orb = "snap_l_scatter",
-        hero = "npc_dota_hero_snapfire",
-        icon = "snapfire_scatterblast"
-    },
-    {
-        ab = "snapfire_firesnap_cookie",
-        t = "buff",
-        dur = 4,
-        props = {slowres = 20},
-        shield = {base = 160, dur = 4},
-        aw = {props = {slowres = 30}, shield = {base = 235}},
-        key = "snap_l_cookie_1",
-        orb = "snap_l_cookie",
-        hero = "npc_dota_hero_snapfire",
-        icon = "snapfire_firesnap_cookie"
     },
     {
         ab = "sniper_shrapnel",
@@ -4311,75 +4143,15 @@ ____exports.FX_LIST = {
         icon = "tidehunter_gush"
     },
     {
-        ab = "tidehunter_kraken_shell",
-        t = "taken",
-        reflect = 12,
-        key = "tide_p_spikes_1",
-        orb = "tide_p_spikes",
-        hero = "npc_dota_hero_tidehunter",
-        icon = "tidehunter_kraken_shell"
-    },
-    {
-        ab = "tidehunter_kraken_shell",
-        t = "passive",
-        props = {regen = 10},
-        key = "tide_p_brine_1",
-        orb = "tide_p_brine",
-        hero = "npc_dota_hero_tidehunter",
-        icon = "tidehunter_kraken_shell"
-    },
-    {
-        ab = "tidehunter_ravage",
-        t = "buff",
-        dur = 5,
-        props = {armor = 15},
-        key = "tide_p_bulwark_1",
-        orb = "tide_p_bulwark",
-        hero = "npc_dota_hero_tidehunter",
-        icon = "tidehunter_ravage"
-    },
-    {
         ab = "tidehunter_ravage",
         t = "hit",
         by = "ab",
         heroOnly = 1,
-        cdr = {abs = {"self"}, sec = 8},
+        extra = {flat = 65, type = "magic"},
         key = "tide_p_maelstrom_1",
         orb = "tide_p_maelstrom",
         hero = "npc_dota_hero_tidehunter",
         icon = "tidehunter_ravage"
-    },
-    {
-        ab = "tidehunter_gush",
-        t = "charges",
-        n = 1,
-        key = "tide_l_gush_1",
-        orb = "tide_l_gush",
-        hero = "npc_dota_hero_tidehunter",
-        icon = "tidehunter_gush"
-    },
-    {
-        ab = "tidehunter_kraken_shell",
-        t = "taken",
-        reflect = 15,
-        aw = {reflect = 25},
-        key = "tide_l_shell_1",
-        orb = "tide_l_shell",
-        hero = "npc_dota_hero_tidehunter",
-        icon = "tidehunter_kraken_shell"
-    },
-    {
-        ab = "tidehunter_anchor_smash",
-        t = "hit",
-        by = "ab",
-        heroOnly = 1,
-        icd = 4,
-        debuff = {dur = 3.5, props = {armor = -3}},
-        aw = {debuff = {props = {armor = -5}}},
-        key = "tide_l_anchor_1",
-        orb = "tide_l_anchor",
-        hero = "npc_dota_hero_tidehunter",
-        icon = "tidehunter_anchor_smash"
     },
     {
         ab = "tidehunter_anchor_smash",

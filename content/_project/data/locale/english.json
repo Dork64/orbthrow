@@ -1,4 +1,10 @@
 {
+  "DOTA_Tooltip_ability_orb_snapfire_bank": "Bank Shot",
+  "DOTA_Tooltip_ability_orb_snapfire_bank_Description": "Aim a shot from the marked position.",
+  "DOTA_Tooltip_ability_orb_snapfire_spring": "Spring Cookie",
+  "DOTA_Tooltip_ability_orb_snapfire_spring_Description": "Hop and blast the landing area.",
+  "DOTA_Tooltip_ability_orb_tide_anchor_return": "Reel In",
+  "DOTA_Tooltip_ability_orb_tide_anchor_return_Description": "Return to the anchor within 720 range and damage nearby enemies.",
   "DOTA_Tooltip_modifier_orb_tusk_stance": "Tusk stance",
   "DOTA_Tooltip_modifier_orb_tusk_stance_Description": "Steer the avalanche with move orders. Press Stop after the Tag Team combo to parry. Recast Punch to release early.",
   "addon_game_name": "ORBTHROW",

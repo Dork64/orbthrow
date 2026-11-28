@@ -187,6 +187,12 @@ function ensureExtras(op: OrbPlayer, h: CDOTA_BaseNPC_Hero) {
         h.AddNewModifier(h, undefined, "modifier_orb_necro_legend", {});
     if (h.GetUnitName() === "npc_dota_hero_sven" && !h.HasModifier("modifier_orb_sven_legend"))
         h.AddNewModifier(h, undefined, "modifier_orb_sven_legend", {});
+    if (h.GetUnitName() === "npc_dota_hero_lich" && !h.HasModifier("modifier_orb_lich_legend"))
+        h.AddNewModifier(h, undefined, "modifier_orb_lich_legend", {});
+    if (h.GetUnitName() === "npc_dota_hero_snapfire" && !h.HasModifier("modifier_orb_snapfire_legend"))
+        h.AddNewModifier(h, undefined, "modifier_orb_snapfire_legend", {});
+    if (h.GetUnitName() === "npc_dota_hero_tidehunter" && !h.HasModifier("modifier_orb_tidehunter_legend"))
+        h.AddNewModifier(h, undefined, "modifier_orb_tidehunter_legend", {});
     if (!h.HasModifier("modifier_orb_hero")) h.AddNewModifier(h, undefined, "modifier_orb_hero", {});
 
 }

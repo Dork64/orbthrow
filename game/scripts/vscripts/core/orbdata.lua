@@ -5926,10 +5926,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_lich",
         branch = "Q",
         ability = "lich_frost_nova",
-        mods = {},
+        mods = {{key = "slow_movement_speed", add = -8, unit = "", base = -25}},
         cd = 0,
         max = 1,
-        code = true
+        code = false
     },
     {
         id = "lich_p_blast",
@@ -5937,10 +5937,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_lich",
         branch = "Q",
         ability = "lich_frost_nova",
-        mods = {},
+        mods = {{key = "damage", add = 50, unit = "", base = 160}},
         cd = 0,
         max = 1,
-        code = true
+        code = false
     },
     {
         id = "lich_p_icy",
@@ -5959,10 +5959,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_lich",
         branch = "W",
         ability = "lich_frost_shield",
-        mods = {},
+        mods = {{key = "damage_reduction", add = 8, unit = "", base = 60}},
         cd = 0,
         max = 1,
-        code = true
+        code = false
     },
     {
         id = "lich_p_focus",
@@ -6014,11 +6014,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_lich",
         branch = "Q",
         ability = "lich_frost_nova",
-        mods = {{key = "aoe_damage", add = 80, unit = "", base = 200}, {key = "radius", add = 100, unit = "", base = 200}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false,
-        awmods = {{key = "aoe_damage", add = 80, unit = "", base = 200}}
+        code = true
     },
     {
         id = "lich_l_shield",
@@ -6026,11 +6025,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_lich",
         branch = "W",
         ability = "lich_frost_shield",
-        mods = {{key = "damage_reduction", add = 15, unit = "", base = 60}, {key = "duration", add = 2, unit = "", base = 7}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false,
-        awmods = {{key = "radius", add = 300, unit = "", base = 600}}
+        code = true
     },
     {
         id = "lich_l_trance",
@@ -9016,10 +9014,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_snapfire",
         branch = "Q",
         ability = "snapfire_scatterblast",
-        mods = {},
+        mods = {{key = "point_blank_dmg_bonus_pct", add = 15, unit = "", base = 25}},
         cd = 0,
         max = 1,
-        code = true
+        code = false
     },
     {
         id = "snap_p_grit",
@@ -9027,10 +9025,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_snapfire",
         branch = "Q",
         ability = "snapfire_scatterblast",
-        mods = {},
+        mods = {{key = "blast_width_end", add = 55, unit = "", base = 400}},
         cd = 0,
         max = 1,
-        code = true
+        code = false
     },
     {
         id = "snap_p_fullbelly",
@@ -9038,10 +9036,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_snapfire",
         branch = "W",
         ability = "snapfire_firesnap_cookie",
-        mods = {},
+        mods = {{key = "jump_horizontal_distance", add = 55, unit = "", base = 425}},
         cd = 0,
         max = 1,
-        code = true
+        code = false
     },
     {
         id = "snap_p_shockwave",
@@ -9049,10 +9047,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_snapfire",
         branch = "W",
         ability = "snapfire_firesnap_cookie",
-        mods = {},
+        mods = {{key = "impact_damage", add = 45, unit = "", base = 270}},
         cd = 0,
         max = 1,
-        code = true
+        code = false
     },
     {
         id = "snap_p_hotlead",
@@ -9060,10 +9058,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_snapfire",
         branch = "E",
         ability = "snapfire_lil_shredder",
-        mods = {},
+        mods = {{key = "buffed_attacks", add = 1, unit = "", base = 5}},
         cd = 0,
         max = 1,
-        code = true
+        code = false
     },
     {
         id = "snap_p_shred",
@@ -9071,10 +9069,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_snapfire",
         branch = "E",
         ability = "snapfire_lil_shredder",
-        mods = {},
+        mods = {{key = "damage", add = 10, unit = "", base = 65}},
         cd = 0,
         max = 1,
-        code = true
+        code = false
     },
     {
         id = "snap_p_napalm",
@@ -9082,10 +9080,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_snapfire",
         branch = "R",
         ability = "snapfire_mortimer_kisses",
-        mods = {},
+        mods = {{key = "damage_per_impact", add = 45, unit = "", base = 320}},
         cd = 0,
         max = 1,
-        code = true
+        code = false
     },
     {
         id = "snap_p_shelter",
@@ -9093,10 +9091,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_snapfire",
         branch = "R",
         ability = "snapfire_mortimer_kisses",
-        mods = {},
+        mods = {{key = "impact_radius", add = 20, unit = "", base = 275}},
         cd = 0,
         max = 1,
-        code = true
+        code = false
     },
     {
         id = "snap_m_recoil",
@@ -9152,10 +9150,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_snapfire",
         branch = "Q",
         ability = "snapfire_scatterblast",
-        mods = {{key = "blast_width_end", add = 150, unit = "", base = 400}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false
+        code = true
     },
     {
         id = "snap_l_cookie",
@@ -9163,10 +9161,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_snapfire",
         branch = "W",
         ability = "snapfire_firesnap_cookie",
-        mods = {{key = "jump_horizontal_distance", add = 85, unit = "", base = 425}, {key = "impact_radius", add = 70, unit = "", base = 300}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false
+        code = true
     },
     {
         id = "snap_l_shredder",
@@ -9174,11 +9172,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_snapfire",
         branch = "E",
         ability = "snapfire_lil_shredder",
-        mods = {{key = "buffed_attacks", add = 4, unit = "", base = 5}, {key = "damage", add = 25, unit = "", base = 65}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false,
-        awmods = {{key = "attack_speed_bonus", add = 100, unit = "", base = 300}}
+        code = true
     },
     {
         id = "snap_l_mortimer",
@@ -9186,17 +9183,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_snapfire",
         branch = "R",
         ability = "snapfire_mortimer_kisses",
-        mods = {{key = "projectile_count", add = 5, unit = "", base = 8}, {key = "burn_damage", add = 40, unit = "", base = 100}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false,
-        awmods = {{
-            key = "damage_per_impact",
-            add = 30,
-            unit = "",
-            base = 320,
-            op = "pct"
-        }}
+        code = true
     },
     {
         id = "sniper_p_suppress",
@@ -9596,10 +9586,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_tidehunter",
         branch = "W",
         ability = "tidehunter_kraken_shell",
-        mods = {},
+        mods = {{key = "damage_reduction", add = 10, unit = "", base = 75}},
         cd = 0,
         max = 1,
-        code = true
+        code = false
     },
     {
         id = "tide_p_brine",
@@ -9607,10 +9597,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_tidehunter",
         branch = "W",
         ability = "tidehunter_kraken_shell",
-        mods = {},
+        mods = {{key = "active_move_speed_penalty_pct", add = -8, unit = "", base = 40}},
         cd = 0,
         max = 1,
-        code = true
+        code = false
     },
     {
         id = "tide_p_heavy",
@@ -9618,7 +9608,7 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_tidehunter",
         branch = "E",
         ability = "tidehunter_anchor_smash",
-        mods = {{key = "attack_damage", add = 50, unit = "", base = 200}},
+        mods = {{key = "attack_damage", add = 40, unit = "", base = 200}},
         cd = 0,
         max = 1,
         code = false
@@ -9629,7 +9619,7 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_tidehunter",
         branch = "E",
         ability = "tidehunter_anchor_smash",
-        mods = {{key = "damage_reduction", add = -10, unit = "", base = -40}},
+        mods = {{key = "additional_range", add = 40, unit = "", base = 225}},
         cd = 0,
         max = 1,
         code = false
@@ -9640,10 +9630,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_tidehunter",
         branch = "R",
         ability = "tidehunter_ravage",
-        mods = {},
+        mods = {{key = "radius", add = 80, unit = "", base = 1250}},
         cd = 0,
         max = 1,
-        code = true
+        code = false
     },
     {
         id = "tide_p_maelstrom",
@@ -9662,11 +9652,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_tidehunter",
         branch = "Q",
         ability = "tidehunter_gush",
-        mods = {{key = "gush_damage", add = 100, unit = "", base = 280}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false,
-        awmods = {{key = "movement_speed", add = -20, unit = "", base = -40}}
+        code = true
     },
     {
         id = "tide_l_shell",
@@ -9674,10 +9663,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_tidehunter",
         branch = "W",
         ability = "tidehunter_kraken_shell",
-        mods = {{key = "damage_reduction", add = 30, unit = "", base = 75}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false
+        code = true
     },
     {
         id = "tide_l_anchor",
@@ -9685,11 +9674,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_tidehunter",
         branch = "E",
         ability = "tidehunter_anchor_smash",
-        mods = {{key = "additional_range", add = 100, unit = "", base = 225}, {key = "attack_damage", add = 45, unit = "", base = 200}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false,
-        awmods = {{key = "reduction_duration", add = 1.5, unit = "", base = 6}}
+        code = true
     },
     {
         id = "tide_l_ravage",
@@ -9697,11 +9685,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_tidehunter",
         branch = "R",
         ability = "tidehunter_ravage",
-        mods = {{key = "duration", add = 0.8, unit = "", base = 2.4}, {key = "radius", add = 250, unit = "", base = 1250}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false,
-        awmods = {{key = "AbilityDamage", add = 150, unit = "", base = 455}}
+        code = true
     },
     {
         id = "tide_m_autoanchor",

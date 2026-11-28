@@ -6,172 +6,96 @@
    "r": "purple",
    "branch": "Q",
    "ab": "snapfire_scatterblast",
-   "fx": [
-    {
-     "t": "hit",
-     "by": "ab",
-     "heroOnly": 1,
-     "debuff": {
-      "props": {
-       "armor": -4
-      },
-      "dur": 4
-     }
-    }
-   ],
+   "code": true,
+   "mods": "point_blank_dmg_bonus_pct:+15",
    "ru": "Картечь",
    "en": "Buckshot",
-   "ru_d": "Scatterblast снижает броню героев на 4 на 4 с",
-   "en_d": "Scatterblast reduces heroes' armor by 4 for 4 s"
+   "ru_d": "Бонус урона Scatterblast в упор выше на 15%. Рикошет наносит ещё 65 урона.",
+   "en_d": "Scatterblast gains 15 percentage points of point-blank damage. The bank shot deals 65 more damage."
   },
   {
    "id": "snap_p_grit",
    "r": "purple",
    "branch": "Q",
    "ab": "snapfire_scatterblast",
-   "fx": [
-    {
-     "t": "buff",
-     "dur": 2,
-     "props": {
-      "ms": 25
-     }
-    }
-   ],
-   "ru": "Отдача в ноги",
-   "en": "Kick in the Boots",
-   "ru_d": "После Scatterblast +25% скорости бега на 2 с",
-   "en_d": "After Scatterblast: +25% movement speed for 2 s"
+   "code": true,
+   "mods": "blast_width_end:+55",
+   "ru": "Широкий ствол",
+   "en": "Widened Barrel",
+   "ru_d": "Ширина Scatterblast в конце полёта увеличена на 55. Полоса рикошета шире на 45.",
+   "en_d": "Scatterblast is 55 wider at the far end. The bank shot is 45 wider."
   },
   {
    "id": "snap_p_fullbelly",
    "r": "purple",
    "branch": "W",
    "ab": "snapfire_firesnap_cookie",
-   "fx": [
-    {
-     "t": "buff",
-     "dur": 4,
-     "props": {
-      "inc": -20
-     }
-    }
-   ],
+   "code": true,
+   "mods": "jump_horizontal_distance:+55",
    "ru": "Сытое брюхо",
    "en": "Full Belly",
-   "ru_d": "После Firesnap Cookie Снэпфайр получает на 20% меньше урона 4 с",
-   "en_d": "After Firesnap Cookie Snapfire takes 20% less damage for 4 s"
+   "ru_d": "Первый прыжок от Cookie дальше на 55. Второй прыжок дальше на 65.",
+   "en_d": "Cookie’s first hop travels 55 farther. The second hop travels 65 farther."
   },
   {
    "id": "snap_p_shockwave",
    "r": "purple",
    "branch": "W",
    "ab": "snapfire_firesnap_cookie",
-   "fx": [
-    {
-     "t": "blast",
-     "at": "target",
-     "delay": 0.6,
-     "radius": 325,
-     "dmg": 120,
-     "type": "magic",
-     "pfx": "particles/units/heroes/hero_earthshaker/earthshaker_echoslam_start.vpcf"
-    }
-   ],
+   "code": true,
+   "mods": "impact_damage:+45",
    "ru": "Ударная волна",
    "en": "Shockwave",
-   "ru_d": "Приземление печенья — еще 120 урона врагам в 325",
-   "en_d": "The cookie landing deals 120 more damage to enemies within 325"
+   "ru_d": "Посадка после Cookie наносит ещё 45 урона. Вторая посадка наносит ещё 55.",
+   "en_d": "The first Cookie landing deals 45 more damage. The second landing deals 55 more."
   },
   {
    "id": "snap_p_hotlead",
    "r": "purple",
    "branch": "E",
    "ab": "snapfire_lil_shredder",
-   "fx": [
-    {
-     "t": "hit",
-     "by": "attack",
-     "win": "AbilityDuration",
-     "heroOnly": 1,
-     "extra": {
-      "flat": 30,
-      "type": "magic"
-     }
-    }
-   ],
+   "code": true,
+   "mods": "buffed_attacks:+1",
    "ru": "Горячий свинец",
    "en": "Hot Lead",
-   "ru_d": "Во время Lil' Shredder атаки по героям наносят еще 30 магического урона",
-   "en_d": "During Lil' Shredder attacks on heroes deal 30 extra magic damage"
+   "ru_d": "Lil’ Shredder даёт ещё один патрон. Турель может выстрелить четвёртый раз.",
+   "en_d": "Lil’ Shredder grants one more shot. The turret can fire a fourth time."
   },
   {
    "id": "snap_p_shred",
    "r": "purple",
    "branch": "E",
    "ab": "snapfire_lil_shredder",
-   "fx": [
-    {
-     "t": "hit",
-     "by": "attack",
-     "win": "AbilityDuration",
-     "heroOnly": 1,
-     "debuff": {
-      "props": {
-       "healred": 15
-      },
-      "dur": 4,
-      "max": 3
-     }
-    }
-   ],
+   "code": true,
+   "mods": "damage:+10",
    "ru": "Шрапнель",
    "en": "Shrapnel",
-   "ru_d": "Во время Lil' Shredder атаки снижают лечение героя на 15% (до 3 раз)",
-   "en_d": "During Lil' Shredder attacks reduce a hero's healing by 15% (up to 3 times)"
+   "ru_d": "Патрон Lil’ Shredder наносит ещё 10 урона. Турель стреляет через 0,45 с вместо 0,6 с.",
+   "en_d": "Lil’ Shredder shots deal 10 more damage. The turret fires after 0.45 s instead of 0.6 s."
   },
   {
    "id": "snap_p_napalm",
    "r": "purple",
    "branch": "R",
    "ab": "snapfire_mortimer_kisses",
-   "fx": [
-    {
-     "t": "hit",
-     "by": "ab",
-     "heroOnly": 1,
-     "debuff": {
-      "props": {
-       "mr": -10
-      },
-      "dur": 4,
-      "max": 3
-     }
-    }
-   ],
-   "ru": "Липкая магма",
-   "en": "Sticky Magma",
-   "ru_d": "Плевки Мортимера снижают сопротивление магии на 10% на 4 с (до 3 раз)",
-   "en_d": "Mortimer's globs reduce magic resistance by 10% for 4 s (up to 3 times)"
+   "code": true,
+   "mods": "damage_per_impact:+45",
+   "ru": "Раскалённая магма",
+   "en": "Scorching Magma",
+   "ru_d": "Плевок Мортимера наносит ещё 45 урона при попадании. Дополнительные взрывы наносят ещё 60.",
+   "en_d": "Each Mortimer Kiss deals 45 more impact damage. Extra blasts deal 60 more."
   },
   {
    "id": "snap_p_shelter",
    "r": "purple",
    "branch": "R",
    "ab": "snapfire_mortimer_kisses",
-   "fx": [
-    {
-     "t": "buff",
-     "dur": "AbilityDuration",
-     "props": {
-      "inc": -25
-     }
-    }
-   ],
-   "ru": "Укрытие",
-   "en": "Shelter",
-   "ru_d": "Во время Mortimer Kisses Снэпфайр получает на 25% меньше урона",
-   "en_d": "During Mortimer Kisses Snapfire takes 25% less damage"
+   "code": true,
+   "mods": "impact_radius:+20",
+   "ru": "Большой котёл",
+   "en": "Big Cauldron",
+   "ru_d": "Радиус попадания Mortimer Kisses больше на 20. Радиус дополнительных взрывов больше на 40.",
+   "en_d": "Mortimer Kisses gain 20 impact radius. The extra blasts gain 40 radius."
   },
   {
    "id": "snap_m_recoil",
@@ -261,84 +185,52 @@
    "r": "legend",
    "branch": "Q",
    "ab": "snapfire_scatterblast",
-   "mods": "blast_width_end:+150",
-   "fx": [
-    {
-     "t": "charges",
-     "n": 1,
-     "aw": {
-      "n": 2
-     }
-    }
-   ],
+   "code": true,
    "ru": "Двустволка",
    "en": "Double Barrel",
-   "ru_d": "У Scatterblast есть запасной заряд, ширина +150",
-   "en_d": "Scatterblast gets a spare charge, width +150",
-   "ru_aw": "Пробуждение: 2 запасных заряда",
-   "en_aw": "Awakening: 2 spare charges"
+   "ru_d": "Scatterblast оставляет ствол на 3 с. Повторное Q задаёт направление выстрела от ствола. Через 0,6 с полоса наносит 290 магического урона. Дальность 900.",
+   "en_d": "Scatterblast plants a barrel for 3 s. Recast Q to aim a shot from it. The lane deals 290 magic damage after 0.6 s. Range 900.",
+   "ru_aw": "Пробуждение. Дальность второго выстрела увеличивается до 1150.",
+   "en_aw": "Awakening. Bank shot range increases to 1150."
   },
   {
    "id": "snap_l_cookie",
    "r": "legend",
    "branch": "W",
    "ab": "snapfire_firesnap_cookie",
-   "mods": "jump_horizontal_distance:+85;impact_radius:+70",
-   "ru": "Печенье-катапульта",
-   "en": "Catapult Cookie",
-   "ru_d": "Cookie: прыжок дальше на 85, радиус удара +70. При применении Снэпфайр получает щит на 160 и 20% сопротивления замедлениям на 4 с.",
-   "en_d": "Cookie gains 85 jump distance and 70 impact radius. On cast, Snapfire gains a 160 barrier and 20% slow resistance for 4 s.",
-   "ru_aw": "Пробуждение: щит 235 и 30% сопротивления замедлениям.",
-   "en_aw": "Awakening: 235 barrier and 30% slow resistance.",
-   "fx": [
-    {
-     "t": "buff",
-     "dur": 4,
-     "props": {
-      "slowres": 20
-     },
-     "shield": {
-      "base": 160,
-      "dur": 4
-     },
-     "aw": {
-      "props": {
-       "slowres": 30
-      },
-      "shield": {
-       "base": 235
-      }
-     }
-    }
-   ]
+   "code": true,
+   "ru": "Пружинное печенье",
+   "en": "Spring Cookie",
+   "ru_d": "После посадки от Cookie на себя есть 1,45 с, чтобы повторным W прыгнуть на расстояние до 430. Посадка наносит 225 магического урона в радиусе 255.",
+   "en_d": "After landing a self-Cookie, recast W within 1.45 s to hop up to 430. Landing deals 225 magic damage in a 255 radius.",
+   "ru_aw": "Пробуждение. Окно для второго прыжка увеличивается до 2 с, радиус посадки — до 310.",
+   "en_aw": "Awakening. The recast window increases to 2 s and the landing radius to 310."
   },
   {
    "id": "snap_l_shredder",
    "r": "legend",
    "branch": "E",
    "ab": "snapfire_lil_shredder",
-   "mods": "buffed_attacks:+4;damage:+25",
-   "awmods": "attack_speed_bonus:+100",
-   "ru": "Пулемет",
-   "en": "Machine Gun",
-   "ru_d": "Lil' Shredder: +4 выстрела, +25 урона",
-   "en_d": "Lil' Shredder: +4 shots, +25 damage",
-   "ru_aw": "Пробуждение: +100 скорости атаки",
-   "en_aw": "Awakening: +100 attack speed"
+   "code": true,
+   "ru": "Перекрёстный огонь",
+   "en": "Crossfire",
+   "ru_d": "Lil’ Shredder ставит турель. Каждое второе попадание по герою наводит её в сторону цели. Через 0,6 с она простреливает отмеченную полосу на 140 физического урона. До 3 выстрелов за применение.",
+   "en_d": "Lil’ Shredder deploys a turret. Every second hero hit lines up a shot toward the target. After 0.6 s, the marked line takes 140 physical damage. Up to 3 shots per cast.",
+   "ru_aw": "Пробуждение. Турель наносит 185 физического урона.",
+   "en_aw": "Awakening. The turret deals 185 physical damage."
   },
   {
    "id": "snap_l_mortimer",
    "r": "legend",
    "branch": "R",
    "ab": "snapfire_mortimer_kisses",
-   "mods": "projectile_count:+5;burn_damage:+40",
-   "awmods": "damage_per_impact:%30",
-   "ru": "Поцелуи дракона",
-   "en": "Dragon Kisses",
-   "ru_d": "Mortimer Kisses: +5 плевков, горение +40 в секунду",
-   "en_d": "Mortimer Kisses: +5 globs, +40 burn per second",
-   "ru_aw": "Пробуждение: урон плевка +30%",
-   "en_aw": "Awakening: +30% glob damage"
+   "code": true,
+   "ru": "Марш огня",
+   "en": "Fire March",
+   "ru_d": "Mortimer Kisses отмечает две точки по разным сторонам от прицела. Они по очереди взрываются на 255 магического урона, максимум одно попадание по герою.",
+   "en_d": "Mortimer Kisses marks two points on opposite sides of the aim. They explode in order for 255 magic damage, at most once per hero.",
+   "ru_aw": "Пробуждение. В конце маршрута взрывается третья точка.",
+   "en_aw": "Awakening. A third spot explodes at the end of the route."
   }
  ]
 }

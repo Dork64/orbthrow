@@ -6,17 +6,19 @@
    "r": "purple",
    "branch": "Q",
    "ab": "tidehunter_gush",
+   "code": true,
    "mods": "negative_armor:+3",
    "ru": "Коррозия",
    "en": "Corrosion",
-   "ru_d": "Gush снижает броню еще на 3",
-   "en_d": "Gush reduces armor by 3 more"
+   "ru_d": "Gush снижает броню ещё на 3. Отлив наносит ещё 50 урона.",
+   "en_d": "Gush reduces armor by 3 more. The undertow deals 50 more damage."
   },
   {
    "id": "tide_p_tide",
    "r": "purple",
    "branch": "Q",
    "ab": "tidehunter_gush",
+   "code": true,
    "fx": [
     {
      "t": "hit",
@@ -26,198 +28,143 @@
     }
    ],
    "ru": "Прилив сил",
-   "en": "Tide of Strength",
-   "ru_d": "Gush лечит на 30% урона по героям",
-   "en_d": "Gush heals for 30% of its damage to heroes"
+   "en": "Surging Strength",
+   "ru_d": "Gush лечит Тайда на 30% урона по героям. Отлив приходит через 0,8 с вместо 1 с.",
+   "en_d": "Gush heals Tidehunter for 30% of its hero damage. The undertow starts after 0.8 s instead of 1 s."
   },
   {
    "id": "tide_p_spikes",
    "r": "purple",
    "branch": "W",
    "ab": "tidehunter_kraken_shell",
-   "fx": [
-    {
-     "t": "taken",
-     "reflect": 12
-    }
-   ],
+   "code": true,
+   "mods": "damage_reduction:+10",
    "ru": "Шипы ракушки",
    "en": "Shell Spikes",
-   "ru_d": "12% урона от героев возвращается атакующему (чистый урон)",
-   "en_d": "12% of the damage from heroes is returned to the attacker as pure damage"
+   "ru_d": "Kraken Shell блокирует ещё 10 урона. Предел запаса панциря выше на 65.",
+   "en_d": "Kraken Shell blocks 10 more damage. The pressure cap increases by 65."
   },
   {
    "id": "tide_p_brine",
    "r": "purple",
    "branch": "W",
    "ab": "tidehunter_kraken_shell",
-   "fx": [
-    {
-     "t": "passive",
-     "props": {
-      "regen": 10
-     }
-    }
-   ],
-   "ru": "Соленая кровь",
-   "en": "Brine",
-   "ru_d": "+10 восстановления здоровья, пока изучен Kraken Shell",
-   "en_d": "+10 health regeneration while Kraken Shell is learned"
+   "code": true,
+   "mods": "active_move_speed_penalty_pct:-8",
+   "ru": "Солёная кровь",
+   "en": "Briny Blood",
+   "ru_d": "Активный Kraken Shell замедляет Тайда на 8 процентных пунктов меньше. Радиус выброса больше на 65.",
+   "en_d": "Active Kraken Shell slows Tidehunter by 8 percentage points less. The burst radius increases by 65."
   },
   {
    "id": "tide_p_heavy",
    "r": "purple",
    "branch": "E",
    "ab": "tidehunter_anchor_smash",
-   "mods": "attack_damage:+50",
-   "ru": "Тяжелый якорь",
+   "code": true,
+   "mods": "attack_damage:+40",
+   "ru": "Тяжёлый якорь",
    "en": "Heavy Anchor",
-   "ru_d": "Урон Anchor Smash +50",
-   "en_d": "Anchor Smash damage +50"
+   "ru_d": "Anchor Smash наносит ещё 40 урона. Удар после возврата к якорю наносит ещё 55.",
+   "en_d": "Anchor Smash deals 40 more damage. Returning to the anchor deals 55 more."
   },
   {
    "id": "tide_p_weaken",
    "r": "purple",
    "branch": "E",
    "ab": "tidehunter_anchor_smash",
-   "mods": "damage_reduction:-10",
-   "ru": "Подавление",
-   "en": "Suppress",
-   "ru_d": "Anchor Smash снижает урон врагов еще на 10%",
-   "en_d": "Anchor Smash reduces enemies' damage by 10% more"
+   "code": true,
+   "mods": "additional_range:+40",
+   "ru": "Широкий размах",
+   "en": "Wide Swing",
+   "ru_d": "Радиус Anchor Smash больше на 40. Радиус удара при возврате больше на 45.",
+   "en_d": "Anchor Smash gains 40 radius. The return strike gains 45 radius."
   },
   {
    "id": "tide_p_bulwark",
    "r": "purple",
    "branch": "R",
    "ab": "tidehunter_ravage",
-   "fx": [
-    {
-     "t": "buff",
-     "dur": 5,
-     "props": {
-      "armor": 15
-     }
-    }
-   ],
+   "code": true,
+   "mods": "radius:+80",
    "ru": "Волнорез",
    "en": "Breakwater",
-   "ru_d": "Ravage дает Тайду +15 брони на 5 с",
-   "en_d": "Ravage grants Tidehunter +15 armor for 5 s"
+   "ru_d": "Радиус Ravage больше на 80. Внешний край водоворота дальше на 85.",
+   "en_d": "Ravage gains 80 radius. The outer rim of the whirlpool starts 85 farther out."
   },
   {
    "id": "tide_p_maelstrom",
    "r": "purple",
    "branch": "R",
    "ab": "tidehunter_ravage",
+   "code": true,
+   "ru": "Давление глубин",
+   "en": "Deep Pressure",
+   "ru_d": "Ravage наносит героям ещё 65 урона. Водоворот тоже наносит ещё 65.",
+   "en_d": "Ravage deals 65 bonus damage to heroes. The whirlpool also deals 65 more damage.",
    "fx": [
     {
      "t": "hit",
      "by": "ab",
      "heroOnly": 1,
-     "cdr": {
-      "abs": [
-       "self"
-      ],
-      "sec": 8
+     "extra": {
+      "flat": 65,
+      "type": "magic"
      }
     }
-   ],
-   "ru": "Водоворот",
-   "en": "Maelstrom",
-   "ru_d": "Каждый герой, задетый Ravage, сокращает его перезарядку на 8 с",
-   "en_d": "Each hero hit by Ravage reduces its cooldown by 8 s"
+   ]
   },
   {
    "id": "tide_l_gush",
    "r": "legend",
    "branch": "Q",
    "ab": "tidehunter_gush",
-   "mods": "gush_damage:+100",
-   "awmods": "movement_speed:-20",
-   "fx": [
-    {
-     "t": "charges",
-     "n": 1
-    }
-   ],
-   "ru": "Цунами",
-   "en": "Tsunami",
-   "ru_d": "У Gush есть запасной заряд, урон +100",
-   "en_d": "Gush gets a spare charge, damage +100",
-   "ru_aw": "Пробуждение: замедление +20%",
-   "en_aw": "Awakening: slow +20%"
+   "code": true,
+   "ru": "Донное течение",
+   "en": "Undertow",
+   "ru_d": "Первое попадание Gush по герою отмечает полосу от него к месту каста. Через 1 с по ней идёт отлив на 215 магического урона.",
+   "en_d": "The first hero hit by Gush marks a lane back toward the cast position. After 1 s, an undertow sweeps it for 215 magic damage.",
+   "ru_aw": "Пробуждение. Отлив наносит 275 магического урона.",
+   "en_aw": "Awakening. The undertow deals 275 magic damage."
   },
   {
    "id": "tide_l_shell",
    "r": "legend",
    "branch": "W",
    "ab": "tidehunter_kraken_shell",
-   "mods": "damage_reduction:+30",
-   "fx": [
-    {
-     "t": "taken",
-     "reflect": 15,
-     "aw": {
-      "reflect": 25
-     }
-    }
-   ],
-   "ru": "Панцирь кракена",
-   "en": "Kraken Carapace",
-   "ru_d": "Kraken Shell блокирует на 30 урона больше; 15% урона от героев возвращается атакующему",
-   "en_d": "Kraken Shell blocks 30 more damage; 15% of the damage from heroes is returned to the attacker",
-   "ru_aw": "Пробуждение: возврат 25%",
-   "en_aw": "Awakening: 25% returned"
+   "code": true,
+   "ru": "Панцирь под давлением",
+   "en": "Pressure Shell",
+   "ru_d": "Активный Kraken Shell запасает 45% полученного от героев урона, до 330. При запасе от 90 в конце он выплёскивает его и ещё 65 магического урона в радиусе 420. Break мешает накоплению и выбросу.",
+   "en_d": "Active Kraken Shell stores 45% of hero damage taken, up to 330. With at least 90 stored it bursts at expiry for the stored amount plus 65 magic damage in a 420 radius. Break stops storage and release.",
+   "ru_aw": "Пробуждение. Предел запаса увеличивается до 430.",
+   "en_aw": "Awakening. The pressure cap increases to 430."
   },
   {
    "id": "tide_l_anchor",
    "r": "legend",
    "branch": "E",
    "ab": "tidehunter_anchor_smash",
-   "mods": "additional_range:+100;attack_damage:+45",
-   "awmods": "reduction_duration:+1.5",
-   "ru": "Якорь бездны",
-   "en": "Abyssal Anchor",
-   "ru_d": "Anchor Smash: радиус +100, урон атаки +45. Задетый герой теряет 3 брони на 3,5 с. Раз в 4 с по цели.",
-   "en_d": "Anchor Smash gains 100 radius and 45 attack damage. A hero it hits loses 3 armor for 3.5 s, once per target per 4 s.",
-   "ru_aw": "Пробуждение: −5 брони, штатное снижение урона длится ещё 1,5 с.",
-   "en_aw": "Awakening: 5 armor reduction and 1.5 s longer native damage reduction.",
-   "fx": [
-    {
-     "t": "hit",
-     "by": "ab",
-     "heroOnly": 1,
-     "icd": 4,
-     "debuff": {
-      "dur": 3.5,
-      "props": {
-       "armor": -3
-      }
-     },
-     "aw": {
-      "debuff": {
-       "props": {
-        "armor": -5
-       }
-      }
-     }
-    }
-   ]
+   "code": true,
+   "ru": "Якорь на тросе",
+   "en": "Anchor Line",
+   "ru_d": "Ручной Anchor Smash оставляет якорь на 2,1 с. Повторное E с расстояния до 720 возвращает к нему после короткой подготовки и бьёт в радиусе 265 на 135 + 35% урона атаки физическим уроном.",
+   "en_d": "A manual Anchor Smash drops an anchor for 2.1 s. Recast E within 720 range to wind up, return, and deal 135 plus 35% attack damage as physical damage in a 265 radius.",
+   "ru_aw": "Пробуждение. Окно для возврата увеличивается до 2,7 с.",
+   "en_aw": "Awakening. The recast window increases to 2.7 s."
   },
   {
    "id": "tide_l_ravage",
    "r": "legend",
    "branch": "R",
    "ab": "tidehunter_ravage",
-   "mods": "duration:+0.8;radius:+250",
-   "awmods": "AbilityDamage:+150",
-   "ru": "Гнев океана",
-   "en": "Ocean's Wrath",
-   "ru_d": "Оглушение Ravage +0.8 с, радиус +250",
-   "en_d": "Ravage stun +0.8 s, radius +250",
-   "ru_aw": "Пробуждение: урон +150",
-   "en_aw": "Awakening: damage +150"
+   "code": true,
+   "ru": "Глаз водоворота",
+   "en": "Eye of the Whirlpool",
+   "ru_d": "Ravage оставляет водоворот. После задержки, зависящей от оглушения Ravage, внешнее кольцо за 1,2 с сжимается с радиуса 820 до безопасного центра 295, нанося 285 магического урона один раз каждому герою.",
+   "en_d": "Ravage leaves a whirlpool. After a delay that scales with the Ravage stun, the outer wave contracts from 820 to a safe 295 radius over 1.2 s, dealing 285 magic damage once per hero.",
+   "ru_aw": "Пробуждение. Внешний радиус водоворота увеличивается до 950.",
+   "en_aw": "Awakening. Whirlpool outer radius increases to 950."
   },
   {
    "id": "tide_m_autoanchor",

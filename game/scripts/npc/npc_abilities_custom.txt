@@ -2,6 +2,38 @@
 {
 	"Version"	"1"
 
+	"orb_snapfire_bank"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_legend_recasts"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING"
+		"AbilityTextureName" "snapfire_scatterblast"
+		"AbilityCastRange" "50000"
+		"AbilityCastPoint" "0"
+		"MaxLevel" "1"
+	}
+
+	"orb_snapfire_spring"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_legend_recasts"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING"
+		"AbilityTextureName" "snapfire_firesnap_cookie"
+		"AbilityCastRange" "50000"
+		"AbilityCastPoint" "0"
+		"MaxLevel" "1"
+	}
+
+	"orb_tide_anchor_return"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_legend_recasts"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING"
+		"AbilityTextureName" "tidehunter_anchor_smash"
+		"AbilityCastPoint" "0"
+		"MaxLevel" "1"
+	}
+
 	"orb_mirana_star"
 	{
 		"BaseClass" "ability_lua"

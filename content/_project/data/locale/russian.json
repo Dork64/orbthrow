@@ -1,4 +1,10 @@
 {
+  "DOTA_Tooltip_ability_orb_snapfire_bank": "Рикошет картечи",
+  "DOTA_Tooltip_ability_orb_snapfire_bank_Description": "Выбирает направление выстрела от отмеченной точки.",
+  "DOTA_Tooltip_ability_orb_snapfire_spring": "Пружинное печенье",
+  "DOTA_Tooltip_ability_orb_snapfire_spring_Description": "Прыжок и взрыв в точке приземления.",
+  "DOTA_Tooltip_ability_orb_tide_anchor_return": "Подтянуться к якорю",
+  "DOTA_Tooltip_ability_orb_tide_anchor_return_Description": "Возвращает Тайда к якорю в пределах 720 и наносит урон вокруг него.",
   "DOTA_Tooltip_modifier_orb_tusk_stance": "Стойка Туска",
   "DOTA_Tooltip_modifier_orb_tusk_stance_Description": "Следи за значком способности. Снежком управляй ПКМ. После серии под Tag Team нажми Стоп для парирования. Нажми Punch повторно для раннего удара.",
   "addon_game_name": "ORBTHROW",

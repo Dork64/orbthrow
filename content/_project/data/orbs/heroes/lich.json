@@ -6,45 +6,31 @@
    "r": "purple",
    "branch": "Q",
    "ab": "lich_frost_nova",
-   "fx": [
-    {
-     "t": "hit",
-     "by": "ab",
-     "debuff": {
-      "props": {
-       "mr": -12
-      },
-      "dur": 4
-     }
-    }
-   ],
+   "code": true,
+   "mods": "slow_movement_speed:-8",
    "ru": "Пронизывающий холод",
    "en": "Piercing Cold",
-   "ru_d": "Frost Blast снижает сопротивление магии врагов на 12% на 4 с",
-   "en_d": "Frost Blast reduces enemies' magic resistance by 12% for 4 s"
+   "ru_d": "Frost Blast замедляет ещё на 8%. Трещина взрывается через 0,8 с вместо 1 с.",
+   "en_d": "Frost Blast slows by 8% more. The fissure bursts after 0.8 s instead of 1 s."
   },
   {
    "id": "lich_p_blast",
    "r": "purple",
    "branch": "Q",
    "ab": "lich_frost_nova",
-   "fx": [
-    {
-     "t": "refund",
-     "chance": 35,
-     "cdpct": 100
-    }
-   ],
-   "ru": "Снова холод",
-   "en": "Cold Again",
-   "ru_d": "35% шанс, что Frost Blast не уйдет на перезарядку",
-   "en_d": "35% chance that Frost Blast does not go on cooldown"
+   "code": true,
+   "mods": "damage:+50",
+   "ru": "Хрупкий лёд",
+   "en": "Brittle Ice",
+   "ru_d": "Основная цель Frost Blast получает ещё 50 урона, а ледяная трещина наносит ещё 65.",
+   "en_d": "Frost Blast deals 50 more damage to its primary target. The fissure deals 65 more damage."
   },
   {
    "id": "lich_p_icy",
    "r": "purple",
    "branch": "W",
    "ab": "lich_frost_shield",
+   "code": true,
    "fx": [
     {
      "t": "buff",
@@ -56,61 +42,59 @@
    ],
    "ru": "Ледяная кровь",
    "en": "Icy Blood",
-   "ru_d": "Frost Shield дает Личу +25 восстановления здоровья на время действия",
-   "en_d": "Frost Shield grants Lich +25 health regeneration for its duration"
+   "ru_d": "После Frost Shield Лич получает +25 восстановления здоровья на время щита. Ледяные лучи летят на 140 дальше.",
+   "en_d": "After Frost Shield, Lich gains 25 health regeneration for its duration. Ice rays reach 140 farther."
   },
   {
    "id": "lich_p_thorns",
    "r": "purple",
    "branch": "W",
    "ab": "lich_frost_shield",
-   "fx": [
-    {
-     "t": "taken",
-     "win": "duration",
-     "reflect": 20
-    }
-   ],
+   "code": true,
+   "mods": "damage_reduction:+8",
    "ru": "Ледяные шипы",
-   "en": "Ice Thorns",
-   "ru_d": "Пока действует Frost Shield, 20% урона от героев возвращается атакующему",
-   "en_d": "While Frost Shield lasts, 20% of the damage from heroes is returned to the attacker"
+   "en": "Ice Spikes",
+   "ru_d": "Frost Shield снижает урон от атак ещё на 8%. Ледяные лучи наносят ещё 45 урона.",
+   "en_d": "Frost Shield reduces attack damage by 8% more. Ice rays deal 45 more damage."
   },
   {
    "id": "lich_p_focus",
    "r": "purple",
    "branch": "E",
    "ab": "lich_sinister_gaze",
+   "code": true,
    "fx": [
     {
      "t": "buff",
      "dur": 5,
      "props": {
-      "sa": 20
+      "sa": 12
      }
     }
    ],
    "ru": "Сила взгляда",
-   "en": "Focused Gaze",
-   "ru_d": "Sinister Gaze дает Личу +20% усиления способностей на 5 с",
-   "en_d": "Sinister Gaze grants Lich +20% spell amplification for 5 s"
+   "en": "Mesmerism",
+   "ru_d": "Sinister Gaze даёт +12% усиления заклинаний на 5 с. Луч зеркала шире на 40.",
+   "en_d": "Sinister Gaze grants 12% spell amplification for 5 s. The mirror beam is 40 wider."
   },
   {
    "id": "lich_p_drain",
    "r": "purple",
    "branch": "E",
    "ab": "lich_sinister_gaze",
+   "code": true,
    "mods": "mana_drain:+15",
    "ru": "Опустошение",
-   "en": "Drain",
-   "ru_d": "Sinister Gaze выкачивает на 15% больше маны",
-   "en_d": "Sinister Gaze drains 15% more mana"
+   "en": "Draining Stare",
+   "ru_d": "Sinister Gaze выкачивает ещё 15% маны. Луч зеркала наносит ещё 55 урона.",
+   "en_d": "Sinister Gaze drains 15% more mana. The mirror beam deals 55 more damage."
   },
   {
    "id": "lich_p_frostbound",
    "r": "purple",
    "branch": "R",
    "ab": "lich_chain_frost",
+   "code": true,
    "fx": [
     {
      "t": "hit",
@@ -124,16 +108,17 @@
      }
     }
    ],
-   "ru": "Обледенение",
-   "en": "Frostbound",
-   "ru_d": "Chain Frost снижает урон героев на 15% на 3 с",
-   "en_d": "Chain Frost reduces heroes' damage by 15% for 3 s"
+   "ru": "Мёрзлые цепи",
+   "en": "Frozen Chain",
+   "ru_d": "Chain Frost снижает урон задетых героев на 15% на 3 с. Спутник живёт на 0,7 с дольше.",
+   "en_d": "Chain Frost reduces hit heroes’ damage by 15% for 3 s. The satellite lasts 0.7 s longer."
   },
   {
    "id": "lich_p_soul",
    "r": "purple",
    "branch": "R",
    "ab": "lich_chain_frost",
+   "code": true,
    "fx": [
     {
      "t": "hit",
@@ -143,93 +128,61 @@
     }
    ],
    "ru": "Пожиратель душ",
-   "en": "Soul Eater",
-   "ru_d": "Chain Frost лечит Лича на 20% урона по героям",
-   "en_d": "Chain Frost heals Lich for 20% of its damage to heroes"
+   "en": "Soul Devourer",
+   "ru_d": "Chain Frost лечит Лича на 20% урона по героям. Спутник наносит ещё 65 урона.",
+   "en_d": "Chain Frost heals Lich for 20% of damage dealt to heroes. The satellite deals 65 more damage."
   },
   {
    "id": "lich_l_nova",
    "r": "legend",
    "branch": "Q",
    "ab": "lich_frost_nova",
-   "mods": "aoe_damage:+80;radius:+100",
-   "awmods": "aoe_damage:+80",
-   "ru": "Ледяная бездна",
-   "en": "Ice Abyss",
-   "ru_d": "Урон Frost Blast по области +80, радиус +100",
-   "en_d": "Frost Blast area damage +80, radius +100",
-   "ru_aw": "Пробуждение: урон по области еще +80",
-   "en_aw": "Awakening: area damage another +80"
+   "code": true,
+   "ru": "Белая трещина",
+   "en": "White Fissure",
+   "ru_d": "Frost Blast оставляет под основной целью-героем ледяную трещину. Через 1 с она взрывается на 230 магического урона в радиусе 255.",
+   "en_d": "Frost Blast cracks the ice under its primary hero target. After 1 s it bursts for 230 magic damage in a 255 radius.",
+   "ru_aw": "Пробуждение. Радиус трещины увеличивается до 300.",
+   "en_aw": "Awakening. Fissure radius increases to 300."
   },
   {
    "id": "lich_l_shield",
    "r": "legend",
    "branch": "W",
    "ab": "lich_frost_shield",
-   "mods": "damage_reduction:+15;duration:+2",
-   "awmods": "radius:+300",
-   "ru": "Вечная мерзлота",
-   "en": "Permafrost",
-   "ru_d": "Frost Shield снижает урон еще на 15% и длится на 2 с дольше",
-   "en_d": "Frost Shield reduces 15% more damage and lasts 2 s longer",
-   "ru_aw": "Пробуждение: радиус ледяной ауры щита +300",
-   "en_aw": "Awakening: shield's frost aura radius +300"
+   "code": true,
+   "ru": "Колючая скорлупа",
+   "en": "Brittle Shell",
+   "ru_d": "Третья атака героя по Личу под своим Frost Shield после предупреждения выпускает три ледяных луча в сторону атакующего. Каждый задетый герой получает 215 магического урона один раз.",
+   "en_d": "The third hero attack against Lich under his own Frost Shield lines up three ice rays aimed toward the attacker. After a warning, they deal 215 magic damage once per hero.",
+   "ru_aw": "Пробуждение. Ледяные лучи наносят 270 урона.",
+   "en_aw": "Awakening. Ice rays deal 270 damage."
   },
   {
    "id": "lich_l_trance",
    "r": "legend",
    "branch": "E",
    "ab": "lich_sinister_gaze",
-   "fx": [
-    {
-     "t": "buff",
-     "dur": 5,
-     "props": {
-      "sa": 25,
-      "mr": 20
-     },
-     "aw": {
-      "props": {
-       "sa": 40
-      }
-     }
-    }
-   ],
-   "ru": "Гипноз",
-   "en": "Trance",
-   "ru_d": "Sinister Gaze дает Личу +25% усиления способностей и +20% сопротивления магии на 5 с",
-   "en_d": "Sinister Gaze grants Lich +25% spell amplification and +20% magic resistance for 5 s",
-   "ru_aw": "Пробуждение: +40% усиления",
-   "en_aw": "Awakening: +40% amplification"
+   "code": true,
+   "ru": "Отражение взгляда",
+   "en": "Reflected Gaze",
+   "ru_d": "Завершённый Sinister Gaze оставляет зеркало. Через 0,8 с оно выпускает луч в отмеченном направлении и наносит 245 магического урона.",
+   "en_d": "A completed Sinister Gaze leaves a mirror. After 0.8 s it fires in the marked direction for 245 magic damage.",
+   "ru_aw": "Пробуждение. Луч зеркала наносит 315 урона.",
+   "en_aw": "Awakening. The mirror beam deals 315 damage."
   },
   {
    "id": "lich_l_chain",
    "r": "legend",
    "branch": "R",
    "ab": "lich_chain_frost",
-   "ru": "Вечная цепь",
-   "en": "Endless Chain",
-   "ru_d": "Chain Frost метит до 4 задетых героев на 5 с. Frost Blast по метке наносит 160 дополнительного магического урона.",
-   "en_d": "Chain Frost marks up to 4 heroes it damages for 5 s. Frost Blast detonates a mark for 160 extra magic damage.",
-   "ru_aw": "Пробуждение: 235 дополнительного урона, метка на 6 с.",
-   "en_aw": "Awakening: 235 extra damage and a 6 s mark.",
-   "fx": [
-    {
-     "t": "mark",
-     "by": "ab",
-     "consume": [
-      "lich_frost_nova"
-     ],
-     "dur": 5,
-     "icd": 8,
-     "max": 4,
-     "dmg": 160,
-     "aw": {
-      "dmg": 235,
-      "dur": 6
-     }
-    }
-   ]
+   "code": true,
+   "ru": "Ледяной спутник",
+   "en": "Ice Satellite",
+   "ru_d": "Первое попадание Chain Frost по герою на 3,5 с запускает вокруг него ледяной спутник. Касание наносит 290 магического урона один раз каждому герою. Сильное развеивание снимает спутник.",
+   "en_d": "The first hero hit by Chain Frost carries an orbiting ice satellite for 3.5 s. It deals 290 magic damage once per hero on contact. A strong dispel removes it.",
+   "ru_aw": "Пробуждение. Второй спутник вращается напротив первого. Лимит попаданий общий.",
+   "en_aw": "Awakening. A second satellite orbits opposite the first with the same shared hit limit."
   },
   {
    "id": "lich_m_autonova",
