@@ -218,8 +218,9 @@ export class OgreMagiLegends extends ModBase {
         const caster = this.GetParent();
         this.clubShown = this.swap(FIREBLAST, CLUB, true);
         if (!this.clubShown) return;
-        this.club = { ability, target, ends: time() + CLUB_WINDOW,
-            icon: caster.AddNewModifier(caster, ability, CLUB_READY, { duration: CLUB_WINDOW }) };
+        const window = CLUB_WINDOW + (this.owns("ogre_p_dizzy") ? 0.75 : 0);
+        this.club = { ability, target, ends: time() + window,
+            icon: caster.AddNewModifier(caster, ability, CLUB_READY, { duration: window }) };
     }
     CanThrowClub(point: Vector) {
         return this.club !== undefined && time() < this.club.ends &&
@@ -237,7 +238,7 @@ export class OgreMagiLegends extends ModBase {
         this.clearClub();
         if (this.landing !== undefined) clearParticle(this.landing.marker);
         this.landing = {
-            point, ability, centerDamage: stunEnded ? 500 : 380, lands: time() + CLUB_FLIGHT,
+            point, ability, centerDamage: (stunEnded ? 500 : 380) + (this.owns("ogre_p_bigblast") ? 65 : 0), lands: time() + CLUB_FLIGHT,
             marker: warning(point, CLUB_RADIUS), hit: new Set<EntityIndex>(),
             bounce: this.bonuses().awake ? GetGroundPosition(
                 Vector(point.x + direction.x * CLUB_BOUNCE, point.y + direction.y * CLUB_BOUNCE, point.z), caster) : undefined,
@@ -288,10 +289,10 @@ export class OgreMagiLegends extends ModBase {
         this.potato = undefined;
         clear(potato.icon);
         const point = alive(potato.owner) ? potato.owner.GetAbsOrigin() : potato.last;
-        const damage = 400 + (potato.awake ? 80 * Math.min(2, potato.transfers) : 0);
+        const damage = 400 + (this.owns("ogre_p_napalm") ? 65 : 0) + (potato.awake ? 80 * Math.min(2, potato.transfers) : 0);
         ParticleManager.ReleaseParticleIndex(atPoint(FIRE_FX, point));
         EmitSoundOnLocationWithCaster(point, "Hero_OgreMagi.Fireblast.Target", this.GetParent());
-        for (const victim of this.enemies(point, POTATO_RADIUS)) this.magic(victim, potato.ability, damage);
+        for (const victim of this.enemies(point, POTATO_RADIUS + (this.owns("ogre_p_wildfire") ? 65 : 0))) this.magic(victim, potato.ability, damage);
         const caster = this.GetParent();
         if (potato.owner === caster && alive(caster) && !caster.IsDebuffImmune() && !caster.IsInvulnerable())
             this.magic(caster, potato.ability, damage);
@@ -320,9 +321,10 @@ export class OgreMagiLegends extends ModBase {
     }
     private startDuel(target: CDOTA_BaseNPC) {
         const caster = this.GetParent(), ability = caster.FindAbilityByName(BLOODLUST);
-        const s: Duel = { target, ends: time() + DUEL_WINDOW, ours: 1, theirs: 0,
-            scoreOgre: caster.AddNewModifier(caster, ability, DUEL, { duration: DUEL_WINDOW }),
-            scoreEnemy: target.AddNewModifier(caster, ability, DUEL, { duration: DUEL_WINDOW }) };
+        const window = DUEL_WINDOW + (this.owns("ogre_p_hide") ? 0.8 : 0);
+        const s: Duel = { target, ends: time() + window, ours: 1, theirs: 0,
+            scoreOgre: caster.AddNewModifier(caster, ability, DUEL, { duration: window }),
+            scoreEnemy: target.AddNewModifier(caster, ability, DUEL, { duration: window }) };
         this.duel = s;
         this.duelsUsed++;
         this.canDuelAgain = false;
@@ -478,7 +480,7 @@ export class OgreMagiLegends extends ModBase {
             e.unit === duel.target && e.inflictor === undefined && e.damage > 0) {
             this.clearDuel();
             this.canDuelAgain = this.bonuses().awake;
-            e.attacker.Heal(e.damage * 0.5, e.attacker.FindAbilityByName(BLOODLUST));
+            e.attacker.Heal(e.damage * (this.owns("ogre_p_thirst") ? 0.6 : 0.5), e.attacker.FindAbilityByName(BLOODLUST));
             attached(LUST_FX, e.attacker);
             return;
         }
@@ -502,9 +504,11 @@ export class OgreMagiLegends extends ModBase {
         this.syncDie();
         const caster = this.GetParent();
         const multiplier = this.bonuses().awake ? 4 : 3;
-        const icon = caster.AddNewModifier(caster, caster.FindAbilityByName(MULTICAST), DIE_BET, { duration: BET_WINDOW });
+        const window = BET_WINDOW + (this.owns("ogre_p_doublehit") ? 1.5 : 0);
+        if (this.owns("ogre_p_jackpot")) caster.GiveMana(caster.GetMaxMana() * 0.12);
+        const icon = caster.AddNewModifier(caster, caster.FindAbilityByName(MULTICAST), DIE_BET, { duration: window });
         icon?.SetStackCount(multiplier);
-        this.dieBet = { ends: time() + BET_WINDOW, multiplier, icon };
+        this.dieBet = { ends: time() + window, multiplier, icon };
     }
     GetMulticastChanceFloor(key: string): number | undefined {
         const cast = this.pending;

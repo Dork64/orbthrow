@@ -10,6 +10,7 @@ declare global {
     var modifier_orb_mirana_moons: unknown;
     var modifier_orb_mirana_decoy: unknown;
     var modifier_orb_mirana_shot: unknown;
+    var modifier_orb_mirana_reach: unknown;
 }
 
 const Q = "mirana_starfall", W = "mirana_arrow", E = "mirana_leap", R = "mirana_invis";
@@ -98,6 +99,11 @@ class Moonshot extends Status {
     OnAttack(e: ModifierAttackEvent) {
         if (IsServer() && e.attacker===this.GetParent() && !e.no_attack_cooldown && enemy(e.attacker,e.target) && real(e.target)) this.Destroy();
     }
+}
+class MoonReach extends Status {
+    GetTexture() { return "mirana_invis"; }
+    DeclareFunctions() { return [ModifierFunction.ATTACK_RANGE_BONUS]; }
+    GetModifierAttackRangeBonus() { return 90; }
 }
 type Pickup = {point:Vector; ends:number; ring:ParticleID; beam:ParticleID};
 type Held = {ends:number; icon?:CDOTA_Buff};
@@ -213,8 +219,8 @@ export class MiranaLegends extends ModBase {
     ThrowStar(a:CDOTABaseAbility,point:Vector) {
         const h=this.GetParent();if(!this.held||this.held.ends<clock()||!alive(h))return;
         const base=h.FindAbilityByName(Q);this.clearHeld();if(!base)return;
-        const id=++this.seq;this.stars.set(id,{damage:2*base.GetSpecialValueFor("damage"),hits:this.awake()?2:1,until:clock()+3,hit:new Set()});
-        this.projectile(a,h.GetAbsOrigin(),aim(h.GetAbsOrigin(),point,h.GetForwardVector()),1150,1150,90,STAR_SHOT,id);
+        const id=++this.seq;this.stars.set(id,{damage:2*base.GetSpecialValueFor("damage")+(this.owned("mir_p_starlight")?70:0),hits:this.awake()?2:1,until:clock()+3,hit:new Set()});
+        this.projectile(a,h.GetAbsOrigin(),aim(h.GetAbsOrigin(),point,h.GetForwardVector()),1150,this.owned("mir_p_meteor")?1350:1150,90,STAR_SHOT,id);
         EmitSoundOn("Ability.Starfall",h);
     }
     StarHit(target:CDOTA_BaseNPC|undefined,id:number) {
@@ -234,8 +240,9 @@ export class MiranaLegends extends ModBase {
         const h=this.GetParent(),p=tree.GetAbsOrigin();
         const model=SpawnEntityFromTableSynchronous("prop_dynamic",{model:ARROW_MODEL,solid:0,disableshadows:1,modelscale:1.25});
         if(model){model.SetAbsOrigin(Vector(p.x-dir.x*20,p.y-dir.y*20,p.z+100));model.SetForwardVector(dir);}
-        this.pin={tree,point:p,travelled,left,turns,skill,model,deadline:clock()+2,glow:effect(MOON,p),icon:this.icon("arrow",skill,2,turns)};
-        this.swap(W,BANK,true);AddFOWViewer(h.GetTeamNumber(),p,190,2,false);
+        const window=this.owned("mir_p_quiver")?2.8:2;
+        this.pin={tree,point:p,travelled,left,turns,skill,model,deadline:clock()+window,glow:effect(MOON,p),icon:this.icon("arrow",skill,window,turns)};
+        this.swap(W,BANK,true);AddFOWViewer(h.GetTeamNumber(),p,190,window,false);
     }
     private clearPin(){const p=this.pin;if(!p)return;
         stop(p.glow);remove(p.icon);if(p.model&&IsValidEntity(p.model))UTIL_Remove(p.model);
@@ -337,8 +344,8 @@ export class MiranaLegends extends ModBase {
         const a=h.FindAbilityByName(TURN);if(!a)return;
         burst(BURST,point);
         const id=++this.seq;
-        this.fans.set(id,{hits:new Map(),until:clock()+1.4,skill,damage:60+0.5*h.GetAverageTrueAttackDamage(h),awake:this.awake(),refunded:false});
-        for(const angle of [-0.22,0,0.22])this.projectile(a,point,spin(dir,angle),1200,550,46,ARROW,id);
+        this.fans.set(id,{hits:new Map(),until:clock()+1.4,skill,damage:60+(this.owned("mir_p_pounce")?24:0)+0.5*h.GetAverageTrueAttackDamage(h),awake:this.awake(),refunded:false});
+        for(const angle of [-0.22,0,0.22])this.projectile(a,point,spin(dir,angle),1200,this.owned("mir_p_blur")?660:550,46,ARROW,id);
     }
     FanHit(target:CDOTA_BaseNPC|undefined,id:number){
         const f=this.fans.get(id),h=this.GetParent();if(!f||!target)return true;
@@ -374,7 +381,7 @@ export class MiranaLegends extends ModBase {
     }
     private createMoons(){
         const h=this.GetParent(),r=h.FindAbilityByName(R);if(!r)return;
-        this.clearMoons();const duration=4;
+        this.clearMoons();const duration=this.owned("mir_p_shadow")?5:4;
         const keys={outgoing_damage:-100,incoming_damage:0,bounty_base:0,bounty_growth:0,duration};
         const clones=CreateIllusions(h,h as CDOTA_BaseNPC_Hero,keys,2,36,false,true);
         for(let i=0;i<clones.length;i++){
@@ -411,7 +418,9 @@ export class MiranaLegends extends ModBase {
         if(!best||score<0)return;
         const dest=best.GetAbsOrigin();FindClearSpaceForUnit(h,dest,true);FindClearSpaceForUnit(best,origin,true);
         burst(STAR,origin);burst(STAR,dest);this.clearMoons();
-        if(this.awake())h.AddNewModifier(h,h.FindAbilityByName(R),"modifier_orb_mirana_shot",{duration:4});
+        const ultimate=h.FindAbilityByName(R);
+        if(this.awake())h.AddNewModifier(h,ultimate,"modifier_orb_mirana_shot",{duration:4});
+        if(this.owned("mir_p_ambush"))h.AddNewModifier(h,ultimate,"modifier_orb_mirana_reach",{duration:2});
     }
     OnIntervalThink(){
         const h=this.GetParent(),t=clock();if(!alive(h)||!real(h))return;
@@ -484,3 +493,4 @@ modifier_orb_mirana_turn=registerModifier("modifier_orb_mirana_turn",TurnStatus)
 modifier_orb_mirana_moons=registerModifier("modifier_orb_mirana_moons",MoonStatus);
 modifier_orb_mirana_decoy=registerModifier("modifier_orb_mirana_decoy",Decoy);
 modifier_orb_mirana_shot=registerModifier("modifier_orb_mirana_shot",Moonshot);
+modifier_orb_mirana_reach=registerModifier("modifier_orb_mirana_reach",MoonReach);

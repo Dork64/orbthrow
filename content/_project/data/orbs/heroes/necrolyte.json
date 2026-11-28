@@ -129,8 +129,8 @@
    "max": 1,
    "ru": "Хрупкие кости",
    "en": "Brittle Bones",
-   "ru_d": "Death Pulse снижает сопротивление магии героев на 10% на 3 с.",
-   "en_d": "Death Pulse reduces hero magic resistance by 10% for 3 s.",
+   "ru_d": "Death Pulse снижает сопротивление магии героев на 10% на 3 с. Радиус повторного пульса увеличен на 50.",
+   "en_d": "Death Pulse reduces hero magic resistance by 10% for 3 s. The follow-up Pulse gains 50 radius.",
    "fx": [
     {
      "t": "hit",
@@ -154,8 +154,8 @@
    "max": 1,
    "ru": "Переливание",
    "en": "Transfusion",
-   "ru_d": "Death Pulse возвращает ману в размере 25% нанесённого героям урона. Раз в секунду по цели.",
-   "en_d": "Death Pulse returns mana equal to 25% damage dealt to heroes. Once per second per target.",
+   "ru_d": "Death Pulse возвращает ману в размере 25% нанесённого героям урона. Раз в секунду по цели. Повторный пульс лечит на 45% нанесённого урона вместо 35%.",
+   "en_d": "Death Pulse returns mana equal to 25% damage dealt to heroes. Once per second per target. The follow-up Pulse heals for 45% of damage dealt instead of 35%.",
    "fx": [
     {
      "t": "hit",
@@ -174,8 +174,8 @@
    "max": 1,
    "ru": "Холод могилы",
    "en": "Grave Chill",
-   "ru_d": "После Ghost Shroud +12% усиления способностей на 3 с",
-   "en_d": "After Ghost Shroud: +12% spell amplification for 3 s",
+   "ru_d": "После Ghost Shroud +12% усиления способностей на 3 с. Дальность возврата к силуэту увеличена на 125.",
+   "en_d": "After Ghost Shroud: +12% spell amplification for 3 s. Return to Silhouette gains 125 range.",
    "fx": [
     {
      "t": "buff",
@@ -194,8 +194,8 @@
    "max": 1,
    "ru": "Плотная вуаль",
    "en": "Dense Veil",
-   "ru_d": "Во время Ghost Shroud +10% сопротивления магии",
-   "en_d": "During Ghost Shroud: +10% magic resistance",
+   "ru_d": "Во время Ghost Shroud +10% сопротивления магии. Предел лечения от возврата выше на 7 п. п.",
+   "en_d": "During Ghost Shroud: +10% magic resistance. Returning raises the restoration cap by 7 percentage points.",
    "fx": [
     {
      "t": "buff",
@@ -214,8 +214,8 @@
    "max": 1,
    "ru": "Костница",
    "en": "Ossuary",
-   "ru_d": "Пока изучена Heartstopper Aura, +4 брони",
-   "en_d": "While Heartstopper Aura is learned: +4 armor",
+   "ru_d": "Пока изучена Heartstopper Aura, +4 брони. Маяк держится ещё 1 с.",
+   "en_d": "While Heartstopper Aura is learned: +4 armor. The beacon lasts 1 s longer.",
    "fx": [
     {
      "t": "passive",
@@ -233,8 +233,8 @@
    "max": 1,
    "ru": "Немощь",
    "en": "Frailty",
-   "ru_d": "Герои в 350 наносят на 8% меньше урона",
-   "en_d": "Heroes within 350 deal 8% less damage",
+   "ru_d": "Герои в 350 наносят на 8% меньше урона. Чума разгоняется за 1 с вместо 1,25 с.",
+   "en_d": "Heroes within 350 deal 8% less damage. Plague builds up in 1 s instead of 1.25 s.",
    "fx": [
     {
      "t": "aura",
@@ -254,8 +254,8 @@
    "max": 1,
    "ru": "Последний вдох",
    "en": "Last Breath",
-   "ru_d": "После Reaper’s Scythe следующая атака или Death Pulse по её цели за 4 с наносит 80 магического урона. Метка на цель — раз в 6 с.",
-   "en_d": "After Reaper’s Scythe, your next attack or Death Pulse on that target within 4 s deals 80 magic damage. Marks have a 6 s cooldown per target.",
+   "ru_d": "После Reaper’s Scythe следующая атака или Death Pulse по её цели за 4 с наносит 80 магического урона. Метка на цель — раз в 6 с. Окно второй Косы длится ещё 0,75 с.",
+   "en_d": "After Reaper’s Scythe, your next attack or Death Pulse on that target within 4 s deals 80 magic damage. Marks have a 6 s cooldown per target. The second Scythe remains available 0.75 s longer.",
    "fx": [
     {
      "t": "mark",
@@ -279,8 +279,8 @@
    "max": 1,
    "ru": "Нетленные останки",
    "en": "Undying Remains",
-   "ru_d": "После применения Reaper’s Scythe Некрофос на 4 с получает +20% сопротивления эффектам. Общий предел сфер — 50%.",
-   "en_d": "Casting Reaper’s Scythe grants 20% status resistance for 4 s, within the shared 50% orb cap.",
+   "ru_d": "После применения Reaper’s Scythe Некрофос на 4 с получает +20% сопротивления эффектам. Общий предел сфер — 50%. Дальность второй Косы увеличена на 100.",
+   "en_d": "Casting Reaper’s Scythe grants 20% status resistance for 4 s, within the shared 50% orb cap. The second Scythe gains 100 range.",
    "fx": [
     {
      "t": "buff",
@@ -385,25 +385,23 @@
    "r": "purple",
    "ab": "necrolyte_reapers_scythe",
    "max": 1,
-   "ru": "Эпитафия",
-   "en": "Epitaph",
-   "ru_d": "Scythe оставляет у цели одну ловушку на 8 с: готова через 2 с, 160 магического урона и замедление героя на 30% на 3 с",
-   "en_d": "Scythe leaves one trap at the target for 8 s: arms after 2 s, 160 magic damage and 30% slow to a hero for 3 s",
+   "ru": "Поминальный круг",
+   "en": "Wake Circle",
+   "ru_d": "Коса на 3 с оставляет в точке применения круг радиусом 300. Герои в нём теряют 20 скорости атаки.",
+   "en_d": "Scythe leaves a circle around the caster for 3 s. Heroes inside lose 20 attack speed.",
    "fx": [
     {
-     "t": "trap",
-     "at": "target",
-     "radius": 220,
-     "arm": 2,
-     "life": 8,
-     "max": 1,
-     "dmg": 160,
-     "type": "magic",
+     "t": "zone",
+     "at": "self",
+     "radius": 300,
+     "dur": 3,
+     "every": 1,
+     "dmg": 0,
      "debuff": {
       "props": {
-       "ms": -30
+       "as": -20
       },
-      "dur": 3
+      "dur": 1.1
      }
     }
    ],

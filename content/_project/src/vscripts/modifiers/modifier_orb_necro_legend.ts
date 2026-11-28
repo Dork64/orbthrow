@@ -238,7 +238,7 @@ export class NecroLegends extends ModBase {
         const hero = this.GetParent();
         const time = this.IsAwake() ? 0.4 : 0.6;
         this.qWind = {
-            ring: ring(hero.GetAbsOrigin(), PULSE_RADIUS, Vector(125, 255, 124)),
+            ring: ring(hero.GetAbsOrigin(), PULSE_RADIUS + (this.owns("necro_p_brittle") ? 50 : 0), Vector(125, 255, 124)),
             icon: hero.AddNewModifier(hero, this.pulse.ability, Q_WIND, { duration: time }),
         };
         EmitSoundOn("Hero_Necrolyte.DeathPulse", hero);
@@ -263,14 +263,14 @@ export class NecroLegends extends ModBase {
         if (!woundUp || pulse === undefined || !alive(hero)) return;
         this.qNext = now() + 8;
         flash(PULSE_FX, hero.GetAbsOrigin());
-        const target = this.enemies(hero.GetAbsOrigin(), PULSE_RADIUS)[0];
+        const target = this.enemies(hero.GetAbsOrigin(), PULSE_RADIUS + (this.owns("necro_p_brittle") ? 50 : 0))[0];
         if (target === undefined || this.protected(target)) return;
         flash(IMPACT, target.GetAbsOrigin());
         const special = pulse.ability.GetSpecialValueFor("AbilityDamage");
         const base = special > 0 ? special : pulse.ability.GetAbilityDamage();
         const dealt = ApplyDamage({ victim: target, attacker: hero, ability, damage: base * 1.6,
             damage_type: DamageTypes.MAGICAL });
-        if (dealt > 0 && alive(hero)) hero.Heal(dealt * 0.35, ability);
+        if (dealt > 0 && alive(hero)) hero.Heal(dealt * (this.owns("necro_p_transfusion") ? 0.45 : 0.35), ability);
     }
 
     private shroud(ability: CDOTABaseAbility): CDOTA_Buff | undefined {
@@ -313,14 +313,14 @@ export class NecroLegends extends ModBase {
         const anchor = this.anchor;
         return anchor !== undefined && alive(hero) && !hero.IsRooted() && !hero.IsCurrentlyHorizontalMotionControlled() &&
             !hero.HasModifier("modifier_slark_pounce_leash") && !hero.HasModifier("modifier_puck_dream_coil") &&
-            distance(hero.GetAbsOrigin(), anchor.pos) <= (this.IsAwake() ? 1100 : 750) &&
+            distance(hero.GetAbsOrigin(), anchor.pos) <= ((this.IsAwake() ? 1100 : 750) + (this.owns("necro_p_chill") ? 125 : 0)) &&
             this.shroud(anchor.ability) !== undefined && GridNav.IsTraversable(anchor.pos) && !GridNav.IsBlocked(anchor.pos);
     }
     ReturnToAnchor(ability: CDOTABaseAbility) {
         const anchor = this.anchor;
         if (anchor === undefined || !this.CanReturn()) return;
         const hero = this.GetParent();
-        const heal = Math.min(Math.max(0, anchor.health - hero.GetHealth()), hero.GetMaxHealth() * (this.IsAwake() ? 0.45 : 0.35));
+        const heal = Math.min(Math.max(0, anchor.health - hero.GetHealth()), hero.GetMaxHealth() * ((this.IsAwake() ? 0.45 : 0.35) + (this.owns("necro_p_veil") ? 0.07 : 0)));
         flash(PULSE_FX, hero.GetAbsOrigin());
         this.clearAnchor();
         clear(this.shroud(anchor.ability));
@@ -346,10 +346,11 @@ export class NecroLegends extends ModBase {
         const pos = GetGroundPosition(point, hero);
         const radius = Math.max(500, 500 + ability.GetSpecialValueFor("aura_radius") - 700);
         const placed = now();
+        const duration = this.owns("necro_p_ossuary") ? 7 : 6;
         this.beacon = {
-            ability, pos, radius, ends: placed + 6, lastTick: placed, moved: false, victims: new Map(),
+            ability, pos, radius, ends: placed + duration, lastTick: placed, moved: false, victims: new Map(),
             ring: ring(pos, radius, Vector(100, 219, 97)), mist: worldParticle(GHOST_FX, pos),
-            icon: hero.AddNewModifier(hero, ability, E_ACTIVE, { duration: 6 }),
+            icon: hero.AddNewModifier(hero, ability, E_ACTIVE, { duration }),
         };
         this.beacon.icon?.SetStackCount(radius);
         this.refreshAura(ability);
@@ -401,17 +402,18 @@ export class NecroLegends extends ModBase {
         if (damageTick) beacon.lastTick = time;
         const baseReduction = Math.max(0, ability.GetSpecialValueFor("heal_reduction_pct"));
         const baseDamage = ability.GetSpecialValueFor("aura_damage") / 100;
+        const buildup = this.owns("necro_p_frailty") ? 1 : 1.25;
         const regenDamage = hero.HasScepter() ? hero.GetHealthRegen() * ability.GetSpecialValueFor("heal_regen_to_damage") / 100 : 0;
         for (const target of targets) {
             let exposure = beacon.victims.get(target);
             if (!this.protected(target)) {
                 if (exposure === undefined) {
                     exposure = { since: time, active: false, icon: target.AddNewModifier(hero, ability, E_BUILD, { duration: -1 }) };
-                    exposure.icon?.SetDuration(1.25, true);
+                    exposure.icon?.SetDuration(buildup, true);
                     exposure.icon?.SetStackCount(baseReduction);
                     beacon.victims.set(target, exposure);
                 }
-                if (!exposure.active && time - exposure.since + 0.001 >= 1.25) {
+                if (!exposure.active && time - exposure.since + 0.001 >= buildup) {
                     clear(exposure.icon);
                     exposure.icon = target.AddNewModifier(hero, ability, E_PLAGUE, {});
                     exposure.icon?.SetStackCount(Math.max(60, baseReduction));
@@ -433,7 +435,7 @@ export class NecroLegends extends ModBase {
     private markVerdict(target: CDOTA_BaseNPC, ability: CDOTABaseAbility) {
         const hero = this.GetParent();
         const awake = this.IsAwake();
-        const duration = awake ? 4 : 3, threshold = awake ? 30 : 25;
+        const duration = (awake ? 4 : 3) + (this.owns("necro_p_lastbreath") ? 0.75 : 0), threshold = awake ? 30 : 25;
         const targetIcon = target.AddNewModifier(hero, ability, R_MARK, { duration });
         const ownerIcon = hero.AddNewModifier(hero, ability, R_READY, { duration });
         targetIcon?.SetStackCount(threshold);
@@ -453,7 +455,7 @@ export class NecroLegends extends ModBase {
         const verdict = this.verdict;
         return verdict !== undefined && verdict.ends > now() && this.enemy(verdict.target) &&
             !this.protected(verdict.target) && verdict.target.GetHealth() * 100 <= verdict.threshold * verdict.target.GetMaxHealth() &&
-            distance(this.GetParent().GetAbsOrigin(), verdict.target.GetAbsOrigin()) <= VERDICT_RANGE;
+            distance(this.GetParent().GetAbsOrigin(), verdict.target.GetAbsOrigin()) <= VERDICT_RANGE + (this.owns("necro_p_remains") ? 100 : 0);
     }
     private refreshVerdict() {
         const ability = this.GetParent().FindAbilityByName(R);

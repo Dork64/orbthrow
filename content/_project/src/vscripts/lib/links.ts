@@ -42,6 +42,7 @@ export const MODIFIER_LINKS: [string, string][] = [
     ["modifier_orb_mirana_moons", "modifiers/modifier_orb_mirana_legend"],
     ["modifier_orb_mirana_decoy", "modifiers/modifier_orb_mirana_legend"],
     ["modifier_orb_mirana_shot", "modifiers/modifier_orb_mirana_legend"],
+    ["modifier_orb_mirana_reach", "modifiers/modifier_orb_mirana_legend"],
     ["modifier_orb_earthshaker_legend", "modifiers/modifier_orb_earthshaker_legend"],
     ["modifier_orb_es_pivot", "modifiers/modifier_orb_earthshaker_legend"],
     ["modifier_orb_es_charged", "modifiers/modifier_orb_earthshaker_legend"],

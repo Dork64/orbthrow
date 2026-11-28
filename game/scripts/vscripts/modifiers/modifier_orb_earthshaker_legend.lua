@@ -545,18 +545,23 @@ function ShakerLegends.prototype.tickWall(self, w, t)
         if t >= w.nextGrid then
             w.nextGrid = t + 0.1
         end
-        for ____, u in ipairs(self:enemies(w.hinge, w.half + 90)) do
+        local sweepWidth = 90 + (self:have("es_p_tremor") and 30 or 0)
+        for ____, u in ipairs(self:enemies(w.hinge, w.half + sweepWidth)) do
             do
                 if not magic(u) or w.swept:has(u) or self:lineDistance(
                     u:GetAbsOrigin(),
                     w.hinge,
                     w.movingDir,
                     w.half
-                ) > 90 then
+                ) > sweepWidth then
                     goto __continue87
                 end
                 w.swept:add(u)
-                self:damage(u, w.skill, 280)
+                self:damage(
+                    u,
+                    w.skill,
+                    280 + (self:have("es_p_rift") and 70 or 0)
+                )
                 if live(u) then
                     shove(
                         h,
@@ -650,9 +655,10 @@ function ShakerLegends.prototype.OnAttackLanded(self, e)
         self:enemies(pos, 445),
         function(____, x) return x ~= u end
     )
+    local throwRange = 350 + (self:have("es_p_lifetotem") and 56 or 0)
     do
         local d = 14
-        while d <= 350 do
+        while d <= throwRange do
             local p = ray(pos, dir, d)
             if not walk(p) or math.abs(GetGroundHeight(p, h) - pos.z) > 90 then
                 impact = true
@@ -687,7 +693,7 @@ function ShakerLegends.prototype.OnAttackLanded(self, e)
         local value = math.min(
             650,
             250 + u:GetMaxHealth() * 0.08
-        )
+        ) + (self:have("es_p_stoneskin") and 65 or 0)
         self:damage(u, a, value)
         if other ~= nil then
             self:damage(other, a, value)
@@ -752,7 +758,7 @@ function ShakerLegends.prototype.recordCrack(self, u)
     local ____self_cracks_5 = self.cracks
     ____self_cracks_5[#____self_cracks_5 + 1] = {
         pos = p,
-        ends = t + 2,
+        ends = t + (self:have("es_p_concussion") and 2.7 or 2),
         fx = ring(
             p,
             175,
@@ -833,7 +839,11 @@ function ShakerLegends.prototype.finishFuse(self)
                     goto __continue146
                 end
                 hit:add(u)
-                self:damage(u, f.ability, 300)
+                self:damage(
+                    u,
+                    f.ability,
+                    300 + (self:have("es_p_earthpower") and 65 or 0)
+                )
                 if live(u) then
                     shove(
                         h,
@@ -911,7 +921,7 @@ function ShakerLegends.prototype.tickTrail(self, s, dt)
             math.ceil(s.remaining)
         ))
     end
-    if s.still >= 0.7 then
+    if s.still >= (self:have("es_p_victory") and 0.85 or 0.7) then
         self:endTrail(s)
         return
     end
@@ -920,7 +930,7 @@ function ShakerLegends.prototype.tickTrail(self, s, dt)
     end
     self:endTrail(s)
     burst(ECHO, pos, 280)
-    local amt = 320 + 0.1 * (u:GetMaxHealth() - u:GetHealth())
+    local amt = 320 + (self:have("es_p_echolife") and 70 or 0) + 0.1 * (u:GetMaxHealth() - u:GetHealth())
     local h = self:GetParent()
     local victims = self:b().awake and self:enemies(pos, 280) or ({u})
     for ____, v in ipairs(victims) do

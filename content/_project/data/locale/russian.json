@@ -381,6 +381,8 @@
   "DOTA_Tooltip_modifier_orb_mirana_moons_Description": "Число показывает доступных двойников. Направьте R на одного из них.",
   "DOTA_Tooltip_modifier_orb_mirana_decoy": "Лунный двойник",
   "DOTA_Tooltip_modifier_orb_mirana_decoy_Description": "Исчезает от одной атаки вражеского героя.",
+  "DOTA_Tooltip_modifier_orb_mirana_reach": "Лунная дистанция",
+  "DOTA_Tooltip_modifier_orb_mirana_reach_Description": "После обмена с двойником дальность атаки увеличена на 90.",
   "DOTA_Tooltip_modifier_orb_mirana_shot": "Выстрел из лунной тени",
   "DOTA_Tooltip_modifier_orb_mirana_shot_Description": "Первая обычная атака по герою наносит 180% урона.",
   "DOTA_Tooltip_ability_orb_es_pivot": "Тектонический сдвиг",

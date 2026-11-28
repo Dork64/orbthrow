@@ -320,7 +320,7 @@ function NecroLegends.prototype.BeginPulse(self)
     self.qWind = {
         ring = ring(
             hero:GetAbsOrigin(),
-            PULSE_RADIUS,
+            PULSE_RADIUS + (self:owns("necro_p_brittle") and 50 or 0),
             Vector(125, 255, 124)
         ),
         icon = hero:AddNewModifier(hero, self.pulse.ability, Q_WIND, {duration = time})
@@ -360,7 +360,7 @@ function NecroLegends.prototype.FinishPulse(self, ability)
     )
     local target = self:enemies(
         hero:GetAbsOrigin(),
-        PULSE_RADIUS
+        PULSE_RADIUS + (self:owns("necro_p_brittle") and 50 or 0)
     )[1]
     if target == nil or self:protected(target) then
         return
@@ -379,7 +379,10 @@ function NecroLegends.prototype.FinishPulse(self, ability)
         damage_type = DAMAGE_TYPE_MAGICAL
     })
     if dealt > 0 and alive(hero) then
-        hero:Heal(dealt * 0.35, ability)
+        hero:Heal(
+            dealt * (self:owns("necro_p_transfusion") and 0.45 or 0.35),
+            ability
+        )
     end
 end
 function NecroLegends.prototype.shroud(self, ability)
@@ -453,7 +456,7 @@ function NecroLegends.prototype.CanReturn(self)
     return anchor ~= nil and alive(hero) and not hero:IsRooted() and not hero:IsCurrentlyHorizontalMotionControlled() and not hero:HasModifier("modifier_slark_pounce_leash") and not hero:HasModifier("modifier_puck_dream_coil") and distance(
         hero:GetAbsOrigin(),
         anchor.pos
-    ) <= (self:IsAwake() and 1100 or 750) and self:shroud(anchor.ability) ~= nil and GridNav:IsTraversable(anchor.pos) and not GridNav:IsBlocked(anchor.pos)
+    ) <= (self:IsAwake() and 1100 or 750) + (self:owns("necro_p_chill") and 125 or 0) and self:shroud(anchor.ability) ~= nil and GridNav:IsTraversable(anchor.pos) and not GridNav:IsBlocked(anchor.pos)
 end
 function NecroLegends.prototype.ReturnToAnchor(self, ability)
     local anchor = self.anchor
@@ -466,7 +469,7 @@ function NecroLegends.prototype.ReturnToAnchor(self, ability)
             0,
             anchor.health - hero:GetHealth()
         ),
-        hero:GetMaxHealth() * (self:IsAwake() and 0.45 or 0.35)
+        hero:GetMaxHealth() * ((self:IsAwake() and 0.45 or 0.35) + (self:owns("necro_p_veil") and 0.07 or 0))
     )
     flash(
         PULSE_FX,
@@ -516,11 +519,12 @@ function NecroLegends.prototype.PlaceBeacon(self, point)
         500 + ability:GetSpecialValueFor("aura_radius") - 700
     )
     local placed = now()
+    local duration = self:owns("necro_p_ossuary") and 7 or 6
     self.beacon = {
         ability = ability,
         pos = pos,
         radius = radius,
-        ends = placed + 6,
+        ends = placed + duration,
         lastTick = placed,
         moved = false,
         victims = __TS__New(Map),
@@ -530,7 +534,7 @@ function NecroLegends.prototype.PlaceBeacon(self, point)
             Vector(100, 219, 97)
         ),
         mist = worldParticle(GHOST_FX, pos),
-        icon = hero:AddNewModifier(hero, ability, ____exports.E_ACTIVE, {duration = 6})
+        icon = hero:AddNewModifier(hero, ability, ____exports.E_ACTIVE, {duration = duration})
     }
     local ____opt_15 = self.beacon.icon
     if ____opt_15 ~= nil then
@@ -617,6 +621,7 @@ function NecroLegends.prototype.updateBeacon(self, time)
         ability:GetSpecialValueFor("heal_reduction_pct")
     )
     local baseDamage = ability:GetSpecialValueFor("aura_damage") / 100
+    local buildup = self:owns("necro_p_frailty") and 1 or 1.25
     local regenDamage = hero:HasScepter() and hero:GetHealthRegen() * ability:GetSpecialValueFor("heal_regen_to_damage") / 100 or 0
     for ____, target in __TS__Iterator(targets) do
         do
@@ -630,7 +635,7 @@ function NecroLegends.prototype.updateBeacon(self, time)
                     }
                     local ____opt_19 = exposure.icon
                     if ____opt_19 ~= nil then
-                        ____opt_19:SetDuration(1.25, true)
+                        ____opt_19:SetDuration(buildup, true)
                     end
                     local ____opt_21 = exposure.icon
                     if ____opt_21 ~= nil then
@@ -638,7 +643,7 @@ function NecroLegends.prototype.updateBeacon(self, time)
                     end
                     beacon.victims:set(target, exposure)
                 end
-                if not exposure.active and time - exposure.since + 0.001 >= 1.25 then
+                if not exposure.active and time - exposure.since + 0.001 >= buildup then
                     clear(exposure.icon)
                     exposure.icon = target:AddNewModifier(hero, ability, E_PLAGUE, {})
                     local ____opt_23 = exposure.icon
@@ -670,7 +675,7 @@ end
 function NecroLegends.prototype.markVerdict(self, target, ability)
     local hero = self:GetParent()
     local awake = self:IsAwake()
-    local duration = awake and 4 or 3
+    local duration = (awake and 4 or 3) + (self:owns("necro_p_lastbreath") and 0.75 or 0)
     local threshold = awake and 30 or 25
     local targetIcon = target:AddNewModifier(hero, ability, R_MARK, {duration = duration})
     local ownerIcon = hero:AddNewModifier(hero, ability, R_READY, {duration = duration})
@@ -704,7 +709,7 @@ function NecroLegends.prototype.CanVerdict(self)
     return verdict ~= nil and verdict.ends > now() and self:enemy(verdict.target) and not self:protected(verdict.target) and verdict.target:GetHealth() * 100 <= verdict.threshold * verdict.target:GetMaxHealth() and distance(
         self:GetParent():GetAbsOrigin(),
         verdict.target:GetAbsOrigin()
-    ) <= VERDICT_RANGE
+    ) <= VERDICT_RANGE + (self:owns("necro_p_remains") and 100 or 0)
 end
 function NecroLegends.prototype.refreshVerdict(self)
     local ability = self:GetParent():FindAbilityByName(R)

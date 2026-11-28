@@ -19,8 +19,8 @@
    ],
    "ru": "Большой взрыв",
    "en": "Big Blast",
-   "ru_d": "Fireblast дополнительно наносит 5% макс. здоровья цели",
-   "en_d": "Fireblast also deals 5% of the target's max health"
+   "ru_d": "Fireblast дополнительно наносит 5% макс. здоровья цели. Дубина наносит ещё 65 урона в центре и половину прибавки по краям.",
+   "en_d": "Fireblast also deals 5% of the target's max health. The club deals 65 more damage at the center and half that increase at the edge."
   },
   {
    "id": "ogre_p_dizzy",
@@ -44,8 +44,8 @@
    ],
    "ru": "Звон в голове",
    "en": "Seeing Stars",
-   "ru_d": "После оглушения Fireblast цель еще 1.5 с не может атаковать и замедлена на 20%",
-   "en_d": "After the Fireblast stun the target can't attack and is slowed by 20% for 1.5 more seconds"
+   "ru_d": "После оглушения Fireblast цель еще 1.5 с не может атаковать и замедлена на 20%. Окно броска дубины длится ещё 0,75 с.",
+   "en_d": "After the Fireblast stun the target can't attack and is slowed by 20% for 1.5 more seconds. The club throw stays available 0.75 s longer."
   },
   {
    "id": "ogre_p_napalm",
@@ -67,8 +67,8 @@
    ],
    "ru": "Напалм",
    "en": "Napalm",
-   "ru_d": "Ignite снижает получаемое лечение на 35%",
-   "en_d": "Ignite reduces healing received by 35%"
+   "ru_d": "Ignite снижает получаемое лечение на 35%. Взрыв котелка наносит ещё 65 магического урона, в том числе по Огру, если котелок у него.",
+   "en_d": "Ignite reduces healing received by 35%. The pot deals 65 extra magic damage, including to Ogre if he carries it."
   },
   {
    "id": "ogre_p_wildfire",
@@ -77,19 +77,22 @@
    "ab": "ogre_magi_ignite",
    "fx": [
     {
-     "t": "blast",
-     "at": "target",
-     "delay": 0.4,
-     "radius": 250,
-     "dmg": 120,
-     "type": "magic",
-     "pfx": "particles/units/heroes/hero_dragon_knight/dragon_knight_breathe_fire.vpcf"
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "icd": 1,
+     "debuff": {
+      "props": {
+       "as": -24
+      },
+      "dur": 1.5
+     }
     }
    ],
-   "ru": "Лесной пожар",
-   "en": "Wildfire",
-   "ru_d": "Ignite взрывается на цели: 120 урона врагам вокруг в 250",
-   "en_d": "Ignite explodes on the target: 120 damage to enemies within 250"
+   "ru": "Дымовая завеса",
+   "en": "Smoke Screen",
+   "ru_d": "Пока горит Ignite, его тики замедляют скорость атаки героя на 24 на 1,5 с. Радиус взрыва котелка увеличен на 65.",
+   "en_d": "Ignite ticks slow the target’s attack speed by 24 for 1.5 s. The pot explosion radius increases by 65."
   },
   {
    "id": "ogre_p_thirst",
@@ -107,8 +110,8 @@
    ],
    "ru": "Кровожадность",
    "en": "Bloodthirst",
-   "ru_d": "Bloodlust дает Огру 15% вампиризма на 8 с",
-   "en_d": "Bloodlust grants Ogre 15% lifesteal for 8 s"
+   "ru_d": "Bloodlust дает Огру 15% вампиризма на 8 с. Победный удар в споре лечит на 60% фактического урона вместо 50%.",
+   "en_d": "Bloodlust grants Ogre 15% lifesteal for 8 s. The winning hit heals for 60% of its actual damage instead of 50%."
   },
   {
    "id": "ogre_p_hide",
@@ -127,8 +130,8 @@
    ],
    "ru": "Толстая шкура",
    "en": "Thick Hide",
-   "ru_d": "Bloodlust дает Огру +6 брони и +10% сопротивления магии на 8 с",
-   "en_d": "Bloodlust grants Ogre +6 armor and +10% magic resistance for 8 s"
+   "ru_d": "Bloodlust дает Огру +6 брони и +10% сопротивления магии на 8 с. Спор длится ещё 0,8 с. Сопернику по-прежнему достаточно двух ответных ударов.",
+   "en_d": "Bloodlust grants Ogre +6 armor and +10% magic resistance for 8 s. The argument lasts 0.8 s longer. Two counterhits still win it."
   },
   {
    "id": "ogre_p_doublehit",
@@ -149,8 +152,8 @@
    ],
    "ru": "Две головы — два удара",
    "en": "Two Heads, Two Hits",
-   "ru_d": "15% шанс, что атака по герою ударит дважды",
-   "en_d": "15% chance that an attack on a hero hits twice"
+   "ru_d": "15% шанс, что атака по герою ударит дважды. На расход ставки доступно ещё 1,5 с.",
+   "en_d": "15% chance that an attack on a hero hits twice. The wager stays available 1.5 s longer."
   },
   {
    "id": "ogre_p_jackpot",
@@ -167,8 +170,8 @@
    ],
    "ru": "Джекпот",
    "en": "Jackpot",
-   "ru_d": "Убийство героя восполняет 25% здоровья и маны",
-   "en_d": "A hero kill restores 25% health and mana"
+   "ru_d": "Убийство героя восполняет 25% здоровья и маны. Постановка кости возвращает 12% максимальной маны.",
+   "en_d": "A hero kill restores 25% health and mana. Placing the wager restores 12% of maximum mana."
   },
   {
    "id": "ogre_m_autoblast",
@@ -196,16 +199,18 @@
    "ab": "ogre_magi_ignite",
    "fx": [
     {
-     "t": "multi",
-     "chance": 30,
-     "times": 2,
-     "delay": 0.5
+     "t": "buff",
+     "dur": 4,
+     "props": {
+      "slowres": 20,
+      "ms": 8
+     }
     }
    ],
-   "ru": "Огненный дождь",
-   "en": "Fire Rain",
-   "ru_d": "30% шанс бросить Ignite еще раз (до 2 раз подряд) — сверх мультикаста",
-   "en_d": "30% chance to throw Ignite again (up to 2 times in a row) — on top of Multicast",
+   "ru": "Костёр на двоих",
+   "en": "Campfire for Two",
+   "ru_d": "Ignite на 4 с даёт Огру +20% сопротивления замедлению и +8% скорости бега.",
+   "en_d": "Ignite grants Ogre 20% slow resistance and 8% movement speed for 4 s.",
    "mech": 1
   },
   {

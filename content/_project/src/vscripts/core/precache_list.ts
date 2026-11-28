@@ -22,7 +22,6 @@ export const PRECACHE_PARTICLES = [
     "particles/units/heroes/hero_crystalmaiden/maiden_crystal_nova.vpcf",
     "particles/units/heroes/hero_crystalmaiden/maiden_freezing_field_explosion.vpcf",
     "particles/units/heroes/hero_dark_seer/dark_seer_vacuum.vpcf",
-    "particles/units/heroes/hero_dragon_knight/dragon_knight_breathe_fire.vpcf",
     "particles/units/heroes/hero_earthshaker/earthshaker_aftershock.vpcf",
     "particles/units/heroes/hero_earthshaker/earthshaker_echoslam_start.vpcf",
     "particles/units/heroes/hero_earthshaker/earthshaker_echoslam_start_cracks.vpcf",

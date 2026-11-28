@@ -21,8 +21,8 @@
    ],
    "ru": "Трещина",
    "en": "Rift",
-   "ru_d": "После оглушения Fissure враги еще 3 с замедлены на 30%",
-   "en_d": "After the Fissure stun enemies are slowed by 30% for 3 more seconds"
+   "ru_d": "После оглушения Fissure враги еще 3 с замедлены на 30%. Поворот стены наносит ещё 70 урона.",
+   "en_d": "After the Fissure stun enemies are slowed by 30% for 3 more seconds. The moving wall deals 70 bonus damage."
   },
   {
    "id": "es_p_tremor",
@@ -44,8 +44,8 @@
    ],
    "ru": "Предвестник",
    "en": "Harbinger",
-   "ru_d": "Каждый герой, задетый Fissure, сокращает перезарядку Echo Slam на 5 с",
-   "en_d": "Each hero hit by Fissure reduces Echo Slam's cooldown by 5 s"
+   "ru_d": "Каждый герой, задетый Fissure, сокращает перезарядку Echo Slam на 5 с. Поворот стены срабатывает в полосе на 30 шире с каждой стороны.",
+   "en_d": "Each hero hit by Fissure reduces Echo Slam's cooldown by 5 s. The moving wall sweeps 30 farther to either side."
   },
   {
    "id": "es_p_lifetotem",
@@ -63,8 +63,8 @@
    ],
    "ru": "Тотем жизни",
    "en": "Totem of Life",
-   "ru_d": "5 с после Enchant Totem атаки по героям лечат на 30% урона",
-   "en_d": "For 5 s after Enchant Totem attacks on heroes heal for 30% of the damage"
+   "ru_d": "5 с после Enchant Totem атаки по героям лечат на 30% урона. Бильярд отбрасывает цель на 56 дальше.",
+   "en_d": "For 5 s after Enchant Totem attacks on heroes heal for 30% of the damage. Billiards knocks its target 56 farther."
   },
   {
    "id": "es_p_stoneskin",
@@ -82,8 +82,8 @@
    ],
    "ru": "Каменная кожа",
    "en": "Stoneskin",
-   "ru_d": "Enchant Totem дает +8 брони на 5 с",
-   "en_d": "Enchant Totem grants +8 armor for 5 s"
+   "ru_d": "Enchant Totem дает +8 брони на 5 с. Столкновение Бильярда наносит ещё 65 урона.",
+   "en_d": "Enchant Totem grants +8 armor for 5 s. Billiards collisions deal 65 bonus damage."
   },
   {
    "id": "es_p_concussion",
@@ -106,8 +106,8 @@
    ],
    "ru": "Сотрясение",
    "en": "Concussion",
-   "ru_d": "Aftershock снижает сопротивление магии героев на 8% на 4 с (до 3 раз)",
-   "en_d": "Aftershock reduces heroes' magic resistance by 8% for 4 s (up to 3 times)"
+   "ru_d": "Aftershock снижает сопротивление магии героев на 8% на 4 с (до 3 раз). Трещины Сейсмографа ждут на 0,7 с дольше.",
+   "en_d": "Aftershock reduces heroes' magic resistance by 8% for 4 s (up to 3 times). Seismograph cracks linger 0.7 s longer."
   },
   {
    "id": "es_p_earthpower",
@@ -124,8 +124,8 @@
    ],
    "ru": "Сила земли",
    "en": "Earth Power",
-   "ru_d": "Aftershock лечит Шейкера на 25% урона по героям",
-   "en_d": "Aftershock heals Earthshaker for 25% of its damage to heroes"
+   "ru_d": "Aftershock лечит Шейкера на 25% урона по героям. Взрыв Сейсмографа наносит ещё 65 урона.",
+   "en_d": "Aftershock heals Earthshaker for 25% of its damage to heroes. Seismograph deals 65 bonus damage."
   },
   {
    "id": "es_p_echolife",
@@ -142,8 +142,8 @@
    ],
    "ru": "Отголосок жизни",
    "en": "Echo of Life",
-   "ru_d": "Echo Slam лечит на 10% урона по героям",
-   "en_d": "Echo Slam heals for 10% of its damage to heroes"
+   "ru_d": "Echo Slam лечит на 10% урона по героям. Взрыв гула наносит ещё 70 урона.",
+   "en_d": "Echo Slam heals for 10% of its damage to heroes. The rumble explosion deals 70 bonus damage."
   },
   {
    "id": "es_p_victory",
@@ -159,8 +159,8 @@
    ],
    "ru": "Эхо победы",
    "en": "Echo of Victory",
-   "ru_d": "Убийство героя Echo Slam снимает половину его перезарядки",
-   "en_d": "A hero kill with Echo Slam removes half of its cooldown"
+   "ru_d": "Убийство героя Echo Slam снимает половину его перезарядки. Для прекращения гула нужно простоять ещё 0,15 с.",
+   "en_d": "A hero kill with Echo Slam removes half of its cooldown. Shaking the rumble off takes 0.15 s longer without moving."
   },
   {
    "id": "es_l_rift",
@@ -241,16 +241,24 @@
    "ab": "earthshaker_fissure",
    "fx": [
     {
-     "t": "multi",
-     "chance": 35,
-     "times": 1,
-     "delay": 0.4
+     "t": "zone",
+     "at": "point",
+     "radius": 235,
+     "dur": 3,
+     "every": 1,
+     "dmg": 0,
+     "debuff": {
+      "props": {
+       "ms": -22
+      },
+      "dur": 1.1
+     }
     }
    ],
-   "ru": "Двойной разлом",
-   "en": "Double Fissure",
-   "ru_d": "35% шанс второго Fissure в ту же сторону",
-   "en_d": "35% chance of a second Fissure in the same direction",
+   "ru": "Каменная крошка",
+   "en": "Stone Chips",
+   "ru_d": "Fissure оставляет каменную крошку в выбранной точке на 3 с. Герои в радиусе 235 замедляются на 22%.",
+   "en_d": "Fissure leaves rubble at the chosen point for 3 s. Heroes within 235 are slowed by 22%.",
    "mech": 1
   },
   {

@@ -263,11 +263,12 @@ function OgreMagiLegends.prototype.armClub(self, ability, target)
     if not self.clubShown then
         return
     end
+    local window = CLUB_WINDOW + (self:owns("ogre_p_dizzy") and 0.75 or 0)
     self.club = {
         ability = ability,
         target = target,
-        ends = time() + CLUB_WINDOW,
-        icon = caster:AddNewModifier(caster, ability, CLUB_READY, {duration = CLUB_WINDOW})
+        ends = time() + window,
+        icon = caster:AddNewModifier(caster, ability, CLUB_READY, {duration = window})
     }
 end
 function OgreMagiLegends.prototype.CanThrowClub(self, point)
@@ -297,7 +298,7 @@ function OgreMagiLegends.prototype.ThrowClub(self, point, ability)
     self.landing = {
         point = point,
         ability = ability,
-        centerDamage = stunEnded and 500 or 380,
+        centerDamage = (stunEnded and 500 or 380) + (self:owns("ogre_p_bigblast") and 65 or 0),
         lands = time() + CLUB_FLIGHT,
         marker = warning(point, CLUB_RADIUS),
         hit = __TS__New(Set),
@@ -399,14 +400,17 @@ function OgreMagiLegends.prototype.burstPotato(self)
     self.potato = nil
     clear(potato.icon)
     local point = alive(potato.owner) and potato.owner:GetAbsOrigin() or potato.last
-    local damage = 400 + (potato.awake and 80 * math.min(2, potato.transfers) or 0)
+    local damage = 400 + (self:owns("ogre_p_napalm") and 65 or 0) + (potato.awake and 80 * math.min(2, potato.transfers) or 0)
     ParticleManager:ReleaseParticleIndex(atPoint(FIRE_FX, point))
     EmitSoundOnLocationWithCaster(
         point,
         "Hero_OgreMagi.Fireblast.Target",
         self:GetParent()
     )
-    for ____, victim in ipairs(self:enemies(point, POTATO_RADIUS)) do
+    for ____, victim in ipairs(self:enemies(
+        point,
+        POTATO_RADIUS + (self:owns("ogre_p_wildfire") and 65 or 0)
+    )) do
         self:magic(victim, potato.ability, damage)
     end
     local caster = self:GetParent()
@@ -444,13 +448,14 @@ end
 function OgreMagiLegends.prototype.startDuel(self, target)
     local caster = self:GetParent()
     local ability = caster:FindAbilityByName(BLOODLUST)
+    local window = DUEL_WINDOW + (self:owns("ogre_p_hide") and 0.8 or 0)
     local s = {
         target = target,
-        ends = time() + DUEL_WINDOW,
+        ends = time() + window,
         ours = 1,
         theirs = 0,
-        scoreOgre = caster:AddNewModifier(caster, ability, DUEL, {duration = DUEL_WINDOW}),
-        scoreEnemy = target:AddNewModifier(caster, ability, DUEL, {duration = DUEL_WINDOW})
+        scoreOgre = caster:AddNewModifier(caster, ability, DUEL, {duration = window}),
+        scoreEnemy = target:AddNewModifier(caster, ability, DUEL, {duration = window})
     }
     self.duel = s
     self.duelsUsed = self.duelsUsed + 1
@@ -720,7 +725,7 @@ function OgreMagiLegends.prototype.OnTakeDamage(self, e)
         self:clearDuel()
         self.canDuelAgain = self:bonuses().awake
         e.attacker:Heal(
-            e.damage * 0.5,
+            e.damage * (self:owns("ogre_p_thirst") and 0.6 or 0.5),
             e.attacker:FindAbilityByName(BLOODLUST)
         )
         attached(LUST_FX, e.attacker)
@@ -760,17 +765,21 @@ function OgreMagiLegends.prototype.LoadDie(self)
     self:syncDie()
     local caster = self:GetParent()
     local multiplier = self:bonuses().awake and 4 or 3
+    local window = BET_WINDOW + (self:owns("ogre_p_doublehit") and 1.5 or 0)
+    if self:owns("ogre_p_jackpot") then
+        caster:GiveMana(caster:GetMaxMana() * 0.12)
+    end
     local icon = caster:AddNewModifier(
         caster,
         caster:FindAbilityByName(MULTICAST),
         DIE_BET,
-        {duration = BET_WINDOW}
+        {duration = window}
     )
     if icon ~= nil then
         icon:SetStackCount(multiplier)
     end
     self.dieBet = {
-        ends = time() + BET_WINDOW,
+        ends = time() + window,
         multiplier = multiplier,
         icon = icon
     }
@@ -834,13 +843,13 @@ function OgreMagiLegends.prototype.settleRolls(self, at)
                     local ____i_41 = i
                     i = ____i_41 - 1
                     __TS__ArraySplice(____self_casts_42, ____i_41, 1)
-                    goto __continue147
+                    goto __continue148
                 end
                 if not cast.potUsed and self.potato == nil and cast.ability:GetAbilityName() == IGNITE then
                     for ____, target in __TS__Iterator(cast.igniteCandidates) do
                         do
                             if not self:enemy(target) then
-                                goto __continue153
+                                goto __continue154
                             end
                             local burn = target:FindModifierByNameAndCaster(NATIVE_IGNITE, caster)
                             if burn ~= nil and burn:GetElapsedTime() < THINK * 2 then
@@ -850,11 +859,11 @@ function OgreMagiLegends.prototype.settleRolls(self, at)
                                 break
                             end
                         end
-                        ::__continue153::
+                        ::__continue154::
                     end
                 end
             end
-            ::__continue147::
+            ::__continue148::
             i = i + 1
         end
     end

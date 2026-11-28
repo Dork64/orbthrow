@@ -20,8 +20,8 @@
    ],
    "ru": "Звездный свет",
    "en": "Starlight",
-   "ru_d": "Starstorm снижает сопротивление магии врагов на 10% на 4 с",
-   "en_d": "Starstorm reduces enemies' magic resistance by 10% for 4 s"
+   "ru_d": "Starstorm снижает сопротивление магии врагов на 10% на 4 с. Брошенная звезда наносит ещё 70 магического урона.",
+   "en_d": "Starstorm reduces enemies' magic resistance by 10% for 4 s. The thrown star deals 70 bonus magic damage."
   },
   {
    "id": "mir_p_meteor",
@@ -31,8 +31,8 @@
    "mods": "secondary_targets:+1",
    "ru": "Метеоры",
    "en": "Meteors",
-   "ru_d": "Вторая звезда Starstorm падает на 2 цели вместо 1",
-   "en_d": "Starstorm's second star hits 2 targets instead of 1"
+   "ru_d": "Вторая звезда Starstorm падает на 2 цели вместо 1. Брошенная звезда летит на 200 дальше.",
+   "en_d": "Starstorm's second star hits 2 targets instead of 1. The thrown star travels 200 farther."
   },
   {
    "id": "mir_p_sacred",
@@ -47,13 +47,14 @@
      "extra": {
       "maxhp": 8,
       "type": "magic"
-     }
+     },
+     "icd": 0.15
     }
    ],
    "ru": "Священный огонь",
    "en": "Sacred Fire",
-   "ru_d": "Sacred Arrow наносит героям еще 8% их максимального здоровья",
-   "en_d": "Sacred Arrow deals an extra 8% of a hero's max health"
+   "ru_d": "Sacred Arrow наносит герою ещё 8% его максимального здоровья магией. Бонус действует и после поворота стрелы. Дополнительный удар Scepter это не повторяет.",
+   "en_d": "Sacred Arrow deals bonus magic damage equal to 8% of the target hero’s max health, including after a bank. The Scepter follow-up does not repeat it."
   },
   {
    "id": "mir_p_quiver",
@@ -69,8 +70,8 @@
    ],
    "ru": "Быстрый колчан",
    "en": "Quick Quiver",
-   "ru_d": "25% шанс, что Sacred Arrow восстановится вдвое быстрее",
-   "en_d": "25% chance that Sacred Arrow recharges twice as fast"
+   "ru_d": "25% шанс, что Sacred Arrow восстановится вдвое быстрее. Стрела в дереве держится на 0,8 с дольше.",
+   "en_d": "25% chance that Sacred Arrow recharges twice as fast. An arrow stuck in a tree stays there 0.8 s longer."
   },
   {
    "id": "mir_p_pounce",
@@ -88,8 +89,8 @@
    ],
    "ru": "Хищный прыжок",
    "en": "Pounce",
-   "ru_d": "Leap дает +10% урона на 5 с",
-   "en_d": "Leap grants +10% damage for 5 s"
+   "ru_d": "Leap дает +10% урона на 5 с. Каждая стрела веера наносит ещё 24 физического урона.",
+   "en_d": "Leap grants +10% damage for 5 s. Each fan arrow deals 24 bonus physical damage."
   },
   {
    "id": "mir_p_blur",
@@ -107,8 +108,8 @@
    ],
    "ru": "Размытие",
    "en": "Blur",
-   "ru_d": "Leap дает +30% уклонения на 3 с",
-   "en_d": "Leap grants +30% evasion for 3 s"
+   "ru_d": "Leap дает +30% уклонения на 3 с. Стрелы веера летят на 110 дальше.",
+   "en_d": "Leap grants +30% evasion for 3 s. The fan arrows fly 110 farther."
   },
   {
    "id": "mir_p_shadow",
@@ -127,8 +128,8 @@
    ],
    "ru": "Лунная тень",
    "en": "Moon Shade",
-   "ru_d": "Moonlight Shadow дает +15% скорости бега и 1% восстановления здоровья в секунду",
-   "en_d": "Moonlight Shadow grants +15% movement speed and 1% health regeneration per second"
+   "ru_d": "Moonlight Shadow дает +15% скорости бега и 1% восстановления здоровья в секунду. Двойники и возможность обмена остаются ещё на 1 с.",
+   "en_d": "Moonlight Shadow grants +15% movement speed and 1% health regeneration per second. Decoys and the swap remain available for 1 s longer."
   },
   {
    "id": "mir_p_ambush",
@@ -145,8 +146,8 @@
    ],
    "ru": "Засада",
    "en": "Ambush",
-   "ru_d": "Убийство героя во время Moonlight Shadow снимает 40% его перезарядки",
-   "en_d": "A hero kill during Moonlight Shadow removes 40% of its cooldown"
+   "ru_d": "Убийство героя во время Moonlight Shadow снимает 40% его перезарядки. После обмена Мирана на 2 с получает +90 дальности атаки.",
+   "en_d": "A hero kill during Moonlight Shadow removes 40% of its cooldown. After swapping, Mirana gains 90 attack range for 2 s."
   },
   {
    "id": "mir_l_starstorm",
@@ -226,16 +227,22 @@
    "ab": "mirana_arrow",
    "fx": [
     {
-     "t": "multi",
-     "chance": 40,
-     "times": 2,
-     "delay": 0.35
+     "t": "hit",
+     "by": "ab",
+     "heroOnly": 1,
+     "icd": 5,
+     "debuff": {
+      "props": {
+       "reveal": 1
+      },
+      "dur": 3
+     }
     }
    ],
-   "ru": "Залп стрел",
-   "en": "Arrow Volley",
-   "ru_d": "40% шанс выпустить еще одну стрелу (и еще одну)",
-   "en_d": "40% chance to fire another arrow (and another)",
+   "ru": "Серебряная искра",
+   "en": "Silver Spark",
+   "ru_d": "Стрела при попадании по герою высвечивает его на 3 с. Повтор не чаще раза в 5 с по цели.",
+   "en_d": "Arrow hits reveal heroes for 3 s. Once per target every 5 s.",
    "mech": 1
   },
   {

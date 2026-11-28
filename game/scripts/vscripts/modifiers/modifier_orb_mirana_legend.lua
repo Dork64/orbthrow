@@ -218,6 +218,18 @@ function Moonshot.prototype.OnAttack(self, e)
         self:Destroy()
     end
 end
+local MoonReach = __TS__Class()
+MoonReach.name = "MoonReach"
+__TS__ClassExtends(MoonReach, Status)
+function MoonReach.prototype.GetTexture(self)
+    return "mirana_invis"
+end
+function MoonReach.prototype.DeclareFunctions(self)
+    return {MODIFIER_PROPERTY_ATTACK_RANGE_BONUS}
+end
+function MoonReach.prototype.GetModifierAttackRangeBonus(self)
+    return 90
+end
 ____exports.MiranaLegends = __TS__Class()
 local MiranaLegends = ____exports.MiranaLegends
 MiranaLegends.name = "MiranaLegends"
@@ -474,7 +486,7 @@ function MiranaLegends.prototype.ThrowStar(self, a, point)
     self.stars:set(
         id,
         {
-            damage = 2 * base:GetSpecialValueFor("damage"),
+            damage = 2 * base:GetSpecialValueFor("damage") + (self:owned("mir_p_starlight") and 70 or 0),
             hits = self:awake() and 2 or 1,
             ["until"] = clock() + 3,
             hit = __TS__New(Set)
@@ -489,7 +501,7 @@ function MiranaLegends.prototype.ThrowStar(self, a, point)
             h:GetForwardVector()
         ),
         1150,
-        1150,
+        self:owned("mir_p_meteor") and 1350 or 1150,
         90,
         STAR_SHOT,
         id
@@ -541,6 +553,7 @@ function MiranaLegends.prototype.lodge(self, tree, dir, travelled, left, turns, 
         model:SetAbsOrigin(Vector(p.x - dir.x * 20, p.y - dir.y * 20, p.z + 100))
         model:SetForwardVector(dir)
     end
+    local window = self:owned("mir_p_quiver") and 2.8 or 2
     self.pin = {
         tree = tree,
         point = p,
@@ -549,16 +562,16 @@ function MiranaLegends.prototype.lodge(self, tree, dir, travelled, left, turns, 
         turns = turns,
         skill = skill,
         model = model,
-        deadline = clock() + 2,
+        deadline = clock() + window,
         glow = effect(MOON, p),
-        icon = self:icon("arrow", skill, 2, turns)
+        icon = self:icon("arrow", skill, window, turns)
     }
     self:swap(W, BANK, true)
     AddFOWViewer(
         h:GetTeamNumber(),
         p,
         190,
-        2,
+        window,
         false
     )
 end
@@ -865,7 +878,7 @@ function MiranaLegends.prototype.land(self)
             hits = __TS__New(Map),
             ["until"] = clock() + 1.4,
             skill = skill,
-            damage = 60 + 0.5 * h:GetAverageTrueAttackDamage(h),
+            damage = 60 + (self:owned("mir_p_pounce") and 24 or 0) + 0.5 * h:GetAverageTrueAttackDamage(h),
             awake = self:awake(),
             refunded = false
         }
@@ -876,7 +889,7 @@ function MiranaLegends.prototype.land(self)
             point,
             spin(dir, angle),
             1200,
-            550,
+            self:owned("mir_p_blur") and 660 or 550,
             46,
             ARROW,
             id
@@ -961,7 +974,7 @@ function MiranaLegends.prototype.createMoons(self)
         return
     end
     self:clearMoons()
-    local duration = 4
+    local duration = self:owned("mir_p_shadow") and 5 or 4
     local keys = {
         outgoing_damage = -100,
         incoming_damage = 0,
@@ -984,7 +997,7 @@ function MiranaLegends.prototype.createMoons(self)
             do
                 local clone = clones[i + 1]
                 if not alive(clone) then
-                    goto __continue142
+                    goto __continue145
                 end
                 local dir = spin(
                     h:GetForwardVector(),
@@ -1009,7 +1022,7 @@ function MiranaLegends.prototype.createMoons(self)
                 local ____self_clones_25 = self.clones
                 ____self_clones_25[#____self_clones_25 + 1] = clone
             end
-            ::__continue142::
+            ::__continue145::
             i = i + 1
         end
     end
@@ -1051,7 +1064,7 @@ function MiranaLegends.prototype.SwapMoon(self, point)
     for ____, c in ipairs(self.clones) do
         do
             if not alive(c) or not legal(c:GetAbsOrigin()) then
-                goto __continue154
+                goto __continue157
             end
             local towards = aim(
                 origin,
@@ -1064,7 +1077,7 @@ function MiranaLegends.prototype.SwapMoon(self, point)
                 score = dot
             end
         end
-        ::__continue154::
+        ::__continue157::
     end
     if not best or score < 0 then
         return
@@ -1075,13 +1088,12 @@ function MiranaLegends.prototype.SwapMoon(self, point)
     burst(STAR, origin)
     burst(STAR, dest)
     self:clearMoons()
+    local ultimate = h:FindAbilityByName(R)
     if self:awake() then
-        h:AddNewModifier(
-            h,
-            h:FindAbilityByName(R),
-            "modifier_orb_mirana_shot",
-            {duration = 4}
-        )
+        h:AddNewModifier(h, ultimate, "modifier_orb_mirana_shot", {duration = 4})
+    end
+    if self:owned("mir_p_ambush") then
+        h:AddNewModifier(h, ultimate, "modifier_orb_mirana_reach", {duration = 2})
     end
 end
 function MiranaLegends.prototype.OnIntervalThink(self)
@@ -1284,4 +1296,5 @@ modifier_orb_mirana_turn = registerModifier("modifier_orb_mirana_turn", TurnStat
 modifier_orb_mirana_moons = registerModifier("modifier_orb_mirana_moons", MoonStatus)
 modifier_orb_mirana_decoy = registerModifier("modifier_orb_mirana_decoy", Decoy)
 modifier_orb_mirana_shot = registerModifier("modifier_orb_mirana_shot", Moonshot)
+modifier_orb_mirana_reach = registerModifier("modifier_orb_mirana_reach", MoonReach)
 return ____exports

@@ -209,9 +209,10 @@ export class ShakerLegends extends ModBase {
             w.movingDir=w.dir+w.delta*frac;
             this.drawWall(w,t>=w.nextGrid||frac>=1);
             if(t>=w.nextGrid)w.nextGrid=t+0.1;
-            for(const u of this.enemies(w.hinge,w.half+90)){
-                if(!magic(u)||w.swept.has(u)||this.lineDistance(u.GetAbsOrigin(),w.hinge,w.movingDir,w.half)>90)continue;
-                w.swept.add(u);this.damage(u,w.skill,280);
+            const sweepWidth=90+(this.have("es_p_tremor")?30:0);
+            for(const u of this.enemies(w.hinge,w.half+sweepWidth)){
+                if(!magic(u)||w.swept.has(u)||this.lineDistance(u.GetAbsOrigin(),w.hinge,w.movingDir,w.half)>sweepWidth)continue;
+                w.swept.add(u);this.damage(u,w.skill,280+(this.have("es_p_rift")?70:0));
                 if(live(u))shove(h,u,w.skill,w.movingDir+(w.delta<0?-1:1)*Math.PI/2,130,0.18,20,false);
             }
             if(frac>=1){w.start=undefined;for(const fx of w.hints)endFX(fx);w.hints=[];}
@@ -241,7 +242,8 @@ export class ShakerLegends extends ModBase {
         const pos=u.GetAbsOrigin(),dir=angle(h.GetAbsOrigin(),pos);
         let travel=0,impact=false,other:CDOTA_BaseNPC|undefined;
         const others=this.enemies(pos,445).filter(x=>x!==u);
-        for(let d=14;d<=350;d+=14){
+        const throwRange=350+(this.have("es_p_lifetotem")?56:0);
+        for(let d=14;d<=throwRange;d+=14){
             const p=ray(pos,dir,d);
             if(!walk(p)||Math.abs(GetGroundHeight(p,h)-pos.z)>90){impact=true;break;}
             other=others.find(x=>dist(x.GetAbsOrigin(),p)<=u.GetHullRadius()+x.GetHullRadius()+12);
@@ -250,7 +252,7 @@ export class ShakerLegends extends ModBase {
         }
         shove(h,u,a,dir,travel,0.24,32,false);
         if(impact){
-            const value=Math.min(650,250+u.GetMaxHealth()*0.08);
+            const value=Math.min(650,250+u.GetMaxHealth()*0.08)+(this.have("es_p_stoneskin")?65:0);
             this.damage(u,a,value);
             if(other!==undefined)this.damage(other,a,value);
             burst(DUST,ray(pos,dir,travel),180);
@@ -272,7 +274,7 @@ export class ShakerLegends extends ModBase {
         const p=u.GetAbsOrigin(),t=time();
         for(const c of this.cracks)if(dist(c.pos,p)<96){c.ends=t+2;this.crackHUD();return;}
         if(this.cracks.length>=(this.b().awake?2:1))endFX(this.cracks.shift()!.fx);
-        this.cracks.push({pos:p,ends:t+2,fx:ring(p,175,Vector(255,190,72))});
+        this.cracks.push({pos:p,ends:t+(this.have("es_p_concussion")?2.7:2),fx:ring(p,175,Vector(255,190,72))});
         burst(CRACK,p,175);this.crackHUD();
     }
     private crackHUD(){
@@ -298,7 +300,7 @@ export class ShakerLegends extends ModBase {
             endFX(m.fx);burst(DUST,m.pos,175);
             for(const u of this.enemies(m.pos,175)){
                 if(hit.has(u)||!magic(u))continue;hit.add(u);
-                this.damage(u,f.ability,300);
+                this.damage(u,f.ability,300+(this.have("es_p_earthpower")?65:0));
                 if(live(u))shove(h,u,f.ability,0,0,0.7*(1-u.GetStatusResistance()),150,true);
             }
         }
@@ -324,10 +326,10 @@ export class ShakerLegends extends ModBase {
         if(dist(pos,s.last)<=1.5)s.still+=dt;else s.still=0;
         s.last=pos;s.remaining-=dt;
         s.icon?.SetStackCount(Math.max(1,Math.ceil(s.remaining)));
-        if(s.still>=0.7){this.endTrail(s);return;}
+        if(s.still>=(this.have("es_p_victory")?0.85:0.7)){this.endTrail(s);return;}
         if(s.remaining>0)return;
         this.endTrail(s);burst(ECHO,pos,280);
-        const amt=320+0.1*(u.GetMaxHealth()-u.GetHealth());
+        const amt=320+(this.have("es_p_echolife")?70:0)+0.1*(u.GetMaxHealth()-u.GetHealth());
         // Use the custom modifier (no original Echo inflictor) to avoid recursively tracking our own bonus.
         const h=this.GetParent(),victims=this.b().awake?this.enemies(pos,280):[u];
         for(const v of victims)if(magic(v))ApplyDamage({attacker:h,victim:v,damage:amt,damage_type:DamageTypes.MAGICAL});

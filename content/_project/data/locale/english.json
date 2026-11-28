@@ -381,6 +381,8 @@
   "DOTA_Tooltip_modifier_orb_mirana_moons_Description": "The count shows remaining decoys. Aim R towards one of them.",
   "DOTA_Tooltip_modifier_orb_mirana_decoy": "Moon Decoy",
   "DOTA_Tooltip_modifier_orb_mirana_decoy_Description": "One enemy hero attack destroys the decoy.",
+  "DOTA_Tooltip_modifier_orb_mirana_reach": "Moon Reach",
+  "DOTA_Tooltip_modifier_orb_mirana_reach_Description": "After swapping with a decoy, attack range is increased by 90.",
   "DOTA_Tooltip_modifier_orb_mirana_shot": "Moonshot",
   "DOTA_Tooltip_modifier_orb_mirana_shot_Description": "Your first ordinary attack against a hero deals 180% damage.",
   "DOTA_Tooltip_ability_orb_es_pivot": "Tectonic Shift",

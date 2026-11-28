@@ -30,13 +30,13 @@ function fixture(awake=false) {
     vi.stubGlobal("FindUnitsInRadius",(_:number,p:any,_c:any,r:number,team:number)=>[h,enemy,enemy2]
         .filter(u=>(team===3||u!==h)&&Math.hypot(p.x-u.p.x,p.y-u.p.y)<=r));
     vi.stubGlobal("CreateIllusions",vi.fn(()=>[c1,c2]));
-    const m=new ctor();m.GetParent=()=>h;m.owned=()=>true;m.awake=()=>awake;
+    const m=new ctor();m.GetParent=()=>h;m.owned=(id:string)=>id.startsWith("mir_l_");m.awake=()=>awake;
     return {h,enemy,enemy2,c1,c2,tree,m,skills,tick(t:number){time=t;m.OnIntervalThink();},
         cast(n:string){m.OnAbilityFullyCast({unit:h,ability:skills.get(n)});},
         hit(n:string,u=enemy){m.OnTakeDamage({attacker:h,unit:u,inflictor:skills.get(n)});}};
 }
 beforeAll(async()=>{
-    for(const n of ["legend","star","arrow","turn","moons","decoy","shot"])vi.stubGlobal("modifier_orb_mirana_"+n,null);
+    for(const n of ["legend","star","arrow","turn","moons","decoy","shot","reach"])vi.stubGlobal("modifier_orb_mirana_"+n,null);
     ctor=(await import("../src/vscripts/modifiers/modifier_orb_mirana_legend")).MiranaLegends;
 });
 beforeEach(()=>{
@@ -61,13 +61,15 @@ describe("легендарки Мираны",()=>{
     it("подобранная звезда в пробуждении проходит через первого и поражает второго один раз",()=>{
         const f=fixture(true);
         f.cast(Q);f.hit(Q);f.h.p=f.m.pickup.point;f.tick(1.2);
+        f.m.owned=(id:string)=>id.startsWith("mir_l_")||id==="mir_p_starlight"||id==="mir_p_meteor";
         f.m.ThrowStar(f.skills.get("orb_mirana_star"),pos(900));
         const projectile=vi.mocked(ProjectileManager.CreateLinearProjectile).mock.calls[0][0] as any;
+        expect(projectile.fDistance).toBe(1350);
         expect(f.m.StarHit(f.enemy,projectile.ExtraData.id)).toBe(false);
         expect(f.m.StarHit(f.enemy,projectile.ExtraData.id)).toBe(false);
         expect(f.m.StarHit(f.enemy2,projectile.ExtraData.id)).toBe(true);
         expect(ApplyDamage).toHaveBeenCalledTimes(2);
-        expect(ApplyDamage).toHaveBeenCalledWith(expect.objectContaining({damage:600}));
+        expect(ApplyDamage).toHaveBeenCalledWith(expect.objectContaining({damage:670}));
     });
     it("W останавливает нативный полёт у дерева, переносит пройденную дистанцию, исчезает если дерево срубили",()=>{
         const f=fixture();f.enemy.p=pos(1400);const a=f.skills.get(W);
