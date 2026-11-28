@@ -7,13 +7,17 @@ const v = (x = 0) => ({ x, y: 0, z: 0 });
 let Ogre: any, at = 0;
 
 function fixture(awake = false) {
-    const skills = new Map([Q, W, E, R, "orb_ogre_club", "orb_ogre_loaded_die", "item_dagon"].map(name => [name, {
+    const skills = new Map([Q, W, E, R, "orb_ogre_club", "orb_ogre_loaded_die", "orb_ogre_challenge", "item_dagon"].map(name => [name, {
         GetAbilityName: () => name, GetLevel: () => 4, IsInAbilityPhase: () => true,
         SetLevel: vi.fn(), SetHidden: vi.fn(), MarkAbilityButtonDirty: vi.fn(),
     }]));
     const unit = (id: number, team: number, x: number) => {
         const mods = new Map<string, any>();
+        let forced: unknown;
         return {
+            SetForceAttackTarget: vi.fn((target: unknown) => { forced=target; }),
+            GetForceAttackTarget: () => forced, MoveToTargetToAttack: vi.fn(),
+            TriggerSpellAbsorb: vi.fn(() => false), GetMaxHealth: () => 2000,
             mods, pos: v(x), immune: false, broken: false, real: true, alive: true, stunned: false,
             GetAbsOrigin() { return this.pos; }, GetForwardVector: () => v(1),
             IsAlive() { return this.alive; }, IsRealHero() { return this.real; },
@@ -62,7 +66,7 @@ function fixture(awake = false) {
 }
 
 beforeAll(async () => {
-    for (const n of ["magi_legend", "club_ready", "potato", "duel", "die_ready", "die_bet"])
+    for (const n of ["magi_legend", "club_ready", "potato", "duel", "duel_ready", "die_ready", "die_bet"])
         vi.stubGlobal("modifier_orb_ogre_" + n, null);
     Ogre = (await import("../src/vscripts/modifiers/modifier_orb_ogre_magi_legend")).OgreMagiLegends;
 });
@@ -75,6 +79,7 @@ beforeEach(() => {
         ParticleManager: { CreateParticle: vi.fn(() => 5), SetParticleControl: vi.fn(), DestroyParticle: vi.fn(),
             ReleaseParticleIndex: vi.fn() },
         EmitSoundOn: vi.fn(), EmitSoundOnLocationWithCaster: vi.fn(), ApplyDamage: vi.fn(() => 100),
+        SpawnEntityFromTableSynchronous: vi.fn(() => ({ SetAbsOrigin: vi.fn(), SetAngles: vi.fn() })), UTIL_Remove: vi.fn(),
         DamageTypes: { MAGICAL: 2 }, UnitTargetTeam: {}, UnitTargetType: {}, UnitTargetFlags: {}, FindOrder: {},
     })) vi.stubGlobal(key, value);
 });
@@ -88,11 +93,11 @@ describe("легендарки Огра", () => {
         expect(f.mod.CanThrowClub(v(425))).toBe(true);
         f.mod.ThrowClub(v(425), f.skills.get("orb_ogre_club"));
         expect(f.mod.CanThrowClub(v(425))).toBe(false);
-        f.tick(0.40);
+        f.tick(0.60);
         expect(ApplyDamage).not.toHaveBeenCalled();
-        f.tick(0.43);
+        f.tick(0.66);
         expect(ApplyDamage).toHaveBeenCalledWith(expect.objectContaining({ victim: f.foe, damage: 500 }));
-        f.tick(0.88);
+        f.tick(1.32);
         expect(ApplyDamage).toHaveBeenCalledWith(expect.objectContaining({ victim: f.other, damage: 500 }));
         f.tick(1.40);
         expect(ApplyDamage).toHaveBeenCalledTimes(2);
@@ -111,28 +116,35 @@ describe("легендарки Огра", () => {
         f.tick(1.5);
         f.mod.OnAttackLanded(f.attack(f.foe as any, f.caster));
         expect(f.foe.mods.get(POTATO).IsNull()).toBe(true);
-        expect(f.caster.mods.get(POTATO).GetDieTime()).toBeCloseTo(3);
-        f.tick(3.01);
+        expect(f.caster.mods.get(POTATO).GetDieTime()).toBeCloseTo(4);
+        f.tick(4.01);
         expect(ApplyDamage).toHaveBeenCalledTimes(1);
         expect(ApplyDamage).toHaveBeenCalledWith(expect.objectContaining({ victim: f.caster, damage: 480 }));
     });
 
-    it("E считает обычные удары, лечит по фактическому урону и даёт пробуждённому Огру второго соперника", () => {
+    it("E открывает дуэль только после Bloodlust на себе, а победа и таймер снимают принуждение", () => {
         const f = fixture(true);
+        const challenge=f.skills.get("orb_ogre_challenge");
+        f.foe.pos=v(220);
         f.lust();
-        f.mod.OnAttackLanded(f.attack());
-        f.mod.OnAttackLanded(f.attack(f.caster, f.foe, 2));
-        expect(f.caster.mods.get(DUEL).SetStackCount).toHaveBeenLastCalledWith(20);
-        expect(f.mod.GetModifierPreAttack_CriticalStrike(f.attack(f.caster, f.foe, 3))).toBe(250);
-        f.mod.OnTakeDamage({ attacker: f.caster, unit: f.foe, record: 3, damage: 196 });
-        expect(f.caster.Heal).toHaveBeenCalledWith(98, f.skills.get(E));
-        f.mod.OnAttackLanded(f.attack());
-        expect(f.foe.mods.get(DUEL).IsNull()).toBe(true);
-        f.mod.OnAttackLanded(f.attack(f.caster, f.other, 4));
-        expect(f.other.mods.get(DUEL).IsNull()).toBe(false);
-        f.mod.OnAttackLanded(f.attack(f.other as any, f.caster, 5));
-        f.mod.OnAttackLanded(f.attack(f.other as any, f.caster, 6));
-        expect(f.other.mods.get(DUEL).IsNull()).toBe(true);
+        f.end(f.start(E, f.foe));
+        expect(f.mod.CanChallenge(f.foe)).toBe(false);
+        f.end(f.start(E, f.caster));
+        expect(f.mod.CanChallenge(f.foe)).toBe(true);
+        f.mod.StartChallenge(f.foe,challenge);
+        expect(f.caster.GetForceAttackTarget()).toBe(f.foe);
+        expect(f.foe.GetForceAttackTarget()).toBe(f.caster);
+        f.mod.OnDeath({unit:f.foe,attacker:f.caster});
+        expect(f.caster.Heal).toHaveBeenCalledWith(360,f.skills.get(E));
+        expect(f.caster.GetForceAttackTarget()).toBeUndefined();
+        f.end(f.start(E, f.caster));
+        f.foe.TriggerSpellAbsorb.mockReturnValueOnce(true);
+        f.mod.StartChallenge(f.foe,challenge);
+        expect(f.foe.GetForceAttackTarget()).toBeUndefined();
+        f.end(f.start(E, f.caster));
+        f.mod.StartChallenge(f.foe,challenge);
+        f.tick(3);
+        expect(f.foe.GetForceAttackTarget()).toBeUndefined();
     });
 
     it("R улавливает штатный повтор и игнорирует сферный; кость расходует только следующий ручной Q/W по герою", () => {

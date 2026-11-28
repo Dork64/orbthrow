@@ -22,6 +22,8 @@ local CLUB = "orb_ogre_club"
 local LOADED_DIE = "orb_ogre_loaded_die"
 local CLUB_READY = "modifier_orb_ogre_club_ready"
 local POTATO = "modifier_orb_ogre_potato"
+local CHALLENGE = "orb_ogre_challenge"
+local DUEL_READY = "modifier_orb_ogre_duel_ready"
 local DUEL = "modifier_orb_ogre_duel"
 local DIE_READY = "modifier_orb_ogre_die_ready"
 local DIE_BET = "modifier_orb_ogre_die_bet"
@@ -33,15 +35,20 @@ local IGNITE_FX = "particles/units/heroes/hero_ogre_magi/ogre_magi_ignite.vpcf"
 local LUST_FX = "particles/units/heroes/hero_ogre_magi/ogre_magi_bloodlust_buff.vpcf"
 local RING_FX = "particles/ui_mouseactions/drag_selected_ring.vpcf"
 local THINK = 0.04
-local CLUB_WINDOW = 3
+local CLUB_MODEL = "models/heroes/ogre_magi/ogre_magi_weapon.vmdl"
+local POT_MODEL = "models/items/wards/fall20_cauldron_ward/fall20_cauldron_ward.vmdl"
+local DUEL_FX = "particles/units/heroes/hero_legion_commander/legion_commander_duel_ring.vpcf"
+local CLUB_WINDOW = 6
 local CLUB_RANGE = 825
 local CLUB_RADIUS = 290
 local CLUB_CENTER = 150
-local CLUB_FLIGHT = 0.42
+local CLUB_FLIGHT = 0.65
 local CLUB_BOUNCE = 400
-local POTATO_FUSE = 3
+local POTATO_FUSE = 4
 local POTATO_RADIUS = 325
-local DUEL_WINDOW = 4
+local DUEL_WINDOW = 2.4
+local CHALLENGE_WINDOW = 5
+local CHALLENGE_RANGE = 375
 local BET_WINDOW = 4
 local ROLLED_AT = 0.75
 local function time()
@@ -115,11 +122,23 @@ end
 function HotPotato.prototype.GetEffectAttachType(self)
     return PATTACH_OVERHEAD_FOLLOW
 end
+local DuelReady = __TS__Class()
+DuelReady.name = "DuelReady"
+__TS__ClassExtends(DuelReady, ClubReady)
+function DuelReady.prototype.GetTexture(self)
+    return BLOODLUST
+end
 local DuelScore = __TS__Class()
 DuelScore.name = "DuelScore"
-__TS__ClassExtends(DuelScore, ClubReady)
-function DuelScore.prototype.GetTexture(self)
-    return BLOODLUST
+__TS__ClassExtends(DuelScore, DuelReady)
+function DuelScore.prototype.IsDebuff(self)
+    return self:GetParent() ~= self:GetCaster()
+end
+function DuelScore.prototype.IgnoreTenacity(self)
+    return true
+end
+function DuelScore.prototype.CheckState(self)
+    return {[MODIFIER_STATE_TAUNTED] = true, [MODIFIER_STATE_SILENCED] = true, [MODIFIER_STATE_MUTED] = true}
 end
 function DuelScore.prototype.GetEffectName(self)
     return LUST_FX
@@ -153,8 +172,7 @@ function OgreMagiLegends.prototype.____constructor(self, ...)
     ModBase.prototype.____constructor(self, ...)
     self.clubShown = false
     self.dieShown = false
-    self.duelsUsed = 0
-    self.canDuelAgain = false
+    self.challengeShown = false
     self.dieProgress = 0
     self.casts = {}
     self.orbFreeCast = false
@@ -182,8 +200,6 @@ function OgreMagiLegends.prototype.DeclareFunctions(self)
         MODIFIER_EVENT_ON_MODIFIER_ADDED,
         MODIFIER_EVENT_ON_TAKEDAMAGE,
         MODIFIER_EVENT_ON_ATTACK_LANDED,
-        MODIFIER_PROPERTY_PREATTACK_CRITICALSTRIKE,
-        MODIFIER_EVENT_ON_ATTACK_RECORD_DESTROY,
         MODIFIER_EVENT_ON_DEATH
     }
 end
@@ -292,12 +308,13 @@ function OgreMagiLegends.prototype.ThrowClub(self, point, ability)
     local target = window.target
     local stunEnded = not alive(target) or not target:FindModifierByNameAndCaster(NATIVE_STUN, caster) and not target:IsStunned()
     self:clearClub()
-    if self.landing ~= nil then
-        clearParticle(self.landing.marker)
-    end
+    self:clearLanding()
     self.landing = {
         point = point,
         ability = ability,
+        origin = origin,
+        launched = time(),
+        model = self:spawnModel(CLUB_MODEL, 1.6),
         centerDamage = (stunEnded and 500 or 380) + (self:owns("ogre_p_bigblast") and 65 or 0),
         lands = time() + CLUB_FLIGHT,
         marker = warning(point, CLUB_RADIUS),
@@ -307,10 +324,43 @@ function OgreMagiLegends.prototype.ThrowClub(self, point, ability)
             caster
         ) or nil
     }
+    self:moveClub(
+        self.landing,
+        time()
+    )
     local trace = atPoint(IGNITE_FX, origin)
     ParticleManager:SetParticleControl(trace, 1, point)
     ParticleManager:ReleaseParticleIndex(trace)
     EmitSoundOn("Hero_OgreMagi.Ignite.Cast", caster)
+end
+function OgreMagiLegends.prototype.spawnModel(self, path, scale)
+    return SpawnEntityFromTableSynchronous("prop_dynamic", {model = path, modelscale = scale, solid = 0, disableshadows = 1})
+end
+function OgreMagiLegends.prototype.dropModel(self, model)
+    if model ~= nil and IsValidEntity(model) then
+        UTIL_Remove(model)
+    end
+end
+function OgreMagiLegends.prototype.clearLanding(self)
+    if self.landing == nil then
+        return
+    end
+    clearParticle(self.landing.marker)
+    self:dropModel(self.landing.model)
+    self.landing = nil
+end
+function OgreMagiLegends.prototype.moveClub(self, drop, at)
+    if drop.model == nil then
+        return
+    end
+    local t = math.max(
+        0,
+        math.min(1, (at - drop.launched) / CLUB_FLIGHT)
+    )
+    local a = drop.origin
+    local b = drop.point
+    drop.model:SetAbsOrigin(Vector(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t + 55 * (1 - t) + 220 * 4 * t * (1 - t)))
+    drop.model:SetAngles(45 + t * 500, 360 * t, 0)
 end
 function OgreMagiLegends.prototype.landClub(self)
     local drop = self.landing
@@ -327,7 +377,7 @@ function OgreMagiLegends.prototype.landClub(self)
     for ____, victim in ipairs(self:enemies(drop.point, CLUB_RADIUS)) do
         do
             if drop.hit:has(victim:entindex()) then
-                goto __continue53
+                goto __continue62
             end
             drop.hit:add(victim:entindex())
             self:magic(
@@ -339,24 +389,29 @@ function OgreMagiLegends.prototype.landClub(self)
                 ) <= CLUB_CENTER and drop.centerDamage or drop.centerDamage * 0.5
             )
         end
-        ::__continue53::
+        ::__continue62::
     end
-    local ____temp_3
     if drop.bounce == nil then
-        ____temp_3 = nil
+        self:dropModel(drop.model)
+        self.landing = nil
     else
-        ____temp_3 = __TS__ObjectAssign(
+        self.landing = __TS__ObjectAssign(
             {},
             drop,
             {
+                origin = drop.point,
                 point = drop.bounce,
                 bounce = nil,
+                launched = time(),
                 lands = time() + CLUB_FLIGHT,
                 marker = warning(drop.bounce, CLUB_RADIUS)
             }
         )
+        self:moveClub(
+            self.landing,
+            time()
+        )
     end
-    self.landing = ____temp_3
 end
 function OgreMagiLegends.prototype.placePotato(self, spell, unit)
     if spell.potUsed or self.potato ~= nil or time() > spell.ignitionEnds or not self:enemy(unit) or unit:IsDebuffImmune() or not self:owns("ogre_l_ignite") then
@@ -369,7 +424,8 @@ function OgreMagiLegends.prototype.placePotato(self, spell, unit)
         ability = spell.ability,
         ends = time() + POTATO_FUSE,
         transfers = 0,
-        awake = self:bonuses().awake
+        awake = self:bonuses().awake,
+        model = self:spawnModel(POT_MODEL, 0.72)
     }
     self.potato = potato
     self:potatoMark(potato, unit)
@@ -387,9 +443,17 @@ function OgreMagiLegends.prototype.potatoMark(self, potato, unit)
             potato.ends - time()
         )}
     )
-    local ____opt_4 = potato.icon
-    if ____opt_4 ~= nil then
-        ____opt_4:SetStackCount(1 + potato.transfers)
+    local ____opt_3 = potato.icon
+    if ____opt_3 ~= nil then
+        ____opt_3:SetStackCount(1 + potato.transfers)
+    end
+    self:movePotato(potato)
+end
+function OgreMagiLegends.prototype.movePotato(self, potato)
+    local p = potato.last
+    local ____opt_5 = potato.model
+    if ____opt_5 ~= nil then
+        ____opt_5:SetAbsOrigin(Vector(p.x, p.y, p.z + 145))
     end
 end
 function OgreMagiLegends.prototype.burstPotato(self)
@@ -399,6 +463,7 @@ function OgreMagiLegends.prototype.burstPotato(self)
     end
     self.potato = nil
     clear(potato.icon)
+    self:dropModel(potato.model)
     local point = alive(potato.owner) and potato.owner:GetAbsOrigin() or potato.last
     local damage = 400 + (self:owns("ogre_p_napalm") and 65 or 0) + (potato.awake and 80 * math.min(2, potato.transfers) or 0)
     ParticleManager:ReleaseParticleIndex(atPoint(FIRE_FX, point))
@@ -418,60 +483,77 @@ function OgreMagiLegends.prototype.burstPotato(self)
         self:magic(caster, potato.ability, damage)
     end
 end
-function OgreMagiLegends.prototype.clearDuel(self)
-    local ____clear_8 = clear
-    local ____opt_6 = self.duel
-    ____clear_8(____opt_6 and ____opt_6.scoreOgre)
-    local ____clear_11 = clear
-    local ____opt_9 = self.duel
-    ____clear_11(____opt_9 and ____opt_9.scoreEnemy)
-    self.duel = nil
+function OgreMagiLegends.prototype.clearChallenge(self)
+    local ____clear_9 = clear
+    local ____opt_7 = self.challenge
+    ____clear_9(____opt_7 and ____opt_7.icon)
+    self.challenge = nil
+    if self.challengeShown then
+        self.challengeShown = self:swap(BLOODLUST, CHALLENGE, false)
+    end
 end
-function OgreMagiLegends.prototype.syncBloodlust(self)
-    local caster = self:GetParent()
-    local lust = caster:FindModifierByNameAndCaster(NATIVE_LUST, caster)
-    if lust == nil then
-        self:clearDuel()
-        self.bloodlustEnds = nil
+function OgreMagiLegends.prototype.armChallenge(self, ability)
+    if self.duel ~= nil then
         return
     end
-    local ends = lust:GetDieTime()
-    if self.bloodlustEnds ~= nil and math.abs(self.bloodlustEnds - ends) < 0.1 then
+    self:clearChallenge()
+    local caster = self:GetParent()
+    self.challengeShown = self:swap(BLOODLUST, CHALLENGE, true)
+    if self.challengeShown then
+        self.challenge = {
+            ends = time() + CHALLENGE_WINDOW,
+            icon = caster:AddNewModifier(caster, ability, DUEL_READY, {duration = CHALLENGE_WINDOW})
+        }
+    end
+end
+function OgreMagiLegends.prototype.CanChallenge(self, target)
+    local caster = self:GetParent()
+    return self.challenge ~= nil and time() < self.challenge.ends and self.duel == nil and alive(caster) and self:enemy(target) and not target:IsDebuffImmune() and distance(
+        caster:GetAbsOrigin(),
+        target:GetAbsOrigin()
+    ) <= CHALLENGE_RANGE + caster:GetCastRangeBonus() + 32 and caster:FindModifierByNameAndCaster(NATIVE_LUST, caster) ~= nil
+end
+function OgreMagiLegends.prototype.StartChallenge(self, target, ability)
+    if target == nil or not self:CanChallenge(target) then
         return
     end
-    self:clearDuel()
-    self.bloodlustEnds = ends
-    self.duelsUsed = 0
-    self.canDuelAgain = true
-    self.lastDuelTarget = nil
-end
-function OgreMagiLegends.prototype.startDuel(self, target)
+    self:clearChallenge()
+    if target:TriggerSpellAbsorb(ability) then
+        return
+    end
     local caster = self:GetParent()
-    local ability = caster:FindAbilityByName(BLOODLUST)
-    local window = DUEL_WINDOW + (self:owns("ogre_p_hide") and 0.8 or 0)
-    local s = {
+    local window = DUEL_WINDOW + (self:bonuses().awake and 0.55 or 0) + (self:owns("ogre_p_hide") and 0.6 or 0)
+    local center = GetGroundPosition(
+        target:GetAbsOrigin(),
+        caster
+    )
+    self.duel = {
         target = target,
         ends = time() + window,
-        ours = 1,
-        theirs = 0,
+        ring = atPoint(DUEL_FX, center),
         scoreOgre = caster:AddNewModifier(caster, ability, DUEL, {duration = window}),
         scoreEnemy = target:AddNewModifier(caster, ability, DUEL, {duration = window})
     }
-    self.duel = s
-    self.duelsUsed = self.duelsUsed + 1
-    self.canDuelAgain = false
-    self.lastDuelTarget = target
-    self:duelScore(s)
+    caster:SetForceAttackTarget(target)
+    target:SetForceAttackTarget(caster)
+    caster:MoveToTargetToAttack(target)
+    target:MoveToTargetToAttack(caster)
 end
-function OgreMagiLegends.prototype.duelScore(self, s)
-    local score = s.ours * 10 + s.theirs
-    local ____opt_12 = s.scoreOgre
-    if ____opt_12 ~= nil then
-        ____opt_12:SetStackCount(score)
+function OgreMagiLegends.prototype.clearDuel(self)
+    local duel = self.duel
+    if duel == nil then
+        return
     end
-    local ____opt_14 = s.scoreEnemy
-    if ____opt_14 ~= nil then
-        ____opt_14:SetStackCount(score)
+    self.duel = nil
+    clear(duel.scoreOgre)
+    clear(duel.scoreEnemy)
+    clearParticle(duel.ring)
+    local caster = self:GetParent()
+    if caster:GetForceAttackTarget() == duel.target then
+        caster:SetForceAttackTarget(nil)
+    end
+    if IsValidEntity(duel.target) and duel.target:GetForceAttackTarget() == caster then
+        duel.target:SetForceAttackTarget(nil)
     end
 end
 function OgreMagiLegends.prototype.ordinary(self, e)
@@ -486,55 +568,6 @@ function OgreMagiLegends.prototype.OnAttackLanded(self, e)
     if potato ~= nil and potato.owner == e.attacker and time() < potato.ends and not e.target:IsInvulnerable() then
         potato.transfers = potato.transfers + 1
         self:potatoMark(potato, e.target)
-    end
-    if not self:owns("ogre_l_bloodlust") then
-        return
-    end
-    self:syncBloodlust()
-    local duel = self.duel
-    if duel ~= nil and time() >= duel.ends then
-        self:clearDuel()
-        return
-    end
-    if duel ~= nil and e.attacker == duel.target and e.target == caster then
-        local ____duel_16, ____theirs_17 = duel, "theirs"
-        local ____duel_theirs_18 = ____duel_16[____theirs_17] + 1
-        ____duel_16[____theirs_17] = ____duel_theirs_18
-        if ____duel_theirs_18 >= 2 then
-            self:clearDuel()
-        else
-            self:duelScore(duel)
-        end
-    elseif e.attacker == caster and self:enemy(e.target) and self.bloodlustEnds ~= nil then
-        if duel == nil then
-            if self.canDuelAgain and self.duelsUsed < (self:bonuses().awake and 2 or 1) and e.target ~= self.lastDuelTarget then
-                self:startDuel(e.target)
-            end
-        elseif e.target == duel.target and duel.ours < 2 then
-            duel.ours = duel.ours + 1
-            self:duelScore(duel)
-        end
-    end
-end
-function OgreMagiLegends.prototype.GetModifierPreAttack_CriticalStrike(self, e)
-    local duel = self.duel
-    if not IsServer() or duel == nil or duel.ours ~= 2 or e.attacker ~= self:GetParent() or e.target ~= duel.target or not self:ordinary(e) or not self:enemy(e.target) or time() >= duel.ends or not e.attacker:FindModifierByNameAndCaster(NATIVE_LUST, e.attacker) then
-        return 0
-    end
-    if duel.record ~= nil and e.record ~= duel.record then
-        return 0
-    end
-    duel.record = e.record
-    return 250
-end
-function OgreMagiLegends.prototype.OnAttackRecordDestroy(self, e)
-    local ____temp_21 = IsServer() and e.attacker == self:GetParent()
-    if ____temp_21 then
-        local ____opt_19 = self.duel
-        ____temp_21 = (____opt_19 and ____opt_19.record) == e.record
-    end
-    if ____temp_21 and self.duel ~= nil then
-        self.duel.record = nil
     end
 end
 function OgreMagiLegends.prototype.targetOf(self, e)
@@ -552,8 +585,8 @@ function OgreMagiLegends.prototype.OnAbilityStart(self, e)
         return
     end
     self.suppressFloor = true
-    local ____opt_22 = self.pending
-    if (____opt_22 and ____opt_22.at) == nil then
+    local ____opt_10 = self.pending
+    if (____opt_10 and ____opt_10.at) == nil then
         clear(self.targetBet)
     end
     self.pending = nil
@@ -588,9 +621,9 @@ function OgreMagiLegends.prototype.OnAbilityStart(self, e)
             DIE_BET,
             {duration = 2.4}
         )
-        local ____opt_24 = self.targetBet
-        if ____opt_24 ~= nil then
-            ____opt_24:SetStackCount(multiplier)
+        local ____opt_12 = self.targetBet
+        if ____opt_12 ~= nil then
+            ____opt_12:SetStackCount(multiplier)
         end
     end
 end
@@ -608,14 +641,14 @@ function OgreMagiLegends.prototype.nativeCast(self, e)
             cast.multiplier = nil
             clear(self.targetBet)
         end
-        local ____temp_28 = self:owns("ogre_l_multicast") and cast.multiplier == nil and self:enemy(cast.target) and self.dieProgress < 2 and self.dieBet == nil and not self:GetParent():PassivesDisabled()
-        if ____temp_28 then
-            local ____opt_26 = self:GetParent():FindAbilityByName(MULTICAST)
-            ____temp_28 = (____opt_26 and ____opt_26:GetLevel() or 0) > 0
+        local ____temp_16 = self:owns("ogre_l_multicast") and cast.multiplier == nil and self:enemy(cast.target) and self.dieProgress < 2 and self.dieBet == nil and not self:GetParent():PassivesDisabled()
+        if ____temp_16 then
+            local ____opt_14 = self:GetParent():FindAbilityByName(MULTICAST)
+            ____temp_16 = (____opt_14 and ____opt_14:GetLevel() or 0) > 0
         end
-        cast.eligible = ____temp_28
-        local ____self_casts_29 = self.casts
-        ____self_casts_29[#____self_casts_29 + 1] = cast
+        cast.eligible = ____temp_16
+        local ____self_casts_17 = self.casts
+        ____self_casts_17[#____self_casts_17 + 1] = cast
     end
     return cast
 end
@@ -628,6 +661,9 @@ end
 function OgreMagiLegends.prototype.OnAbilityFullyCast(self, e)
     if not IsServer() or e.unit ~= self:GetParent() or e.ability == nil or self.orbFreeCast then
         return
+    end
+    if e.ability:GetAbilityName() == BLOODLUST and self:targetOf(e) == self:GetParent() and self:owns("ogre_l_bloodlust") then
+        self:armChallenge(e.ability)
     end
     local cast = self:nativeCast(e)
     if cast == nil then
@@ -646,9 +682,9 @@ function OgreMagiLegends.prototype.OnAbilityFullyCast(self, e)
             DIE_BET,
             {duration = 1.8}
         ) or nil
-        local ____opt_30 = self.targetBet
-        if ____opt_30 ~= nil then
-            ____opt_30:SetStackCount(cast.multiplier)
+        local ____opt_18 = self.targetBet
+        if ____opt_18 ~= nil then
+            ____opt_18:SetStackCount(cast.multiplier)
         end
     end
 end
@@ -720,23 +756,12 @@ function OgreMagiLegends.prototype.OnTakeDamage(self, e)
     if not IsServer() or e.attacker ~= self:GetParent() then
         return
     end
-    local duel = self.duel
-    if duel ~= nil and duel.record ~= nil and e.record == duel.record and e.unit == duel.target and e.inflictor == nil and e.damage > 0 then
-        self:clearDuel()
-        self.canDuelAgain = self:bonuses().awake
-        e.attacker:Heal(
-            e.damage * (self:owns("ogre_p_thirst") and 0.6 or 0.5),
-            e.attacker:FindAbilityByName(BLOODLUST)
-        )
-        attached(LUST_FX, e.attacker)
-        return
+    local ____self_orbFreeCast_22 = self.orbFreeCast
+    if not ____self_orbFreeCast_22 then
+        local ____opt_20 = e.inflictor
+        ____self_orbFreeCast_22 = (____opt_20 and ____opt_20:GetAbilityName()) ~= FIREBLAST
     end
-    local ____self_orbFreeCast_34 = self.orbFreeCast
-    if not ____self_orbFreeCast_34 then
-        local ____opt_32 = e.inflictor
-        ____self_orbFreeCast_34 = (____opt_32 and ____opt_32:GetAbilityName()) ~= FIREBLAST
-    end
-    if ____self_orbFreeCast_34 then
+    if ____self_orbFreeCast_22 then
         return
     end
     local cast = self:currentCast(e.inflictor)
@@ -815,9 +840,9 @@ function OgreMagiLegends.prototype.syncDie(self)
         if self.dieIcon == nil then
             self.dieIcon = caster:AddNewModifier(caster, native, DIE_READY, {})
         end
-        local ____opt_39 = self.dieIcon
-        if ____opt_39 ~= nil then
-            ____opt_39:SetStackCount(self.dieProgress)
+        local ____opt_27 = self.dieIcon
+        if ____opt_27 ~= nil then
+            ____opt_27:SetStackCount(self.dieProgress)
         end
     end
 end
@@ -839,17 +864,17 @@ function OgreMagiLegends.prototype.settleRolls(self, at)
                     self:syncDie()
                 end
                 if at >= cast.ignitionEnds then
-                    local ____self_casts_42 = self.casts
-                    local ____i_41 = i
-                    i = ____i_41 - 1
-                    __TS__ArraySplice(____self_casts_42, ____i_41, 1)
-                    goto __continue148
+                    local ____self_casts_30 = self.casts
+                    local ____i_29 = i
+                    i = ____i_29 - 1
+                    __TS__ArraySplice(____self_casts_30, ____i_29, 1)
+                    goto __continue153
                 end
                 if not cast.potUsed and self.potato == nil and cast.ability:GetAbilityName() == IGNITE then
                     for ____, target in __TS__Iterator(cast.igniteCandidates) do
                         do
                             if not self:enemy(target) then
-                                goto __continue154
+                                goto __continue159
                             end
                             local burn = target:FindModifierByNameAndCaster(NATIVE_IGNITE, caster)
                             if burn ~= nil and burn:GetElapsedTime() < THINK * 2 then
@@ -859,11 +884,11 @@ function OgreMagiLegends.prototype.settleRolls(self, at)
                                 break
                             end
                         end
-                        ::__continue154::
+                        ::__continue159::
                     end
                 end
             end
-            ::__continue148::
+            ::__continue153::
             i = i + 1
         end
     end
@@ -878,8 +903,12 @@ function OgreMagiLegends.prototype.OnIntervalThink(self)
     if self.club ~= nil and at >= self.club.ends then
         self:clearClub()
     end
-    if self.landing ~= nil and at >= self.landing.lands then
-        self:landClub()
+    if self.landing ~= nil then
+        if at >= self.landing.lands then
+            self:landClub()
+        else
+            self:moveClub(self.landing, at)
+        end
     end
     if self.potato ~= nil then
         if alive(self.potato.owner) then
@@ -887,29 +916,35 @@ function OgreMagiLegends.prototype.OnIntervalThink(self)
         end
         if at >= self.potato.ends then
             self:burstPotato()
+        else
+            self:movePotato(self.potato)
         end
     end
-    if self.duel ~= nil then
-        self:syncBloodlust()
-        if self.duel ~= nil and (at >= self.duel.ends or not self:enemy(self.duel.target)) then
-            self:clearDuel()
-        end
+    if self.challenge ~= nil and at >= self.challenge.ends then
+        self:clearChallenge()
+    end
+    local duel = self.duel
+    if duel ~= nil and (at >= duel.ends or not self:enemy(duel.target) or duel.target:IsDebuffImmune() or distance(
+        caster:GetAbsOrigin(),
+        duel.target:GetAbsOrigin()
+    ) > 600) then
+        self:clearDuel()
     end
     if self.dieBet ~= nil and at >= self.dieBet.ends then
         clear(self.dieBet.icon)
         self.dieBet = nil
     end
-    local ____temp_44 = cast ~= nil
-    if ____temp_44 then
-        local ____temp_43
+    local ____temp_32 = cast ~= nil
+    if ____temp_32 then
+        local ____temp_31
         if cast.at ~= nil then
-            ____temp_43 = at > cast.at + 0.1
+            ____temp_31 = at > cast.at + 0.1
         else
-            ____temp_43 = at > cast.starts + 0.8 or at > cast.starts + 0.08 and not cast.ability:IsInAbilityPhase()
+            ____temp_31 = at > cast.starts + 0.8 or at > cast.starts + 0.08 and not cast.ability:IsInAbilityPhase()
         end
-        ____temp_44 = ____temp_43
+        ____temp_32 = ____temp_31
     end
-    if ____temp_44 then
+    if ____temp_32 then
         if cast.at == nil then
             clear(self.targetBet)
         end
@@ -931,19 +966,29 @@ function OgreMagiLegends.prototype.OnDeath(self, e)
         clear(potato.icon)
         potato.owner = nil
     end
-    local ____e_unit_47 = e.unit
-    local ____opt_45 = self.duel
-    if ____e_unit_47 == (____opt_45 and ____opt_45.target) then
+    local ____e_unit_35 = e.unit
+    local ____opt_33 = self.duel
+    if ____e_unit_35 == (____opt_33 and ____opt_33.target) then
+        if e.attacker == caster and alive(caster) then
+            local reward = (self:bonuses().awake and 18 or 12) + (self:owns("ogre_p_thirst") and 8 or 0)
+            caster:Heal(
+                caster:GetMaxHealth() * reward / 100,
+                caster:FindAbilityByName(BLOODLUST)
+            )
+            attached(LUST_FX, caster)
+        end
         self:clearDuel()
     end
     if e.unit ~= caster then
         return
     end
     self:clearClub()
+    self:clearLanding()
+    self:clearChallenge()
     self:clearDuel()
-    local ____clear_50 = clear
-    local ____opt_48 = self.dieBet
-    ____clear_50(____opt_48 and ____opt_48.icon)
+    local ____clear_38 = clear
+    local ____opt_36 = self.dieBet
+    ____clear_38(____opt_36 and ____opt_36.icon)
     clear(self.targetBet)
     self.dieBet = nil
     self.pending = nil
@@ -955,6 +1000,7 @@ modifier_orb_ogre_magi_legend = registerModifier("modifier_orb_ogre_magi_legend"
 modifier_orb_ogre_club_ready = registerModifier("modifier_orb_ogre_club_ready", ClubReady)
 modifier_orb_ogre_potato = registerModifier("modifier_orb_ogre_potato", HotPotato)
 modifier_orb_ogre_duel = registerModifier("modifier_orb_ogre_duel", DuelScore)
+modifier_orb_ogre_duel_ready = registerModifier("modifier_orb_ogre_duel_ready", DuelReady)
 modifier_orb_ogre_die_ready = registerModifier("modifier_orb_ogre_die_ready", DieReady)
 modifier_orb_ogre_die_bet = registerModifier("modifier_orb_ogre_die_bet", DieBet)
 return ____exports

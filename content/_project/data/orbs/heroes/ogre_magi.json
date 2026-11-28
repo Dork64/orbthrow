@@ -110,8 +110,8 @@
    ],
    "ru": "Кровожадность",
    "en": "Bloodthirst",
-   "ru_d": "Bloodlust дает Огру 15% вампиризма на 8 с. Победный удар в споре лечит на 60% фактического урона вместо 50%.",
-   "en_d": "Bloodlust grants Ogre 15% lifesteal for 8 s. The winning hit heals for 60% of its actual damage instead of 50%."
+   "ru_d": "Bloodlust даёт 15% вампиризма на 8 с. Победа в драке дополнительно восстанавливает 8% максимального здоровья.",
+   "en_d": "Bloodlust grants 15% lifesteal for 8 s. Winning a brawl restores an additional 8% max health."
   },
   {
    "id": "ogre_p_hide",
@@ -130,8 +130,8 @@
    ],
    "ru": "Толстая шкура",
    "en": "Thick Hide",
-   "ru_d": "Bloodlust дает Огру +6 брони и +10% сопротивления магии на 8 с. Спор длится ещё 0,8 с. Сопернику по-прежнему достаточно двух ответных ударов.",
-   "en_d": "Bloodlust grants Ogre +6 armor and +10% magic resistance for 8 s. The argument lasts 0.8 s longer. Two counterhits still win it."
+   "ru_d": "Bloodlust даёт +6 брони и +10% сопротивления магии на 8 с. Драка длится ещё 0,6 с.",
+   "en_d": "Bloodlust grants 6 armor and 10% magic resistance for 8 s. The brawl lasts 0.6 s longer."
   },
   {
    "id": "ogre_p_doublehit",
@@ -262,8 +262,8 @@
    "mech": true,
    "ru": "Я сказал — туда!",
    "en": "I Said, Over There!",
-   "ru_d": "После Fireblast по герою нажмите Q в течение 3 с и бросьте дубину в точку. Удар наносит 380 магического урона в центре и половину по краям. Если первая цель вышла из оглушения Fireblast, в центре будет 500 урона.",
-   "en_d": "After Fireblast on a hero, press Q within 3 s and pick a point to throw the club. It deals 380 magical damage at the center and half at the edges. If the initial target is out of the Fireblast stun, the center deals 500.",
+   "ru_d": "После Fireblast по герою нажмите Q в течение 6 с и бросьте дубину в точку. Она наносит 380 магического урона в центре и половину по краям. Если исходная цель вышла из оглушения Fireblast, центр наносит 500.",
+   "en_d": "After Fireblast on a hero, press Q within 6 s and throw the club at a point. It deals 380 magical damage at the center and half at the edge. If the initial target is out of the Fireblast stun, the center deals 500.",
    "ru_aw": "Дубина один раз отскакивает дальше в направлении броска.",
    "en_aw": "The club bounces once in the direction of the throw."
   },
@@ -276,8 +276,8 @@
    "mech": true,
    "ru": "Горячая картошка",
    "en": "Hot Potato",
-   "ru_d": "Первый герой, подожжённый вашим Ignite, получает котелок на 3 с. Обычный удар по другому герою передаёт ему котелок, в том числе Огру. Таймер не меняется. Котелок взрывается на 400 магического урона по носителю и вокруг.",
-   "en_d": "The first hero ignited gets a pot with a 3 s fuse. A regular attack on another hero passes it, including back to Ogre, without resetting the fuse. The pot explodes for 400 magical damage to the carrier and around them.",
+   "ru_d": "Первый герой под вашим Ignite получает котелок на 4 с. Обычным ударом по другому герою котелок можно передать, в том числе Огру. Таймер продолжает идти. Взрыв наносит 400 магического урона носителю и героям вокруг.",
+   "en_d": "The first hero under your Ignite gets the pot for 4 s. A regular hit against another hero passes it, including to Ogre. The fuse keeps running. The explosion deals 400 magic damage to the carrier and nearby heroes.",
    "ru_aw": "Урон растёт на 80 за передачу, максимум +160.",
    "en_aw": "Each pass adds 80 damage, up to +160."
   },
@@ -288,12 +288,12 @@
    "ab": "ogre_magi_bloodlust",
    "code": true,
    "mech": true,
-   "ru": "Спор на три удара",
-   "en": "Three-Hit Argument",
-   "ru_d": "Первая обычная атака Огра под Bloodlust открывает спор на 4 с. Третья атака по тому же герою критует на 250% и лечит Огра на половину реально нанесённого урона. Если соперник раньше дважды ударит Огра, спор сгорает.",
-   "en_d": "Ogre's first regular attack under Bloodlust starts a 4 s argument. His third hit on the same hero crits for 250% and heals Ogre for half of the damage dealt. If the rival lands two hits on Ogre first, the argument ends.",
-   "ru_aw": "После победы можно поспорить ещё раз с другим героем под тем же Bloodlust.",
-   "en_aw": "After winning, start one more argument against a different hero under the same Bloodlust."
+   "ru": "Драка один на один",
+   "en": "One-on-One Brawl",
+   "ru_d": "Дайте Bloodlust себе. В следующие 5 с повторным E можно вызвать героя в 375 на драку на 2,4 с. Оба вынуждены атаковать друг друга без предметов и заклинаний. Если Огр добивает соперника, он лечится на 12% максимального здоровья. Linken блокирует вызов.",
+   "en_d": "Cast Bloodlust on yourself. Within 5 s, recast E on a hero within 375 for a 2.4 s brawl. Both are forced to attack one another and cannot use spells or items. If Ogre lands the kill, he restores 12% max health. Linken’s blocks the challenge.",
+   "ru_aw": "Драка длится ещё 0,55 с. Победа восстанавливает 18% максимального здоровья.",
+   "en_aw": "The brawl lasts 0.55 s longer. Winning restores 18% max health."
   },
   {
    "id": "ogre_l_multicast",

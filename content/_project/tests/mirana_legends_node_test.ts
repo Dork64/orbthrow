@@ -55,7 +55,7 @@ describe("легендарки Мираны",()=>{
     it("ручной Starstorm роняет одну звезду; соперник может раздавить её до подбора",()=>{
         const f=fixture();
         f.hit(Q);expect(f.m.pickup).toBeUndefined();
-        f.cast(Q);f.hit(Q);const pickup=f.m.pickup;f.hit(Q);expect(f.m.pickup).toBe(pickup);
+        f.cast(Q);f.hit(Q);const pickup=f.m.pickup;expect(pickup.model).toBeDefined();f.hit(Q);expect(f.m.pickup).toBe(pickup);
         f.enemy.p=pickup.point;f.tick(1.2);expect(f.m.pickup).toBeUndefined();expect(f.m.held).toBeUndefined();
     });
     it("подобранная звезда в пробуждении проходит через первого и поражает второго один раз",()=>{
@@ -78,14 +78,14 @@ describe("легендарки Мираны",()=>{
         f.m.Redirect(f.skills.get("orb_mirana_arrow"),pos(440,1000));
         const id=f.m.arrowFlight.id;
         expect(f.m.ArrowHit(f.enemy,pos(440,450),id)).toBe(true);
-        expect(ApplyDamage).toHaveBeenCalledWith(expect.objectContaining({damage:360+180*(404+412)/1500}));
+        expect(ApplyDamage).toHaveBeenCalledWith(expect.objectContaining({damage:1.5*(360+180*(404+412)/1500)+140}));
         f.m.OnAbilityStart({unit:f.h,ability:a});f.cast(W);f.tick(2);f.tree.standing=false;f.tick(2.1);
         expect(f.m.pin).toBeUndefined();
     });
     it("прыжок даёт ровно один поворот и веер, три попадания учитываются отдельно по каждому герою",()=>{
         const f=fixture(true);f.cast(E);f.m.Turn(f.skills.get("orb_mirana_turn"),pos(150,160));
         const to=f.m.leap.turn.to;f.m.Turn(f.skills.get("orb_mirana_turn"),pos(-150,-160));expect(f.m.leap.turn.to).toBe(to);
-        f.tick(1.4);expect(ProjectileManager.CreateLinearProjectile).toHaveBeenCalledTimes(3);
+        f.tick(1.42);expect(ProjectileManager.CreateLinearProjectile).toHaveBeenCalledTimes(3);
         const proj=vi.mocked(ProjectileManager.CreateLinearProjectile).mock.calls[0][0] as any;
         f.m.FanHit(f.enemy,proj.ExtraData.id);f.m.FanHit(f.enemy2,proj.ExtraData.id);f.m.FanHit(f.enemy,proj.ExtraData.id);
         expect(f.skills.get(E)?.StartCooldown).not.toHaveBeenCalled();
@@ -94,7 +94,7 @@ describe("легендарки Мираны",()=>{
     it("луны расходятся только когда Мирана исчезла; после уничтожения одной можно поменяться с оставшейся",()=>{
         const f=fixture(true);f.cast(R);f.tick(1.2);expect(CreateIllusions).not.toHaveBeenCalled();
         f.h.FindAllModifiers=()=>[{GetName:()=>"modifier_mirana_moonlight_shadow"}] as any;
-        f.tick(2.5);expect(CreateIllusions).toHaveBeenCalledOnce();f.c1.alive=false;f.tick(2.6);
+        f.tick(2.5);expect(CreateIllusions).toHaveBeenCalledWith(f.h,f.h,expect.objectContaining({duration:10}),2,36,false,true);f.c1.alive=false;f.tick(2.6);
         f.h.root=true;f.m.SwapMoon(pos(-600));expect(f.h.p.x).toBe(0);
         f.h.root=false;f.m.SwapMoon(pos(-600));expect(f.h.p.x).toBe(-120);expect(f.m.moons).toBeUndefined();
         expect(f.h.AddNewModifier).toHaveBeenCalledWith(f.h,f.skills.get(R),"modifier_orb_mirana_shot",{duration:4});

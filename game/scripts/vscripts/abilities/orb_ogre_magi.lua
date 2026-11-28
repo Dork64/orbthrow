@@ -40,34 +40,69 @@ function Club.prototype.OnSpellStart(self)
         end
     end
 end
+local Challenge = __TS__Class()
+Challenge.name = "Challenge"
+__TS__ClassExtends(Challenge, AbilityBase)
+function Challenge.prototype.CastFilterResultTarget(self, target)
+    local ____IsServer_result_8 = IsServer()
+    if ____IsServer_result_8 then
+        local ____opt_6 = legends(self:GetCaster())
+        ____IsServer_result_8 = not (____opt_6 and ____opt_6:CanChallenge(target))
+    end
+    if ____IsServer_result_8 then
+        return UF_FAIL_CUSTOM
+    end
+    return UnitFilter(
+        target,
+        DOTA_UNIT_TARGET_TEAM_ENEMY,
+        DOTA_UNIT_TARGET_HERO,
+        DOTA_UNIT_TARGET_FLAG_NONE,
+        self:GetCaster():GetTeamNumber()
+    )
+end
+function Challenge.prototype.GetCustomCastErrorTarget(self)
+    return "#orb_ogre_challenge_invalid"
+end
+function Challenge.prototype.OnSpellStart(self)
+    if IsServer() then
+        local ____opt_9 = legends(self:GetCaster())
+        if ____opt_9 ~= nil then
+            ____opt_9:StartChallenge(
+                self:GetCursorTarget(),
+                self
+            )
+        end
+    end
+end
 local LoadedDie = __TS__Class()
 LoadedDie.name = "LoadedDie"
 __TS__ClassExtends(LoadedDie, AbilityBase)
 function LoadedDie.prototype.CastFilterResult(self)
-    local ____temp_9
-    local ____temp_8 = not IsServer()
-    if not ____temp_8 then
-        local ____opt_6 = legends(self:GetCaster())
-        ____temp_8 = ____opt_6 and ____opt_6:CanLoadDie()
+    local ____temp_14
+    local ____temp_13 = not IsServer()
+    if not ____temp_13 then
+        local ____opt_11 = legends(self:GetCaster())
+        ____temp_13 = ____opt_11 and ____opt_11:CanLoadDie()
     end
-    if ____temp_8 then
-        ____temp_9 = UF_SUCCESS
+    if ____temp_13 then
+        ____temp_14 = UF_SUCCESS
     else
-        ____temp_9 = UF_FAIL_CUSTOM
+        ____temp_14 = UF_FAIL_CUSTOM
     end
-    return ____temp_9
+    return ____temp_14
 end
 function LoadedDie.prototype.GetCustomCastError(self)
     return "#orb_ogre_die_invalid"
 end
 function LoadedDie.prototype.OnSpellStart(self)
     if IsServer() then
-        local ____opt_10 = legends(self:GetCaster())
-        if ____opt_10 ~= nil then
-            ____opt_10:LoadDie()
+        local ____opt_15 = legends(self:GetCaster())
+        if ____opt_15 ~= nil then
+            ____opt_15:LoadDie()
         end
     end
 end
 orb_ogre_club = registerAbility("orb_ogre_club", Club)
+orb_ogre_challenge = registerAbility("orb_ogre_challenge", Challenge)
 orb_ogre_loaded_die = registerAbility("orb_ogre_loaded_die", LoadedDie)
 return ____exports

@@ -33,6 +33,8 @@ local SHINE = "particles/units/heroes/hero_mirana/mirana_starfall_moonray.vpcf"
 local BURST = "particles/units/heroes/hero_mirana/mirana_shard_impact.vpcf"
 local ARROW = "particles/units/heroes/hero_mirana/mirana_spell_arrow.vpcf"
 local STAR_SHOT = "particles/units/heroes/hero_mirana/mirana_base_attack.vpcf"
+local STAR_MODEL = "models/events/crownfall/match3/gems/gem_fragments.vmdl"
+local LEAP_WINDOW = 1.45
 local ARROW_MODEL = "models/projectiles/mirana_arrow.vmdl"
 local RING = "particles/ui_mouseactions/range_display.vpcf"
 local function clock()
@@ -374,11 +376,20 @@ function MiranaLegends.prototype.OnAbilityStart(self, e)
     end
 end
 function MiranaLegends.prototype.GetModifierOverrideAbilitySpecial(self, e)
-    return IsServer() and self.arrowPlan ~= nil and self.arrowPlan.expires >= clock() and validTree(self.arrowPlan.tree) and e.ability == self.arrowPlan.skill and e.ability_special_value == "arrow_range" and 1 or 0
+    if not IsServer() or e.ability == nil then
+        return 0
+    end
+    if e.ability_special_value == "leap_speed" and e.ability:GetAbilityName() == E and self:owned("mir_l_starhunt") then
+        return 1
+    end
+    return self.arrowPlan ~= nil and self.arrowPlan.expires >= clock() and validTree(self.arrowPlan.tree) and e.ability == self.arrowPlan.skill and e.ability_special_value == "arrow_range" and 1 or 0
 end
-function MiranaLegends.prototype.GetModifierOverrideAbilitySpecialValue(self)
-    local ____opt_2 = self.arrowPlan
-    return ____opt_2 and ____opt_2.distance or 0
+function MiranaLegends.prototype.GetModifierOverrideAbilitySpecialValue(self, e)
+    if (e and e.ability_special_value) == "leap_speed" then
+        return e.ability:GetSpecialValueFor("leap_distance") / LEAP_WINDOW
+    end
+    local ____opt_4 = self.arrowPlan
+    return ____opt_4 and ____opt_4.distance or 0
 end
 function MiranaLegends.prototype.watchStarfall(self, e)
     if e.ability:GetAbilityName() ~= Q or not self:owned("mir_l_starstorm") or self.held or self.pickup or clock() - self.qCastAt < 0.05 then
@@ -445,27 +456,37 @@ function MiranaLegends.prototype.OnTakeDamage(self, e)
         point = pos
     end
     point = GetGroundPosition(point, h)
+    local model = SpawnEntityFromTableSynchronous("prop_dynamic", {model = STAR_MODEL, solid = 0, disableshadows = 1, modelscale = 1.65})
+    if model ~= nil then
+        model:SetAbsOrigin(Vector(point.x, point.y, point.z + 70))
+    end
     self.pickup = {
         point = point,
-        ends = clock() + 4,
+        ends = clock() + 6,
         ring = ring(point, 84),
-        beam = effect(MOON, point)
+        beam = effect(MOON, point),
+        model = model
     }
     burst(SHINE, point)
 end
 function MiranaLegends.prototype.clearPickup(self)
-    local ____stop_6 = stop
-    local ____opt_4 = self.pickup
-    ____stop_6(____opt_4 and ____opt_4.ring)
-    local ____stop_9 = stop
-    local ____opt_7 = self.pickup
-    ____stop_9(____opt_7 and ____opt_7.beam)
+    local ____stop_10 = stop
+    local ____opt_8 = self.pickup
+    ____stop_10(____opt_8 and ____opt_8.ring)
+    local ____stop_13 = stop
+    local ____opt_11 = self.pickup
+    ____stop_13(____opt_11 and ____opt_11.beam)
+    local ____opt_14 = self.pickup
+    local model = ____opt_14 and ____opt_14.model
+    if model ~= nil and IsValidEntity(model) then
+        UTIL_Remove(model)
+    end
     self.pickup = nil
 end
 function MiranaLegends.prototype.clearHeld(self)
-    local ____remove_12 = remove
-    local ____opt_10 = self.held
-    ____remove_12(____opt_10 and ____opt_10.icon)
+    local ____remove_18 = remove
+    local ____opt_16 = self.held
+    ____remove_18(____opt_16 and ____opt_16.icon)
     self.held = nil
     self:swap(Q, THROW, false)
 end
@@ -479,10 +500,10 @@ function MiranaLegends.prototype.ThrowStar(self, a, point)
     if not base then
         return
     end
-    local ____self_13, ____seq_14 = self, "seq"
-    local ____self_seq_15 = ____self_13[____seq_14] + 1
-    ____self_13[____seq_14] = ____self_seq_15
-    local id = ____self_seq_15
+    local ____self_19, ____seq_20 = self, "seq"
+    local ____self_seq_21 = ____self_19[____seq_20] + 1
+    ____self_19[____seq_20] = ____self_seq_21
+    local id = ____self_seq_21
     self.stars:set(
         id,
         {
@@ -532,10 +553,10 @@ function MiranaLegends.prototype.StarHit(self, target, id)
             target:GetAbsOrigin()
         )
     end
-    local ____s_16, ____hits_17 = s, "hits"
-    local ____s_hits_18 = ____s_16[____hits_17] - 1
-    ____s_16[____hits_17] = ____s_hits_18
-    if ____s_hits_18 <= 0 then
+    local ____s_22, ____hits_23 = s, "hits"
+    local ____s_hits_24 = ____s_22[____hits_23] - 1
+    ____s_22[____hits_23] = ____s_hits_24
+    if ____s_hits_24 <= 0 then
         self.stars:delete(id)
         return true
     end
@@ -549,11 +570,11 @@ function MiranaLegends.prototype.lodge(self, tree, dir, travelled, left, turns, 
     local h = self:GetParent()
     local p = tree:GetAbsOrigin()
     local model = SpawnEntityFromTableSynchronous("prop_dynamic", {model = ARROW_MODEL, solid = 0, disableshadows = 1, modelscale = 1.25})
-    if model then
+    if model ~= nil then
         model:SetAbsOrigin(Vector(p.x - dir.x * 20, p.y - dir.y * 20, p.z + 100))
         model:SetForwardVector(dir)
     end
-    local window = self:owned("mir_p_quiver") and 2.8 or 2
+    local window = self:owned("mir_p_quiver") and 4.8 or 4
     self.pin = {
         tree = tree,
         point = p,
@@ -601,10 +622,10 @@ function MiranaLegends.prototype.Redirect(self, a, point)
         h:GetForwardVector()
     )
     local from = step(pin.point, dir, 38)
-    local ____self_19, ____seq_20 = self, "seq"
-    local ____self_seq_21 = ____self_19[____seq_20] + 1
-    ____self_19[____seq_20] = ____self_seq_21
-    local id = ____self_seq_21
+    local ____self_25, ____seq_26 = self, "seq"
+    local ____self_seq_27 = ____self_25[____seq_26] + 1
+    ____self_25[____seq_26] = ____self_seq_27
+    local id = ____self_seq_27
     self:clearPin()
     local projectile = self:projectile(
         a,
@@ -694,7 +715,7 @@ function MiranaLegends.prototype.ArrowHit(self, target, point, id)
         h,
         a,
         "modifier_stunned",
-        {duration = (min + (max - min) * pct) * (1 - target:GetStatusResistance())}
+        {duration = (min + (max - min) * pct + 1.1) * (1 - target:GetStatusResistance())}
     )
     local baseDamage = a:GetSpecialValueFor("AbilityDamage")
     local damage = baseDamage > 0 and baseDamage or a:GetAbilityDamage()
@@ -703,7 +724,7 @@ function MiranaLegends.prototype.ArrowHit(self, target, point, id)
         victim = target,
         ability = a,
         damage_type = DAMAGE_TYPE_MAGICAL,
-        damage = damage + a:GetSpecialValueFor("arrow_bonus_damage") * pct
+        damage = 1.5 * (damage + a:GetSpecialValueFor("arrow_bonus_damage") * pct) + 140
     })
     if h:HasScepter() then
         local q = h:FindAbilityByName(Q)
@@ -726,14 +747,7 @@ function MiranaLegends.prototype.beginLeap(self, skill)
     local start = h:GetAbsOrigin()
     local direction = h:GetForwardVector()
     local range = skill:GetSpecialValueFor("leap_distance")
-    local speed = math.max(
-        1,
-        skill:GetSpecialValueFor("leap_speed")
-    )
-    local life = math.max(
-        0.32,
-        math.min(1.1, range / speed)
-    )
+    local life = LEAP_WINDOW
     self.leap = {
         start = start,
         direction = direction,
@@ -813,8 +827,8 @@ function MiranaLegends.prototype.Turn(self, _ability, point)
     }
     j.direction = dir
     j.ends = clock() + math.max(
-        0.15,
-        dist(pos, to) / 1100
+        0.4,
+        dist(pos, to) / 800
     )
     ParticleManager:SetParticleControl(j.shadow, 0, to)
     self:swap(E, TURN, false)
@@ -868,10 +882,10 @@ function MiranaLegends.prototype.land(self)
         return
     end
     burst(BURST, point)
-    local ____self_22, ____seq_23 = self, "seq"
-    local ____self_seq_24 = ____self_22[____seq_23] + 1
-    ____self_22[____seq_23] = ____self_seq_24
-    local id = ____self_seq_24
+    local ____self_28, ____seq_29 = self, "seq"
+    local ____self_seq_30 = ____self_28[____seq_29] + 1
+    ____self_28[____seq_29] = ____self_seq_30
+    local id = ____self_seq_30
     self.fans:set(
         id,
         {
@@ -974,7 +988,7 @@ function MiranaLegends.prototype.createMoons(self)
         return
     end
     self:clearMoons()
-    local duration = self:owned("mir_p_shadow") and 5 or 4
+    local duration = self:owned("mir_p_shadow") and 11 or 10
     local keys = {
         outgoing_damage = -100,
         incoming_damage = 0,
@@ -997,7 +1011,7 @@ function MiranaLegends.prototype.createMoons(self)
             do
                 local clone = clones[i + 1]
                 if not alive(clone) then
-                    goto __continue145
+                    goto __continue149
                 end
                 local dir = spin(
                     h:GetForwardVector(),
@@ -1019,10 +1033,10 @@ function MiranaLegends.prototype.createMoons(self)
                     1050
                 )
                 clone:MoveToPosition(goal)
-                local ____self_clones_25 = self.clones
-                ____self_clones_25[#____self_clones_25 + 1] = clone
+                local ____self_clones_31 = self.clones
+                ____self_clones_31[#____self_clones_31 + 1] = clone
             end
-            ::__continue145::
+            ::__continue149::
             i = i + 1
         end
     end
@@ -1037,9 +1051,9 @@ end
 function MiranaLegends.prototype.clearMoons(self)
     local old = self.clones
     self.clones = {}
-    local ____remove_28 = remove
-    local ____opt_26 = self.moons
-    ____remove_28(____opt_26 and ____opt_26.icon)
+    local ____remove_34 = remove
+    local ____opt_32 = self.moons
+    ____remove_34(____opt_32 and ____opt_32.icon)
     self.moons = nil
     self:swap(R, SWAP, false)
     for ____, clone in ipairs(old) do
@@ -1064,7 +1078,7 @@ function MiranaLegends.prototype.SwapMoon(self, point)
     for ____, c in ipairs(self.clones) do
         do
             if not alive(c) or not legal(c:GetAbsOrigin()) then
-                goto __continue157
+                goto __continue161
             end
             local towards = aim(
                 origin,
@@ -1077,7 +1091,7 @@ function MiranaLegends.prototype.SwapMoon(self, point)
                 score = dot
             end
         end
-        ::__continue157::
+        ::__continue161::
     end
     if not best or score < 0 then
         return

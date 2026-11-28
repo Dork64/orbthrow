@@ -52,6 +52,7 @@ ____exports.MODIFIER_LINKS = {
     {"modifier_orb_ogre_club_ready", "modifiers/modifier_orb_ogre_magi_legend"},
     {"modifier_orb_ogre_potato", "modifiers/modifier_orb_ogre_magi_legend"},
     {"modifier_orb_ogre_duel", "modifiers/modifier_orb_ogre_magi_legend"},
+    {"modifier_orb_ogre_duel_ready", "modifiers/modifier_orb_ogre_magi_legend"},
     {"modifier_orb_ogre_die_ready", "modifiers/modifier_orb_ogre_magi_legend"},
     {"modifier_orb_ogre_die_bet", "modifiers/modifier_orb_ogre_magi_legend"},
     {"modifier_orb_necro_legend", "modifiers/modifier_orb_necro_legend"},

@@ -85,6 +85,18 @@
 		"AbilityManaCost" "0"
 		"MaxLevel" "1"
 	}
+	"orb_ogre_challenge"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_ogre_magi"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | DOTA_ABILITY_BEHAVIOR_DONT_PROC_OTHER_ABILITIES"
+		"AbilityTextureName" "ogre_magi_bloodlust"
+		"AbilityUnitTargetTeam" "DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitTargetType" "DOTA_UNIT_TARGET_HERO"
+		"AbilityCastRange" "375"
+		"AbilityCastPoint" "0.25"
+		"MaxLevel" "1"
+	}
 	"orb_ogre_loaded_die"
 	{
 		"BaseClass" "ability_lua"

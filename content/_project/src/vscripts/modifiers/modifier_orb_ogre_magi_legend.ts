@@ -7,6 +7,7 @@ declare global {
     var modifier_orb_ogre_club_ready: unknown;
     var modifier_orb_ogre_potato: unknown;
     var modifier_orb_ogre_duel: unknown;
+    var modifier_orb_ogre_duel_ready: unknown;
     var modifier_orb_ogre_die_ready: unknown;
     var modifier_orb_ogre_die_bet: unknown;
 }
@@ -19,6 +20,8 @@ const CLUB = "orb_ogre_club";
 const LOADED_DIE = "orb_ogre_loaded_die";
 const CLUB_READY = "modifier_orb_ogre_club_ready";
 const POTATO = "modifier_orb_ogre_potato";
+const CHALLENGE = "orb_ogre_challenge";
+const DUEL_READY = "modifier_orb_ogre_duel_ready";
 const DUEL = "modifier_orb_ogre_duel";
 const DIE_READY = "modifier_orb_ogre_die_ready";
 const DIE_BET = "modifier_orb_ogre_die_bet";
@@ -31,15 +34,20 @@ const IGNITE_FX = "particles/units/heroes/hero_ogre_magi/ogre_magi_ignite.vpcf";
 const LUST_FX = "particles/units/heroes/hero_ogre_magi/ogre_magi_bloodlust_buff.vpcf";
 const RING_FX = "particles/ui_mouseactions/drag_selected_ring.vpcf";
 const THINK = 0.04;
-const CLUB_WINDOW = 3;
+const CLUB_MODEL = "models/heroes/ogre_magi/ogre_magi_weapon.vmdl";
+const POT_MODEL = "models/items/wards/fall20_cauldron_ward/fall20_cauldron_ward.vmdl";
+const DUEL_FX = "particles/units/heroes/hero_legion_commander/legion_commander_duel_ring.vpcf";
+const CLUB_WINDOW = 6;
 const CLUB_RANGE = 825;
 const CLUB_RADIUS = 290;
 const CLUB_CENTER = 150;
-const CLUB_FLIGHT = 0.42;
+const CLUB_FLIGHT = 0.65;
 const CLUB_BOUNCE = 400;
-const POTATO_FUSE = 3;
+const POTATO_FUSE = 4;
 const POTATO_RADIUS = 325;
-const DUEL_WINDOW = 4;
+const DUEL_WINDOW = 2.4;
+const CHALLENGE_WINDOW = 5;
+const CHALLENGE_RANGE = 375;
 const BET_WINDOW = 4;
 const ROLLED_AT = 0.75; // первый штатный повтор приходит через 0.6 с.
 
@@ -85,8 +93,13 @@ class HotPotato extends ClubReady {
     GetEffectName() { return IGNITE_FX; }
     GetEffectAttachType() { return ParticleAttachment.OVERHEAD_FOLLOW; }
 }
-class DuelScore extends ClubReady {
-    GetTexture() { return BLOODLUST; }
+class DuelReady extends ClubReady { GetTexture() { return BLOODLUST; } }
+class DuelScore extends DuelReady {
+    IsDebuff() { return this.GetParent() !== this.GetCaster(); }
+    IgnoreTenacity() { return true; }
+    CheckState() {
+        return { [ModifierState.TAUNTED]: true, [ModifierState.SILENCED]: true, [ModifierState.MUTED]: true };
+    }
     GetEffectName() { return LUST_FX; }
     GetEffectAttachType() { return ParticleAttachment.ABSORIGIN_FOLLOW; }
 }
@@ -108,6 +121,9 @@ interface ClubWindow {
 interface ClubLanding {
     point: Vector;
     centerDamage: number;
+    origin: Vector;
+    launched: number;
+    model?: CBaseEntity;
     lands: number;
     marker: ParticleID;
     ability: CDOTABaseAbility;
@@ -121,16 +137,15 @@ interface Potato {
     ends: number;
     transfers: number;
     awake: boolean;
+    model?: CBaseEntity;
     icon?: CDOTA_Buff;
 }
 interface Duel {
     target: CDOTA_BaseNPC;
     ends: number;
-    ours: number;
-    theirs: number;
+    ring: ParticleID;
     scoreOgre?: CDOTA_Buff;
     scoreEnemy?: CDOTA_Buff;
-    record?: number;
 }
 interface Cast {
     ability: CDOTABaseAbility;
@@ -154,10 +169,8 @@ export class OgreMagiLegends extends ModBase {
     private dieShown = false;
     private potato?: Potato;
     private duel?: Duel;
-    private bloodlustEnds?: number;
-    private lastDuelTarget?: CDOTA_BaseNPC;
-    private duelsUsed = 0;
-    private canDuelAgain = false;
+    private challenge?: { ends: number; icon?: CDOTA_Buff };
+    private challengeShown = false;
     private dieProgress = 0;
     private dieIcon?: CDOTA_Buff;
     private dieBet?: { ends: number; multiplier: number; icon?: CDOTA_Buff };
@@ -175,7 +188,7 @@ export class OgreMagiLegends extends ModBase {
         return [
             ModifierFunction.ON_ABILITY_START, ModifierFunction.ON_ABILITY_EXECUTED, ModifierFunction.ON_ABILITY_FULLY_CAST,
             ModifierFunction.ON_MODIFIER_ADDED, ModifierFunction.ON_TAKEDAMAGE, ModifierFunction.ON_ATTACK_LANDED,
-            ModifierFunction.PREATTACK_CRITICALSTRIKE, ModifierFunction.ON_ATTACK_RECORD_DESTROY, ModifierFunction.ON_DEATH,
+            ModifierFunction.ON_DEATH,
         ];
     }
     private bonuses() { return bonusesOf(this.GetParent().GetPlayerOwnerID(), true, time()); }
@@ -236,17 +249,37 @@ export class OgreMagiLegends extends ModBase {
         const target = window.target;
         const stunEnded = !alive(target) || (!target.FindModifierByNameAndCaster(NATIVE_STUN, caster) && !target.IsStunned());
         this.clearClub();
-        if (this.landing !== undefined) clearParticle(this.landing.marker);
+        this.clearLanding();
         this.landing = {
-            point, ability, centerDamage: (stunEnded ? 500 : 380) + (this.owns("ogre_p_bigblast") ? 65 : 0), lands: time() + CLUB_FLIGHT,
+            point, ability, origin, launched: time(), model: this.spawnModel(CLUB_MODEL, 1.6), centerDamage: (stunEnded ? 500 : 380) + (this.owns("ogre_p_bigblast") ? 65 : 0), lands: time() + CLUB_FLIGHT,
             marker: warning(point, CLUB_RADIUS), hit: new Set<EntityIndex>(),
             bounce: this.bonuses().awake ? GetGroundPosition(
                 Vector(point.x + direction.x * CLUB_BOUNCE, point.y + direction.y * CLUB_BOUNCE, point.z), caster) : undefined,
         };
+        this.moveClub(this.landing, time());
         const trace = atPoint(IGNITE_FX, origin);
         ParticleManager.SetParticleControl(trace, 1, point);
         ParticleManager.ReleaseParticleIndex(trace);
         EmitSoundOn("Hero_OgreMagi.Ignite.Cast", caster);
+    }
+    private spawnModel(path: string, scale: number) {
+        return SpawnEntityFromTableSynchronous("prop_dynamic", { model: path, modelscale: scale, solid: 0, disableshadows: 1 });
+    }
+    private dropModel(model?: CBaseEntity) {
+        if (model !== undefined && IsValidEntity(model)) UTIL_Remove(model);
+    }
+    private clearLanding() {
+        if (this.landing === undefined) return;
+        clearParticle(this.landing.marker);
+        this.dropModel(this.landing.model);
+        this.landing = undefined;
+    }
+    private moveClub(drop: ClubLanding, at: number) {
+        if (drop.model===undefined) return;
+        const t = Math.max(0, Math.min(1, (at - drop.launched) / CLUB_FLIGHT));
+        const a=drop.origin, b=drop.point;
+        drop.model.SetAbsOrigin(Vector(a.x+(b.x-a.x)*t,a.y+(b.y-a.y)*t,a.z+(b.z-a.z)*t+55*(1-t)+220*4*t*(1-t)));
+        drop.model.SetAngles(45 + t*500, 360*t, 0);
     }
     private landClub() {
         const drop = this.landing;
@@ -260,18 +293,22 @@ export class OgreMagiLegends extends ModBase {
             this.magic(victim, drop.ability, distance(victim.GetAbsOrigin(), drop.point) <= CLUB_CENTER
                 ? drop.centerDamage : drop.centerDamage * 0.5);
         }
-        this.landing = drop.bounce === undefined ? undefined : {
-            ...drop, point: drop.bounce, bounce: undefined, lands: time() + CLUB_FLIGHT,
-            marker: warning(drop.bounce, CLUB_RADIUS),
-        };
+        if (drop.bounce === undefined) {
+            this.dropModel(drop.model);
+            this.landing = undefined;
+        } else {
+            this.landing = { ...drop, origin: drop.point, point: drop.bounce, bounce: undefined,
+                launched: time(), lands: time()+CLUB_FLIGHT, marker: warning(drop.bounce, CLUB_RADIUS) };
+            this.moveClub(this.landing,time());
+        }
     }
 
     private placePotato(spell: Cast, unit: CDOTA_BaseNPC) {
         if (spell.potUsed || this.potato !== undefined || time() > spell.ignitionEnds || !this.enemy(unit) ||
             unit.IsDebuffImmune() || !this.owns("ogre_l_ignite")) return;
         spell.potUsed = true;
-        const potato = { owner: unit, last: unit.GetAbsOrigin(), ability: spell.ability,
-            ends: time() + POTATO_FUSE, transfers: 0, awake: this.bonuses().awake };
+        const potato: Potato = { owner: unit, last: unit.GetAbsOrigin(), ability: spell.ability,
+            ends: time() + POTATO_FUSE, transfers: 0, awake: this.bonuses().awake, model: this.spawnModel(POT_MODEL, 0.72) };
         this.potato = potato;
         this.potatoMark(potato, unit);
     }
@@ -282,12 +319,18 @@ export class OgreMagiLegends extends ModBase {
         potato.icon = unit.AddNewModifier(this.GetParent(), potato.ability, POTATO,
             { duration: Math.max(0.01, potato.ends - time()) });
         potato.icon?.SetStackCount(1 + potato.transfers);
+        this.movePotato(potato);
+    }
+    private movePotato(potato: Potato) {
+        const p=potato.last;
+        potato.model?.SetAbsOrigin(Vector(p.x,p.y,p.z+145));
     }
     private burstPotato() {
         const potato = this.potato;
         if (potato === undefined) return;
         this.potato = undefined;
         clear(potato.icon);
+        this.dropModel(potato.model);
         const point = alive(potato.owner) ? potato.owner.GetAbsOrigin() : potato.last;
         const damage = 400 + (this.owns("ogre_p_napalm") ? 65 : 0) + (potato.awake ? 80 * Math.min(2, potato.transfers) : 0);
         ParticleManager.ReleaseParticleIndex(atPoint(FIRE_FX, point));
@@ -298,43 +341,51 @@ export class OgreMagiLegends extends ModBase {
             this.magic(caster, potato.ability, damage);
     }
 
+    private clearChallenge() {
+        clear(this.challenge?.icon);
+        this.challenge=undefined;
+        if (this.challengeShown) this.challengeShown=this.swap(BLOODLUST, CHALLENGE, false);
+    }
+    private armChallenge(ability: CDOTABaseAbility) {
+        if(this.duel!==undefined) return;
+        this.clearChallenge();
+        const caster=this.GetParent();
+        this.challengeShown=this.swap(BLOODLUST,CHALLENGE,true);
+        if(this.challengeShown) this.challenge={ends:time()+CHALLENGE_WINDOW,
+            icon:caster.AddNewModifier(caster,ability,DUEL_READY,{duration:CHALLENGE_WINDOW})};
+    }
+    CanChallenge(target?: CDOTA_BaseNPC): boolean {
+        const caster=this.GetParent();
+        return this.challenge!==undefined && time()<this.challenge.ends && this.duel===undefined &&
+            alive(caster) && this.enemy(target) && !target.IsDebuffImmune() &&
+            distance(caster.GetAbsOrigin(),target.GetAbsOrigin())<=CHALLENGE_RANGE+caster.GetCastRangeBonus()+32 &&
+            caster.FindModifierByNameAndCaster(NATIVE_LUST,caster)!==undefined;
+    }
+    StartChallenge(target: CDOTA_BaseNPC | undefined, ability: CDOTABaseAbility) {
+        if(target===undefined || !this.CanChallenge(target))return;
+        this.clearChallenge();
+        if(target.TriggerSpellAbsorb(ability))return;
+        const caster=this.GetParent();
+        const window=DUEL_WINDOW+(this.bonuses().awake?0.55:0)+(this.owns("ogre_p_hide")?0.6:0);
+        const center=GetGroundPosition(target.GetAbsOrigin(),caster);
+        this.duel={target,ends:time()+window,ring:atPoint(DUEL_FX,center),
+            scoreOgre:caster.AddNewModifier(caster,ability,DUEL,{duration:window}),
+            scoreEnemy:target.AddNewModifier(caster,ability,DUEL,{duration:window})};
+        caster.SetForceAttackTarget(target);
+        target.SetForceAttackTarget(caster);
+        caster.MoveToTargetToAttack(target);
+        target.MoveToTargetToAttack(caster);
+    }
     private clearDuel() {
-        clear(this.duel?.scoreOgre);
-        clear(this.duel?.scoreEnemy);
-        this.duel = undefined;
-    }
-    private syncBloodlust() {
-        const caster = this.GetParent();
-        const lust = caster.FindModifierByNameAndCaster(NATIVE_LUST, caster);
-        if (lust === undefined) {
-            this.clearDuel();
-            this.bloodlustEnds = undefined;
-            return;
-        }
-        const ends = lust.GetDieTime();
-        if (this.bloodlustEnds !== undefined && Math.abs(this.bloodlustEnds - ends) < 0.1) return;
-        this.clearDuel();
-        this.bloodlustEnds = ends;
-        this.duelsUsed = 0;
-        this.canDuelAgain = true;
-        this.lastDuelTarget = undefined;
-    }
-    private startDuel(target: CDOTA_BaseNPC) {
-        const caster = this.GetParent(), ability = caster.FindAbilityByName(BLOODLUST);
-        const window = DUEL_WINDOW + (this.owns("ogre_p_hide") ? 0.8 : 0);
-        const s: Duel = { target, ends: time() + window, ours: 1, theirs: 0,
-            scoreOgre: caster.AddNewModifier(caster, ability, DUEL, { duration: window }),
-            scoreEnemy: target.AddNewModifier(caster, ability, DUEL, { duration: window }) };
-        this.duel = s;
-        this.duelsUsed++;
-        this.canDuelAgain = false;
-        this.lastDuelTarget = target;
-        this.duelScore(s);
-    }
-    private duelScore(s: Duel) {
-        const score = s.ours * 10 + s.theirs;
-        s.scoreOgre?.SetStackCount(score);
-        s.scoreEnemy?.SetStackCount(score);
+        const duel=this.duel;
+        if(duel===undefined)return;
+        this.duel=undefined;
+        clear(duel.scoreOgre);
+        clear(duel.scoreEnemy);
+        clearParticle(duel.ring);
+        const caster=this.GetParent();
+        if(caster.GetForceAttackTarget()===duel.target)caster.SetForceAttackTarget(undefined);
+        if(IsValidEntity(duel.target) && duel.target.GetForceAttackTarget()===caster)duel.target.SetForceAttackTarget(undefined);
     }
     private ordinary(e: ModifierAttackEvent) {
         return !e.no_attack_cooldown && e.inflictor === undefined &&
@@ -347,35 +398,6 @@ export class OgreMagiLegends extends ModBase {
             potato.transfers++;
             this.potatoMark(potato, e.target);
         }
-        if (!this.owns("ogre_l_bloodlust")) return;
-        this.syncBloodlust();
-        const duel = this.duel;
-        if (duel !== undefined && time() >= duel.ends) { this.clearDuel(); return; }
-        if (duel !== undefined && e.attacker === duel.target && e.target === caster) {
-            if (++duel.theirs >= 2) this.clearDuel();
-            else this.duelScore(duel);
-        } else if (e.attacker === caster && this.enemy(e.target) && this.bloodlustEnds !== undefined) {
-            if (duel === undefined) {
-                if (this.canDuelAgain && this.duelsUsed < (this.bonuses().awake ? 2 : 1) && e.target !== this.lastDuelTarget)
-                    this.startDuel(e.target);
-            } else if (e.target === duel.target && duel.ours < 2) {
-                duel.ours++;
-                this.duelScore(duel);
-            }
-        }
-    }
-    GetModifierPreAttack_CriticalStrike(e: ModifierAttackEvent): number {
-        const duel = this.duel;
-        if (!IsServer() || duel === undefined || duel.ours !== 2 || e.attacker !== this.GetParent() ||
-            e.target !== duel.target || !this.ordinary(e) || !this.enemy(e.target) ||
-            time() >= duel.ends || !e.attacker.FindModifierByNameAndCaster(NATIVE_LUST, e.attacker)) return 0;
-        if (duel.record !== undefined && e.record !== duel.record) return 0;
-        duel.record = e.record;
-        return 250;
-    }
-    OnAttackRecordDestroy(e: ModifierAttackEvent) {
-        if (IsServer() && e.attacker === this.GetParent() && this.duel?.record === e.record && this.duel !== undefined)
-            this.duel.record = undefined;
     }
 
     private targetOf(e: ModifierAbilityEvent) { return e.target ?? e.ability.GetCursorTarget(); }
@@ -428,6 +450,8 @@ export class OgreMagiLegends extends ModBase {
     }
     OnAbilityFullyCast(e: ModifierAbilityEvent) {
         if (!IsServer() || e.unit !== this.GetParent() || e.ability === undefined || this.orbFreeCast) return;
+        if(e.ability.GetAbilityName()===BLOODLUST && this.targetOf(e)===this.GetParent() && this.owns("ogre_l_bloodlust"))
+            this.armChallenge(e.ability);
         const cast = this.nativeCast(e);
         if (cast === undefined) return;
         if (cast.ability.GetAbilityName() === FIREBLAST && this.owns("ogre_l_fireblast") && this.enemy(cast.target))
@@ -475,15 +499,6 @@ export class OgreMagiLegends extends ModBase {
     }
     OnTakeDamage(e: ModifierInstanceEvent) {
         if (!IsServer() || e.attacker !== this.GetParent()) return;
-        const duel = this.duel;
-        if (duel !== undefined && duel.record !== undefined && e.record === duel.record &&
-            e.unit === duel.target && e.inflictor === undefined && e.damage > 0) {
-            this.clearDuel();
-            this.canDuelAgain = this.bonuses().awake;
-            e.attacker.Heal(e.damage * (this.owns("ogre_p_thirst") ? 0.6 : 0.5), e.attacker.FindAbilityByName(BLOODLUST));
-            attached(LUST_FX, e.attacker);
-            return;
-        }
         if (this.orbFreeCast || e.inflictor?.GetAbilityName() !== FIREBLAST) return;
         const cast = this.currentCast(e.inflictor);
         if (cast !== undefined && e.unit === cast.target) this.observeFireblast(cast);
@@ -563,15 +578,19 @@ export class OgreMagiLegends extends ModBase {
         if (!IsServer()) return;
         const at = time(), caster = this.GetParent(), cast = this.pending;
         if (this.club !== undefined && at >= this.club.ends) this.clearClub();
-        if (this.landing !== undefined && at >= this.landing.lands) this.landClub();
+        if (this.landing !== undefined) {
+            if (at >= this.landing.lands) this.landClub();
+            else this.moveClub(this.landing,at);
+        }
         if (this.potato !== undefined) {
             if (alive(this.potato.owner)) this.potato.last = this.potato.owner.GetAbsOrigin();
             if (at >= this.potato.ends) this.burstPotato();
+            else this.movePotato(this.potato);
         }
-        if (this.duel !== undefined) {
-            this.syncBloodlust();
-            if (this.duel !== undefined && (at >= this.duel.ends || !this.enemy(this.duel.target))) this.clearDuel();
-        }
+        if (this.challenge!==undefined && at>=this.challenge.ends) this.clearChallenge();
+        const duel=this.duel;
+        if(duel!==undefined && (at>=duel.ends || !this.enemy(duel.target) || duel.target.IsDebuffImmune() ||
+            distance(caster.GetAbsOrigin(),duel.target.GetAbsOrigin())>600)) this.clearDuel();
         if (this.dieBet !== undefined && at >= this.dieBet.ends) {
             clear(this.dieBet.icon);
             this.dieBet = undefined;
@@ -592,9 +611,18 @@ export class OgreMagiLegends extends ModBase {
             clear(potato.icon);
             potato.owner = undefined;
         }
-        if (e.unit === this.duel?.target) this.clearDuel();
+        if (e.unit === this.duel?.target) {
+            if(e.attacker===caster && alive(caster)) {
+                const reward=(this.bonuses().awake?18:12)+(this.owns("ogre_p_thirst")?8:0);
+                caster.Heal(caster.GetMaxHealth()*reward/100,caster.FindAbilityByName(BLOODLUST));
+                attached(LUST_FX,caster);
+            }
+            this.clearDuel();
+        }
         if (e.unit !== caster) return;
         this.clearClub();
+        this.clearLanding();
+        this.clearChallenge();
         this.clearDuel();
         clear(this.dieBet?.icon);
         clear(this.targetBet);
@@ -610,5 +638,6 @@ modifier_orb_ogre_magi_legend = registerModifier("modifier_orb_ogre_magi_legend"
 modifier_orb_ogre_club_ready = registerModifier("modifier_orb_ogre_club_ready", ClubReady);
 modifier_orb_ogre_potato = registerModifier("modifier_orb_ogre_potato", HotPotato);
 modifier_orb_ogre_duel = registerModifier("modifier_orb_ogre_duel", DuelScore);
+modifier_orb_ogre_duel_ready = registerModifier("modifier_orb_ogre_duel_ready", DuelReady);
 modifier_orb_ogre_die_ready = registerModifier("modifier_orb_ogre_die_ready", DieReady);
 modifier_orb_ogre_die_bet = registerModifier("modifier_orb_ogre_die_bet", DieBet);

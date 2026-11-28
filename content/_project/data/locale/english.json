@@ -409,12 +409,17 @@
   "DOTA_Tooltip_modifier_orb_ogre_club_ready_Description": "Press Q and choose where to throw.",
   "DOTA_Tooltip_modifier_orb_ogre_potato": "Hot Potato",
   "DOTA_Tooltip_modifier_orb_ogre_potato_Description": "Land a regular attack on another hero to pass the pot. It explodes when its timer ends. Stacks show passes plus one.",
-  "DOTA_Tooltip_modifier_orb_ogre_duel": "Three-Hit Argument",
-  "DOTA_Tooltip_modifier_orb_ogre_duel_Description": "The first digit shows Ogre's hits. The second shows the rival's hits. Ogre needs three, and the rival needs two.",
+  "DOTA_Tooltip_modifier_orb_ogre_duel": "One-on-One Brawl",
+  "DOTA_Tooltip_modifier_orb_ogre_duel_Description": "Both heroes attack one another. Items and spells are unavailable.",
   "DOTA_Tooltip_modifier_orb_ogre_die_ready": "Loaded Dice",
   "DOTA_Tooltip_modifier_orb_ogre_die_ready_Description": "Stacks show consecutive Fireblast or Ignite casts without Multicast. At two, press R to stake the die.",
   "DOTA_Tooltip_modifier_orb_ogre_die_bet": "Die Staked",
   "DOTA_Tooltip_modifier_orb_ogre_die_bet_Description": "Stacks show the guaranteed minimum Multicast multiplier for the bet.",
   "orb_ogre_club_invalid": "The throw window expired or the point is too far away.",
-  "orb_ogre_die_invalid": "The die isn't ready."
+  "orb_ogre_die_invalid": "The die isn't ready.",
+  "DOTA_Tooltip_ability_orb_ogre_challenge": "One-on-One Brawl",
+  "DOTA_Tooltip_ability_orb_ogre_challenge_Description": "Challenge one hero to a short brawl. Both heroes attack one another and cannot use items or abilities.",
+  "orb_ogre_challenge_invalid": "A nearby vulnerable enemy hero is required while Bloodlust is active.",
+  "DOTA_Tooltip_modifier_orb_ogre_duel_ready": "Challenge Ready",
+  "DOTA_Tooltip_modifier_orb_ogre_duel_ready_Description": "Press E again and choose an enemy hero."
 }

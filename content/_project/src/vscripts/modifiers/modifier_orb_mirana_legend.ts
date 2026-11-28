@@ -21,6 +21,8 @@ const SHINE = "particles/units/heroes/hero_mirana/mirana_starfall_moonray.vpcf";
 const BURST = "particles/units/heroes/hero_mirana/mirana_shard_impact.vpcf";
 const ARROW = "particles/units/heroes/hero_mirana/mirana_spell_arrow.vpcf";
 const STAR_SHOT = "particles/units/heroes/hero_mirana/mirana_base_attack.vpcf";
+const STAR_MODEL = "models/events/crownfall/match3/gems/gem_fragments.vmdl";
+const LEAP_WINDOW = 1.45;
 const ARROW_MODEL = "models/projectiles/mirana_arrow.vmdl";
 const RING = "particles/ui_mouseactions/range_display.vpcf";
 const clock = () => GameRules.GetGameTime();
@@ -105,7 +107,7 @@ class MoonReach extends Status {
     DeclareFunctions() { return [ModifierFunction.ATTACK_RANGE_BONUS]; }
     GetModifierAttackRangeBonus() { return 90; }
 }
-type Pickup = {point:Vector; ends:number; ring:ParticleID; beam:ParticleID};
+type Pickup = {point:Vector; ends:number; ring:ParticleID; beam:ParticleID; model?:CBaseEntity};
 type Held = {ends:number; icon?:CDOTA_Buff};
 type Path = { tree:CDOTA_MapTree; origin:Vector; dir:Vector; distance:number; budget:number; expires:number; skill:CDOTABaseAbility };
 type Pin = {tree:CDOTA_MapTree; point:Vector; travelled:number; left:number; turns:number; deadline:number;
@@ -175,10 +177,15 @@ export class MiranaLegends extends ModBase {
         if(hit)this.arrowPlan={...hit,origin,dir,budget,expires:clock()+a.GetCastPoint()+0.25,skill:a};
     }
     GetModifierOverrideAbilitySpecial(e:ModifierOverrideAbilitySpecialEvent):0|1 {
-        return IsServer() && this.arrowPlan!==undefined && this.arrowPlan.expires>=clock() &&
+        if(!IsServer()||e.ability===undefined)return 0;
+        if(e.ability_special_value==="leap_speed" && e.ability.GetAbilityName()===E && this.owned("mir_l_starhunt"))return 1;
+        return this.arrowPlan!==undefined && this.arrowPlan.expires>=clock() &&
             validTree(this.arrowPlan.tree) && e.ability===this.arrowPlan.skill && e.ability_special_value==="arrow_range" ? 1:0;
     }
-    GetModifierOverrideAbilitySpecialValue(){return this.arrowPlan?.distance??0;}
+    GetModifierOverrideAbilitySpecialValue(e?:ModifierOverrideAbilitySpecialEvent){
+        if(e?.ability_special_value==="leap_speed")return e.ability.GetSpecialValueFor("leap_distance")/LEAP_WINDOW;
+        return this.arrowPlan?.distance??0;
+    }
     private watchStarfall(e:ModifierAbilityEvent) {
         if(e.ability.GetAbilityName()!==Q || !this.owned("mir_l_starstorm") || this.held || this.pickup ||
             clock()-this.qCastAt<0.05)return;
@@ -211,10 +218,12 @@ export class MiranaLegends extends ModBase {
         const pos=e.unit.GetAbsOrigin(), back=aim(pos,h.GetAbsOrigin(),h.GetForwardVector());
         let point=step(pos,back,145);if(!legal(point))point=pos;
         point=GetGroundPosition(point,h);
-        this.pickup={point, ends:clock()+4, ring:ring(point,84),beam:effect(MOON,point)};
+        const model=SpawnEntityFromTableSynchronous("prop_dynamic",{model:STAR_MODEL,solid:0,disableshadows:1,modelscale:1.65});
+        model?.SetAbsOrigin(Vector(point.x,point.y,point.z+70));
+        this.pickup={point, ends:clock()+6, ring:ring(point,84),beam:effect(MOON,point),model};
         burst(SHINE,point);
     }
-    private clearPickup(){stop(this.pickup?.ring);stop(this.pickup?.beam);this.pickup=undefined;}
+    private clearPickup(){stop(this.pickup?.ring);stop(this.pickup?.beam);const model=this.pickup?.model;if(model!==undefined && IsValidEntity(model))UTIL_Remove(model);this.pickup=undefined;}
     private clearHeld(){remove(this.held?.icon);this.held=undefined;this.swap(Q,THROW,false);}
     ThrowStar(a:CDOTABaseAbility,point:Vector) {
         const h=this.GetParent();if(!this.held||this.held.ends<clock()||!alive(h))return;
@@ -239,8 +248,8 @@ export class MiranaLegends extends ModBase {
         if(left<50||!validTree(tree))return;
         const h=this.GetParent(),p=tree.GetAbsOrigin();
         const model=SpawnEntityFromTableSynchronous("prop_dynamic",{model:ARROW_MODEL,solid:0,disableshadows:1,modelscale:1.25});
-        if(model){model.SetAbsOrigin(Vector(p.x-dir.x*20,p.y-dir.y*20,p.z+100));model.SetForwardVector(dir);}
-        const window=this.owned("mir_p_quiver")?2.8:2;
+        if(model!==undefined){model.SetAbsOrigin(Vector(p.x-dir.x*20,p.y-dir.y*20,p.z+100));model.SetForwardVector(dir);}
+        const window=this.owned("mir_p_quiver")?4.8:4;
         this.pin={tree,point:p,travelled,left,turns,skill,model,deadline:clock()+window,glow:effect(MOON,p),icon:this.icon("arrow",skill,window,turns)};
         this.swap(W,BANK,true);AddFOWViewer(h.GetTeamNumber(),p,190,window,false);
     }
@@ -276,11 +285,11 @@ export class MiranaLegends extends ModBase {
         }
         const a=f.skill,pct=Math.min(1,(f.travelled+dist(point,f.from))/Math.max(1,a.GetSpecialValueFor("arrow_max_stunrange")));
         const min=a.GetSpecialValueFor("arrow_min_stun"),max=a.GetSpecialValueFor("arrow_max_stun");
-        target.AddNewModifier(h,a,"modifier_stunned",{duration:(min+(max-min)*pct)*(1-target.GetStatusResistance())});
+        target.AddNewModifier(h,a,"modifier_stunned",{duration:(min+(max-min)*pct+1.1)*(1-target.GetStatusResistance())});
         const baseDamage=a.GetSpecialValueFor("AbilityDamage");
         const damage=baseDamage>0 ? baseDamage : a.GetAbilityDamage();
         ApplyDamage({attacker:h,victim:target,ability:a,damage_type:DamageTypes.MAGICAL,
-            damage:damage+a.GetSpecialValueFor("arrow_bonus_damage")*pct});
+            damage:1.5*(damage+a.GetSpecialValueFor("arrow_bonus_damage")*pct)+140});
         if(h.HasScepter()){
             const q=h.FindAbilityByName(Q);
             if(q&&q.GetLevel()>0){
@@ -293,8 +302,8 @@ export class MiranaLegends extends ModBase {
     }
     private beginLeap(skill:CDOTABaseAbility){
         this.clearLeap();const h=this.GetParent(),start=h.GetAbsOrigin(),direction=h.GetForwardVector();
-        const range=skill.GetSpecialValueFor("leap_distance"), speed=Math.max(1,skill.GetSpecialValueFor("leap_speed"));
-        const life=Math.max(0.32,Math.min(1.1,range/speed));
+        const range=skill.GetSpecialValueFor("leap_distance");
+        const life=LEAP_WINDOW;
         this.leap={start,direction,skill,ends:clock()+life,icon:this.icon("turn",skill,life),shadow:ring(step(start,direction,range),90)};
         this.swap(E,TURN,true);
     }
@@ -316,7 +325,7 @@ export class MiranaLegends extends ModBase {
             if(m.GetName()==="modifier_mirana_leap" && m.GetAbility()===j.skill)m.Destroy();
         }
         j.turn={from:pos,to,at:clock(),height,last:pos};j.direction=dir;
-        j.ends=clock()+Math.max(0.15,dist(pos,to)/1100);
+        j.ends=clock()+Math.max(0.4,dist(pos,to)/800);
         ParticleManager.SetParticleControl(j.shadow,0,to);this.swap(E,TURN,false);
         remove(j.icon);j.icon=undefined;
     }
@@ -381,7 +390,7 @@ export class MiranaLegends extends ModBase {
     }
     private createMoons(){
         const h=this.GetParent(),r=h.FindAbilityByName(R);if(!r)return;
-        this.clearMoons();const duration=this.owned("mir_p_shadow")?5:4;
+        this.clearMoons();const duration=this.owned("mir_p_shadow")?11:10;
         const keys={outgoing_damage:-100,incoming_damage:0,bounty_base:0,bounty_growth:0,duration};
         const clones=CreateIllusions(h,h as CDOTA_BaseNPC_Hero,keys,2,36,false,true);
         for(let i=0;i<clones.length;i++){

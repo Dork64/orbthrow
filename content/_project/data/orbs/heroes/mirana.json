@@ -156,8 +156,8 @@
    "ab": "mirana_starfall",
    "ru": "Поймать звезду",
    "en": "Catch a Star",
-   "ru_d": "Попадание ручного Starstorm роняет рядом с героем звезду на 4 с. Подберите её раньше соперника и за 4 с повторным Q бросьте вперёд. Первый герой на пути получает двойной урон обычной звезды магией.",
-   "en_d": "A manual Starstorm hit drops a star near a hero for 4s. Reach it before an enemy hero and recast Q within 4s to throw it for twice a normal star’s damage.",
+   "ru_d": "Ручной Starstorm роняет рядом с задетым героем звезду на 6 с. Подберите её раньше соперника и за 4 с бросьте повторным Q. Первый герой на пути получает двойной урон звезды Starstorm.",
+   "en_d": "Manual Starstorm drops a star near a hit hero for 6 s. Pick it up before your opponent and throw it within 4 s with Q. The first hero hit takes twice the damage of a Starstorm star.",
    "ru_aw": "Пробуждение: Снаряд проходит через первого героя и поражает второго.",
    "en_aw": "Awakening: The star pierces the first hero and can hit a second.",
    "code": true
@@ -170,8 +170,8 @@
    "awmods": "arrow_speed:+400",
    "ru": "Стрела за углом",
    "en": "Around the Corner",
-   "ru_d": "Попав в дерево раньше цели, Sacred Arrow застревает на 2 с. Повторным W укажите направление вылета. Пройденный путь учитывается для урона и оглушения. Если дерево срубят, стрела пропадёт.",
-   "en_d": "A Sacred Arrow that meets a tree before a unit lodges for 2s. Recast W to aim from that tree. Distance travelled carries over for bonus damage and stun. Cutting the tree cancels the shot.",
+   "ru_d": "Намеренно выстрелите в дерево. Стрела застрянет на 4 с. Повторным W задайте новое направление. Засчитывается весь пройденный путь. Попадание после поворота наносит 150% обычного урона стрелы +140 и оглушает на 1,1 с дольше. Если дерево срубят, стрела пропадёт.",
+   "en_d": "Aim into a tree to lodge the arrow for 4 s. Recast W to shoot in a new direction. The whole path counts. A banked hit deals 150% of normal arrow damage +140 and stuns for 1.1 s longer. Cutting the tree destroys the arrow.",
    "ru_aw": "Пробуждение: Стрела может повернуть через второе дерево.",
    "en_aw": "Awakening: The same arrow can bank off a second tree.",
    "code": true
@@ -183,8 +183,8 @@
    "ab": "mirana_leap",
    "ru": "Верхом на комете",
    "en": "Comet Rider",
-   "ru_d": "В полёте Leap нажмите E в сторону точки, чтобы изменить посадку. При приземлении летят три стрелы веером. Каждая наносит герою 60 + 50% урона атаки физическим уроном.",
-   "en_d": "Recast E towards a point during Leap to bend the landing. On landing fire three arrows in a fan. Each deals 60 + 50% of attack damage as physical damage to the first hero hit.",
+   "ru_d": "Leap даёт до 1,45 с на смену курса в воздухе. Повторным E укажите посадку. При приземлении летят три стрелы веером по 60 + 50% урона атаки физическим уроном.",
+   "en_d": "Leap gives up to 1.45 s to change course midair. Recast E to steer the landing. On landing, three arrows deal 60 + 50% attack damage each as physical damage.",
    "ru_aw": "Пробуждение: Три попадания в одного героя ускоряют восстановление одного заряда Leap на половину интервала.",
    "en_aw": "Awakening: Hitting the same hero with all three arrows advances one Leap recharge by half an interval.",
    "code": true
@@ -196,8 +196,8 @@
    "ab": "mirana_invis",
    "ru": "Три луны",
    "en": "Three Moons",
-   "ru_d": "При входе в невидимость Moonlight Shadow два двойника Мираны расходятся в разные стороны на 4 с. Направьте повторное R на одного, чтобы поменяться местами. Удар вражеского героя убирает двойника.",
-   "en_d": "Entering Moonlight Shadow creates two outward-running decoys for 4s. Aim a recast R at one to exchange places. An enemy hero attack destroys a decoy.",
+   "ru_d": "При входе в невидимость Moonlight Shadow два двойника расходятся на 10 с. Направьте повторное R на одного, чтобы поменяться местами. Один удар вражеского героя убирает двойника.",
+   "en_d": "When Moonlight Shadow turns Mirana invisible, two decoys fan out for 10 s. Aim the R recast at one to swap places. One enemy hero attack removes a decoy.",
    "ru_aw": "Пробуждение: За 4 с после обмена первая обычная атака по герою наносит 180% урона.",
    "en_aw": "Awakening: Your first ordinary attack on a hero within 4s after swapping deals 180% damage.",
    "code": true

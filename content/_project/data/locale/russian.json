@@ -409,12 +409,17 @@
   "DOTA_Tooltip_modifier_orb_ogre_club_ready_Description": "Нажмите Q и выберите точку броска.",
   "DOTA_Tooltip_modifier_orb_ogre_potato": "Горячая картошка",
   "DOTA_Tooltip_modifier_orb_ogre_potato_Description": "Обычный удар по другому герою передаст ему котелок. Когда время истечёт, он взорвётся. Счётчик показывает число передач плюс один.",
-  "DOTA_Tooltip_modifier_orb_ogre_duel": "Спор на три удара",
-  "DOTA_Tooltip_modifier_orb_ogre_duel_Description": "Первая цифра — удары Огра, вторая — удары соперника. Огру нужно три, сопернику два.",
+  "DOTA_Tooltip_modifier_orb_ogre_duel": "Драка один на один",
+  "DOTA_Tooltip_modifier_orb_ogre_duel_Description": "Оба героя атакуют друг друга. Предметы и способности недоступны.",
   "DOTA_Tooltip_modifier_orb_ogre_die_ready": "Краплёные кости",
   "DOTA_Tooltip_modifier_orb_ogre_die_ready_Description": "Счётчик показывает последовательные применения Fireblast или Ignite без Multicast. На двух нажмите R и сделайте ставку.",
   "DOTA_Tooltip_modifier_orb_ogre_die_bet": "Кость поставлена",
   "DOTA_Tooltip_modifier_orb_ogre_die_bet_Description": "Число показывает гарантированный минимум Multicast для ставки.",
   "orb_ogre_club_invalid": "Срок броска истёк или точка слишком далеко.",
-  "orb_ogre_die_invalid": "Кость ещё не готова."
+  "orb_ogre_die_invalid": "Кость ещё не готова.",
+  "DOTA_Tooltip_ability_orb_ogre_challenge": "Драка один на один",
+  "DOTA_Tooltip_ability_orb_ogre_challenge_Description": "Вызвать одного героя на короткую драку. Оба бьют друг друга и не могут применять предметы и способности.",
+  "orb_ogre_challenge_invalid": "Нужен уязвимый вражеский герой рядом, пока действует Bloodlust.",
+  "DOTA_Tooltip_modifier_orb_ogre_duel_ready": "Вызов готов",
+  "DOTA_Tooltip_modifier_orb_ogre_duel_ready_Description": "Нажмите E повторно и выберите вражеского героя."
 }

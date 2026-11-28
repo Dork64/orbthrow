@@ -8,6 +8,7 @@ local __TS__ArrayFilter = ____lualib.__TS__ArrayFilter
 local __TS__StringStartsWith = ____lualib.__TS__StringStartsWith
 local __TS__Iterator = ____lualib.__TS__Iterator
 local __TS__ArrayFind = ____lualib.__TS__ArrayFind
+local __TS__ArrayMap = ____lualib.__TS__ArrayMap
 local __TS__ArraySome = ____lualib.__TS__ArraySome
 local ____exports = {}
 local ____modbase = require("lib.modbase")
@@ -30,7 +31,8 @@ local RING = "particles/ui_mouseactions/range_display.vpcf"
 local DUST = "particles/units/heroes/hero_earthshaker/earthshaker_aftershock.vpcf"
 local ECHO = "particles/units/heroes/hero_earthshaker/earthshaker_echoslam_start.vpcf"
 local CRACK = "particles/units/heroes/hero_earthshaker/earthshaker_echoslam_start_cracks.vpcf"
-local ROCK = "models/particle/earthshaker_fissure_rocks_v1.vmdl"
+local ROCK = "models/items/earthshaker/baron_of_the_minotaur_fissure/baron_of_the_minotaur_fissure1.vmdl"
+local WALL_TIME = 12
 local function time()
     return GameRules:GetGameTime()
 end
@@ -317,12 +319,15 @@ function ShakerLegends.prototype.makeWall(self, skill)
         "fissure_duration",
         skill:GetLevel() - 1
     )
-    local duration = overrideValue(
-        self:b(),
-        Q,
-        "fissure_duration",
-        base
-    ) or base
+    local duration = WALL_TIME + math.max(
+        0,
+        (overrideValue(
+            self:b(),
+            Q,
+            "fissure_duration",
+            base
+        ) or base) - base
+    )
     local half = math.max(
         150,
         skill:GetCastRange(origin, nil) + h:GetCastRangeBonus()
@@ -347,7 +352,13 @@ function ShakerLegends.prototype.makeWall(self, skill)
     do
         local d = 105
         while d < 2 * half do
-            local rock = SpawnEntityFromTableSynchronous("prop_dynamic", {model = ROCK, solid = 0, disableshadows = 1, origin = start})
+            local rock = SpawnEntityFromTableSynchronous("prop_dynamic", {
+                model = ROCK,
+                solid = 0,
+                disableshadows = 1,
+                modelscale = 1.15,
+                origin = start
+            })
             if rock ~= nil then
                 local ____wall_rocks_0 = wall.rocks
                 ____wall_rocks_0[#____wall_rocks_0 + 1] = rock
@@ -382,7 +393,7 @@ function ShakerLegends.prototype.drawWall(self, w, grid)
                 self:point(w, 105 + i * 96),
                 h
             )
-            w.rocks[i + 1]:SetAbsOrigin(p)
+            w.rocks[i + 1]:SetAbsOrigin(Vector(p.x, p.y, p.z + 12))
             w.rocks[i + 1]:SetAngles(0, (105 + i * 96 < w.half and w.dir or w.movingDir) / rad + i % 3 * 20, 0)
             i = i + 1
         end
@@ -455,6 +466,7 @@ function ShakerLegends.prototype.Pivot(self, p)
     end
     w.pivoted = true
     w.start = time()
+    w.ends = math.max(w.ends, w.start + 3)
     clear(w.icon)
     self:swap(Q, PIVOT, false)
     do
@@ -615,7 +627,7 @@ function ShakerLegends.prototype.OnAttackRecord(self, e)
     if not IsServer() or e.attacker ~= self:GetParent() or not self:have("es_l_faultline") or e.no_attack_cooldown or not valid(e.target) then
         return
     end
-    if self:GetParent():HasModifier("modifier_earthshaker_enchant_totem") then
+    if self.lastBuff ~= nil or self:GetParent():HasModifier("modifier_earthshaker_enchant_totem") then
         self.records:add(e.record)
     end
 end
@@ -745,9 +757,10 @@ function ShakerLegends.prototype.recordCrack(self, u)
     end
     local p = u:GetAbsOrigin()
     local t = time()
+    local window = self:have("es_p_concussion") and 3.7 or 3
     for ____, c in ipairs(self.cracks) do
         if dist(c.pos, p) < 96 then
-            c.ends = t + 2
+            c.ends = t + window
             self:crackHUD()
             return
         end
@@ -758,7 +771,7 @@ function ShakerLegends.prototype.recordCrack(self, u)
     local ____self_cracks_5 = self.cracks
     ____self_cracks_5[#____self_cracks_5 + 1] = {
         pos = p,
-        ends = t + (self:have("es_p_concussion") and 2.7 or 2),
+        ends = t + window,
         fx = ring(
             p,
             175,
@@ -776,12 +789,16 @@ function ShakerLegends.prototype.crackHUD(self)
         self.crackIcon = nil
         return
     end
+    local duration = math.max(unpack(__TS__ArrayMap(
+        self.cracks,
+        function(____, crack) return crack.ends end
+    ))) - time()
     if self.crackIcon == nil or self.crackIcon:IsNull() then
-        self.crackIcon = h:AddNewModifier(h, a, "modifier_orb_es_crack", {duration = 2})
+        self.crackIcon = h:AddNewModifier(h, a, "modifier_orb_es_crack", {duration = duration})
     end
     local ____opt_6 = self.crackIcon
     if ____opt_6 ~= nil then
-        ____opt_6:SetDuration(2, true)
+        ____opt_6:SetDuration(duration, true)
     end
     local ____opt_8 = self.crackIcon
     if ____opt_8 ~= nil then
@@ -836,7 +853,7 @@ function ShakerLegends.prototype.finishFuse(self)
         for ____, u in ipairs(self:enemies(m.pos, 175)) do
             do
                 if hit:has(u) or not magic(u) then
-                    goto __continue146
+                    goto __continue147
                 end
                 hit:add(u)
                 self:damage(
@@ -857,7 +874,7 @@ function ShakerLegends.prototype.finishFuse(self)
                     )
                 end
             end
-            ::__continue146::
+            ::__continue147::
         end
     end
     EmitSoundOn("Hero_EarthShaker.Aftershock", h)

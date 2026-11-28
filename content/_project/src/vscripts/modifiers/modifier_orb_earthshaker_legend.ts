@@ -17,7 +17,8 @@ const RING = "particles/ui_mouseactions/range_display.vpcf";
 const DUST = "particles/units/heroes/hero_earthshaker/earthshaker_aftershock.vpcf";
 const ECHO = "particles/units/heroes/hero_earthshaker/earthshaker_echoslam_start.vpcf";
 const CRACK = "particles/units/heroes/hero_earthshaker/earthshaker_echoslam_start_cracks.vpcf";
-const ROCK = "models/particle/earthshaker_fissure_rocks_v1.vmdl";
+const ROCK = "models/items/earthshaker/baron_of_the_minotaur_fissure/baron_of_the_minotaur_fissure1.vmdl";
+const WALL_TIME = 12;
 const time = () => GameRules.GetGameTime();
 const rad = Math.PI / 180;
 function dist(a: Vector, b: Vector) { return Math.sqrt((a.x-b.x)**2 + (a.y-b.y)**2); }
@@ -133,14 +134,14 @@ export class ShakerLegends extends ModBase {
         const h=this.GetParent(),origin=h.GetAbsOrigin(),cursor=skill.GetCursorPosition();
         const dir=dist(origin,cursor)>1?angle(origin,cursor):Math.atan2(h.GetForwardVector().y,h.GetForwardVector().x);
         const base=skill.GetLevelSpecialValueNoOverride("fissure_duration",skill.GetLevel()-1);
-        const duration=overrideValue(this.b(),Q,"fissure_duration",base)??base;
+        const duration=WALL_TIME+Math.max(0,(overrideValue(this.b(),Q,"fissure_duration",base)??base)-base);
         const half=Math.max(150,skill.GetCastRange(origin,undefined)+h.GetCastRangeBonus())/2;
         const wall:Ridge={origin,hinge:ray(origin,dir,half),half,dir,movingDir:dir,ends:time()+duration,skill,
             blocks:new Map(),rocks:[],hints:[],delta:0,pivoted:false,swept:new Set(),nextGrid:0};
         const start=ray(origin,dir,105);
         // Separate stones follow the bent ridge; collision uses a grid-cell union, including the fixed half.
         for(let d=105;d<2*half;d+=96){
-            const rock=SpawnEntityFromTableSynchronous("prop_dynamic",{model:ROCK,solid:0,disableshadows:1,origin:start});
+            const rock=SpawnEntityFromTableSynchronous("prop_dynamic",{model:ROCK,solid:0,disableshadows:1,modelscale:1.15,origin:start});
             if(rock!==undefined)wall.rocks.push(rock);
         }
         this.ridge=wall;
@@ -155,7 +156,7 @@ export class ShakerLegends extends ModBase {
         const h=this.GetParent();
         for(let i=0;i<w.rocks.length;i++){
             const p=GetGroundPosition(this.point(w,105+i*96),h);
-            w.rocks[i].SetAbsOrigin(p);
+            w.rocks[i].SetAbsOrigin(Vector(p.x,p.y,p.z+12));
             w.rocks[i].SetAngles(0,(105+i*96<w.half?w.dir:w.movingDir)/rad+(i%3)*20,0);
         }
         if(!grid)return;
@@ -178,7 +179,7 @@ export class ShakerLegends extends ModBase {
         const max=(this.b().awake?90:60)*rad;
         w.delta=Math.max(-max,Math.min(max,signedTurn(w.dir,angle(w.hinge,p))));
         if(Math.abs(w.delta)<3*rad)return;
-        w.pivoted=true;w.start=time();clear(w.icon);
+        w.pivoted=true;w.start=time();w.ends=Math.max(w.ends,w.start+3);clear(w.icon);
         this.swap(Q,PIVOT,false);
         for(let d=120;d<w.half;d+=180)w.hints.push(ring(ray(w.hinge,w.dir+w.delta,d),40,Vector(255,96,35)));
         EmitSoundOn("Hero_EarthShaker.Fissure",this.GetParent());
@@ -229,7 +230,7 @@ export class ShakerLegends extends ModBase {
     }
     OnAttackRecord(e:ModifierAttackEvent){
         if(!IsServer()||e.attacker!==this.GetParent()||!this.have("es_l_faultline")||e.no_attack_cooldown||!valid(e.target))return;
-        if(this.GetParent().HasModifier("modifier_earthshaker_enchant_totem"))this.records.add(e.record);
+        if(this.lastBuff!==undefined||this.GetParent().HasModifier("modifier_earthshaker_enchant_totem"))this.records.add(e.record);
     }
     OnAttackRecordDestroy(e:ModifierAttackEvent){if(IsServer()&&e.attacker===this.GetParent())this.records.delete(e.record);}
     OnAttackLanded(e:ModifierAttackEvent){
@@ -271,17 +272,18 @@ export class ShakerLegends extends ModBase {
     private recordCrack(u:CDOTA_BaseNPC){
         const h=this.GetParent(),a=h.FindAbilityByName(E);
         if(!live(h)||!a||a.GetLevel()<1||!this.have("es_l_aftershock")||h.PassivesDisabled()||this.fuse||time()<this.nextCrack)return;
-        const p=u.GetAbsOrigin(),t=time();
-        for(const c of this.cracks)if(dist(c.pos,p)<96){c.ends=t+2;this.crackHUD();return;}
+        const p=u.GetAbsOrigin(),t=time(),window=this.have("es_p_concussion")?3.7:3;
+        for(const c of this.cracks)if(dist(c.pos,p)<96){c.ends=t+window;this.crackHUD();return;}
         if(this.cracks.length>=(this.b().awake?2:1))endFX(this.cracks.shift()!.fx);
-        this.cracks.push({pos:p,ends:t+(this.have("es_p_concussion")?2.7:2),fx:ring(p,175,Vector(255,190,72))});
+        this.cracks.push({pos:p,ends:t+window,fx:ring(p,175,Vector(255,190,72))});
         burst(CRACK,p,175);this.crackHUD();
     }
     private crackHUD(){
         const h=this.GetParent(),a=h.FindAbilityByName(E);
         if(this.cracks.length===0){clear(this.crackIcon);this.crackIcon=undefined;return;}
-        if(this.crackIcon===undefined||this.crackIcon.IsNull())this.crackIcon=h.AddNewModifier(h,a,"modifier_orb_es_crack",{duration:2});
-        this.crackIcon?.SetDuration(2,true);this.crackIcon?.SetStackCount(this.cracks.length);
+        const duration=Math.max(...this.cracks.map(crack=>crack.ends))-time();
+        if(this.crackIcon===undefined||this.crackIcon.IsNull())this.crackIcon=h.AddNewModifier(h,a,"modifier_orb_es_crack",{duration});
+        this.crackIcon?.SetDuration(duration,true);this.crackIcon?.SetStackCount(this.cracks.length);
     }
     Detonate(ability:CDOTABaseAbility){
         const h=this.GetParent();

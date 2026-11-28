@@ -169,8 +169,8 @@
    "ab": "earthshaker_fissure",
    "ru": "Тектонический сдвиг",
    "en": "Tectonic Shift",
-   "ru_d": "После Fissure повторное Q поворачивает дальнюю половину стены вокруг шарнира на угол до 60° за 0,8 с. Движущийся гребень сдвигает каждого задетого героя и наносит 280 магического урона один раз.",
-   "en_d": "After Fissure, recast Q to turn its far half by up to 60° over 0.8s. The moving ridge pushes heroes aside and deals 280 magical damage once per hero.",
+   "ru_d": "Fissure создаёт каменную стену на 12 с. Повторное Q поворачивает дальнюю половину до 60° за 0,8 с. Движущийся гребень сдвигает героя и наносит 280 магического урона один раз.",
+   "en_d": "Fissure creates a stone wall for 12 s. Recast Q to rotate the far half up to 60° in 0.8 s. The sweeping ridge moves each hero once and deals 280 magic damage.",
    "ru_aw": "Пробуждение: Поворот до 90°.",
    "en_aw": "Awakening: Turn up to 90°.",
    "code": true
@@ -195,8 +195,8 @@
    "ab": "earthshaker_aftershock",
    "ru": "Сейсмограф",
    "en": "Seismograph",
-   "ru_d": "Удар героя по Шейкеру или заклинание врага в 550 оставляют трещину на его месте на 2 с. Нажмите E: через 0,5 с взрыв в 175 наносит 300 магического урона и подбрасывает на 0,7 с. КД 7 с.",
-   "en_d": "Enemy heroes attacking Earthshaker or casting a spell within 550 leave a crack beneath them for 2s. Press E to detonate it after 0.5s for 300 magic damage and a 0.7s toss within 175. Cooldown 7s.",
+   "ru_d": "Удар по Шейкеру или заклинание врага в радиусе 550 оставляют трещину на его месте на 3 с. Повторное E взрывает трещину через 0,5 с, наносит 300 магического урона в 175 и подбрасывает на 0,7 с. КД 7 с.",
+   "en_d": "A hit on Earthshaker or an enemy cast within 550 leaves a crack for 3 s. Press E to detonate after 0.5 s, dealing 300 magic damage within 175 and lifting heroes for 0.7 s. Cooldown 7 s.",
    "ru_aw": "Пробуждение: Запоминает две последние разные позиции. Одна цель получает урон взрыва единожды.",
    "en_aw": "Awakening: Stores the two latest distinct positions. A target takes only one explosion.",
    "code": true
