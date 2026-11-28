@@ -33,7 +33,8 @@ local SHINE = "particles/units/heroes/hero_mirana/mirana_starfall_moonray.vpcf"
 local BURST = "particles/units/heroes/hero_mirana/mirana_shard_impact.vpcf"
 local ARROW = "particles/units/heroes/hero_mirana/mirana_spell_arrow.vpcf"
 local STAR_SHOT = "particles/units/heroes/hero_mirana/mirana_base_attack.vpcf"
-local STAR_MODEL = "models/events/crownfall/match3/gems/gem_fragments.vmdl"
+local STAR_MODEL = "models/orbthrow/fallen_star/fallen_star.vmdl"
+local STAR_GRACE = 1
 local LEAP_WINDOW = 1.45
 local ARROW_MODEL = "models/projectiles/mirana_arrow.vmdl"
 local RING = "particles/ui_mouseactions/range_display.vpcf"
@@ -241,6 +242,7 @@ function MiranaLegends.prototype.____constructor(self, ...)
     self.seq = 0
     self.qPending = 0
     self.qCastAt = -5
+    self.qStartAt = -5
     self.stars = __TS__New(Map)
     self.fans = __TS__New(Map)
     self.clones = {}
@@ -348,7 +350,15 @@ function MiranaLegends.prototype.projectile(self, ability, from, dir, speed, ran
     })
 end
 function MiranaLegends.prototype.OnAbilityStart(self, e)
-    if not IsServer() or e.unit ~= self:GetParent() or e.ability:GetAbilityName() ~= W or not self:owned("mir_l_arrow") then
+    if not IsServer() or e.unit ~= self:GetParent() then
+        return
+    end
+    local name = e.ability:GetAbilityName()
+    if name == Q then
+        self.earlyStarHit = nil
+        self.qStartAt = clock()
+    end
+    if name ~= W or not self:owned("mir_l_arrow") then
         return
     end
     self.arrowPlan = nil
@@ -396,7 +406,12 @@ function MiranaLegends.prototype.watchStarfall(self, e)
         return
     end
     self.qCastAt = clock()
-    self.qPending = clock() + 1.6
+    self.qPending = clock() + 1.8
+    local early = self.earlyStarHit
+    self.earlyStarHit = nil
+    if early ~= nil and clock() - early.at <= 0.12 then
+        self:dropStar(early.target)
+    end
 end
 function MiranaLegends.prototype.OnAbilityExecuted(self, e)
     if IsServer() and e.unit == self:GetParent() and alive(e.unit) and real(e.unit) then
@@ -441,11 +456,27 @@ function MiranaLegends.prototype.OnTakeDamage(self, e)
     if n == W and self.nativeArrow then
         self.nativeArrow = nil
     end
-    if n ~= Q or self.qPending <= clock() or self.pickup or self.held or not e.unit:IsHero() or not real(e.unit) or e.unit:GetTeamNumber() == h:GetTeamNumber() then
+    if n ~= Q or not self:owned("mir_l_starstorm") or self.pickup or self.held or not IsValidEntity(e.unit) or not real(e.unit) or e.unit:GetTeamNumber() == h:GetTeamNumber() or e.unit:IsOutOfGame() or e.damage <= 0 or e.unit:IsDebuffImmune() then
+        return
+    end
+    if self.qPending > clock() then
+        self:dropStar(e.unit)
+    elseif clock() - self.qStartAt <= 0.75 then
+        if self.earlyStarHit == nil then
+            self.earlyStarHit = {
+                target = e.unit,
+                at = clock()
+            }
+        end
+    end
+end
+function MiranaLegends.prototype.dropStar(self, target)
+    local h = self:GetParent()
+    if self.pickup ~= nil or self.held ~= nil or not IsValidEntity(target) then
         return
     end
     self.qPending = 0
-    local pos = e.unit:GetAbsOrigin()
+    local pos = target:GetAbsOrigin()
     local back = aim(
         pos,
         h:GetAbsOrigin(),
@@ -456,14 +487,16 @@ function MiranaLegends.prototype.OnTakeDamage(self, e)
         point = pos
     end
     point = GetGroundPosition(point, h)
-    local model = SpawnEntityFromTableSynchronous("prop_dynamic", {model = STAR_MODEL, solid = 0, disableshadows = 1, modelscale = 1.65})
+    local marker = Vector(point.x, point.y, point.z + 66)
+    local model = SpawnEntityFromTableSynchronous("prop_dynamic", {model = STAR_MODEL, solid = 0, disableshadows = 1, origin = marker})
     if model ~= nil then
-        model:SetAbsOrigin(Vector(point.x, point.y, point.z + 70))
+        model:SetAbsOrigin(marker)
     end
+    local opened = clock()
     self.pickup = {
         point = point,
-        ends = clock() + 6,
-        ring = ring(point, 84),
+        opens = opened + STAR_GRACE,
+        ends = opened + 6,
         beam = effect(MOON, point),
         model = model
     }
@@ -472,21 +505,18 @@ end
 function MiranaLegends.prototype.clearPickup(self)
     local ____stop_10 = stop
     local ____opt_8 = self.pickup
-    ____stop_10(____opt_8 and ____opt_8.ring)
-    local ____stop_13 = stop
+    ____stop_10(____opt_8 and ____opt_8.beam)
     local ____opt_11 = self.pickup
-    ____stop_13(____opt_11 and ____opt_11.beam)
-    local ____opt_14 = self.pickup
-    local model = ____opt_14 and ____opt_14.model
+    local model = ____opt_11 and ____opt_11.model
     if model ~= nil and IsValidEntity(model) then
         UTIL_Remove(model)
     end
     self.pickup = nil
 end
 function MiranaLegends.prototype.clearHeld(self)
-    local ____remove_18 = remove
-    local ____opt_16 = self.held
-    ____remove_18(____opt_16 and ____opt_16.icon)
+    local ____remove_15 = remove
+    local ____opt_13 = self.held
+    ____remove_15(____opt_13 and ____opt_13.icon)
     self.held = nil
     self:swap(Q, THROW, false)
 end
@@ -500,10 +530,10 @@ function MiranaLegends.prototype.ThrowStar(self, a, point)
     if not base then
         return
     end
-    local ____self_19, ____seq_20 = self, "seq"
-    local ____self_seq_21 = ____self_19[____seq_20] + 1
-    ____self_19[____seq_20] = ____self_seq_21
-    local id = ____self_seq_21
+    local ____self_16, ____seq_17 = self, "seq"
+    local ____self_seq_18 = ____self_16[____seq_17] + 1
+    ____self_16[____seq_17] = ____self_seq_18
+    local id = ____self_seq_18
     self.stars:set(
         id,
         {
@@ -553,10 +583,10 @@ function MiranaLegends.prototype.StarHit(self, target, id)
             target:GetAbsOrigin()
         )
     end
-    local ____s_22, ____hits_23 = s, "hits"
-    local ____s_hits_24 = ____s_22[____hits_23] - 1
-    ____s_22[____hits_23] = ____s_hits_24
-    if ____s_hits_24 <= 0 then
+    local ____s_19, ____hits_20 = s, "hits"
+    local ____s_hits_21 = ____s_19[____hits_20] - 1
+    ____s_19[____hits_20] = ____s_hits_21
+    if ____s_hits_21 <= 0 then
         self.stars:delete(id)
         return true
     end
@@ -622,10 +652,10 @@ function MiranaLegends.prototype.Redirect(self, a, point)
         h:GetForwardVector()
     )
     local from = step(pin.point, dir, 38)
-    local ____self_25, ____seq_26 = self, "seq"
-    local ____self_seq_27 = ____self_25[____seq_26] + 1
-    ____self_25[____seq_26] = ____self_seq_27
-    local id = ____self_seq_27
+    local ____self_22, ____seq_23 = self, "seq"
+    local ____self_seq_24 = ____self_22[____seq_23] + 1
+    ____self_22[____seq_23] = ____self_seq_24
+    local id = ____self_seq_24
     self:clearPin()
     local projectile = self:projectile(
         a,
@@ -882,10 +912,10 @@ function MiranaLegends.prototype.land(self)
         return
     end
     burst(BURST, point)
-    local ____self_28, ____seq_29 = self, "seq"
-    local ____self_seq_30 = ____self_28[____seq_29] + 1
-    ____self_28[____seq_29] = ____self_seq_30
-    local id = ____self_seq_30
+    local ____self_25, ____seq_26 = self, "seq"
+    local ____self_seq_27 = ____self_25[____seq_26] + 1
+    ____self_25[____seq_26] = ____self_seq_27
+    local id = ____self_seq_27
     self.fans:set(
         id,
         {
@@ -1011,7 +1041,7 @@ function MiranaLegends.prototype.createMoons(self)
             do
                 local clone = clones[i + 1]
                 if not alive(clone) then
-                    goto __continue149
+                    goto __continue156
                 end
                 local dir = spin(
                     h:GetForwardVector(),
@@ -1033,10 +1063,10 @@ function MiranaLegends.prototype.createMoons(self)
                     1050
                 )
                 clone:MoveToPosition(goal)
-                local ____self_clones_31 = self.clones
-                ____self_clones_31[#____self_clones_31 + 1] = clone
+                local ____self_clones_28 = self.clones
+                ____self_clones_28[#____self_clones_28 + 1] = clone
             end
-            ::__continue149::
+            ::__continue156::
             i = i + 1
         end
     end
@@ -1051,9 +1081,9 @@ end
 function MiranaLegends.prototype.clearMoons(self)
     local old = self.clones
     self.clones = {}
-    local ____remove_34 = remove
-    local ____opt_32 = self.moons
-    ____remove_34(____opt_32 and ____opt_32.icon)
+    local ____remove_31 = remove
+    local ____opt_29 = self.moons
+    ____remove_31(____opt_29 and ____opt_29.icon)
     self.moons = nil
     self:swap(R, SWAP, false)
     for ____, clone in ipairs(old) do
@@ -1078,7 +1108,7 @@ function MiranaLegends.prototype.SwapMoon(self, point)
     for ____, c in ipairs(self.clones) do
         do
             if not alive(c) or not legal(c:GetAbsOrigin()) then
-                goto __continue161
+                goto __continue168
             end
             local towards = aim(
                 origin,
@@ -1091,7 +1121,7 @@ function MiranaLegends.prototype.SwapMoon(self, point)
                 score = dot
             end
         end
-        ::__continue161::
+        ::__continue168::
     end
     if not best or score < 0 then
         return
@@ -1167,6 +1197,13 @@ function MiranaLegends.prototype.OnIntervalThink(self)
     end
     local pick = self.pickup
     if pick then
+        local turn = (t - pick.opens) * 48
+        local ____opt_32 = pick.model
+        if ____opt_32 ~= nil then
+            ____opt_32:SetAngles(0, turn, 0)
+        end
+    end
+    if pick and t >= pick.opens then
         local near = __TS__ArrayFind(
             FindUnitsInRadius(
                 h:GetTeamNumber(),
@@ -1279,6 +1316,8 @@ function MiranaLegends.prototype.reset(self)
     self.recharge = nil
     self.armedMoon = 0
     self.qPending = 0
+    self.qStartAt = -5
+    self.earlyStarHit = nil
     self.arrowPlan = nil
     self.nativeArrow = nil
     self:clearPickup()

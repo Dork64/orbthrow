@@ -33,7 +33,7 @@ local NATIVE_LUST = "modifier_ogre_magi_bloodlust"
 local FIRE_FX = "particles/units/heroes/hero_ogre_magi/ogre_magi_fireblast.vpcf"
 local IGNITE_FX = "particles/units/heroes/hero_ogre_magi/ogre_magi_ignite.vpcf"
 local LUST_FX = "particles/units/heroes/hero_ogre_magi/ogre_magi_bloodlust_buff.vpcf"
-local RING_FX = "particles/ui_mouseactions/drag_selected_ring.vpcf"
+local RING_FX = "particles/ui_mouseactions/range_display.vpcf"
 local THINK = 0.04
 local CLUB_MODEL = "models/heroes/ogre_magi/ogre_magi_weapon.vmdl"
 local POT_MODEL = "models/items/wards/fall20_cauldron_ward/fall20_cauldron_ward.vmdl"
@@ -91,7 +91,7 @@ local function warning(point, radius)
     ParticleManager:SetParticleControl(
         p,
         2,
-        Vector(255, 100, 30)
+        Vector(255, 178, 87)
     )
     return p
 end

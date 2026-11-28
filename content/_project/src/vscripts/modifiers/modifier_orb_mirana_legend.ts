@@ -21,7 +21,8 @@ const SHINE = "particles/units/heroes/hero_mirana/mirana_starfall_moonray.vpcf";
 const BURST = "particles/units/heroes/hero_mirana/mirana_shard_impact.vpcf";
 const ARROW = "particles/units/heroes/hero_mirana/mirana_spell_arrow.vpcf";
 const STAR_SHOT = "particles/units/heroes/hero_mirana/mirana_base_attack.vpcf";
-const STAR_MODEL = "models/events/crownfall/match3/gems/gem_fragments.vmdl";
+const STAR_MODEL = "models/orbthrow/fallen_star/fallen_star.vmdl";
+const STAR_GRACE = 1;
 const LEAP_WINDOW = 1.45;
 const ARROW_MODEL = "models/projectiles/mirana_arrow.vmdl";
 const RING = "particles/ui_mouseactions/range_display.vpcf";
@@ -107,7 +108,7 @@ class MoonReach extends Status {
     DeclareFunctions() { return [ModifierFunction.ATTACK_RANGE_BONUS]; }
     GetModifierAttackRangeBonus() { return 90; }
 }
-type Pickup = {point:Vector; ends:number; ring:ParticleID; beam:ParticleID; model?:CBaseEntity};
+type Pickup = {point:Vector; opens:number; ends:number; beam:ParticleID; model?:CBaseEntity};
 type Held = {ends:number; icon?:CDOTA_Buff};
 type Path = { tree:CDOTA_MapTree; origin:Vector; dir:Vector; distance:number; budget:number; expires:number; skill:CDOTABaseAbility };
 type Pin = {tree:CDOTA_MapTree; point:Vector; travelled:number; left:number; turns:number; deadline:number;
@@ -123,6 +124,8 @@ export class MiranaLegends extends ModBase {
     private seq=0;
     private qPending=0;
     private qCastAt=-5;
+    private qStartAt=-5;
+    private earlyStarHit?: { target: CDOTA_BaseNPC; at: number };
     private pickup?:Pickup;
     private held?:Held;
     private stars=new Map<number,Stars>();
@@ -170,7 +173,10 @@ export class MiranaLegends extends ModBase {
             bProvidesVision:true,iVisionRadius:150,iVisionTeamNumber:this.GetParent().GetTeamNumber(),ExtraData:{id}});
     }
     OnAbilityStart(e:ModifierAbilityEvent) {
-        if(!IsServer()||e.unit!==this.GetParent()||e.ability.GetAbilityName()!==W||!this.owned("mir_l_arrow"))return;
+        if(!IsServer()||e.unit!==this.GetParent())return;
+        const name=e.ability.GetAbilityName();
+        if(name===Q){this.earlyStarHit=undefined;this.qStartAt=clock();}
+        if(name!==W||!this.owned("mir_l_arrow"))return;
         this.arrowPlan=undefined;
         const a=e.ability, origin=e.unit.GetAbsOrigin(), dir=aim(origin,a.GetCursorPosition(),e.unit.GetForwardVector());
         const budget=a.GetSpecialValueFor("arrow_range"), hit=treeOnLine(origin,dir,budget);
@@ -190,7 +196,10 @@ export class MiranaLegends extends ModBase {
         if(e.ability.GetAbilityName()!==Q || !this.owned("mir_l_starstorm") || this.held || this.pickup ||
             clock()-this.qCastAt<0.05)return;
         this.qCastAt=clock();
-        this.qPending=clock()+1.6;
+        this.qPending=clock()+1.8;
+        const early=this.earlyStarHit;
+        this.earlyStarHit=undefined;
+        if(early!==undefined && clock()-early.at<=0.12)this.dropStar(early.target);
     }
     OnAbilityExecuted(e:ModifierAbilityEvent) {
         if(IsServer() && e.unit===this.GetParent() && alive(e.unit) && real(e.unit))this.watchStarfall(e);
@@ -213,17 +222,27 @@ export class MiranaLegends extends ModBase {
         if(!IsServer()||e.attacker!==h||!alive(h)||!e.inflictor)return;
         const n=e.inflictor.GetAbilityName();
         if(n===W && this.nativeArrow) this.nativeArrow=undefined;
-        if(n!==Q || this.qPending<=clock()||this.pickup||this.held||!e.unit.IsHero()||!real(e.unit)||e.unit.GetTeamNumber()===h.GetTeamNumber())return;
+        if(n!==Q || !this.owned("mir_l_starstorm") || this.pickup || this.held ||
+            !IsValidEntity(e.unit) || !real(e.unit) || e.unit.GetTeamNumber()===h.GetTeamNumber() ||
+            e.unit.IsOutOfGame() || e.damage<=0 || e.unit.IsDebuffImmune())return;
+        if(this.qPending>clock())this.dropStar(e.unit);
+        else if(clock()-this.qStartAt<=0.75) this.earlyStarHit??={target:e.unit,at:clock()};
+    }
+    private dropStar(target: CDOTA_BaseNPC) {
+        const h=this.GetParent();
+        if(this.pickup!==undefined || this.held!==undefined || !IsValidEntity(target))return;
         this.qPending=0;
-        const pos=e.unit.GetAbsOrigin(), back=aim(pos,h.GetAbsOrigin(),h.GetForwardVector());
+        const pos=target.GetAbsOrigin(), back=aim(pos,h.GetAbsOrigin(),h.GetForwardVector());
         let point=step(pos,back,145);if(!legal(point))point=pos;
         point=GetGroundPosition(point,h);
-        const model=SpawnEntityFromTableSynchronous("prop_dynamic",{model:STAR_MODEL,solid:0,disableshadows:1,modelscale:1.65});
-        model?.SetAbsOrigin(Vector(point.x,point.y,point.z+70));
-        this.pickup={point, ends:clock()+6, ring:ring(point,84),beam:effect(MOON,point),model};
+        const marker=Vector(point.x,point.y,point.z+66);
+        const model=SpawnEntityFromTableSynchronous("prop_dynamic",{model:STAR_MODEL,solid:0,disableshadows:1,origin:marker});
+        model?.SetAbsOrigin(marker);
+        const opened=clock();
+        this.pickup={point, opens:opened+STAR_GRACE, ends:opened+6, beam:effect(MOON,point),model};
         burst(SHINE,point);
     }
-    private clearPickup(){stop(this.pickup?.ring);stop(this.pickup?.beam);const model=this.pickup?.model;if(model!==undefined && IsValidEntity(model))UTIL_Remove(model);this.pickup=undefined;}
+    private clearPickup(){stop(this.pickup?.beam);const model=this.pickup?.model;if(model!==undefined && IsValidEntity(model))UTIL_Remove(model);this.pickup=undefined;}
     private clearHeld(){remove(this.held?.icon);this.held=undefined;this.swap(Q,THROW,false);}
     ThrowStar(a:CDOTABaseAbility,point:Vector) {
         const h=this.GetParent();if(!this.held||this.held.ends<clock()||!alive(h))return;
@@ -449,6 +468,10 @@ export class MiranaLegends extends ModBase {
         if(this.pin&&(!validTree(this.pin.tree)||t>=this.pin.deadline))this.clearPin();
         const pick=this.pickup;
         if(pick){
+            const turn=(t-pick.opens)*48;
+            pick.model?.SetAngles(0,turn,0);
+        }
+        if(pick && t>=pick.opens){
             const near=FindUnitsInRadius(h.GetTeamNumber(),pick.point,undefined,84,UnitTargetTeam.BOTH,UnitTargetType.HERO,
                 UnitTargetFlags.MAGIC_IMMUNE_ENEMIES,FindOrder.CLOSEST,false)
                 .find(u=>alive(u)&&real(u)&&(u===h||u.GetTeamNumber()!==h.GetTeamNumber())&&!u.IsOutOfGame());
@@ -487,7 +510,7 @@ export class MiranaLegends extends ModBase {
         }
     }
     private reset(){
-        this.recharge=undefined;this.armedMoon=0;this.qPending=0;this.arrowPlan=undefined;this.nativeArrow=undefined;
+        this.recharge=undefined;this.armedMoon=0;this.qPending=0;this.qStartAt=-5;this.earlyStarHit=undefined;this.arrowPlan=undefined;this.nativeArrow=undefined;
         this.clearPickup();this.clearHeld();this.clearPin();this.clearLeap();this.clearMoons();
         if(this.arrowFlight){ProjectileManager.DestroyLinearProjectile(this.arrowFlight.projectile);this.arrowFlight=undefined;}
         this.stars.clear();this.fans.clear();

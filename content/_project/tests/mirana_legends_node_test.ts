@@ -33,7 +33,7 @@ function fixture(awake=false) {
     const m=new ctor();m.GetParent=()=>h;m.owned=(id:string)=>id.startsWith("mir_l_");m.awake=()=>awake;
     return {h,enemy,enemy2,c1,c2,tree,m,skills,tick(t:number){time=t;m.OnIntervalThink();},
         cast(n:string){m.OnAbilityFullyCast({unit:h,ability:skills.get(n)});},
-        hit(n:string,u=enemy){m.OnTakeDamage({attacker:h,unit:u,inflictor:skills.get(n)});}};
+        hit(n:string,u=enemy){m.OnTakeDamage({attacker:h,unit:u,damage:100,inflictor:skills.get(n)});}};
 }
 beforeAll(async()=>{
     for(const n of ["legend","star","arrow","turn","moons","decoy","shot","reach"])vi.stubGlobal("modifier_orb_mirana_"+n,null);
@@ -45,7 +45,7 @@ beforeEach(()=>{
         ParticleManager:{CreateParticle:vi.fn(()=>1),SetParticleControl:vi.fn(),DestroyParticle:vi.fn(),ReleaseParticleIndex:vi.fn()},
         ProjectileManager:{CreateLinearProjectile:vi.fn(()=>10),DestroyLinearProjectile:vi.fn()},
         EmitSoundOn:vi.fn(),ApplyDamage:vi.fn(),GetGroundPosition:(p:any)=>pos(p.x,p.y,0),FindClearSpaceForUnit:vi.fn((u:any,p:any)=>{u.p=p;}),
-        StartSoundEventFromPosition:vi.fn(),AddFOWViewer:vi.fn(),UTIL_Remove:vi.fn(),SpawnEntityFromTableSynchronous:vi.fn(()=>({SetAbsOrigin:vi.fn(),SetForwardVector:vi.fn()})),
+        StartSoundEventFromPosition:vi.fn(),AddFOWViewer:vi.fn(),UTIL_Remove:vi.fn(),SpawnEntityFromTableSynchronous:vi.fn(()=>({SetAbsOrigin:vi.fn(),SetForwardVector:vi.fn(),SetAngles:vi.fn()})),
         DamageTypes:{MAGICAL:2,PHYSICAL:1},UnitTargetTeam:{BOTH:3,ENEMY:2},UnitTargetType:{HERO:1,BASIC:2},
         UnitTargetFlags:{MAGIC_IMMUNE_ENEMIES:16},ParticleAttachment:{WORLDORIGIN:1},FindOrder:{CLOSEST:0,ANY:1}})) vi.stubGlobal(k,v);
 });
@@ -55,12 +55,14 @@ describe("легендарки Мираны",()=>{
     it("ручной Starstorm роняет одну звезду; соперник может раздавить её до подбора",()=>{
         const f=fixture();
         f.hit(Q);expect(f.m.pickup).toBeUndefined();
-        f.cast(Q);f.hit(Q);const pickup=f.m.pickup;expect(pickup.model).toBeDefined();f.hit(Q);expect(f.m.pickup).toBe(pickup);
-        f.enemy.p=pickup.point;f.tick(1.2);expect(f.m.pickup).toBeUndefined();expect(f.m.held).toBeUndefined();
+        f.m.OnAbilityStart({unit:f.h,ability:f.skills.get(Q)});
+        f.hit(Q);expect(f.m.pickup).toBeUndefined();
+        f.cast(Q);const pickup=f.m.pickup;expect(pickup.model).toBeDefined();f.hit(Q);expect(f.m.pickup).toBe(pickup);
+        f.enemy.p=pickup.point;f.tick(1.95);expect(f.m.pickup).toBe(pickup);f.tick(2.05);expect(f.m.pickup).toBeUndefined();expect(f.m.held).toBeUndefined();
     });
     it("подобранная звезда в пробуждении проходит через первого и поражает второго один раз",()=>{
         const f=fixture(true);
-        f.cast(Q);f.hit(Q);f.h.p=f.m.pickup.point;f.tick(1.2);
+        f.cast(Q);f.hit(Q);f.h.p=f.m.pickup.point;f.tick(2.05);
         f.m.owned=(id:string)=>id.startsWith("mir_l_")||id==="mir_p_starlight"||id==="mir_p_meteor";
         f.m.ThrowStar(f.skills.get("orb_mirana_star"),pos(900));
         const projectile=vi.mocked(ProjectileManager.CreateLinearProjectile).mock.calls[0][0] as any;

@@ -18,7 +18,7 @@ const DUST = "particles/units/heroes/hero_earthshaker/earthshaker_aftershock.vpc
 const ECHO = "particles/units/heroes/hero_earthshaker/earthshaker_echoslam_start.vpcf";
 const CRACK = "particles/units/heroes/hero_earthshaker/earthshaker_echoslam_start_cracks.vpcf";
 const ROCK = "models/items/earthshaker/baron_of_the_minotaur_fissure/baron_of_the_minotaur_fissure1.vmdl";
-const WALL_TIME = 12;
+const WALL_TIME = 9.5;
 const time = () => GameRules.GetGameTime();
 const rad = Math.PI / 180;
 function dist(a: Vector, b: Vector) { return Math.sqrt((a.x-b.x)**2 + (a.y-b.y)**2); }
@@ -68,7 +68,7 @@ class Pathing extends PivotIcon {
 }
 interface Ridge {
     origin: Vector; hinge: Vector; half: number; dir: number; movingDir: number; ends: number; skill: CDOTABaseAbility;
-    blocks: Map<string,CBaseEntity>; rocks: CBaseEntity[]; hints: ParticleID[]; pivoted: boolean;
+    blocks: Map<string,CBaseEntity>; rocks: CBaseEntity[]; pivoted: boolean;
     start?:number; delta:number; swept:Set<CDOTA_BaseNPC>; icon?:CDOTA_Buff; nextGrid:number;
 }
 interface Mark {pos:Vector;ends:number;fx:ParticleID}
@@ -137,7 +137,7 @@ export class ShakerLegends extends ModBase {
         const duration=WALL_TIME+Math.max(0,(overrideValue(this.b(),Q,"fissure_duration",base)??base)-base);
         const half=Math.max(150,skill.GetCastRange(origin,undefined)+h.GetCastRangeBonus())/2;
         const wall:Ridge={origin,hinge:ray(origin,dir,half),half,dir,movingDir:dir,ends:time()+duration,skill,
-            blocks:new Map(),rocks:[],hints:[],delta:0,pivoted:false,swept:new Set(),nextGrid:0};
+            blocks:new Map(),rocks:[],delta:0,pivoted:false,swept:new Set(),nextGrid:0};
         const start=ray(origin,dir,105);
         // Separate stones follow the bent ridge; collision uses a grid-cell union, including the fixed half.
         for(let d=105;d<2*half;d+=96){
@@ -146,7 +146,6 @@ export class ShakerLegends extends ModBase {
         }
         this.ridge=wall;
         this.drawWall(wall,true);
-        wall.hints.push(ring(wall.hinge,76,Vector(255,177,42)));
         wall.icon=h.AddNewModifier(h,skill,"modifier_orb_es_pivot",{duration});
         wall.icon?.SetStackCount(1);
         this.swap(Q,PIVOT,true);
@@ -179,9 +178,9 @@ export class ShakerLegends extends ModBase {
         const max=(this.b().awake?90:60)*rad;
         w.delta=Math.max(-max,Math.min(max,signedTurn(w.dir,angle(w.hinge,p))));
         if(Math.abs(w.delta)<3*rad)return;
-        w.pivoted=true;w.start=time();w.ends=Math.max(w.ends,w.start+3);clear(w.icon);
+        w.pivoted=true;w.start=time();w.ends=Math.max(w.ends,w.start+2);clear(w.icon);
         this.swap(Q,PIVOT,false);
-        for(let d=120;d<w.half;d+=180)w.hints.push(ring(ray(w.hinge,w.dir+w.delta,d),40,Vector(255,96,35)));
+        burst(CRACK,ray(w.hinge,w.dir+w.delta,w.half),120);
         EmitSoundOn("Hero_EarthShaker.Fissure",this.GetParent());
     }
     private lineDistance(p:Vector,start:Vector,dir:number,len:number){
@@ -216,7 +215,7 @@ export class ShakerLegends extends ModBase {
                 w.swept.add(u);this.damage(u,w.skill,280+(this.have("es_p_rift")?70:0));
                 if(live(u))shove(h,u,w.skill,w.movingDir+(w.delta<0?-1:1)*Math.PI/2,130,0.18,20,false);
             }
-            if(frac>=1){w.start=undefined;for(const fx of w.hints)endFX(fx);w.hints=[];}
+            if(frac>=1)w.start=undefined;
         }
         if(h.HasModifier("modifier_item_aghanims_shard")&&this.ridgeDistance(w,h.GetAbsOrigin())<100)
             h.AddNewModifier(h,w.skill,"modifier_orb_es_path",{duration:0.2});
@@ -226,7 +225,6 @@ export class ShakerLegends extends ModBase {
         this.ridge=undefined;clear(w.icon);this.swap(Q,PIVOT,false);
         for(const [,e] of w.blocks)remove(e);
         for(const e of w.rocks)remove(e);
-        for(const fx of w.hints)endFX(fx);
     }
     OnAttackRecord(e:ModifierAttackEvent){
         if(!IsServer()||e.attacker!==this.GetParent()||!this.have("es_l_faultline")||e.no_attack_cooldown||!valid(e.target))return;

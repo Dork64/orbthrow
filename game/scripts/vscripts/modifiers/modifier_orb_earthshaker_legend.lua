@@ -32,7 +32,7 @@ local DUST = "particles/units/heroes/hero_earthshaker/earthshaker_aftershock.vpc
 local ECHO = "particles/units/heroes/hero_earthshaker/earthshaker_echoslam_start.vpcf"
 local CRACK = "particles/units/heroes/hero_earthshaker/earthshaker_echoslam_start_cracks.vpcf"
 local ROCK = "models/items/earthshaker/baron_of_the_minotaur_fissure/baron_of_the_minotaur_fissure1.vmdl"
-local WALL_TIME = 12
+local WALL_TIME = 9.5
 local function time()
     return GameRules:GetGameTime()
 end
@@ -342,7 +342,6 @@ function ShakerLegends.prototype.makeWall(self, skill)
         skill = skill,
         blocks = __TS__New(Map),
         rocks = {},
-        hints = {},
         delta = 0,
         pivoted = false,
         swept = __TS__New(Set),
@@ -368,16 +367,10 @@ function ShakerLegends.prototype.makeWall(self, skill)
     end
     self.ridge = wall
     self:drawWall(wall, true)
-    local ____wall_hints_1 = wall.hints
-    ____wall_hints_1[#____wall_hints_1 + 1] = ring(
-        wall.hinge,
-        76,
-        Vector(255, 177, 42)
-    )
     wall.icon = h:AddNewModifier(h, skill, "modifier_orb_es_pivot", {duration = duration})
-    local ____opt_2 = wall.icon
-    if ____opt_2 ~= nil then
-        ____opt_2:SetStackCount(1)
+    local ____opt_1 = wall.icon
+    if ____opt_1 ~= nil then
+        ____opt_1:SetStackCount(1)
     end
     self:swap(Q, PIVOT, true)
 end
@@ -466,21 +459,14 @@ function ShakerLegends.prototype.Pivot(self, p)
     end
     w.pivoted = true
     w.start = time()
-    w.ends = math.max(w.ends, w.start + 3)
+    w.ends = math.max(w.ends, w.start + 2)
     clear(w.icon)
     self:swap(Q, PIVOT, false)
-    do
-        local d = 120
-        while d < w.half do
-            local ____w_hints_4 = w.hints
-            ____w_hints_4[#____w_hints_4 + 1] = ring(
-                ray(w.hinge, w.dir + w.delta, d),
-                40,
-                Vector(255, 96, 35)
-            )
-            d = d + 180
-        end
-    end
+    burst(
+        CRACK,
+        ray(w.hinge, w.dir + w.delta, w.half),
+        120
+    )
     EmitSoundOn(
         "Hero_EarthShaker.Fissure",
         self:GetParent()
@@ -526,7 +512,7 @@ function ShakerLegends.prototype.shardShock(self, w)
                 w,
                 u:GetAbsOrigin()
             ) > range then
-                goto __continue80
+                goto __continue79
             end
             self:damage(
                 u,
@@ -540,7 +526,7 @@ function ShakerLegends.prototype.shardShock(self, w)
                 {duration = e:GetSpecialValueFor("AbilityDuration") * w.skill:GetSpecialValueFor("shard_aftershock_stun_duration_pct") / 100 * (1 - u:GetStatusResistance())}
             )
         end
-        ::__continue80::
+        ::__continue79::
     end
     burst(DUST, w.hinge, range)
 end
@@ -566,7 +552,7 @@ function ShakerLegends.prototype.tickWall(self, w, t)
                     w.movingDir,
                     w.half
                 ) > sweepWidth then
-                    goto __continue87
+                    goto __continue86
                 end
                 w.swept:add(u)
                 self:damage(
@@ -587,14 +573,10 @@ function ShakerLegends.prototype.tickWall(self, w, t)
                     )
                 end
             end
-            ::__continue87::
+            ::__continue86::
         end
         if frac >= 1 then
             w.start = nil
-            for ____, fx in ipairs(w.hints) do
-                endFX(fx)
-            end
-            w.hints = {}
         end
     end
     if h:HasModifier("modifier_item_aghanims_shard") and self:ridgeDistance(
@@ -618,9 +600,6 @@ function ShakerLegends.prototype.clearRidge(self)
     end
     for ____, e in ipairs(w.rocks) do
         remove(e)
-    end
-    for ____, fx in ipairs(w.hints) do
-        endFX(fx)
     end
 end
 function ShakerLegends.prototype.OnAttackRecord(self, e)
@@ -768,8 +747,8 @@ function ShakerLegends.prototype.recordCrack(self, u)
     if #self.cracks >= (self:b().awake and 2 or 1) then
         endFX(table.remove(self.cracks, 1).fx)
     end
-    local ____self_cracks_5 = self.cracks
-    ____self_cracks_5[#____self_cracks_5 + 1] = {
+    local ____self_cracks_3 = self.cracks
+    ____self_cracks_3[#____self_cracks_3 + 1] = {
         pos = p,
         ends = t + window,
         fx = ring(
@@ -796,13 +775,13 @@ function ShakerLegends.prototype.crackHUD(self)
     if self.crackIcon == nil or self.crackIcon:IsNull() then
         self.crackIcon = h:AddNewModifier(h, a, "modifier_orb_es_crack", {duration = duration})
     end
+    local ____opt_4 = self.crackIcon
+    if ____opt_4 ~= nil then
+        ____opt_4:SetDuration(duration, true)
+    end
     local ____opt_6 = self.crackIcon
     if ____opt_6 ~= nil then
-        ____opt_6:SetDuration(duration, true)
-    end
-    local ____opt_8 = self.crackIcon
-    if ____opt_8 ~= nil then
-        ____opt_8:SetStackCount(#self.cracks)
+        ____opt_6:SetStackCount(#self.cracks)
     end
 end
 function ShakerLegends.prototype.Detonate(self, ability)
@@ -853,7 +832,7 @@ function ShakerLegends.prototype.finishFuse(self)
         for ____, u in ipairs(self:enemies(m.pos, 175)) do
             do
                 if hit:has(u) or not magic(u) then
-                    goto __continue147
+                    goto __continue142
                 end
                 hit:add(u)
                 self:damage(
@@ -874,7 +853,7 @@ function ShakerLegends.prototype.finishFuse(self)
                     )
                 end
             end
-            ::__continue147::
+            ::__continue142::
         end
     end
     EmitSoundOn("Hero_EarthShaker.Aftershock", h)
@@ -931,9 +910,9 @@ function ShakerLegends.prototype.tickTrail(self, s, dt)
     end
     s.last = pos
     s.remaining = s.remaining - dt
-    local ____opt_10 = s.icon
-    if ____opt_10 ~= nil then
-        ____opt_10:SetStackCount(math.max(
+    local ____opt_8 = s.icon
+    if ____opt_8 ~= nil then
+        ____opt_8:SetStackCount(math.max(
             1,
             math.ceil(s.remaining)
         ))
@@ -989,18 +968,18 @@ function ShakerLegends.prototype.OnIntervalThink(self)
                 "modifier_orb_es_charged",
                 {duration = buff:GetRemainingTime()}
             ) or nil
-            local ____opt_12 = self.charged
-            if ____opt_12 ~= nil then
-                ____opt_12:SetStackCount(1)
+            local ____opt_10 = self.charged
+            if ____opt_10 ~= nil then
+                ____opt_10:SetStackCount(1)
             end
         end
-        local ____self_swap_17 = self.swap
-        local ____temp_16 = self:b().awake and buff ~= nil and not self.spentStep
-        if ____temp_16 then
-            local ____opt_14 = h:FindAbilityByName(W)
-            ____temp_16 = (____opt_14 and ____opt_14:GetCooldownTimeRemaining() or 0) > 0.06
+        local ____self_swap_15 = self.swap
+        local ____temp_14 = self:b().awake and buff ~= nil and not self.spentStep
+        if ____temp_14 then
+            local ____opt_12 = h:FindAbilityByName(W)
+            ____temp_14 = (____opt_12 and ____opt_12:GetCooldownTimeRemaining() or 0) > 0.06
         end
-        ____self_swap_17(self, W, STEP, ____temp_16)
+        ____self_swap_15(self, W, STEP, ____temp_14)
     end
     if self.ridge then
         self:tickWall(self.ridge, t)

@@ -156,8 +156,8 @@
    "ab": "mirana_starfall",
    "ru": "Поймать звезду",
    "en": "Catch a Star",
-   "ru_d": "Ручной Starstorm роняет рядом с задетым героем звезду на 6 с. Подберите её раньше соперника и за 4 с бросьте повторным Q. Первый герой на пути получает двойной урон звезды Starstorm.",
-   "en_d": "Manual Starstorm drops a star near a hit hero for 6 s. Pick it up before your opponent and throw it within 4 s with Q. The first hero hit takes twice the damage of a Starstorm star.",
+   "ru_d": "Ручной Starstorm роняет рядом с задетым героем звезду на 6 с. Подобрать её можно через 1 с после появления. Подберите её раньше соперника и за 4 с бросьте повторным Q. Первый герой на пути получает двойной урон звезды Starstorm.",
+   "en_d": "Manual Starstorm drops a star near a hit hero for 6 s. It cannot be picked up for the first second. Pick it up before your opponent and throw it within 4 s with Q. The first hero hit takes twice the damage of a Starstorm star.",
    "ru_aw": "Пробуждение: Снаряд проходит через первого героя и поражает второго.",
    "en_aw": "Awakening: The star pierces the first hero and can hit a second.",
    "code": true

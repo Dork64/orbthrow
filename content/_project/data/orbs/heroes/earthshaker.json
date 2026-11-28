@@ -169,8 +169,8 @@
    "ab": "earthshaker_fissure",
    "ru": "Тектонический сдвиг",
    "en": "Tectonic Shift",
-   "ru_d": "Fissure создаёт каменную стену на 12 с. Повторное Q поворачивает дальнюю половину до 60° за 0,8 с. Движущийся гребень сдвигает героя и наносит 280 магического урона один раз.",
-   "en_d": "Fissure creates a stone wall for 12 s. Recast Q to rotate the far half up to 60° in 0.8 s. The sweeping ridge moves each hero once and deals 280 magic damage.",
+   "ru_d": "Fissure создаёт каменную стену на 9,5 с. Повторное Q поворачивает дальнюю половину до 60° за 0,8 с. Движущийся гребень сдвигает героя и наносит 280 магического урона один раз.",
+   "en_d": "Fissure creates a stone wall for 9.5 s. Recast Q to rotate the far half up to 60° in 0.8 s. The sweeping ridge moves each hero once and deals 280 magic damage.",
    "ru_aw": "Пробуждение: Поворот до 90°.",
    "en_aw": "Awakening: Turn up to 90°.",
    "code": true
