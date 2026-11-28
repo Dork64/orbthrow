@@ -29,8 +29,8 @@
    ],
    "ru": "Прилив сил",
    "en": "Surging Strength",
-   "ru_d": "Gush лечит Тайда на 30% урона по героям. Отлив приходит через 0,8 с вместо 1 с.",
-   "en_d": "Gush heals Tidehunter for 30% of its hero damage. The undertow starts after 0.8 s instead of 1 s."
+   "ru_d": "Gush лечит Тайда на 30% урона по героям. Отлив приходит через 0,56 с вместо 0,74 с.",
+   "en_d": "Gush heals Tidehunter for 30% of its hero damage. Undertow starts after 0.56 s instead of 0.74 s."
   },
   {
    "id": "tide_p_spikes",
@@ -122,10 +122,10 @@
    "code": true,
    "ru": "Донное течение",
    "en": "Undertow",
-   "ru_d": "Первое попадание Gush по герою отмечает полосу от него к месту каста. Через 1 с по ней идёт отлив на 215 магического урона.",
-   "en_d": "The first hero hit by Gush marks a lane back toward the cast position. After 1 s, an undertow sweeps it for 215 magic damage.",
-   "ru_aw": "Пробуждение. Отлив наносит 275 магического урона.",
-   "en_aw": "Awakening. The undertow deals 275 magic damage."
+   "ru_d": "Первое попадание Gush по герою отмечает полосу от него к месту каста. Через 0,74 с по ней проходит волна высотой в героя и наносит 315 магического урона один раз каждому герою.",
+   "en_d": "The first hero hit by Gush marks the lane back toward the caster. After 0.74 s a wave sweeps it for 315 magic damage once per hero.",
+   "ru_aw": "Пробуждение. Отлив наносит 380 магического урона.",
+   "en_aw": "Awakening. Undertow deals 380 magic damage."
   },
   {
    "id": "tide_l_shell",
@@ -135,10 +135,10 @@
    "code": true,
    "ru": "Панцирь под давлением",
    "en": "Pressure Shell",
-   "ru_d": "Активный Kraken Shell запасает 45% полученного от героев урона, до 330. При запасе от 90 в конце он выплёскивает его и ещё 65 магического урона в радиусе 420. Break мешает накоплению и выбросу.",
-   "en_d": "Active Kraken Shell stores 45% of hero damage taken, up to 330. With at least 90 stored it bursts at expiry for the stored amount plus 65 magic damage in a 420 radius. Break stops storage and release.",
-   "ru_aw": "Пробуждение. Предел запаса увеличивается до 430.",
-   "en_aw": "Awakening. The pressure cap increases to 430."
+   "ru_d": "Активный Kraken Shell запасает 60% входящего урона от героев до блока и сопротивлений, максимум 410. Повторное W спустя 0,45 с или конец действия запускают взрыв с коротким предупреждением. Он наносит 225 + запас магического урона в радиусе 460. Break отключает накопление и взрыв.",
+   "en_d": "Active Kraken Shell stores 60% of incoming hero damage before block and resistance, up to 410. Recast W after 0.45 s or wait for expiry to trigger a telegraphed burst for 225 plus stored magic damage in a 460 radius. Break disables storage and detonation.",
+   "ru_aw": "Пробуждение. Предел запаса увеличивается до 530.",
+   "en_aw": "Awakening. The pressure cap increases to 530."
   },
   {
    "id": "tide_l_anchor",
@@ -148,8 +148,8 @@
    "code": true,
    "ru": "Якорь на тросе",
    "en": "Anchor Line",
-   "ru_d": "Ручной Anchor Smash оставляет якорь на 2,1 с. Повторное E с расстояния до 720 возвращает к нему после короткой подготовки и бьёт в радиусе 265 на 135 + 35% урона атаки физическим уроном.",
-   "en_d": "A manual Anchor Smash drops an anchor for 2.1 s. Recast E within 720 range to wind up, return, and deal 135 plus 35% attack damage as physical damage in a 265 radius.",
+   "ru_d": "Ручной Anchor Smash оставляет якорь на 2,1 с. Повторное E с расстояния до 720 возвращает к нему после короткой подготовки и наносит 180 + 45% урона атаки физическим уроном в радиусе 265.",
+   "en_d": "A manual Anchor Smash drops an anchor for 2.1 s. Recast E within 720 range to wind up, return, and deal 180 plus 45% attack damage as physical damage in a 265 radius.",
    "ru_aw": "Пробуждение. Окно для возврата увеличивается до 2,7 с.",
    "en_aw": "Awakening. The recast window increases to 2.7 s."
   },
@@ -161,10 +161,10 @@
    "code": true,
    "ru": "Глаз водоворота",
    "en": "Eye of the Whirlpool",
-   "ru_d": "Ravage оставляет водоворот. После задержки, зависящей от оглушения Ravage, внешнее кольцо за 1,2 с сжимается с радиуса 820 до безопасного центра 295, нанося 285 магического урона один раз каждому герою.",
-   "en_d": "Ravage leaves a whirlpool. After a delay that scales with the Ravage stun, the outer wave contracts from 820 to a safe 295 radius over 1.2 s, dealing 285 magic damage once per hero.",
+   "ru_d": "Ravage оставляет водоворот. После задержки, зависящей от оглушения Ravage, волны за 1,2 с сходятся с радиуса 820 к безопасному центру 295 и наносят 345 магического урона один раз каждому герою.",
+   "en_d": "Ravage leaves a whirlpool. After a delay that scales with the Ravage stun, the waves contract from 820 to a safe 295 radius over 1.2 s, dealing 345 magic damage once per hero.",
    "ru_aw": "Пробуждение. Внешний радиус водоворота увеличивается до 950.",
-   "en_aw": "Awakening. Whirlpool outer radius increases to 950."
+   "en_aw": "Awakening. The outer radius increases to 950."
   },
   {
    "id": "tide_m_autoanchor",

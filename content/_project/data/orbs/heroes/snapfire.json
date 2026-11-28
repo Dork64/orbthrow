@@ -188,10 +188,10 @@
    "code": true,
    "ru": "Двустволка",
    "en": "Double Barrel",
-   "ru_d": "Scatterblast оставляет ствол на 3 с. Повторное Q задаёт направление выстрела от ствола. Через 0,6 с полоса наносит 290 магического урона. Дальность 900.",
-   "en_d": "Scatterblast plants a barrel for 3 s. Recast Q to aim a shot from it. The lane deals 290 magic damage after 0.6 s. Range 900.",
+   "ru_d": "Scatterblast оставляет ствол на 3 с. Повторное Q наводит выстрел от ствола. Через 0,5 с полоса наносит 385 магического урона, до 340 от ствола — 540. Дальность 900.",
+   "en_d": "Scatterblast plants a barrel for 3 s. Recast Q to aim from it. After 0.5 s the lane deals 385 magic damage, or 540 within 340 of the barrel. Range 900.",
    "ru_aw": "Пробуждение. Дальность второго выстрела увеличивается до 1150.",
-   "en_aw": "Awakening. Bank shot range increases to 1150."
+   "en_aw": "Awakening. The bank shot reaches 1150."
   },
   {
    "id": "snap_l_cookie",
@@ -201,10 +201,10 @@
    "code": true,
    "ru": "Пружинное печенье",
    "en": "Spring Cookie",
-   "ru_d": "После посадки от Cookie на себя есть 1,45 с, чтобы повторным W прыгнуть на расстояние до 430. Посадка наносит 225 магического урона в радиусе 255.",
-   "en_d": "After landing a self-Cookie, recast W within 1.45 s to hop up to 430. Landing deals 225 magic damage in a 255 radius.",
-   "ru_aw": "Пробуждение. Окно для второго прыжка увеличивается до 2 с, радиус посадки — до 310.",
-   "en_aw": "Awakening. The recast window increases to 2 s and the landing radius to 310."
+   "ru_d": "После посадки от Cookie на себя есть 1,8 с на повторный W. Второй прыжок до 430 наносит 345 магического урона в радиусе 255 и ненадолго замедляет задетых. Первая атака Снэпфайр по одному из них в течение 3 с добавляет 185 физического урона.",
+   "en_d": "After landing a self-Cookie, recast W within 1.8 s to hop up to 430. Landing deals 345 magic damage in a 255 radius and briefly slows. Snapfire’s first attack against one of those heroes within 3 s deals 185 bonus physical damage.",
+   "ru_aw": "Пробуждение. Окно для второго прыжка увеличивается до 2,35 с, радиус посадки — до 310.",
+   "en_aw": "Awakening. The recast window increases to 2.35 s and landing radius to 310."
   },
   {
    "id": "snap_l_shredder",
@@ -214,10 +214,10 @@
    "code": true,
    "ru": "Перекрёстный огонь",
    "en": "Crossfire",
-   "ru_d": "Lil’ Shredder ставит турель. Каждое второе попадание по герою наводит её в сторону цели. Через 0,6 с она простреливает отмеченную полосу на 140 физического урона. До 3 выстрелов за применение.",
-   "en_d": "Lil’ Shredder deploys a turret. Every second hero hit lines up a shot toward the target. After 0.6 s, the marked line takes 140 physical damage. Up to 3 shots per cast.",
-   "ru_aw": "Пробуждение. Турель наносит 185 физического урона.",
-   "en_aw": "Awakening. The turret deals 185 physical damage."
+   "ru_d": "Lil’ Shredder ставит турель. Каждое второе попадание по герою наводит её в сторону цели. Через 0,6 с она простреливает отмеченную полосу на 180 физического урона. До 3 выстрелов за применение.",
+   "en_d": "Lil’ Shredder deploys a turret. Every second hero hit lines up a shot. After 0.6 s the marked lane takes 180 physical damage. Up to 3 shots per cast.",
+   "ru_aw": "Пробуждение. Турель наносит 235 физического урона.",
+   "en_aw": "Awakening. The turret deals 235 physical damage."
   },
   {
    "id": "snap_l_mortimer",
@@ -227,10 +227,10 @@
    "code": true,
    "ru": "Марш огня",
    "en": "Fire March",
-   "ru_d": "Mortimer Kisses отмечает две точки по разным сторонам от прицела. Они по очереди взрываются на 255 магического урона, максимум одно попадание по герою.",
-   "en_d": "Mortimer Kisses marks two points on opposite sides of the aim. They explode in order for 255 magic damage, at most once per hero.",
-   "ru_aw": "Пробуждение. В конце маршрута взрывается третья точка.",
-   "en_aw": "Awakening. A third spot explodes at the end of the route."
+   "ru_d": "Mortimer Kisses запускает два снаряда с разных сторон от прицела. Они по очереди взрываются на 325 магического урона, максимум одно попадание по герою.",
+   "en_d": "Mortimer Kisses launches two shells from opposite sides of the aim. They explode in order for 325 magic damage, at most once per hero.",
+   "ru_aw": "Пробуждение. В конце маршрута падает третий снаряд.",
+   "en_aw": "Awakening. A third shell falls at the end of the route."
   }
  ]
 }

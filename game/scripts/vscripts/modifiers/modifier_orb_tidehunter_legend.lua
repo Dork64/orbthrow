@@ -3,6 +3,7 @@ local __TS__Class = ____lualib.__TS__Class
 local __TS__ClassExtends = ____lualib.__TS__ClassExtends
 local Set = ____lualib.Set
 local __TS__New = ____lualib.__TS__New
+local __TS__ArrayForEach = ____lualib.__TS__ArrayForEach
 local ____exports = {}
 local ____registry = require("lib.registry")
 local registerModifier = ____registry.registerModifier
@@ -11,7 +12,6 @@ local ModBase = ____modbase.ModBase
 local ____legendfield = require("lib.legendfield")
 local direction = ____legendfield.direction
 local distance = ____legendfield.distance
-local flash = ____legendfield.flash
 local legal = ____legendfield.legal
 local LegendField = ____legendfield.LegendField
 local now = ____legendfield.now
@@ -27,8 +27,12 @@ local W = "tidehunter_kraken_shell"
 local E = "tidehunter_anchor_smash"
 local R = "tidehunter_ravage"
 local RETURN = "orb_tide_anchor_return"
+local RELEASE = "orb_tide_shell_release"
 local SPLASH = "particles/units/heroes/hero_tidehunter/tidehunter_gush_splash.vpcf"
-local GUSH = "particles/units/heroes/hero_tidehunter/tidehunter_gush.vpcf"
+local CREST = "models/orbthrow/legend_props/undertow_crest.vmdl"
+local TRACK = "models/orbthrow/legend_props/undertow_track.vmdl"
+local CARAPACE = "models/heroes/tidehunter/tidehunter_kraken_shell.vmdl"
+local WAVE_SPEED = 1450
 local ANCHOR = "models/heroes/tidehunter/tidehunter_anchor.vmdl"
 local function teal()
     return Vector(75, 240, 185)
@@ -75,19 +79,35 @@ function TidehunterLegends.prototype.OnAbilityFullyCast(self, event)
                     1,
                     ability:GetSpecialValueFor("active_duration")
                 )
-                local radius = self:owns("tide_p_brine") and 485 or 420
-                self.shell = {
+                local radius = self:owns("tide_p_brine") and 525 or 460
+                local models = {}
+                do
+                    local i = 0
+                    while i < 3 do
+                        local model = prop(
+                            CARAPACE,
+                            point,
+                            1.15,
+                            hero:GetForwardVector()
+                        )
+                        if model then
+                            models[#models + 1] = model
+                        end
+                        i = i + 1
+                    end
+                end
+                local shell = {
                     ability = ability,
-                    mark = ring(
-                        point,
-                        radius,
-                        teal()
-                    ),
+                    models = models,
                     radius = radius,
+                    start = now(),
                     ["until"] = now() + duration,
                     stored = 0,
                     icon = hero:AddNewModifier(hero, ability, "modifier_orb_tide_pressure", {duration = duration})
                 }
+                self.shell = shell
+                self:open(ability, RELEASE, duration)
+                self:tickShell(shell)
                 break
             end
         end
@@ -97,11 +117,6 @@ function TidehunterLegends.prototype.OnAbilityFullyCast(self, event)
                 if not self:owns("tide_l_anchor") then
                     return
                 end
-                local mark = ring(
-                    point,
-                    self:owns("tide_p_weaken") and 310 or 265,
-                    teal()
-                )
                 local model = prop(
                     ANCHOR,
                     Vector(point.x, point.y, point.z + 42),
@@ -109,7 +124,6 @@ function TidehunterLegends.prototype.OnAbilityFullyCast(self, event)
                     hero:GetForwardVector()
                 )
                 local function clear()
-                    stop(mark)
                     removeProp(model)
                     self.anchor = nil
                 end
@@ -158,9 +172,35 @@ function TidehunterLegends.prototype.OnAbilityFullyCast(self, event)
                         EYE,
                         teal()
                     ),
+                    crests = {},
                     hit = __TS__New(Set),
-                    damage = 285 + (self:owns("tide_p_maelstrom") and 65 or 0)
+                    damage = 345 + (self:owns("tide_p_maelstrom") and 65 or 0)
                 }
+                do
+                    local i = 0
+                    while i < 6 do
+                        local angle = math.pi * i / 3
+                        local along = Vector(
+                            math.cos(angle),
+                            math.sin(angle),
+                            0
+                        )
+                        local model = prop(
+                            CREST,
+                            GetGroundPosition(
+                                offset(point, along, radius),
+                                nil
+                            ),
+                            0.78,
+                            Vector(-along.x, -along.y, 0)
+                        )
+                        if model then
+                            local ____self_whirl_crests_0 = self.whirl.crests
+                            ____self_whirl_crests_0[#____self_whirl_crests_0 + 1] = {angle = angle, model = model}
+                        end
+                        i = i + 1
+                    end
+                end
                 break
             end
         end
@@ -168,13 +208,19 @@ function TidehunterLegends.prototype.OnAbilityFullyCast(self, event)
 end
 function TidehunterLegends.prototype.OnTakeDamage(self, event)
     local hero = self:hero()
-    if not IsServer() or bit.band(event.damage_flags or 0, DOTA_DAMAGE_FLAG_REFLECTION) ~= 0 or event.damage <= 0 then
+    if not IsServer() or bit.band(
+        event.damage_flags or 0,
+        bit.bor(DOTA_DAMAGE_FLAG_REFLECTION, DOTA_DAMAGE_FLAG_HPLOSS)
+    ) ~= 0 then
         return
     end
     local shell = self.shell
     if shell and event.unit == hero and opponent(hero, event.attacker) and not hero:PassivesDisabled() and now() < shell["until"] then
-        local cap = (self:awake() and 430 or 330) + (self:owns("tide_p_spikes") and 65 or 0)
-        shell.stored = math.min(cap, shell.stored + event.damage * 0.45)
+        local cap = (self:awake() and 530 or 410) + (self:owns("tide_p_spikes") and 65 or 0)
+        shell.stored = math.min(
+            cap,
+            shell.stored + math.max(event.original_damage or 0, event.damage) * 0.6
+        )
         if shell.icon and not shell.icon:IsNull() then
             shell.icon:SetStackCount(math.floor(shell.stored))
         end
@@ -186,11 +232,11 @@ function TidehunterLegends.prototype.OnTakeDamage(self, event)
     end
     self.tide = nil
     local from = event.unit:GetAbsOrigin()
-    local width = 115
+    local width = 145
     local length = math.min(
-        1150,
+        1300,
         math.max(
-            310,
+            400,
             distance(from, tide.from)
         )
     )
@@ -200,42 +246,115 @@ function TidehunterLegends.prototype.OnTakeDamage(self, event)
         hero:GetForwardVector()
     )
     local to = offset(from, aim, length)
-    local damage = (self:awake() and 275 or 215) + (self:owns("tide_p_corrode") and 50 or 0)
+    local damage = (self:awake() and 380 or 315) + (self:owns("tide_p_corrode") and 50 or 0)
+    local cleanup = self:tiles(TRACK, from, to, 1.25)
     self:after(
-        self:owns("tide_p_tide") and 0.8 or 1,
-        self:lane(
-            from,
-            to,
-            width,
-            teal()
-        ),
+        self:owns("tide_p_tide") and 0.56 or 0.74,
+        {},
         function()
+            local crest = prop(
+                CREST,
+                GetGroundPosition(from, nil),
+                1,
+                aim
+            )
             local hit = __TS__New(Set)
-            local steps = math.ceil(length / 220)
-            do
-                local index = 0
-                while index < steps do
-                    local start = offset(from, aim, length * index / steps)
-                    local ____end = offset(from, aim, length * (index + 1) / steps)
-                    self:after(
-                        index * 0.09,
-                        {},
-                        function()
-                            flash(GUSH, start, ____end)
-                            for ____, target in ipairs(self:line(start, ____end, width)) do
-                                do
-                                    if hit:has(target:entindex()) then
-                                        goto __continue27
-                                    end
-                                    hit:add(target:entindex())
-                                    self:hit(ability, target, damage)
-                                end
-                                ::__continue27::
-                            end
-                        end
+            local last = from
+            local sprayAt = -150
+            self:animate(
+                length / WAVE_SPEED,
+                function(progress)
+                    local point = GetGroundPosition(
+                        offset(from, aim, length * progress),
+                        nil
                     )
-                    index = index + 1
-                end
+                    if crest and IsValidEntity(crest) then
+                        crest:SetAbsOrigin(point)
+                    end
+                    local travelled = length * progress
+                    if travelled - sprayAt >= 145 then
+                        sprayAt = travelled
+                        self:transient(SPLASH, point, 0.75)
+                    end
+                    local targets = distance(last, point) < 1 and self:area(point, width) or self:line(last, point, width)
+                    for ____, target in ipairs(targets) do
+                        do
+                            if hit:has(target:entindex()) then
+                                goto __continue32
+                            end
+                            hit:add(target:entindex())
+                            self:hit(ability, target, damage)
+                        end
+                        ::__continue32::
+                    end
+                    last = point
+                end,
+                function() return removeProp(crest) end
+            )
+        end,
+        cleanup
+    )
+end
+function TidehunterLegends.prototype.ReleaseShell(self)
+    local shell = self.shell
+    if shell and now() - shell.start >= 0.45 then
+        self:burstShell(shell)
+    end
+end
+function TidehunterLegends.prototype.burstShell(self, shell)
+    self:clearShell(shell)
+    if self:hero():PassivesDisabled() then
+        return
+    end
+    local point = GetGroundPosition(
+        self:hero():GetAbsOrigin(),
+        nil
+    )
+    local marker = ring(
+        point,
+        shell.radius,
+        teal()
+    )
+    local vents = {}
+    do
+        local i = 0
+        while i < 4 do
+            local angle = math.pi * i / 2
+            local aim = Vector(
+                math.cos(angle),
+                math.sin(angle),
+                0
+            )
+            local model = prop(
+                CREST,
+                GetGroundPosition(
+                    offset(point, aim, 95),
+                    nil
+                ),
+                0.6,
+                aim
+            )
+            if model then
+                vents[#vents + 1] = model
+            end
+            i = i + 1
+        end
+    end
+    self:after(
+        0.42,
+        {marker},
+        function()
+            if self:hero():PassivesDisabled() then
+                return
+            end
+            self:transient(SPLASH, point, 0.8)
+            for ____, target in ipairs(self:area(point, shell.radius)) do
+                self:hit(shell.ability, target, shell.stored + 225)
+            end
+        end,
+        function()
+            for ____, vent in ipairs(vents) do
+                removeProp(vent)
             end
         end
     )
@@ -251,14 +370,16 @@ function TidehunterLegends.prototype.ReturnToAnchor(self)
         return
     end
     local radius = self:owns("tide_p_weaken") and 310 or 265
-    local damage = 135 + hero:GetAverageTrueAttackDamage(nil) * 0.35 + (self:owns("tide_p_heavy") and 55 or 0)
+    local damage = 180 + hero:GetAverageTrueAttackDamage(nil) * 0.45 + (self:owns("tide_p_heavy") and 55 or 0)
+    local model = prop(
+        ANCHOR,
+        Vector(from.x, from.y, from.z + 42),
+        1,
+        hero:GetForwardVector()
+    )
     self:after(
         0.35,
-        {ring(
-            from,
-            radius,
-            teal()
-        )},
+        {},
         function()
             if not self:movable(from) or hero:IsStunned() or hero:IsHexed() then
                 return
@@ -268,11 +389,12 @@ function TidehunterLegends.prototype.ReturnToAnchor(self)
             if distance(point, from) > 110 then
                 return
             end
-            flash(SPLASH, point)
+            self:transient(SPLASH, point, 0.75)
             for ____, target in ipairs(self:area(point, radius)) do
                 self:hit(cast.native, target, damage, DAMAGE_TYPE_PHYSICAL)
             end
-        end
+        end,
+        function() return removeProp(model) end
     )
 end
 function TidehunterLegends.prototype.movable(self, to)
@@ -295,30 +417,65 @@ end
 function TidehunterLegends.prototype.tickShell(self, shell)
     local hero = self:hero()
     local point = hero:GetAbsOrigin()
-    ParticleManager:SetParticleControl(
-        shell.mark,
-        0,
-        GetGroundPosition(point, hero)
+    if now() >= shell["until"] then
+        self:burstShell(shell)
+        return
+    end
+    __TS__ArrayForEach(
+        shell.models,
+        function(____, model, index)
+            if not IsValidEntity(model) then
+                return
+            end
+            local angle = now() * 2.45 + index * 2 * math.pi / 3
+            local aim = Vector(
+                math.cos(angle),
+                math.sin(angle),
+                0
+            )
+            local radius = 112 + math.min(35, shell.stored / 14)
+            model:SetAbsOrigin(offset(
+                Vector(
+                    point.x,
+                    point.y,
+                    point.z + 92 + 16 * math.sin(angle)
+                ),
+                aim,
+                radius
+            ))
+            model:SetForwardVector(aim)
+        end
     )
-    if now() < shell["until"] then
-        return
-    end
-    self:clearShell(shell)
-    if shell.stored < 90 or hero:PassivesDisabled() then
-        return
-    end
-    flash(SPLASH, point)
-    for ____, target in ipairs(self:area(point, shell.radius)) do
-        self:hit(shell.ability, target, shell.stored + 65)
-    end
 end
 function TidehunterLegends.prototype.tickWhirl(self, whirl)
     local progress = (now() - whirl.starts) / SURGE_TIME
+    local radius = math.max(
+        EYE,
+        whirl.radius - (whirl.radius - EYE) * math.max(0, progress)
+    )
+    resizeRing(whirl.outer, radius)
+    for ____, crest in ipairs(whirl.crests) do
+        do
+            if not IsValidEntity(crest.model) then
+                goto __continue68
+            end
+            local angle = crest.angle + now() * 0.72
+            local aim = Vector(
+                math.cos(angle),
+                math.sin(angle),
+                0
+            )
+            crest.model:SetAbsOrigin(GetGroundPosition(
+                offset(whirl.from, aim, radius),
+                nil
+            ))
+            crest.model:SetForwardVector(Vector(-aim.x, -aim.y, 0))
+        end
+        ::__continue68::
+    end
     if progress < 0 then
         return
     end
-    local radius = math.max(EYE, whirl.radius - (whirl.radius - EYE) * progress)
-    resizeRing(whirl.outer, radius)
     for ____, target in ipairs(self:area(whirl.from, whirl.last + 38)) do
         do
             local id = target:entindex()
@@ -327,16 +484,17 @@ function TidehunterLegends.prototype.tickWhirl(self, whirl)
                 target:GetAbsOrigin()
             )
             if length < EYE or length < radius - 38 or whirl.hit:has(id) then
-                goto __continue50
+                goto __continue72
             end
             whirl.hit:add(id)
-            flash(
+            self:transient(
                 SPLASH,
-                target:GetAbsOrigin()
+                target:GetAbsOrigin(),
+                0.7
             )
             self:hit(whirl.ability, target, whirl.damage)
         end
-        ::__continue50::
+        ::__continue72::
     end
     whirl.last = radius
     if progress >= 1 then
@@ -344,15 +502,22 @@ function TidehunterLegends.prototype.tickWhirl(self, whirl)
     end
 end
 function TidehunterLegends.prototype.clearShell(self, shell)
-    stop(shell.mark)
+    self.shell = nil
+    self:consume(RELEASE)
+    for ____, model in ipairs(shell.models) do
+        removeProp(model)
+    end
     if shell.icon and not shell.icon:IsNull() then
         shell.icon:Destroy()
     end
-    self.shell = nil
 end
 function TidehunterLegends.prototype.clearWhirl(self, whirl)
     stop(whirl.outer)
     stop(whirl.eye)
+    for ____, ____value in ipairs(whirl.crests) do
+        local model = ____value.model
+        removeProp(model)
+    end
     self.whirl = nil
 end
 function TidehunterLegends.prototype.clear(self)

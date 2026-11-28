@@ -1,0 +1,5 @@
+Layer0
+{
+    shader "hero.vfx"
+    TextureColor "materials/orbthrow/legend_props/ice.png"
+}

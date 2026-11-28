@@ -3,8 +3,11 @@ local __TS__Class = ____lualib.__TS__Class
 local __TS__ClassExtends = ____lualib.__TS__ClassExtends
 local Set = ____lualib.Set
 local __TS__New = ____lualib.__TS__New
+local __TS__ArrayFind = ____lualib.__TS__ArrayFind
 local __TS__ArrayForEach = ____lualib.__TS__ArrayForEach
 local ____exports = {}
+local ____modbase = require("lib.modbase")
+local ModBase = ____modbase.ModBase
 local ____registry = require("lib.registry")
 local registerModifier = ____registry.registerModifier
 local ____legendfield = require("lib.legendfield")
@@ -19,7 +22,6 @@ local opponent = ____legendfield.opponent
 local prop = ____legendfield.prop
 local removeProp = ____legendfield.removeProp
 local ring = ____legendfield.ring
-local stop = ____legendfield.stop
 local Q = "snapfire_scatterblast"
 local W = "snapfire_firesnap_cookie"
 local E = "snapfire_lil_shredder"
@@ -28,6 +30,10 @@ local BANK = "orb_snapfire_bank"
 local SPRING = "orb_snapfire_spring"
 local BLAST = "particles/units/heroes/hero_snapfire/snapfire_flaming_creep_impact.vpcf"
 local WEAPON = "models/heroes/snapfire/snapfire_weapon.vmdl"
+local LANE = "models/orbthrow/legend_props/firing_lane.vmdl"
+local COOKIE = "models/heroes/snapfire/fx/snapfire_cookie.vmdl"
+local SHELL = "models/heroes/snapfire/snapfire_magma_projectile.vmdl"
+local SCORE = "modifier_orb_snapfire_scored"
 local function orange()
     return Vector(255, 125, 50)
 end
@@ -37,6 +43,7 @@ SnapfireLegends.name = "SnapfireLegends"
 __TS__ClassExtends(SnapfireLegends, LegendField)
 function SnapfireLegends.prototype.____constructor(self, ...)
     LegendField.prototype.____constructor(self, ...)
+    self.scored = {}
     self.rounds = __TS__New(Set)
 end
 function SnapfireLegends.prototype.DeclareFunctions(self)
@@ -63,11 +70,6 @@ function SnapfireLegends.prototype.OnAbilityFullyCast(self, event)
                 if not self:owns("snap_l_scatter") then
                     return
                 end
-                local mark = ring(
-                    point,
-                    95,
-                    orange()
-                )
                 local muzzle = Vector(point.x, point.y, point.z + 44)
                 local model = prop(
                     WEAPON,
@@ -80,7 +82,6 @@ function SnapfireLegends.prototype.OnAbilityFullyCast(self, event)
                     )
                 )
                 local function clear()
-                    stop(mark)
                     removeProp(model)
                     self.barrel = nil
                 end
@@ -94,7 +95,7 @@ function SnapfireLegends.prototype.OnAbilityFullyCast(self, event)
         end
         ____cond6 = ____cond6 or ____switch6 == W
         if ____cond6 then
-            if self:owns("snap_l_cookie") and ability:GetCursorTarget() == hero then
+            if self:owns("snap_l_cookie") and (event.target or ability:GetCursorTarget()) == hero then
                 local lands = now() + math.max(
                     0.2,
                     ability:GetSpecialValueFor("jump_duration")
@@ -114,11 +115,6 @@ function SnapfireLegends.prototype.OnAbilityFullyCast(self, event)
                 ability = ability,
                 point = point,
                 ["until"] = now() + ability:GetSpecialValueFor("AbilityDuration"),
-                mark = ring(
-                    point,
-                    115,
-                    orange()
-                ),
                 shots = 0,
                 hits = 0,
                 last = -1,
@@ -157,30 +153,40 @@ function SnapfireLegends.prototype.Bank(self, point)
         self:awake() and 1150 or 900
     )
     local width = self:owns("snap_p_grit") and 180 or 135
-    local damage = 290 + (self:owns("snap_p_buckshot") and 65 or 0)
-    local marks = self:lane(
-        from,
-        to,
-        width,
-        orange()
+    local damage = 385 + (self:owns("snap_p_buckshot") and 65 or 0)
+    local cleanup = self:tiles(LANE, from, to, width / 124)
+    local muzzle = prop(
+        WEAPON,
+        Vector(from.x, from.y, from.z + 50),
+        1.35,
+        aim
     )
     self:after(
-        0.6,
-        marks,
+        0.5,
+        {},
         function()
-            flash(BLAST, from)
-            flash(
-                BLAST,
+            for ____, node in ipairs({
+                from,
                 offset(
                     from,
                     aim,
                     distance(from, to) / 2
-                )
-            )
-            flash(BLAST, to)
-            for ____, target in ipairs(self:line(from, to, width)) do
-                self:hit(cast.native, target, damage)
+                ),
+                to
+            }) do
+                flash(BLAST, node)
             end
+            for ____, target in ipairs(self:line(from, to, width)) do
+                local close = distance(
+                    from,
+                    target:GetAbsOrigin()
+                ) <= 340
+                self:hit(cast.native, target, damage + (close and 155 or 0))
+            end
+        end,
+        function()
+            cleanup()
+            removeProp(muzzle)
         end
     )
 end
@@ -209,7 +215,7 @@ function SnapfireLegends.prototype.Spring(self, point)
     end
     self:consume(SPRING)
     local radius = self:awake() and 310 or 255
-    local damage = 225 + (self:owns("snap_p_shockwave") and 55 or 0)
+    local damage = 345 + (self:owns("snap_p_shockwave") and 55 or 0)
     local center = offset(from, aim, -100)
     local hop = hero:AddNewModifier(hero, ability, "modifier_knockback", {
         center_x = center.x,
@@ -224,6 +230,12 @@ function SnapfireLegends.prototype.Spring(self, point)
     if not hop then
         return
     end
+    local crumb = prop(
+        COOKIE,
+        Vector(to.x, to.y, to.z + 35),
+        1.55,
+        aim
+    )
     self:after(
         0.45,
         {ring(
@@ -239,10 +251,27 @@ function SnapfireLegends.prototype.Spring(self, point)
                 return
             end
             flash(BLAST, to)
+            self:clearScored()
             for ____, target in ipairs(self:area(to, radius)) do
-                self:hit(ability, target, damage)
+                do
+                    self:hit(ability, target, damage)
+                    if not opponent(hero, target) then
+                        goto __continue29
+                    end
+                    local icon = target:AddNewModifier(hero, ability, SCORE, {duration = 3})
+                    if icon then
+                        local ____self_scored_0 = self.scored
+                        ____self_scored_0[#____self_scored_0 + 1] = {
+                            target = target:entindex(),
+                            icon = icon,
+                            ability = ability
+                        }
+                    end
+                end
+                ::__continue29::
             end
-        end
+        end,
+        function() return removeProp(crumb) end
     )
 end
 function SnapfireLegends.prototype.OnAttackRecord(self, event)
@@ -260,17 +289,28 @@ end
 function SnapfireLegends.prototype.OnAttackLanded(self, event)
     local turret = self.turret
     local hero = self:hero()
-    if not IsServer() or not turret or event.attacker ~= hero or event.no_attack_cooldown or not opponent(hero, event.target) or now() >= turret["until"] or now() - turret.last < 0.075 or distance(
+    if not IsServer() or event.attacker ~= hero or event.no_attack_cooldown or not opponent(hero, event.target) then
+        return
+    end
+    local scored = __TS__ArrayFind(
+        self.scored,
+        function(____, mark) return mark.target == event.target:entindex() and not mark.icon:IsNull() end
+    )
+    if scored then
+        self:clearScored()
+        self:hit(scored.ability, event.target, 185, DAMAGE_TYPE_PHYSICAL)
+    end
+    if not turret or now() >= turret["until"] or now() - turret.last < 0.075 or distance(
         turret.point,
         event.target:GetAbsOrigin()
     ) > 1150 or not self.rounds:delete(event.record) then
         return
     end
     turret.last = now()
-    local ____turret_0, ____hits_1 = turret, "hits"
-    local ____turret_hits_2 = ____turret_0[____hits_1] + 1
-    ____turret_0[____hits_1] = ____turret_hits_2
-    if ____turret_hits_2 % 2 ~= 0 then
+    local ____turret_1, ____hits_2 = turret, "hits"
+    local ____turret_hits_3 = ____turret_1[____hits_2] + 1
+    ____turret_1[____hits_2] = ____turret_hits_3
+    if ____turret_hits_3 % 2 ~= 0 then
         return
     end
     if turret.shots >= (self:owns("snap_p_hotlead") and 4 or 3) then
@@ -296,23 +336,19 @@ function SnapfireLegends.prototype.OnAttackLanded(self, event)
     if turret.model and IsValidEntity(turret.model) then
         turret.model:SetForwardVector(aim)
     end
-    local marks = self:lane(
-        turret.point,
-        to,
-        100,
-        orange()
-    )
-    local damage = self:awake() and 185 or 140
+    local cleanup = self:tiles(LANE, turret.point, to, 0.84)
+    local damage = self:awake() and 235 or 180
     self:after(
         self:owns("snap_p_shred") and 0.45 or 0.6,
-        marks,
+        {},
         function()
             flash(BLAST, turret.point)
             flash(BLAST, to)
             for ____, target in ipairs(self:line(turret.point, to, 100)) do
                 self:hit(turret.ability, target, damage, DAMAGE_TYPE_PHYSICAL)
             end
-        end
+        end,
+        cleanup
     )
 end
 function SnapfireLegends.prototype.barrage(self, ability, from)
@@ -335,7 +371,7 @@ function SnapfireLegends.prototype.barrage(self, ability, from)
         )
     )
     local radius = self:owns("snap_p_shelter") and 290 or 250
-    local damage = 255 + (self:owns("snap_p_napalm") and 60 or 0)
+    local damage = 325 + (self:owns("snap_p_napalm") and 60 or 0)
     local spots = {
         offset(
             offset(middle, aim, -360),
@@ -356,8 +392,30 @@ function SnapfireLegends.prototype.barrage(self, ability, from)
         spots,
         function(____, position, index)
             local point = GetGroundPosition(position, nil)
+            local duration = 1.15 + 0.55 * index
+            local approach = offset(point, side, index % 2 == 0 and -620 or 620)
+            local shell = prop(
+                SHELL,
+                Vector(approach.x, approach.y, point.z + 780),
+                1.15,
+                direction(approach, point, aim)
+            )
+            self:animate(
+                duration,
+                function(progress)
+                    if not shell or not IsValidEntity(shell) then
+                        return
+                    end
+                    shell:SetAbsOrigin(Vector(
+                        approach.x + (point.x - approach.x) * progress,
+                        approach.y + (point.y - approach.y) * progress,
+                        point.z + (1 - progress) * (780 + 170 * math.sin(math.pi * progress))
+                    ))
+                end,
+                function() return removeProp(shell) end
+            )
             self:after(
-                1.15 + 0.55 * index,
+                duration,
                 {ring(
                     point,
                     radius,
@@ -368,12 +426,12 @@ function SnapfireLegends.prototype.barrage(self, ability, from)
                     for ____, target in ipairs(self:area(point, radius)) do
                         do
                             if hit:has(target:entindex()) then
-                                goto __continue44
+                                goto __continue56
                             end
                             hit:add(target:entindex())
                             self:hit(ability, target, damage)
                         end
-                        ::__continue44::
+                        ::__continue56::
                     end
                 end
             )
@@ -407,28 +465,47 @@ function SnapfireLegends.prototype.OnIntervalThink(self)
     ) < 140 then
         return
     end
+    local point = hero:GetAbsOrigin()
+    local crumb = prop(
+        COOKIE,
+        Vector(point.x, point.y, point.z + 52),
+        1.35,
+        hero:GetForwardVector()
+    )
+    local function cleanup()
+        removeProp(crumb)
+        self.spring = nil
+    end
     if self:open(
         flight.ability,
         SPRING,
-        self:awake() and 2 or 1.45,
-        function()
-            self.spring = nil
-        end
+        self:awake() and 2.35 or 1.8,
+        cleanup
     ) then
         self.spring = flight.ability
+    else
+        cleanup()
     end
 end
 function SnapfireLegends.prototype.clearTurret(self)
     if self.turret then
-        stop(self.turret.mark)
         removeProp(self.turret.model)
     end
     self.rounds:clear()
     self.turret = nil
 end
+function SnapfireLegends.prototype.clearScored(self)
+    for ____, mark in ipairs(self.scored) do
+        if not mark.icon:IsNull() then
+            mark.icon:Destroy()
+        end
+    end
+    self.scored = {}
+end
 function SnapfireLegends.prototype.clear(self)
     LegendField.prototype.clear(self)
     self:clearTurret()
+    self:clearScored()
     self.flight = nil
 end
 function SnapfireLegends.prototype.OnDeath(self, event)
@@ -436,5 +513,24 @@ function SnapfireLegends.prototype.OnDeath(self, event)
         self:clear()
     end
 end
+local Scored = __TS__Class()
+Scored.name = "Scored"
+__TS__ClassExtends(Scored, ModBase)
+function Scored.prototype.IsDebuff(self)
+    return true
+end
+function Scored.prototype.IsPurgable(self)
+    return true
+end
+function Scored.prototype.GetTexture(self)
+    return "snapfire_firesnap_cookie"
+end
+function Scored.prototype.DeclareFunctions(self)
+    return {MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE}
+end
+function Scored.prototype.GetModifierMoveSpeedBonus_Percentage(self)
+    return self:GetElapsedTime() < 0.95 and -44 or 0
+end
+modifier_orb_snapfire_scored = registerModifier("modifier_orb_snapfire_scored", Scored)
 modifier_orb_snapfire_legend = registerModifier("modifier_orb_snapfire_legend", ____exports.SnapfireLegends)
 return ____exports

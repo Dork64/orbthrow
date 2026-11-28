@@ -85,6 +85,7 @@ export const MODIFIER_LINKS: [string, string][] = [
     ["modifier_orb_jugg_encore_slash", "modifiers/modifier_orb_jugg_legend"],
     ["modifier_orb_lich_legend", "modifiers/modifier_orb_lich_legend"],
     ["modifier_orb_lich_satellite", "modifiers/modifier_orb_lich_legend"],
+    ["modifier_orb_snapfire_scored", "modifiers/modifier_orb_snapfire_legend"],
     ["modifier_orb_snapfire_legend", "modifiers/modifier_orb_snapfire_legend"],
     ["modifier_orb_tidehunter_legend", "modifiers/modifier_orb_tidehunter_legend"],
     ["modifier_orb_tide_pressure", "modifiers/modifier_orb_tidehunter_legend"],

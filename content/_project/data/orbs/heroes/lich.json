@@ -10,8 +10,8 @@
    "mods": "slow_movement_speed:-8",
    "ru": "Пронизывающий холод",
    "en": "Piercing Cold",
-   "ru_d": "Frost Blast замедляет ещё на 8%. Трещина взрывается через 0,8 с вместо 1 с.",
-   "en_d": "Frost Blast slows by 8% more. The fissure bursts after 0.8 s instead of 1 s."
+   "ru_d": "Frost Blast замедляет ещё на 8%. Трещина взрывается через 0,55 с вместо 0,75 с.",
+   "en_d": "Frost Blast slows by 8% more. The fissure bursts after 0.55 s instead of 0.75 s."
   },
   {
    "id": "lich_p_blast",
@@ -86,8 +86,8 @@
    "mods": "mana_drain:+15",
    "ru": "Опустошение",
    "en": "Draining Stare",
-   "ru_d": "Sinister Gaze выкачивает ещё 15% маны. Луч зеркала наносит ещё 55 урона.",
-   "en_d": "Sinister Gaze drains 15% more mana. The mirror beam deals 55 more damage."
+   "ru_d": "Sinister Gaze выкачивает ещё 15% маны. Луч зеркала наносит ещё 65 урона.",
+   "en_d": "Sinister Gaze drains 15% more mana. The mirror beam deals 65 more damage."
   },
   {
    "id": "lich_p_frostbound",
@@ -110,8 +110,8 @@
    ],
    "ru": "Мёрзлые цепи",
    "en": "Frozen Chain",
-   "ru_d": "Chain Frost снижает урон задетых героев на 15% на 3 с. Спутник живёт на 0,7 с дольше.",
-   "en_d": "Chain Frost reduces hit heroes’ damage by 15% for 3 s. The satellite lasts 0.7 s longer."
+   "ru_d": "Chain Frost снижает урон задетых героев на 15% на 3 с. Радиус падения спутника больше на 45.",
+   "en_d": "Chain Frost reduces hit heroes’ damage by 15% for 3 s. Satellite impact radius increases by 45."
   },
   {
    "id": "lich_p_soul",
@@ -129,8 +129,8 @@
    ],
    "ru": "Пожиратель душ",
    "en": "Soul Devourer",
-   "ru_d": "Chain Frost лечит Лича на 20% урона по героям. Спутник наносит ещё 65 урона.",
-   "en_d": "Chain Frost heals Lich for 20% of damage dealt to heroes. The satellite deals 65 more damage."
+   "ru_d": "Chain Frost лечит Лича на 20% урона по героям. Падение спутника наносит ещё 75 урона.",
+   "en_d": "Chain Frost heals Lich for 20% of damage dealt to heroes. The satellite impact deals 75 more damage."
   },
   {
    "id": "lich_l_nova",
@@ -140,10 +140,10 @@
    "code": true,
    "ru": "Белая трещина",
    "en": "White Fissure",
-   "ru_d": "Frost Blast оставляет под основной целью-героем ледяную трещину. Через 1 с она взрывается на 230 магического урона в радиусе 255.",
-   "en_d": "Frost Blast cracks the ice under its primary hero target. After 1 s it bursts for 230 magic damage in a 255 radius.",
-   "ru_aw": "Пробуждение. Радиус трещины увеличивается до 300.",
-   "en_aw": "Awakening. Fissure radius increases to 300."
+   "ru_d": "Frost Blast оставляет под задетым героем ледяной разлом. Через 0,75 с разлом наносит 320 + 8% максимального здоровья цели магическим уроном. Бонус за здоровье ограничен 220.",
+   "en_d": "Frost Blast opens an ice fissure under the hero it hits. After 0.75 s it deals 320 plus 8% of max health as magic damage, with the health bonus capped at 220.",
+   "ru_aw": "Пробуждение. Разлом на 20% длиннее и шире.",
+   "en_aw": "Awakening. The fissure is 20% longer and wider."
   },
   {
    "id": "lich_l_shield",
@@ -153,10 +153,10 @@
    "code": true,
    "ru": "Колючая скорлупа",
    "en": "Brittle Shell",
-   "ru_d": "Третья атака героя по Личу под своим Frost Shield после предупреждения выпускает три ледяных луча в сторону атакующего. Каждый задетый герой получает 215 магического урона один раз.",
-   "en_d": "The third hero attack against Lich under his own Frost Shield lines up three ice rays aimed toward the attacker. After a warning, they deal 215 magic damage once per hero.",
-   "ru_aw": "Пробуждение. Ледяные лучи наносят 270 урона.",
-   "en_aw": "Awakening. Ice rays deal 270 damage."
+   "ru_d": "Пока на Личе его Frost Shield, две атаки Лича по героям или героев по Личу заряжают веер из трёх лучей. После предупреждения лучи наносят 350 магического урона один раз каждому герою.",
+   "en_d": "Under his own Frost Shield, Lich charges three ice rays with two attacks traded with heroes. After a warning, they deal 350 magic damage once per hero.",
+   "ru_aw": "Пробуждение. Луч наносит 440 урона.",
+   "en_aw": "Awakening. Ice rays deal 440 damage."
   },
   {
    "id": "lich_l_trance",
@@ -166,10 +166,10 @@
    "code": true,
    "ru": "Отражение взгляда",
    "en": "Reflected Gaze",
-   "ru_d": "Завершённый Sinister Gaze оставляет зеркало. Через 0,8 с оно выпускает луч в отмеченном направлении и наносит 245 магического урона.",
-   "en_d": "A completed Sinister Gaze leaves a mirror. After 0.8 s it fires in the marked direction for 245 magic damage.",
-   "ru_aw": "Пробуждение. Луч зеркала наносит 315 урона.",
-   "en_aw": "Awakening. The mirror beam deals 315 damage."
+   "ru_d": "Завершённый Sinister Gaze оставляет ледяное зеркало. Через 0,65 с оно стреляет по отмеченной полосе на 390 магического урона.",
+   "en_d": "A completed Sinister Gaze leaves an ice mirror, which fires down the marked lane after 0.65 s for 390 magic damage.",
+   "ru_aw": "Пробуждение. Луч наносит 485 урона.",
+   "en_aw": "Awakening. The mirror beam deals 485 damage."
   },
   {
    "id": "lich_l_chain",
@@ -179,10 +179,10 @@
    "code": true,
    "ru": "Ледяной спутник",
    "en": "Ice Satellite",
-   "ru_d": "Первое попадание Chain Frost по герою на 3,5 с запускает вокруг него ледяной спутник. Касание наносит 290 магического урона один раз каждому герою. Сильное развеивание снимает спутник.",
-   "en_d": "The first hero hit by Chain Frost carries an orbiting ice satellite for 3.5 s. It deals 290 magic damage once per hero on contact. A strong dispel removes it.",
-   "ru_aw": "Пробуждение. Второй спутник вращается напротив первого. Лимит попаданий общий.",
-   "en_aw": "Awakening. A second satellite orbits opposite the first with the same shared hit limit."
+   "ru_d": "Первое попадание Chain Frost по герою создаёт спутник. Он вращается вокруг цели 1,65 с, задевая других героев на 220 магического урона один раз. Затем фиксирует точку и за 0,85 с пикирует туда на 535 магического урона. Сильное развеивание сбивает спутник.",
+   "en_d": "The first hero hit by Chain Frost gains an ice satellite. It orbits for 1.65 s, dealing 220 magic damage once per hero it touches, then locks a point and dives for 535 magic damage after 0.85 s. Strong dispels remove it.",
+   "ru_aw": "Пробуждение. Второй спутник расширяет охват. Общий взрыв наносит 650 урона.",
+   "en_aw": "Awakening. A second satellite widens coverage. Their shared impact deals 650 damage."
   },
   {
    "id": "lich_m_autonova",

@@ -24,6 +24,16 @@
 		"MaxLevel" "1"
 	}
 
+	"orb_tide_shell_release"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_legend_recasts"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING"
+		"AbilityTextureName" "tidehunter_kraken_shell"
+		"AbilityCastPoint" "0"
+		"MaxLevel" "1"
+	}
+
 	"orb_tide_anchor_return"
 	{
 		"BaseClass" "ability_lua"

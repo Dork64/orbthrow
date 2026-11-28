@@ -42,6 +42,19 @@ function ReturnToAnchor.prototype.OnSpellStart(self)
         modifier:ReturnToAnchor()
     end
 end
+local ReleaseShell = __TS__Class()
+ReleaseShell.name = "ReleaseShell"
+__TS__ClassExtends(ReleaseShell, AbilityBase)
+function ReleaseShell.prototype.OnSpellStart(self)
+    if not IsServer() then
+        return
+    end
+    local modifier = self:GetCaster():FindModifierByName("modifier_orb_tidehunter_legend")
+    if modifier ~= nil then
+        modifier:ReleaseShell()
+    end
+end
+orb_tide_shell_release = registerAbility("orb_tide_shell_release", ReleaseShell)
 orb_snapfire_bank = registerAbility("orb_snapfire_bank", Bank)
 orb_snapfire_spring = registerAbility("orb_snapfire_spring", Spring)
 orb_tide_anchor_return = registerAbility("orb_tide_anchor_return", ReturnToAnchor)

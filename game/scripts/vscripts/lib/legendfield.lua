@@ -5,6 +5,8 @@ local Map = ____lualib.Map
 local __TS__New = ____lualib.__TS__New
 local __TS__ArrayFilter = ____lualib.__TS__ArrayFilter
 local __TS__Iterator = ____lualib.__TS__Iterator
+local __TS__ArrayIndexOf = ____lualib.__TS__ArrayIndexOf
+local __TS__ArraySplice = ____lualib.__TS__ArraySplice
 local ____exports = {}
 local ____orbstore = require("core.orbstore")
 local bonusesOf = ____orbstore.bonusesOf
@@ -47,6 +49,12 @@ function ____exports.effect(name, point)
     ParticleManager:SetParticleControl(id, 0, point)
     return id
 end
+function ____exports.setControls(id, point, destination)
+    ParticleManager:SetParticleControl(id, 0, point)
+    if destination then
+        ParticleManager:SetParticleControl(id, 1, destination)
+    end
+end
 function ____exports.flash(name, point, destination)
     local id = ____exports.effect(name, point)
     if destination then
@@ -88,6 +96,7 @@ __TS__ClassExtends(LegendField, ModBase)
 function LegendField.prototype.____constructor(self, ...)
     ModBase.prototype.____constructor(self, ...)
     self.cues = {}
+    self.motions = {}
     self.recasts = __TS__New(Map)
 end
 function LegendField.prototype.IsHidden(self)
@@ -121,13 +130,75 @@ end
 function LegendField.prototype.hero(self)
     return self:GetParent()
 end
-function LegendField.prototype.after(self, delay, marks, fire)
+function LegendField.prototype.after(self, delay, marks, fire, cleanup)
     local ____self_cues_0 = self.cues
     ____self_cues_0[#____self_cues_0 + 1] = {
         time = ____exports.now() + delay,
         marks = marks,
-        fire = fire
+        fire = fire,
+        cleanup = cleanup
     }
+end
+function LegendField.prototype.animate(self, duration, move, cleanup)
+    local ____self_motions_1 = self.motions
+    ____self_motions_1[#____self_motions_1 + 1] = {
+        start = ____exports.now(),
+        duration = duration,
+        move = move,
+        cleanup = cleanup
+    }
+end
+function LegendField.prototype.transient(self, name, point, duration, destination)
+    local id = ____exports.effect(name, point)
+    if destination then
+        ____exports.setControls(id, point, destination)
+    end
+    self:after(
+        duration,
+        {id},
+        function()
+        end
+    )
+end
+function LegendField.prototype.tiles(self, model, from, to, scale, spacing)
+    if scale == nil then
+        scale = 1
+    end
+    if spacing == nil then
+        spacing = 210
+    end
+    local length = ____exports.distance(from, to)
+    local aim = ____exports.direction(
+        from,
+        to,
+        self:hero():GetForwardVector()
+    )
+    local count = math.max(
+        1,
+        math.ceil(length / (spacing * scale))
+    )
+    local props = {}
+    do
+        local i = 0
+        while i < count do
+            local node = ____exports.offset(from, aim, length * (i + 0.5) / count)
+            local part = ____exports.prop(
+                model,
+                GetGroundPosition(node, nil),
+                scale,
+                aim
+            )
+            if part then
+                props[#props + 1] = part
+            end
+            i = i + 1
+        end
+    end
+    return function()
+        for ____, part in ipairs(props) do
+            ____exports.removeProp(part)
+        end
+    end
 end
 function LegendField.prototype.area(self, point, radius)
     local hero = self:hero()
@@ -161,31 +232,6 @@ function LegendField.prototype.line(self, from, to, width)
         ),
         function(____, unit) return ____exports.opponent(hero, unit) and ____exports.vulnerable(unit) end
     )
-end
-function LegendField.prototype.lane(self, from, to, width, color)
-    local marks = {}
-    local length = ____exports.distance(from, to)
-    local aim = ____exports.direction(
-        from,
-        to,
-        self:hero():GetForwardVector()
-    )
-    local pieces = math.max(
-        1,
-        math.ceil(length / (width * 1.5))
-    )
-    do
-        local index = 0
-        while index <= pieces do
-            marks[#marks + 1] = ____exports.ring(
-                ____exports.offset(from, aim, length * index / pieces),
-                width,
-                color
-            )
-            index = index + 1
-        end
-    end
-    return marks
 end
 function LegendField.prototype.hit(self, ability, target, damage, ____type)
     if ____type == nil then
@@ -265,9 +311,9 @@ function LegendField.prototype.consume(self, name)
     alt:SetHidden(true)
     native:MarkAbilityButtonDirty()
     alt:MarkAbilityButtonDirty()
-    local ____opt_1 = recast.close
-    if ____opt_1 ~= nil then
-        ____opt_1(recast)
+    local ____opt_2 = recast.close
+    if ____opt_2 ~= nil then
+        ____opt_2(recast)
     end
     return recast
 end
@@ -293,21 +339,49 @@ function LegendField.prototype.OnIntervalThink(self)
         function(____, cue) return cue.time > time end
     )
     for ____, cue in ipairs(ready) do
-        for ____, mark in ipairs(cue.marks) do
-            ____exports.stop(mark)
-        end
+        self:cleanupCue(cue)
         if ____exports.valid(self:hero()) then
             cue:fire()
         end
     end
+    for ____, motion in ipairs({unpack(self.motions)}) do
+        if not ____exports.valid(self:hero()) then
+            break
+        end
+        local progress = math.max(
+            0,
+            math.min(1, (time - motion.start) / motion.duration)
+        )
+        motion:move(progress)
+        if progress >= 1 then
+            local index = __TS__ArrayIndexOf(self.motions, motion)
+            if index >= 0 then
+                __TS__ArraySplice(self.motions, index, 1)
+                motion:cleanup()
+            end
+        end
+    end
+end
+function LegendField.prototype.cleanupCue(self, cue)
+    for ____, mark in ipairs(cue.marks) do
+        ____exports.stop(mark)
+    end
+    local ____this_5
+    ____this_5 = cue
+    local ____opt_4 = ____this_5.cleanup
+    if ____opt_4 ~= nil then
+        ____opt_4(____this_5)
+    end
 end
 function LegendField.prototype.clear(self)
     for ____, cue in ipairs(self.cues) do
-        for ____, mark in ipairs(cue.marks) do
-            ____exports.stop(mark)
-        end
+        self:cleanupCue(cue)
+    end
+    for ____, motion in ipairs(self.motions) do
+        motion:cleanup()
     end
     self.cues = {}
+    self.motions = {}
     for ____, ____value in __TS__Iterator(self.recasts) do
         local name = ____value[1]
         self:consume(name)

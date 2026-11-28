@@ -1,4 +1,8 @@
 {
+  "DOTA_Tooltip_ability_orb_tide_shell_release": "Выпустить давление",
+  "DOTA_Tooltip_ability_orb_tide_shell_release_Description": "Взорвать панцирь. Урон зависит от накопленного давления.",
+  "DOTA_Tooltip_modifier_orb_snapfire_scored": "Поджарен",
+  "DOTA_Tooltip_modifier_orb_snapfire_scored_Description": "Следующая атака Снэпфайр наносит дополнительный физический урон.",
   "DOTA_Tooltip_ability_orb_snapfire_bank": "Рикошет картечи",
   "DOTA_Tooltip_ability_orb_snapfire_bank_Description": "Выбирает направление выстрела от отмеченной точки.",
   "DOTA_Tooltip_ability_orb_snapfire_spring": "Пружинное печенье",

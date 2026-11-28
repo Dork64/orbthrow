@@ -42,6 +42,11 @@ export function effect(name: string, point: Vector) {
     return id;
 }
 
+export function setControls(id: ParticleID, point: Vector, destination?: Vector) {
+    ParticleManager.SetParticleControl(id, 0, point);
+    if (destination) ParticleManager.SetParticleControl(id, 1, destination);
+}
+
 export function flash(name: string, point: Vector, destination?: Vector) {
     const id = effect(name, point);
     if (destination) ParticleManager.SetParticleControl(id, 1, destination);
@@ -80,11 +85,13 @@ export function removeProp(entity?: CBaseEntity) {
     if (entity && IsValidEntity(entity)) UTIL_Remove(entity);
 }
 
-type Cue = { time: number; marks: ParticleID[]; fire: () => void };
+type Cue = { time: number; marks: ParticleID[]; fire: () => void; cleanup?: () => void };
+type Motion = { start: number; duration: number; move: (progress: number) => void; cleanup: () => void };
 type Recast = { native: CDOTABaseAbility; alt: CDOTABaseAbility; time: number; close?: () => void };
 
 export class LegendField extends ModBase {
     private cues: Cue[] = [];
+    private motions: Motion[] = [];
     private recasts = new Map<string, Recast>();
 
     IsHidden() { return true; }
@@ -98,8 +105,31 @@ export class LegendField extends ModBase {
     protected awake() { return bonusesOf(this.GetParent().GetPlayerOwnerID(), true, now()).awake; }
     protected hero() { return this.GetParent(); }
 
-    protected after(delay: number, marks: ParticleID[], fire: () => void) {
-        this.cues.push({ time: now() + delay, marks, fire });
+    protected after(delay: number, marks: ParticleID[], fire: () => void, cleanup?: () => void) {
+        this.cues.push({ time: now() + delay, marks, fire, cleanup });
+    }
+
+    protected animate(duration: number, move: (progress: number) => void, cleanup: () => void) {
+        this.motions.push({ start: now(), duration, move, cleanup });
+    }
+
+    protected transient(name: string, point: Vector, duration: number, destination?: Vector) {
+        const id = effect(name, point);
+        if (destination) setControls(id, point, destination);
+        this.after(duration, [id], () => {});
+    }
+
+    protected tiles(model: string, from: Vector, to: Vector, scale = 1, spacing = 210) {
+        const length = distance(from, to);
+        const aim = direction(from, to, this.hero().GetForwardVector());
+        const count = Math.max(1, Math.ceil(length / (spacing * scale)));
+        const props: CBaseEntity[] = [];
+        for (let i = 0; i < count; i++) {
+            const node = offset(from, aim, length * (i + 0.5) / count);
+            const part = prop(model, GetGroundPosition(node, undefined), scale, aim);
+            if (part) props.push(part);
+        }
+        return () => { for (const part of props) removeProp(part); };
     }
 
     protected area(point: Vector, radius: number) {
@@ -112,17 +142,6 @@ export class LegendField extends ModBase {
         const hero = this.hero();
         return FindUnitsInLine(hero.GetTeamNumber(), from, to, undefined, width, UnitTargetTeam.ENEMY,
             UnitTargetType.HERO, UnitTargetFlags.NONE).filter(unit => opponent(hero, unit) && vulnerable(unit));
-    }
-
-    protected lane(from: Vector, to: Vector, width: number, color: Vector) {
-        const marks: ParticleID[] = [];
-        const length = distance(from, to);
-        const aim = direction(from, to, this.hero().GetForwardVector());
-        const pieces = Math.max(1, Math.ceil(length / (width * 1.5)));
-        for (let index = 0; index <= pieces; index++) {
-            marks.push(ring(offset(from, aim, length * index / pieces), width, color));
-        }
-        return marks;
     }
 
     protected hit(ability: CDOTABaseAbility, target: CDOTA_BaseNPC, damage: number, type = DamageTypes.MAGICAL) {
@@ -175,14 +194,33 @@ export class LegendField extends ModBase {
         const ready = this.cues.filter(cue => cue.time <= time);
         this.cues = this.cues.filter(cue => cue.time > time);
         for (const cue of ready) {
-            for (const mark of cue.marks) stop(mark);
+            this.cleanupCue(cue);
             if (valid(this.hero())) cue.fire();
+        }
+        for (const motion of [...this.motions]) {
+            if (!valid(this.hero())) break;
+            const progress = Math.max(0, Math.min(1, (time - motion.start) / motion.duration));
+            motion.move(progress);
+            if (progress >= 1) {
+                const index = this.motions.indexOf(motion);
+                if (index >= 0) {
+                    this.motions.splice(index, 1);
+                    motion.cleanup();
+                }
+            }
         }
     }
 
+    private cleanupCue(cue: Cue) {
+        for (const mark of cue.marks) stop(mark);
+        cue.cleanup?.();
+    }
+
     protected clear() {
-        for (const cue of this.cues) for (const mark of cue.marks) stop(mark);
+        for (const cue of this.cues) this.cleanupCue(cue);
+        for (const motion of this.motions) motion.cleanup();
         this.cues = [];
+        this.motions = [];
         for (const [name] of this.recasts) this.consume(name);
     }
 

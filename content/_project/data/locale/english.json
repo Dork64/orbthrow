@@ -1,4 +1,8 @@
 {
+  "DOTA_Tooltip_ability_orb_tide_shell_release": "Release Pressure",
+  "DOTA_Tooltip_ability_orb_tide_shell_release_Description": "Burst the shell. Damage increases with stored pressure.",
+  "DOTA_Tooltip_modifier_orb_snapfire_scored": "Scorched",
+  "DOTA_Tooltip_modifier_orb_snapfire_scored_Description": "Snapfire's next attack deals bonus physical damage.",
   "DOTA_Tooltip_ability_orb_snapfire_bank": "Bank Shot",
   "DOTA_Tooltip_ability_orb_snapfire_bank_Description": "Aim a shot from the marked position.",
   "DOTA_Tooltip_ability_orb_snapfire_spring": "Spring Cookie",

@@ -8,6 +8,7 @@ declare global {
     var orb_snapfire_bank: unknown;
     var orb_snapfire_spring: unknown;
     var orb_tide_anchor_return: unknown;
+    var orb_tide_shell_release: unknown;
 }
 
 class Bank extends AbilityBase {
@@ -34,6 +35,15 @@ class ReturnToAnchor extends AbilityBase {
     }
 }
 
+class ReleaseShell extends AbilityBase {
+    OnSpellStart() {
+        if (!IsServer()) return;
+        const modifier = this.GetCaster().FindModifierByName("modifier_orb_tidehunter_legend") as TidehunterLegends | undefined;
+        modifier?.ReleaseShell();
+    }
+}
+
+orb_tide_shell_release = registerAbility("orb_tide_shell_release", ReleaseShell);
 orb_snapfire_bank = registerAbility("orb_snapfire_bank", Bank);
 orb_snapfire_spring = registerAbility("orb_snapfire_spring", Spring);
 orb_tide_anchor_return = registerAbility("orb_tide_anchor_return", ReturnToAnchor);
