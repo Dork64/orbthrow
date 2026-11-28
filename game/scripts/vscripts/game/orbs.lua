@@ -415,6 +415,18 @@ local function ensureExtras(op, h)
     if h:GetUnitName() == "npc_dota_hero_pudge" and not h:HasModifier("modifier_orb_pudge_legend") then
         h:AddNewModifier(h, nil, "modifier_orb_pudge_legend", {})
     end
+    if h:GetUnitName() == "npc_dota_hero_mirana" and not h:HasModifier("modifier_orb_mirana_legend") then
+        h:AddNewModifier(h, nil, "modifier_orb_mirana_legend", {})
+    end
+    if h:GetUnitName() == "npc_dota_hero_earthshaker" and not h:HasModifier("modifier_orb_earthshaker_legend") then
+        h:AddNewModifier(h, nil, "modifier_orb_earthshaker_legend", {})
+    end
+    if h:GetUnitName() == "npc_dota_hero_ogre_magi" and not h:HasModifier("modifier_orb_ogre_magi_legend") then
+        h:AddNewModifier(h, nil, "modifier_orb_ogre_magi_legend", {})
+    end
+    if h:GetUnitName() == "npc_dota_hero_necrolyte" and not h:HasModifier("modifier_orb_necro_legend") then
+        h:AddNewModifier(h, nil, "modifier_orb_necro_legend", {})
+    end
     if h:GetUnitName() == "npc_dota_hero_sven" and not h:HasModifier("modifier_orb_sven_legend") then
         h:AddNewModifier(h, nil, "modifier_orb_sven_legend", {})
     end
@@ -525,16 +537,16 @@ local function bloodFeast(pid)
                     a:GetAbilityName(),
                     "orb_slot_"
                 ) then
-                    goto __continue40
+                    goto __continue44
                 end
                 local left = a:GetCooldownTimeRemaining()
                 if left <= 0 then
-                    goto __continue40
+                    goto __continue44
                 end
                 a:EndCooldown()
                 a:StartCooldown(left * math.max(0.1, 1 - share - 0.2))
             end
-            ::__continue40::
+            ::__continue44::
             i = i + 1
         end
     end
@@ -551,12 +563,12 @@ function ____exports.grantMechanics(pid)
     for ____, u in ipairs(heroUpgrades(h:GetUnitName())) do
         do
             if u.rarity ~= "purple" or u.mech ~= true or (op.stacks[u.id] or 0) > 0 then
-                goto __continue45
+                goto __continue49
             end
             applyCard(op, u.id)
             n = n + 1
         end
-        ::__continue45::
+        ::__continue49::
     end
     for ____, id in ipairs({
         "p_grave",
@@ -568,12 +580,12 @@ function ____exports.grantMechanics(pid)
     }) do
         do
             if (op.stacks[id] or 0) > 0 then
-                goto __continue48
+                goto __continue52
             end
             applyCard(op, id)
             n = n + 1
         end
-        ::__continue48::
+        ::__continue52::
     end
     pushPlayer(op, true)
     return n
@@ -761,7 +773,7 @@ local function onHeroSpawned(p, hero)
     for ____, d in ipairs(heroUpgrades(hero:GetUnitName())) do
         do
             if d.code or d.ability == "" then
-                goto __continue93
+                goto __continue97
             end
             if op.disabled[d.id] == nil then
                 local ab = hero:FindAbilityByName(d.ability)
@@ -771,7 +783,7 @@ local function onHeroSpawned(p, hero)
                 end
             end
         end
-        ::__continue93::
+        ::__continue97::
     end
     pushCatalog(
         op,
@@ -825,14 +837,14 @@ function ____exports.orbsTick()
                 local timeout = now - op.offer.openedAt >= ORB.autoPickSeconds
                 if timeout or p ~= nil and (p.left or p.isBot) then
                     ____exports.pick(op.pid, op.offer.seq, op.offer.cards[1].id)
-                    goto __continue105
+                    goto __continue109
                 end
             end
             if op.dirty or now - op.lastPush >= 1 then
                 pushPlayer(op, false)
             end
         end
-        ::__continue105::
+        ::__continue109::
     end
 end
 function ____exports.initOrbs()

@@ -253,77 +253,56 @@
    "r": "legend",
    "branch": "Q",
    "ab": "ogre_magi_fireblast",
-   "mods": "stun_duration:+0.3",
-   "fx": [
-    {
-     "t": "charges",
-     "n": 1,
-     "aw": {
-      "n": 2
-     }
-    }
-   ],
-   "ru": "Двойная порция",
-   "en": "Double Helping",
-   "ru_d": "У Fireblast есть запасной заряд, оглушение +0.3 с",
-   "en_d": "Fireblast gets a spare charge, stun +0.3 s",
-   "ru_aw": "Пробуждение: 2 запасных заряда",
-   "en_aw": "Awakening: 2 spare charges"
+   "code": true,
+   "mech": true,
+   "ru": "Я сказал — туда!",
+   "en": "I Said, Over There!",
+   "ru_d": "После Fireblast по герою нажмите Q в течение 3 с и бросьте дубину в точку. Удар наносит 380 магического урона в центре и половину по краям. Если первая цель вышла из оглушения Fireblast, в центре будет 500 урона.",
+   "en_d": "After Fireblast on a hero, press Q within 3 s and pick a point to throw the club. It deals 380 magical damage at the center and half at the edges. If the initial target is out of the Fireblast stun, the center deals 500.",
+   "ru_aw": "Дубина один раз отскакивает дальше в направлении броска.",
+   "en_aw": "The club bounces once in the direction of the throw."
   },
   {
    "id": "ogre_l_ignite",
    "r": "legend",
    "branch": "W",
    "ab": "ogre_magi_ignite",
-   "mods": "duration:+4;burn_damage:+20",
-   "awmods": "slow_movement_speed_pct:-15",
-   "ru": "Пекло",
-   "en": "Inferno",
-   "ru_d": "Ignite: длительность +4 с, урон +20 в секунду",
-   "en_d": "Ignite: duration +4 s, +20 damage per second",
-   "ru_aw": "Пробуждение: замедление +15%",
-   "en_aw": "Awakening: +15% slow"
+   "code": true,
+   "mech": true,
+   "ru": "Горячая картошка",
+   "en": "Hot Potato",
+   "ru_d": "Первый герой, подожжённый вашим Ignite, получает котелок на 3 с. Обычный удар по другому герою передаёт ему котелок, в том числе Огру. Таймер не меняется. Котелок взрывается на 400 магического урона по носителю и вокруг.",
+   "en_d": "The first hero ignited gets a pot with a 3 s fuse. A regular attack on another hero passes it, including back to Ogre, without resetting the fuse. The pot explodes for 400 magical damage to the carrier and around them.",
+   "ru_aw": "Урон растёт на 80 за передачу, максимум +160.",
+   "en_aw": "Each pass adds 80 damage, up to +160."
   },
   {
    "id": "ogre_l_bloodlust",
    "r": "legend",
    "branch": "E",
    "ab": "ogre_magi_bloodlust",
-   "fx": [
-    {
-     "t": "passive",
-     "props": {
-      "as": "bonus_attack_speed*0.5",
-      "ms": "bonus_movement_speed*0.5"
-     },
-     "aw": {
-      "props": {
-       "as": "bonus_attack_speed*1",
-       "ms": "bonus_movement_speed*1"
-      }
-     }
-    }
-   ],
-   "ru": "Вечная жажда боя",
-   "en": "Eternal Bloodlust",
-   "ru_d": "Огр всегда получает 50% бонусов Bloodlust",
-   "en_d": "Ogre always has 50% of Bloodlust's bonuses",
-   "ru_aw": "Пробуждение: 100%",
-   "en_aw": "Awakening: 100%"
+   "code": true,
+   "mech": true,
+   "ru": "Спор на три удара",
+   "en": "Three-Hit Argument",
+   "ru_d": "Первая обычная атака Огра под Bloodlust открывает спор на 4 с. Третья атака по тому же герою критует на 250% и лечит Огра на половину реально нанесённого урона. Если соперник раньше дважды ударит Огра, спор сгорает.",
+   "en_d": "Ogre's first regular attack under Bloodlust starts a 4 s argument. His third hit on the same hero crits for 250% and heals Ogre for half of the damage dealt. If the rival lands two hits on Ogre first, the argument ends.",
+   "ru_aw": "После победы можно поспорить ещё раз с другим героем под тем же Bloodlust.",
+   "en_aw": "After winning, start one more argument against a different hero under the same Bloodlust."
   },
   {
    "id": "ogre_l_multicast",
    "r": "legend",
    "branch": "R",
    "ab": "ogre_magi_multicast",
-   "mods": "multicast_2_times:+10;multicast_3_times:+7;multicast_4_times:+4",
-   "awmods": "multicast_4_times:+6",
-   "ru": "Безумная удача",
-   "en": "Insane Luck",
-   "ru_d": "Multicast: шанс двойного +10 п. п., тройного +7, четверного +4.",
-   "en_d": "Multicast gains 10 points of double, 7 of triple and 4 of quadruple cast chance.",
-   "ru_aw": "Пробуждение: шанс четверного +10 п. п. от базового.",
-   "en_aw": "Awakening: 10 extra points of quadruple cast chance."
+   "code": true,
+   "mech": true,
+   "ru": "Краплёные кости",
+   "en": "Loaded Dice",
+   "ru_d": "Два подряд ручных Fireblast или Ignite по героям без Multicast заряжают одну кость. Нажмите R, затем в течение 4 с примените Fireblast или Ignite по герою: Multicast будет минимум ×3. Предметы, крипы и повторы не копят кость.",
+   "en_d": "Two consecutive manual Fireblast or Ignite casts on heroes without Multicast charge one die. Press R, then cast Fireblast or Ignite on a hero within 4 s for at least ×3 Multicast. Items, creeps, and repeats do not charge the die.",
+   "ru_aw": "Ставка гарантирует ×4 Multicast.",
+   "en_aw": "The wager guarantees ×4 Multicast."
   }
  ]
 }

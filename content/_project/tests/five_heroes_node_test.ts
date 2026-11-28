@@ -116,15 +116,6 @@ describe("исполнение новых механик", () => {
         f.time(1); f.dealt("puck_waning_rift");
         expect(f.damage).not.toHaveBeenCalled();
     });
-    it("ответ Shroud требует порог суммарного урона и срабатывает один раз", () => {
-        const f = harness("necro_l_breathcycle");
-        f.cast("necrolyte_ghost_shroud");
-        f.time(1); f.taken(65);
-        expect(f.damage).not.toHaveBeenCalled();
-        f.time(2); f.taken(60); f.taken(300);
-        expect(f.damage).toHaveBeenCalledTimes(1);
-        expect(f.parent.Heal).toHaveBeenCalledWith(80, expect.anything());
-    });
     it("обычная и легендарная версии Sand Storm дают одно кольцо, первый удар не повторяется после выхода", () => withScalarVectors(() => {
         const f = harness("sand_m_quicksand", "sand_l_glass");
         f.cast("sandking_sand_storm");

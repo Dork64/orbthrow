@@ -226,6 +226,16 @@ function ModifierOrbController.prototype.extraCharges(self, b, ability, name)
         self:isUltimate(ability)
     )
 end
+function ModifierOrbController.prototype.scriptedMulticastFloor(self, name, key, b)
+    if not IsServer() or name ~= "ogre_magi_multicast" or (b.code.ogre_l_multicast or 0) == 0 or key ~= "multicast_2_times" and key ~= "multicast_3_times" and key ~= "multicast_4_times" then
+        return nil
+    end
+    local ogre = self:GetParent():FindModifierByName("modifier_orb_ogre_magi_legend")
+    return ogre and ogre:GetMulticastChanceFloor(key)
+end
+function ModifierOrbController.prototype.usesMovingFissure(self, name, key, b)
+    return name == "earthshaker_fissure" and key == "fissure_duration" and (b.code.es_l_rift or 0) > 0 and IsServer() and self:GetParent():HasModifier("modifier_orb_earthshaker_legend")
+end
 function ModifierOrbController.prototype.GetModifierOverrideAbilitySpecial(self, e)
     local ability = e.ability
     if ability == nil then
@@ -234,6 +244,12 @@ function ModifierOrbController.prototype.GetModifierOverrideAbilitySpecial(self,
     local b = self:b()
     local name = ability:GetAbilityName()
     local key = e.ability_special_value
+    if name == "necrolyte_heartstopper_aura" and key == "aura_radius" and self:GetParent():HasModifier("modifier_orb_necro_beacon") then
+        return 1
+    end
+    if self:usesMovingFissure(name, key, b) or self:scriptedMulticastFloor(name, key, b) ~= nil then
+        return 1
+    end
     if replacesWrathDamage(b, name, key) then
         return 1
     end
@@ -249,18 +265,18 @@ function ModifierOrbController.prototype.GetModifierOverrideAbilitySpecial(self,
             return 1
         end
     end
-    local ____opt_1 = b.specials[name]
-    local ____temp_5 = (____opt_1 and ____opt_1[key]) ~= nil
-    if not ____temp_5 then
-        local ____opt_3 = b.specialsSet[name]
-        ____temp_5 = (____opt_3 and ____opt_3[key]) ~= nil
+    local ____opt_3 = b.specials[name]
+    local ____temp_7 = (____opt_3 and ____opt_3[key]) ~= nil
+    if not ____temp_7 then
+        local ____opt_5 = b.specialsSet[name]
+        ____temp_7 = (____opt_5 and ____opt_5[key]) ~= nil
     end
-    local ____temp_5_8 = ____temp_5
-    if not ____temp_5_8 then
-        local ____opt_6 = b.specialsMul[name]
-        ____temp_5_8 = (____opt_6 and ____opt_6[key]) ~= nil
+    local ____temp_7_10 = ____temp_7
+    if not ____temp_7_10 then
+        local ____opt_8 = b.specialsMul[name]
+        ____temp_7_10 = (____opt_8 and ____opt_8[key]) ~= nil
     end
-    if ____temp_5_8 then
+    if ____temp_7_10 then
         return 1
     end
     return 0
@@ -272,6 +288,12 @@ function ModifierOrbController.prototype.GetModifierOverrideAbilitySpecialValue(
     local name = ability:GetAbilityName()
     local b = self:b()
     local base = ability:GetLevelSpecialValueNoOverride(key, level)
+    if name == "necrolyte_heartstopper_aura" and key == "aura_radius" and self:GetParent():HasModifier("modifier_orb_necro_beacon") then
+        return 0
+    end
+    if self:usesMovingFissure(name, key, b) then
+        return 0.03
+    end
     if IsServer() and replacesWrathDamage(b, name, key) then
         return 0
     end
@@ -287,7 +309,8 @@ function ModifierOrbController.prototype.GetModifierOverrideAbilitySpecialValue(
     if key == "AbilityCooldown" or key == "AbilityChargeRestoreTime" then
         return adjusted * self:orbCooldownFactor(b, ability, name)
     end
-    return adjusted
+    local floor = self:scriptedMulticastFloor(name, key, b)
+    return floor == nil and adjusted or math.max(adjusted, floor)
 end
 function ModifierOrbController.prototype.OnAttackRecord(self, e)
     local parent = self:GetParent()
@@ -312,9 +335,9 @@ function ModifierOrbController.prototype.OnAttackRecord(self, e)
 end
 function ModifierOrbController.prototype.OnAttackRecordDestroy(self, e)
     if IsServer() and e.attacker == self:GetParent() then
-        local ____opt_9 = self.orbCriticals
-        if ____opt_9 ~= nil then
-            ____opt_9:delete(e.record)
+        local ____opt_11 = self.orbCriticals
+        if ____opt_11 ~= nil then
+            ____opt_11:delete(e.record)
         end
     end
 end
@@ -327,13 +350,13 @@ function ModifierOrbController.prototype.OnAttackLanded(self, e)
         return
     end
     local target = e.target
-    local ____temp_15 = e.damage > 0 and target ~= nil
-    if ____temp_15 then
-        local ____opt_13 = self.orbCriticals
-        local ____opt_11 = ____opt_13 and ____opt_13:get(e.record)
-        ____temp_15 = (____opt_11 and ____opt_11.target) == target
+    local ____temp_17 = e.damage > 0 and target ~= nil
+    if ____temp_17 then
+        local ____opt_15 = self.orbCriticals
+        local ____opt_13 = ____opt_15 and ____opt_15:get(e.record)
+        ____temp_17 = (____opt_13 and ____opt_13.target) == target
     end
-    if ____temp_15 and IsValidEntity(target) then
+    if ____temp_17 and IsValidEntity(target) then
         SendOverheadEventMessage(
             nil,
             OVERHEAD_ALERT_CRITICAL,
@@ -377,7 +400,7 @@ function ModifierOrbController.prototype.OnAttackLanded(self, e)
                 break
             end
             if u == target or not u:IsAlive() then
-                goto __continue70
+                goto __continue77
             end
             ApplyDamage({
                 victim = u,
@@ -388,7 +411,7 @@ function ModifierOrbController.prototype.OnAttackLanded(self, e)
             })
             hits = hits + 1
         end
-        ::__continue70::
+        ::__continue77::
     end
 end
 function ModifierOrbController.prototype.GetModifierTotalDamageOutgoing_Percentage(self, e)
@@ -405,14 +428,14 @@ function ModifierOrbController.prototype.GetModifierTotalDamageOutgoing_Percenta
     if inflictor ~= nil and (b.code.l_master or 0) > 0 and self:isBasicAbility(inflictor) then
         pct = pct + (b.awake and 30 or 20)
     end
-    local ____temp_24
+    local ____temp_26
     if IsServer() and (e and e.attacker) == self:GetParent() and e.damage_category == DOTA_DAMAGE_CATEGORY_ATTACK and inflictor == nil and e.record ~= nil then
-        local ____opt_22 = self.orbCriticals
-        ____temp_24 = ____opt_22 and ____opt_22:get(e.record)
+        local ____opt_24 = self.orbCriticals
+        ____temp_26 = ____opt_24 and ____opt_24:get(e.record)
     else
-        ____temp_24 = nil
+        ____temp_26 = nil
     end
-    local crit = ____temp_24
+    local crit = ____temp_26
     local bonus = crit ~= nil and crit.target == target and crit.bonus or 0
     return pct + bonus + pct * bonus / 100
 end
@@ -483,12 +506,12 @@ function ModifierOrbController.prototype.meteor(self, ability, n)
             for ____, u in ipairs(enemies) do
                 do
                     if not u:IsAlive() then
-                        goto __continue86
+                        goto __continue93
                     end
                     ApplyDamage({victim = u, attacker = parent, damage = dmg, damage_type = DAMAGE_TYPE_MAGICAL})
                     u:AddNewModifier(parent, nil, "modifier_stunned", {duration = 0.4})
                 end
-                ::__continue86::
+                ::__continue93::
             end
             return nil
         end,
@@ -547,13 +570,13 @@ function ModifierOrbController.prototype.OnTakeDamage(self, e)
         if bit.band(flags, DOTA_DAMAGE_FLAG_REFLECTION) ~= 0 or bit.band(flags, DOTA_DAMAGE_FLAG_HPLOSS) ~= 0 then
             return
         end
-        local ____temp_25
+        local ____temp_27
         if e.damage_category ~= nil then
-            ____temp_25 = e.damage_category == DOTA_DAMAGE_CATEGORY_SPELL
+            ____temp_27 = e.damage_category == DOTA_DAMAGE_CATEGORY_SPELL
         else
-            ____temp_25 = e.inflictor ~= nil
+            ____temp_27 = e.inflictor ~= nil
         end
-        local spell = ____temp_25
+        local spell = ____temp_27
         if not parent:IsAlive() or spell and bit.band(flags, DOTA_DAMAGE_FLAG_NO_SPELL_LIFESTEAL) ~= 0 then
             return
         end
@@ -644,11 +667,11 @@ function ModifierOrbController.prototype.OnIntervalThink(self)
     for ____, u in ipairs(enemies) do
         do
             if not u:IsAlive() then
-                goto __continue115
+                goto __continue122
             end
             ApplyDamage({victim = u, attacker = parent, damage = dps * BURN_INTERVAL, damage_type = DAMAGE_TYPE_MAGICAL})
         end
-        ::__continue115::
+        ::__continue122::
     end
 end
 modifier_orb_controller = registerModifier("modifier_orb_controller", ____exports.ModifierOrbController)

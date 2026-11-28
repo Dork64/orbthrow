@@ -167,101 +167,52 @@
    "r": "legend",
    "branch": "Q",
    "ab": "earthshaker_fissure",
-   "mods": "fissure_damage:+100",
-   "awmods": "stun_duration:+0.4",
-   "fx": [
-    {
-     "t": "charges",
-     "n": 1
-    }
-   ],
-   "ru": "Разлом",
-   "en": "Great Rift",
-   "ru_d": "У Fissure есть запасной заряд, урон +100",
-   "en_d": "Fissure gets a spare charge, damage +100",
-   "ru_aw": "Пробуждение: оглушение +0.4 с",
-   "en_aw": "Awakening: stun +0.4 s"
+   "ru": "Тектонический сдвиг",
+   "en": "Tectonic Shift",
+   "ru_d": "После Fissure повторное Q поворачивает дальнюю половину стены вокруг шарнира на угол до 60° за 0,8 с. Движущийся гребень сдвигает каждого задетого героя и наносит 280 магического урона один раз.",
+   "en_d": "After Fissure, recast Q to turn its far half by up to 60° over 0.8s. The moving ridge pushes heroes aside and deals 280 magical damage once per hero.",
+   "ru_aw": "Пробуждение: Поворот до 90°.",
+   "en_aw": "Awakening: Turn up to 90°.",
+   "code": true
   },
   {
    "id": "es_l_faultline",
    "r": "legend",
    "branch": "W",
    "ab": "earthshaker_enchant_totem",
-   "fx": [
-    {
-     "t": "hit",
-     "by": "attack",
-     "win": 4,
-     "heroOnly": 1,
-     "icd": 4,
-     "extra": {
-      "maxhp": 5,
-      "type": "magic"
-     },
-     "debuff": {
-      "props": {
-       "root": 1
-      },
-      "dur": 0.6
-     },
-     "aw": {
-      "extra": {
-       "maxhp": 7,
-       "type": "magic"
-      }
-     }
-    }
-   ],
-   "ru": "Линия разлома",
-   "en": "Fault Line",
-   "ru_d": "В течение 4 с после Enchant Totem атака по герою наносит ещё 5% его максимального здоровья магическим уроном и обездвиживает на 0.6 с; раз в 4 с по каждой цели",
-   "en_d": "For 4 s after Enchant Totem, attacking a hero deals 5% of their max health as magic damage and roots for 0.6 s; once per 4 s per target",
-   "ru_aw": "Пробуждение: дополнительный урон 7% здоровья",
-   "en_aw": "Awakening: extra damage is 7% max health"
+   "ru": "Бильярд",
+   "en": "Billiards",
+   "ru_d": "Усиленная Enchant Totem атака отбрасывает героя на 350. При столкновении с преградой или другим героем наносит 250 + 8% максимального здоровья жертвы магией, до 650. Столкнувшиеся герои получают этот урон оба.",
+   "en_d": "An enchanted attack shoves a hero back up to 350. Hitting terrain or another hero deals 250 + 8% of the first target’s max health as magic damage, capped at 650. Both heroes take the impact.",
+   "ru_aw": "Пробуждение: Повторное W позволяет один раз шагнуть до 180 для выбора угла удара.",
+   "en_aw": "Awakening: Recast W once to step up to 180 and line up the hit.",
+   "code": true
   },
   {
    "id": "es_l_aftershock",
    "r": "legend",
    "branch": "E",
    "ab": "earthshaker_aftershock",
-   "mods": "aftershock_range:+150;aftershock_damage:+60",
-   "awmods": "AbilityDuration:+0.4",
-   "ru": "Толчки",
-   "en": "Tremors",
-   "ru_d": "Радиус Aftershock +150, урон +60",
-   "en_d": "Aftershock radius +150, damage +60",
-   "ru_aw": "Пробуждение: оглушение +0.4 с",
-   "en_aw": "Awakening: stun +0.4 s"
+   "ru": "Сейсмограф",
+   "en": "Seismograph",
+   "ru_d": "Удар героя по Шейкеру или заклинание врага в 550 оставляют трещину на его месте на 2 с. Нажмите E: через 0,5 с взрыв в 175 наносит 300 магического урона и подбрасывает на 0,7 с. КД 7 с.",
+   "en_d": "Enemy heroes attacking Earthshaker or casting a spell within 550 leave a crack beneath them for 2s. Press E to detonate it after 0.5s for 300 magic damage and a 0.7s toss within 175. Cooldown 7s.",
+   "ru_aw": "Пробуждение: Запоминает две последние разные позиции. Одна цель получает урон взрыва единожды.",
+   "en_aw": "Awakening: Stores the two latest distinct positions. A target takes only one explosion.",
+   "code": true
   },
   {
    "id": "es_l_apocalypse",
    "r": "legend",
    "branch": "R",
    "ab": "earthshaker_echo_slam",
-   "mods": "echo_slam_echo_damage:+20",
-   "fx": [
-    {
-     "t": "hit",
-     "by": "ab",
-     "heroOnly": 1,
-     "icd": 5,
-     "extra": {
-      "flat": 115,
-      "type": "magic"
-     },
-     "aw": {
-      "extra": {
-       "flat": 175
-      }
-     }
-    }
-   ],
-   "ru": "Апокалипсис",
-   "en": "Apocalypse",
-   "ru_d": "Урон каждого эха Echo Slam +20. Первый урон Echo Slam по герою добавляет 115 магического раз в 5 с по цели.",
-   "en_d": "Each Echo Slam echo deals 20 more damage. The first Echo Slam hit on a hero adds 115 magic damage, once per target per 5 s.",
-   "ru_aw": "Пробуждение: 175 дополнительного урона по герою.",
-   "en_aw": "Awakening: 175 bonus damage against a hero."
+   "ru": "Не буди гору",
+   "en": "Let the Mountain Sleep",
+   "ru_d": "Попавший под Echo Slam герой слышит гул 3 с. Остановка на 0,7 с гасит гул. Иначе взрыв наносит 320 + 10% недостающего здоровья магией. Отсчёт начинается после начального оглушения.",
+   "en_d": "Heroes hit by Echo Slam are pursued for 3s after the initial stun. Stand still for 0.7s to escape. Otherwise take 320 + 10% of missing health as magic damage.",
+   "ru_aw": "Пробуждение: Взрыв поражает также врагов в радиусе 280.",
+   "en_aw": "Awakening: The eruption also hits enemies within 280.",
+   "code": true
   },
   {
    "id": "es_m_stoneecho",

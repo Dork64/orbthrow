@@ -413,161 +413,57 @@
    "id": "necro_l_garden",
    "branch": "Q",
    "r": "legend",
+   "code": true,
    "ab": "necrolyte_death_pulse",
    "max": 1,
-   "ru": "Сад увядания",
-   "en": "Withering Garden",
-   "ru_d": "Death Pulse метит до 4 героев на 8 с. Следующий Pulse по ним наносит ещё 155 магического урона и лечит Некрофоса на 4% макс. здоровья за цель. Метка на героя — раз в 8 с.",
-   "en_d": "Death Pulse marks up to 4 heroes for 8 s. Another Pulse detonates each mark for 155 magic damage and heals Necrophos for 4% max health. Once per hero per 8 s.",
-   "fx": [
-    {
-     "t": "mark",
-     "by": "ab",
-     "consume": [
-      "necrolyte_death_pulse"
-     ],
-     "dur": 8,
-     "icd": 8,
-     "max": 4,
-     "dmg": 155,
-     "aw": {
-      "dmg": 215,
-      "heal": 5
-     },
-     "arm": 0.35,
-     "nextCast": true,
-     "heal": 4
-    }
-   ],
-   "ru_aw": "Пробуждение: 215 урона, лечение 5%.",
-   "en_aw": "Awakening: 215 damage and 5% healing."
+   "ru": "Пульс в упор",
+   "en": "Point-Blank Pulse",
+   "ru_d": "Если Death Pulse задел героя, есть 2 с на повторное Q. После замаха 0,6 с ближайший герой в радиусе 300 получает 160% урона Pulse магией. Некр лечится на 35% нанесённого урона. Второй удар: КД 8 с. Shard не открывает повторное нажатие.",
+   "en_d": "After Death Pulse hits a hero, recast Q within 2 s. After a 0.6 s windup, the nearest hero within 300 takes 160% of Pulse damage as magic damage. Necrophos heals for 35% of damage dealt. Follow-up cooldown: 8 s. Shard cannot unlock the recast.",
+   "ru_aw": "Пробуждение: замах 0,4 с.",
+   "en_aw": "Awakening: 0.4 s windup."
   },
   {
    "id": "necro_l_breathcycle",
    "branch": "W",
    "r": "legend",
+   "code": true,
    "ab": "necrolyte_ghost_shroud",
    "max": 1,
-   "ru": "Между жизнью и смертью",
-   "en": "Between Life and Death",
-   "ru_d": "Ghost Shroud даёт +17% скорости на 3 с. Если за 5 с получено 12% макс. здоровья уроном от героев, Некрофос отвечает на 175 магического урона в 430, лечится на 8% и на 3 с получает на 15% меньше урона. КД ответа 13 с.",
-   "en_d": "Ghost Shroud grants 17% movement speed for 3 s. Taking 12% max health in hero damage within 5 s retaliates for 175 magic damage in 430, heals 8% max health and reduces incoming damage by 15% for 3 s. Retaliation cooldown 13 s.",
-   "fx": [
-    {
-     "t": "buff",
-     "dur": 3,
-     "props": {
-      "ms": 17
-     },
-     "aw": {
-      "props": {
-       "ms": 23
-      }
-     }
-    },
-    {
-     "t": "guard",
-     "win": 5,
-     "thr": 12,
-     "icd": 13,
-     "radius": 430,
-     "dmg": 175,
-     "dur": 3,
-     "props": {
-      "inc": -15
-     },
-     "heal": 8,
-     "aw": {
-      "dmg": 245,
-      "heal": 10,
-      "props": {
-       "inc": -20
-      }
-     }
-    }
-   ],
-   "ru_aw": "Пробуждение: +23% скорости, 245 урона, 10% лечения, −20% входящего урона.",
-   "en_aw": "Awakening: 23% movement speed, 245 damage, 10% healing and 20% damage reduction."
+   "ru": "Занятая жизнь",
+   "en": "Borrowed Life",
+   "ru_d": "Ghost Shroud оставляет призрачный силуэт. Повторное W возвращает к нему с расстояния до 750, завершает форму и восполняет потерянное за неё здоровье, до 35% макс. HP. Антихил снижает возврат здоровья.",
+   "en_d": "Ghost Shroud leaves a ghostly silhouette. Recast W from within 750 to return to it, end Shroud, and restore health lost during it, up to 35% max HP. Healing reduction affects the restoration.",
+   "ru_aw": "Пробуждение: дальность 1100, предел лечения 45%.",
+   "en_aw": "Awakening: 1100 range and 45% max HP restoration cap."
   },
   {
    "id": "necro_l_lastcircle",
    "branch": "E",
    "r": "legend",
+   "code": true,
    "ab": "necrolyte_heartstopper_aura",
    "max": 1,
-   "ru": "Круг немощи",
-   "en": "Circle of Frailty",
-   "ru_d": "Death Pulse оставляет зону радиусом 480 на 4 с. Первый тик наносит 130 магического урона, остальные по 28. В зоне лечение слабее на 32%, скорость ниже на 14%.",
-   "en_d": "Death Pulse leaves a 480-radius zone for 4 s. The first tick deals 130 magic damage; later ticks deal 28. Enemies in the zone receive 32% less healing and move 14% slower.",
-   "fx": [
-    {
-     "t": "zone",
-     "at": "self",
-     "radius": 480,
-     "dur": 4,
-     "every": 1,
-     "dmg": 28,
-     "entryDmg": 102,
-     "ab": "necrolyte_death_pulse",
-     "debuff": {
-      "dur": 1.2,
-      "props": {
-       "healred": 32,
-       "ms": -14
-      }
-     },
-     "aw": {
-      "entryDmg": 147,
-      "debuff": {
-       "props": {
-        "healred": 40,
-        "ms": -20
-       }
-      }
-     }
-    }
-   ],
-   "ru_aw": "Пробуждение: первый тик 175, −40% лечения, −20% скорости.",
-   "en_aw": "Awakening: 175 first tick, 40% healing reduction and 20% slow."
+   "ru": "Чумной маяк",
+   "en": "Plague Beacon",
+   "ru_d": "E переносит Heartstopper в точку на 6 с. В стартовом радиусе 500 после 1,25 с пребывания герои получают ещё 3% макс. HP магией в секунду и −60% к восстановлению здоровья с учётом таланта. Выход сбрасывает разгон. Стоимость 80 маны, КД 14 с. Отключение пассивок гасит маяк.",
+   "en_d": "E relocates Heartstopper for 6 s. After 1.25 s inside its starting radius of 500, heroes take an extra 3% max HP per second as magic damage and receive 60% less health restoration, including the talent. Leaving resets buildup. Costs 80 mana, 14 s cooldown. Break ends the beacon.",
+   "ru_aw": "Пробуждение: повторное E один раз сдвигает маяк на расстояние до 300 без продления.",
+   "en_aw": "Awakening: recast E once to move the beacon up to 300 without extending it."
   },
   {
    "id": "necro_l_testament",
    "branch": "R",
    "r": "legend",
+   "code": true,
    "ab": "necrolyte_reapers_scythe",
    "max": 1,
-   "ru": "Завещание",
-   "en": "Testament",
-   "ru_d": "Если герой выжил после урона Reaper’s Scythe, Death Pulse в следующие 5 с взрывает метку на 220 урона и лечит Некрофоса на 5% макс. здоровья. Убийство самой Косой снимает 22% оставшегося КД.",
-   "en_d": "If a hero survives Reaper’s Scythe damage, Death Pulse within 5 s detonates the mark for 220 damage and heals Necrophos for 5% max health. A Scythe kill removes 22% remaining cooldown.",
-   "fx": [
-    {
-     "t": "mark",
-     "by": "ab",
-     "consume": [
-      "necrolyte_death_pulse"
-     ],
-     "dur": 5,
-     "icd": 10,
-     "max": 1,
-     "dmg": 220,
-     "aw": {
-      "dmg": 315,
-      "heal": 8
-     },
-     "heal": 5
-    },
-    {
-     "t": "kill",
-     "by": "ab",
-     "cdpct": 22,
-     "aw": {
-      "cdpct": 32
-     }
-    }
-   ],
-   "ru_aw": "Пробуждение: 315 урона, лечение 8%, −32% оставшегося КД за убийство.",
-   "en_aw": "Awakening: 315 damage, 8% healing and 32% remaining cooldown removed on a kill."
+   "ru": "Коса в долг",
+   "en": "Scythe on Credit",
+   "ru_d": "Выжившая после Reaper’s Scythe цель помечается на 3 с. Повторное R доступно в 650, если у цели не больше 25% HP. Через 0,45 с наносит 35% её макс. HP магией, до 1050, если условия всё ещё выполнены.",
+   "en_d": "A hero who survives Reaper’s Scythe is marked for 3 s. Recast R within 650 if they are at or below 25% HP. After 0.45 s, deal 35% of their max HP as magic damage, up to 1050, if the conditions still hold.",
+   "ru_aw": "Пробуждение: порог 30%, окно 4 с.",
+   "en_aw": "Awakening: 30% threshold and a 4 s window."
   }
  ]
 }

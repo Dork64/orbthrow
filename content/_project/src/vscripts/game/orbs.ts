@@ -176,6 +176,15 @@ function ensureExtras(op: OrbPlayer, h: CDOTA_BaseNPC_Hero) {
         h.AddNewModifier(h, undefined, "modifier_orb_jugg_legend", {});
     if (h.GetUnitName() === "npc_dota_hero_pudge" && !h.HasModifier("modifier_orb_pudge_legend"))
         h.AddNewModifier(h, undefined, "modifier_orb_pudge_legend", {});
+    // Геройские слоты для повторного применения и объекты легендарок.
+    if (h.GetUnitName() === "npc_dota_hero_mirana" && !h.HasModifier("modifier_orb_mirana_legend"))
+        h.AddNewModifier(h, undefined, "modifier_orb_mirana_legend", {});
+    if (h.GetUnitName() === "npc_dota_hero_earthshaker" && !h.HasModifier("modifier_orb_earthshaker_legend"))
+        h.AddNewModifier(h, undefined, "modifier_orb_earthshaker_legend", {});
+    if (h.GetUnitName() === "npc_dota_hero_ogre_magi" && !h.HasModifier("modifier_orb_ogre_magi_legend"))
+        h.AddNewModifier(h, undefined, "modifier_orb_ogre_magi_legend", {});
+    if (h.GetUnitName() === "npc_dota_hero_necrolyte" && !h.HasModifier("modifier_orb_necro_legend"))
+        h.AddNewModifier(h, undefined, "modifier_orb_necro_legend", {});
     if (h.GetUnitName() === "npc_dota_hero_sven" && !h.HasModifier("modifier_orb_sven_legend"))
         h.AddNewModifier(h, undefined, "modifier_orb_sven_legend", {});
     if (!h.HasModifier("modifier_orb_hero")) h.AddNewModifier(h, undefined, "modifier_orb_hero", {});

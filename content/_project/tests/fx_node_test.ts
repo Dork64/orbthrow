@@ -61,6 +61,10 @@ describe("данные сфер героев", () => {
             const ok = u.cd > 0 || fxOfOrb(u.id).length > 0 || u.mods.length > 0 || (u.awmods ?? []).length > 0 ||
                 ["tusk_l_roll", "tusk_l_counter", "tusk_l_ko", "sven_l_cleave", "sven_l_steeltempo", "sven_l_avatar",
                     "pudge_l_mire", "pudge_l_heap", "pudge_l_dismember",
+                    "mir_l_starstorm", "mir_l_arrow", "mir_l_starhunt", "mir_l_moon",
+                    "es_l_rift", "es_l_faultline", "es_l_aftershock", "es_l_apocalypse",
+                    "ogre_l_fireblast", "ogre_l_ignite", "ogre_l_bloodlust", "ogre_l_multicast",
+                    "necro_l_garden", "necro_l_breathcycle", "necro_l_lastcircle", "necro_l_testament",
                     "pudge_p_glutton", "pudge_p_chew", "pudge_p_bulk", "sven_p_untamed", "sven_p_eternal"].includes(u.id) ||
                 ["axe_", "jugg_"].some(p => u.id.startsWith(p));
             expect([u.id, ok]).toEqual([u.id, true]);

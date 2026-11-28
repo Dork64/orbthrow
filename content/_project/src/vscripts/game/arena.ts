@@ -1,3 +1,4 @@
+import type { OgreMagiLegends } from "../modifiers/modifier_orb_ogre_magi_legend";
 import type { PudgeLegends } from "../modifiers/modifier_orb_pudge_legend";
 import type { TuskOrbs } from "../modifiers/modifier_orb_tusk";
 import { resetItemsNet } from "./itemsnet";
@@ -84,6 +85,19 @@ function configureGameRules() {
     mode.SetDamageFilter(e => {
         safe("месть", () => revengeDamage(e));
         safe("учет урона", () => recordDamage(e));
+        return true;
+    }, {});
+    mode.SetTrackingProjectileFilter(event => {
+        if (event.is_attack === 0 && event.entindex_ability_const > 0) {
+            safe("снаряд Ignite", () => {
+                const ability = EntIndexToHScript(event.entindex_ability_const) as CDOTABaseAbility | undefined;
+                if (ability?.GetAbilityName() !== "ogre_magi_ignite") return;
+                const caster = ability.GetCaster();
+                const target = EntIndexToHScript(event.entindex_target_const) as CDOTA_BaseNPC | undefined;
+                const legends = caster.FindModifierByName("modifier_orb_ogre_magi_legend") as OgreMagiLegends | undefined;
+                if (target !== undefined && IsValidEntity(target)) legends?.ObserveIgniteProjectile(ability, target);
+            });
+        }
         return true;
     }, {});
     mode.SetExecuteOrderFilter(e => safe("фильтр приказов", () => orderFilter(e)) ?? true, {});

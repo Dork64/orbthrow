@@ -1,3 +1,4 @@
+import type { OgreMagiLegends } from "../modifiers/modifier_orb_ogre_magi_legend";
 // Контроллер сфер: один постоянный модификатор на герое (и его иллюзиях).
 // Все бонусы берутся из стаков игрока (OrbStore), поэтому смерть, переподключение
 // и иллюзии ничего не теряют. Синие сферы подменяют значения способностей
@@ -154,11 +155,25 @@ export class ModifierOrbController extends ModBase {
         return bonusAbilityCharges(b, name, this.isUltimate(ability));
     }
 
+    private scriptedMulticastFloor(name: string, key: string, b: OrbBonuses): number | undefined {
+        if (!IsServer() || name !== "ogre_magi_multicast" || (b.code["ogre_l_multicast"] ?? 0) === 0 ||
+            (key !== "multicast_2_times" && key !== "multicast_3_times" && key !== "multicast_4_times")) return undefined;
+        const ogre = this.GetParent().FindModifierByName("modifier_orb_ogre_magi_legend") as OgreMagiLegends | undefined;
+        return ogre?.GetMulticastChanceFloor(key);
+    }
+
+    private usesMovingFissure(name: string, key: string, b: OrbBonuses): boolean {
+        return name === "earthshaker_fissure" && key === "fissure_duration" &&
+            (b.code["es_l_rift"] ?? 0) > 0 && IsServer() && this.GetParent().HasModifier("modifier_orb_earthshaker_legend");
+    }
+
     GetModifierOverrideAbilitySpecial(e: ModifierOverrideAbilitySpecialEvent): 0 | 1 {
         const ability = e.ability;
         if (ability === undefined) return 0;
         const b = this.b();
         const name = ability.GetAbilityName(), key = e.ability_special_value;
+        if (name === "necrolyte_heartstopper_aura" && key === "aura_radius" && this.GetParent().HasModifier("modifier_orb_necro_beacon")) return 1;
+        if (this.usesMovingFissure(name, key, b) || this.scriptedMulticastFloor(name, key, b) !== undefined) return 1;
         if (replacesWrathDamage(b, name, key)) return 1;
         if (key === "AbilityCharges" || key === "AbilityCooldown" || key === "AbilityChargeRestoreTime") {
             const extra = this.extraCharges(b, ability, name);
@@ -175,6 +190,8 @@ export class ModifierOrbController extends ModBase {
         const ability = e.ability, key = e.ability_special_value, level = e.ability_special_level;
         const name = ability.GetAbilityName(), b = this.b();
         const base = ability.GetLevelSpecialValueNoOverride(key, level);
+        if (name === "necrolyte_heartstopper_aura" && key === "aura_radius" && this.GetParent().HasModifier("modifier_orb_necro_beacon")) return 0;
+        if (this.usesMovingFissure(name, key, b)) return 0.03;
         if (IsServer() && replacesWrathDamage(b, name, key)) return 0;
         if (key === "AbilityCharges") {
             const extra = this.extraCharges(b, ability, name);
@@ -184,7 +201,8 @@ export class ModifierOrbController extends ModBase {
         const adjusted = overrideValue(b, name, key, base) ?? base;
         if (key === "AbilityCooldown" || key === "AbilityChargeRestoreTime")
             return adjusted * this.orbCooldownFactor(b, ability, name);
-        return adjusted;
+        const floor = this.scriptedMulticastFloor(name, key, b);
+        return floor === undefined ? adjusted : Math.max(adjusted, floor);
     }
 
     /** Отдельный бросок на атаку, чтобы слоты штатных критов и крита сферы не конкурировали. */

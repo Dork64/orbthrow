@@ -777,21 +777,6 @@
 			}
 		}
 	}
-	"earthshaker_fissure"
-	{
-		"AbilityValues"
-		{
-			"AbilityCharges"
-			{
-				"value"	"0"
-			}
-			"AbilityChargeRestoreTime"
-			{
-				"value"	"18 17 16 15"
-				"special_bonus_shard"	"-2"
-			}
-		}
-	}
 	"faceless_void_time_walk"
 	{
 		"AbilityValues"
@@ -819,21 +804,6 @@
 			{
 				"value"	"9.0 8.0 7.0 6.0"
 				"special_bonus_unique_luna_2"	"-2"
-			}
-		}
-	}
-	"ogre_magi_fireblast"
-	{
-		"AbilityValues"
-		{
-			"AbilityCharges"
-			{
-				"value"	"0"
-			}
-			"AbilityChargeRestoreTime"
-			{
-				"value"	"14 12 10 8"
-				"special_bonus_scepter"	"-1"
 			}
 		}
 	}

@@ -2,6 +2,154 @@
 {
 	"Version"	"1"
 
+	"orb_mirana_star"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_mirana"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING"
+		"AbilityTextureName" "mirana/pulsar_remnant/mirana_starfall"
+		"AbilityCastRange" "2400"
+		"AbilityCastPoint" "0"
+		"MaxLevel" "1"
+	}
+	"orb_mirana_arrow"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_mirana"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING"
+		"AbilityTextureName" "mirana/meoth/meoth_sacred_arrow"
+		"AbilityCastRange" "50000"
+		"AbilityCastPoint" "0"
+		"MaxLevel" "1"
+	}
+	"orb_mirana_turn"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_mirana"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING"
+		"AbilityTextureName" "mirana_leap_secondary"
+		"AbilityCastRange" "50000"
+		"AbilityCastPoint" "0"
+		"MaxLevel" "1"
+	}
+	"orb_mirana_swap"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_mirana"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING"
+		"AbilityTextureName" "mirana_nightveil"
+		"AbilityCastRange" "50000"
+		"AbilityCastPoint" "0"
+		"MaxLevel" "1"
+	}
+
+	"orb_es_pivot"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_earthshaker"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_DONT_PROC_OTHER_ABILITIES"
+		"AbilityCastRange" "3000"
+		"AbilityTextureName" "earthshaker_fissure_alt_gold"
+		"MaxLevel" "1"
+	}
+
+	"orb_es_step"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_earthshaker"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_DONT_PROC_OTHER_ABILITIES"
+		"AbilityCastRange" "900"
+		"AbilityTextureName" "earthshaker/deep_magma/deep_magma_10th/deep_magma_10th_enchant_totem"
+		"MaxLevel" "1"
+	}
+
+	"orb_es_seismograph"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_earthshaker"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_DONT_PROC_OTHER_ABILITIES"
+		"AbilityCastRange" "0"
+		"AbilityTextureName" "earthshaker/deep_magma/deep_magma_10th/deep_magma_10th_aftershock"
+		"MaxLevel" "4"
+	}
+
+	"orb_ogre_club"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_ogre_magi"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING"
+		"AbilityTextureName" "ogre_magi_fireblast"
+		"AbilityCastRange" "825"
+		"AbilityCastPoint" "0.1"
+		"AbilityCooldown" "0"
+		"AbilityManaCost" "0"
+		"MaxLevel" "1"
+	}
+	"orb_ogre_loaded_die"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_ogre_magi"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE"
+		"AbilityType" "ABILITY_TYPE_ULTIMATE"
+		"AbilityTextureName" "ogre_magi_multicast"
+		"AbilityCooldown" "0"
+		"AbilityManaCost" "0"
+		"MaxLevel" "1"
+	}
+
+	"orb_necro_pulse"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_necro"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING"
+		"AbilityTextureName" "necrolyte_death_pulse"
+		"AbilityCastPoint" "0.6"
+		"AbilityCastAnimation" "ACT_DOTA_CAST_ABILITY_1"
+		"MaxLevel" "1"
+	}
+	"orb_necro_return"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_necro"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE"
+		"AbilityTextureName" "necrolyte_sadist"
+		"MaxLevel" "1"
+	}
+	"orb_necro_beacon"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_necro"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE"
+		"AbilityTextureName" "necrolyte_heartstopper_aura"
+		"AbilityCastRange" "650"
+		"AOERadius" "500"
+		"AbilityCastPoint" "0.15"
+		"AbilityCastAnimation" "ACT_DOTA_CAST_ABILITY_1"
+		"AbilityCooldown" "14"
+		"AbilityManaCost" "80"
+		"MaxLevel" "4"
+	}
+	"orb_necro_move_beacon"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_necro"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE"
+		"AbilityTextureName" "necrolyte_heartstopper_aura"
+		"AbilityCastRange" "950"
+		"AOERadius" "500"
+		"MaxLevel" "1"
+	}
+	"orb_necro_verdict"
+	{
+		"BaseClass" "ability_lua"
+		"ScriptFile" "abilities/orb_necro"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE"
+		"AbilityTextureName" "necrolyte_reapers_scythe"
+		"AbilityCastPoint" "0.45"
+		"AbilityCastAnimation" "ACT_DOTA_CAST_ABILITY_4"
+		"MaxLevel" "1"
+	}
+
 	"orb_pudge_counter"
 	{
 		"BaseClass" "ability_lua"

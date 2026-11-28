@@ -153,134 +153,53 @@
    "r": "legend",
    "branch": "Q",
    "ab": "mirana_starfall",
-   "mods": "damage:+100",
-   "fx": [
-    {
-     "t": "echo",
-     "delays": [
-      0.8
-     ],
-     "pct": 50,
-     "aw": {
-      "pct": 80
-     }
-    }
-   ],
-   "ru": "Звездный дождь",
-   "en": "Star Rain",
-   "ru_d": "Урон Starstorm +100; через 0.8 с звезды бьют тех же врагов еще раз с 50% урона",
-   "en_d": "Starstorm damage +100; 0.8 s later the stars hit the same enemies again for 50% damage",
-   "ru_aw": "Пробуждение: повтор 80% урона",
-   "en_aw": "Awakening: repeat deals 80%"
+   "ru": "Поймать звезду",
+   "en": "Catch a Star",
+   "ru_d": "Попадание ручного Starstorm роняет рядом с героем звезду на 4 с. Подберите её раньше соперника и за 4 с повторным Q бросьте вперёд. Первый герой на пути получает двойной урон обычной звезды магией.",
+   "en_d": "A manual Starstorm hit drops a star near a hero for 4s. Reach it before an enemy hero and recast Q within 4s to throw it for twice a normal star’s damage.",
+   "ru_aw": "Пробуждение: Снаряд проходит через первого героя и поражает второго.",
+   "en_aw": "Awakening: The star pierces the first hero and can hit a second.",
+   "code": true
   },
   {
    "id": "mir_l_arrow",
    "r": "legend",
    "branch": "W",
    "ab": "mirana_arrow",
-   "mods": "arrow_max_stun:+1;arrow_bonus_damage:+120",
    "awmods": "arrow_speed:+400",
-   "ru": "Стрела богини",
-   "en": "Goddess Arrow",
-   "ru_d": "Максимальное оглушение Sacred Arrow +1 с, бонусный урон +120",
-   "en_d": "Sacred Arrow max stun +1 s, bonus damage +120",
-   "ru_aw": "Пробуждение: скорость стрелы +400",
-   "en_aw": "Awakening: arrow speed +400"
+   "ru": "Стрела за углом",
+   "en": "Around the Corner",
+   "ru_d": "Попав в дерево раньше цели, Sacred Arrow застревает на 2 с. Повторным W укажите направление вылета. Пройденный путь учитывается для урона и оглушения. Если дерево срубят, стрела пропадёт.",
+   "en_d": "A Sacred Arrow that meets a tree before a unit lodges for 2s. Recast W to aim from that tree. Distance travelled carries over for bonus damage and stun. Cutting the tree cancels the shot.",
+   "ru_aw": "Пробуждение: Стрела может повернуть через второе дерево.",
+   "en_aw": "Awakening: The same arrow can bank off a second tree.",
+   "code": true
   },
   {
    "id": "mir_l_starhunt",
    "r": "legend",
    "branch": "E",
    "ab": "mirana_leap",
-   "ru": "Звёздная охотница",
-   "en": "Star Huntress",
-   "ru_d": "После Leap на 5 с: +100 дальности атаки; каждая 3-я атака по одному герою наносит ещё 80 магического урона (не чаще раза в секунду по цели)",
-   "en_d": "After Leap: +100 attack range for 5 s; every third attack on the same hero deals 80 extra magic damage (at most once per second per target)",
-   "ru_aw": "Пробуждение: дальность +150, дополнительный урон 120",
-   "en_aw": "Awakening: +150 range, 120 extra damage",
-   "fx": [
-    {
-     "t": "buff",
-     "dur": 5,
-     "props": {
-      "range": 100
-     },
-     "aw": {
-      "props": {
-       "range": 150
-      }
-     }
-    },
-    {
-     "t": "hit",
-     "by": "attack",
-     "win": 5,
-     "heroOnly": 1,
-     "every": 3,
-     "icd": 1,
-     "extra": {
-      "flat": 80,
-      "type": "magic"
-     },
-     "aw": {
-      "extra": {
-       "flat": 120,
-       "type": "magic"
-      }
-     }
-    }
-   ]
+   "ru": "Верхом на комете",
+   "en": "Comet Rider",
+   "ru_d": "В полёте Leap нажмите E в сторону точки, чтобы изменить посадку. При приземлении летят три стрелы веером. Каждая наносит герою 60 + 50% урона атаки физическим уроном.",
+   "en_d": "Recast E towards a point during Leap to bend the landing. On landing fire three arrows in a fan. Each deals 60 + 50% of attack damage as physical damage to the first hero hit.",
+   "ru_aw": "Пробуждение: Три попадания в одного героя ускоряют восстановление одного заряда Leap на половину интервала.",
+   "en_aw": "Awakening: Hitting the same hero with all three arrows advances one Leap recharge by half an interval.",
+   "code": true
   },
   {
    "id": "mir_l_moon",
    "r": "legend",
    "branch": "R",
    "ab": "mirana_invis",
-   "mods": "duration:+3",
-   "fx": [
-    {
-     "t": "buff",
-     "dur": 7,
-     "props": {
-      "as": 45,
-      "ms": 12
-     },
-     "aw": {
-      "props": {
-       "as": 65,
-       "ms": 17
-      }
-     }
-    },
-    {
-     "t": "hit",
-     "by": "attack",
-     "heroOnly": 1,
-     "icd": 7,
-     "win": 7,
-     "extra": {
-      "atk": 55,
-      "type": "phys"
-     },
-     "debuff": {
-      "dur": 1.6,
-      "props": {
-       "ms": -25
-      }
-     },
-     "aw": {
-      "extra": {
-       "atk": 75
-      }
-     }
-    }
-   ],
-   "ru": "Полнолуние",
-   "en": "Full Moon",
-   "ru_d": "Moonlight Shadow длится на 3 с дольше. Первые 7 с дают Миране +45 скорости атаки и +12% бега. Первый удар по каждому герою в это окно добавляет 55% силы атаки и замедляет на 25% на 1,6 с.",
-   "en_d": "Moonlight Shadow lasts 3 s longer. For the first 7 s Mirana gains 45 attack speed and 12% movement speed. Her first hit against each hero adds 55% attack damage and slows by 25% for 1.6 s.",
-   "ru_aw": "Пробуждение: +65 скорости атаки, +17% бега, 75% доп. урона.",
-   "en_aw": "Awakening: 65 attack speed, 17% movement speed and 75% bonus hit damage."
+   "ru": "Три луны",
+   "en": "Three Moons",
+   "ru_d": "При входе в невидимость Moonlight Shadow два двойника Мираны расходятся в разные стороны на 4 с. Направьте повторное R на одного, чтобы поменяться местами. Удар вражеского героя убирает двойника.",
+   "en_d": "Entering Moonlight Shadow creates two outward-running decoys for 4s. Aim a recast R at one to exchange places. An enemy hero attack destroys a decoy.",
+   "ru_aw": "Пробуждение: За 4 с после обмена первая обычная атака по герою наносит 180% урона.",
+   "en_aw": "Awakening: Your first ordinary attack on a hero within 4s after swapping deals 180% damage.",
+   "code": true
   },
   {
    "id": "mirana_m_autostar",

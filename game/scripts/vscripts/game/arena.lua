@@ -146,19 +146,19 @@ function forceHeroes()
             do
                 local id = i
                 if not PlayerResource:IsValidPlayerID(id) or PlayerResource:IsFakeClient(id) then
-                    goto __continue38
+                    goto __continue43
                 end
                 if PlayerResource:HasSelectedHero(id) then
-                    goto __continue38
+                    goto __continue43
                 end
                 local player = PlayerResource:GetPlayer(id)
                 if player == nil then
-                    goto __continue38
+                    goto __continue43
                 end
                 player:MakeRandomHeroSelection()
                 log("игрок", id, "не выбрал героя — случайный")
             end
-            ::__continue38::
+            ::__continue43::
             i = i + 1
         end
     end
@@ -357,29 +357,54 @@ local function configureGameRules()
         end,
         {}
     )
+    mode:SetTrackingProjectileFilter(
+        function(____, event)
+            if event.is_attack == 0 and event.entindex_ability_const > 0 then
+                safe(
+                    "снаряд Ignite",
+                    function()
+                        local ability = EntIndexToHScript(event.entindex_ability_const)
+                        if (ability and ability:GetAbilityName()) ~= "ogre_magi_ignite" then
+                            return
+                        end
+                        local caster = ability:GetCaster()
+                        local target = EntIndexToHScript(event.entindex_target_const)
+                        local legends = caster:FindModifierByName("modifier_orb_ogre_magi_legend")
+                        if target ~= nil and IsValidEntity(target) then
+                            if legends ~= nil then
+                                legends:ObserveIgniteProjectile(ability, target)
+                            end
+                        end
+                    end
+                )
+            end
+            return true
+        end,
+        {}
+    )
     mode:SetExecuteOrderFilter(
         function(____, e)
-            local ____safe_result_2 = safe(
+            local ____safe_result_6 = safe(
                 "фильтр приказов",
                 function() return orderFilter(e) end
             )
-            if ____safe_result_2 == nil then
-                ____safe_result_2 = true
+            if ____safe_result_6 == nil then
+                ____safe_result_6 = true
             end
-            return ____safe_result_2
+            return ____safe_result_6
         end,
         {}
     )
     mode:SetItemAddedToInventoryFilter(
         function(____, e)
-            local ____safe_result_3 = safe(
+            local ____safe_result_7 = safe(
                 "фильтр предметов",
                 function() return slotsItemFilter(e) end
             )
-            if ____safe_result_3 == nil then
-                ____safe_result_3 = true
+            if ____safe_result_7 == nil then
+                ____safe_result_7 = true
             end
-            return ____safe_result_3
+            return ____safe_result_7
         end,
         {}
     )

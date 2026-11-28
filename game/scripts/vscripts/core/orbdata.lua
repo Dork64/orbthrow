@@ -5379,11 +5379,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_earthshaker",
         branch = "Q",
         ability = "earthshaker_fissure",
-        mods = {{key = "fissure_damage", add = 100, unit = "", base = 280}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false,
-        awmods = {{key = "stun_duration", add = 0.4, unit = "", base = 1.6}}
+        code = true
     },
     {
         id = "es_l_faultline",
@@ -5402,11 +5401,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_earthshaker",
         branch = "E",
         ability = "earthshaker_aftershock",
-        mods = {{key = "aftershock_range", add = 150, unit = "", base = 350}, {key = "aftershock_damage", add = 60, unit = "", base = 140}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false,
-        awmods = {{key = "AbilityDuration", add = 0.4, unit = "", base = 1.3}}
+        code = true
     },
     {
         id = "es_l_apocalypse",
@@ -5414,10 +5412,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_earthshaker",
         branch = "R",
         ability = "earthshaker_echo_slam",
-        mods = {{key = "echo_slam_echo_damage", add = 20, unit = "", base = 100}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false
+        code = true
     },
     {
         id = "es_m_stoneecho",
@@ -6550,10 +6548,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_mirana",
         branch = "Q",
         ability = "mirana_starfall",
-        mods = {{key = "damage", add = 100, unit = "", base = 300}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false
+        code = true
     },
     {
         id = "mir_l_arrow",
@@ -6561,10 +6559,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_mirana",
         branch = "W",
         ability = "mirana_arrow",
-        mods = {{key = "arrow_max_stun", add = 1, unit = "", base = 5}, {key = "arrow_bonus_damage", add = 120, unit = "", base = 180}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false,
+        code = true,
         awmods = {{key = "arrow_speed", add = 400, unit = "", base = 900}}
     },
     {
@@ -6584,10 +6582,10 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_mirana",
         branch = "R",
         ability = "mirana_invis",
-        mods = {{key = "duration", add = 3, unit = "", base = 18}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false
+        code = true
     },
     {
         id = "mirana_m_autostar",
@@ -6942,8 +6940,7 @@ ____exports.UPGRADE_DEFS = {
         mods = {},
         cd = 0,
         max = 1,
-        code = true,
-        mech = true
+        code = true
     },
     {
         id = "necro_l_testament",
@@ -7098,10 +7095,11 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_ogre_magi",
         branch = "Q",
         ability = "ogre_magi_fireblast",
-        mods = {{key = "stun_duration", add = 0.3, unit = "", base = 1.2}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false
+        code = true,
+        mech = true
     },
     {
         id = "ogre_l_ignite",
@@ -7109,11 +7107,11 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_ogre_magi",
         branch = "W",
         ability = "ogre_magi_ignite",
-        mods = {{key = "duration", add = 4, unit = "", base = 7}, {key = "burn_damage", add = 20, unit = "", base = 55}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false,
-        awmods = {{key = "slow_movement_speed_pct", add = -15, unit = "", base = -25}}
+        code = true,
+        mech = true
     },
     {
         id = "ogre_l_bloodlust",
@@ -7124,7 +7122,8 @@ ____exports.UPGRADE_DEFS = {
         mods = {},
         cd = 0,
         max = 1,
-        code = true
+        code = true,
+        mech = true
     },
     {
         id = "ogre_l_multicast",
@@ -7132,11 +7131,11 @@ ____exports.UPGRADE_DEFS = {
         hero = "npc_dota_hero_ogre_magi",
         branch = "R",
         ability = "ogre_magi_multicast",
-        mods = {{key = "multicast_2_times", add = 10, unit = "", base = 75}, {key = "multicast_3_times", add = 7, unit = "", base = 30}, {key = "multicast_4_times", add = 4, unit = "", base = 15}},
+        mods = {},
         cd = 0,
         max = 1,
-        code = false,
-        awmods = {{key = "multicast_4_times", add = 6, unit = "", base = 15}}
+        code = true,
+        mech = true
     },
     {
         id = "pa_p_bloodknife",

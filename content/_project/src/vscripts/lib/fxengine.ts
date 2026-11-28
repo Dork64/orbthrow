@@ -1,3 +1,4 @@
+import type { OgreMagiLegends } from "../modifiers/modifier_orb_ogre_magi_legend";
 import { bonusAbilityCharges } from "../core/orbstore";
 // Исполнитель эффектов сфер-кода (core/fxdata.ts) на герое. Создается модификатором
 // modifier_orb_hero и получает от него события: применение способности, урон, атака,
@@ -415,7 +416,12 @@ export class FxEngine {
             parent.SetCursorCastTarget(undefined);
             if (point !== undefined) parent.SetCursorPosition(point);
         }
-        ability.OnSpellStart();
+        const name = ability.GetAbilityName();
+        const ogre = name === "ogre_magi_ignite" || name === "ogre_magi_fireblast"
+            ? parent.FindModifierByName("modifier_orb_ogre_magi_legend") as OgreMagiLegends | undefined : undefined;
+        ogre?.SetOrbFreeCast(true);
+        try { ability.OnSpellStart(); }
+        finally { ogre?.SetOrbFreeCast(false); }
     }
 
     private multicast(f: FxDef & { t: "multi" }, ability: CDOTABaseAbility, target: CDOTA_BaseNPC | undefined) {

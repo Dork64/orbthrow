@@ -140,3 +140,30 @@ it("клиент читает КД, заряды и сопротивление �
     expect(special(ability, "AbilityChargeRestoreTime")).toBeCloseTo(11.4);
     expect(mod.GetModifierStatusResistanceStacking()).toBe(0);
 });
+
+it("легендарная стена меняет длительность только серверной Fissure", () => {
+    const { hero, put, special } = heroWithSpheres();
+    const wall = skill("earthshaker_fissure", { fissure_duration: 8, fissure_damage: 280 });
+    Object.assign(hero, { HasModifier: (name: string) => name === "modifier_orb_earthshaker_legend" });
+    expect(special(wall, "fissure_duration")).toBe(8);
+    put({ es_l_rift: 1 });
+    expect(special(wall, "fissure_duration")).toBeCloseTo(0.03);
+    expect(special(wall, "fissure_damage")).toBe(280);
+});
+
+it("ставка Огра поднимает только нужные шансы Multicast на время ручного каста", () => {
+    const { hero, put, special } = heroWithSpheres({ ogre_l_multicast: 1 });
+    let stake = true;
+    Object.assign(hero, { FindModifierByName: () => ({
+        GetMulticastChanceFloor: (key: string) => stake && key !== "multicast_4_times" ? 100 : undefined,
+    }) });
+    const multi = skill("ogre_magi_multicast", { multicast_2_times: 75, multicast_3_times: 30, multicast_4_times: 15 });
+    expect(special(multi, "multicast_2_times")).toBe(100);
+    expect(special(multi, "multicast_3_times")).toBe(100);
+    expect(special(multi, "multicast_4_times")).toBe(15);
+    stake = false;
+    expect(special(multi, "multicast_3_times")).toBe(30);
+    stake = true;
+    put({});
+    expect(special(multi, "multicast_2_times")).toBe(75);
+});
